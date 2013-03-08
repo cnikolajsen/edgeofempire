@@ -1,13 +1,17 @@
 EdgeOfEmpire::Application.routes.draw do
-  devise_for :users
-
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :users
 
   resources :characters
-  resources :users
-
+  
+  devise_scope :user do
+    get "login", :to => "devise/sessions#new"
+    get "logout", :to => "devise/sessions#destroy"
+    get "register", :to => "devise/registrations#new"
+    get "me", :to => "devise/registrations#edit"
+  end
 
   get "home/index"
 

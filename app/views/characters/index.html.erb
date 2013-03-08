@@ -5,18 +5,9 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:species) %></th>
-      <th><%= model_class.human_attribute_name(:gender) %></th>
-      <th><%= model_class.human_attribute_name(:age) %></th>
       <th><%= model_class.human_attribute_name(:career) %></th>
-      <th><%= model_class.human_attribute_name(:brawn) %></th>
-      <th><%= model_class.human_attribute_name(:agility) %></th>
-      <th><%= model_class.human_attribute_name(:intellect) %></th>
-      <th><%= model_class.human_attribute_name(:cunning) %></th>
-      <th><%= model_class.human_attribute_name(:willpower) %></th>
-      <th><%= model_class.human_attribute_name(:presence) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -24,18 +15,9 @@
   <tbody>
     <% @characters.each do |character| %>
       <tr>
-        <td><%= link_to character.id, character_path(character) %></td>
-        <td><%= character.name %></td>
+        <td><%= link_to character.name, character_path(character) %></td>
         <td><%= character.species %></td>
-        <td><%= character.gender %></td>
-        <td><%= character.age %></td>
         <td><%= character.career %></td>
-        <td><%= character.brawn %></td>
-        <td><%= character.agility %></td>
-        <td><%= character.intellect %></td>
-        <td><%= character.cunning %></td>
-        <td><%= character.willpower %></td>
-        <td><%= character.presence %></td>
         <td><%=l character.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

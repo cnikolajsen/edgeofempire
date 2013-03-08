@@ -5,4 +5,6 @@ class Character < ActiveRecord::Base
   validates_presence_of :species, :message => "can't be blank"
   validates_presence_of :gender, :message => "can't be blank"
   validates_presence_of :brawn, :on => :create, :message => "can't be blank"
+  
+  belongs_to :user
 end

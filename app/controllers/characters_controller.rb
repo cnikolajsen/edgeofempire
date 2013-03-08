@@ -2,7 +2,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.all
+    @characters = Character.find_all_by_user_id(current_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,7 +41,8 @@ class CharactersController < ApplicationController
   # POST /characters.json
   def create
     @character = Character.new(params[:character])
-
+    @character.user_id = current_user.id
+    
     respond_to do |format|
       if @character.save
         format.html { redirect_to @character, notice: 'Character was successfully created.' }

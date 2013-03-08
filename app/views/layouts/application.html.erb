@@ -47,11 +47,8 @@
           <a class="brand" href="/">Edge of the Empire</a>
           <div class="container-fluid nav-collapse">
             <ul class="nav">
-              <li><%= link_to "My characters", characters_path()  %></li>
-              <li><%= link_to "Profile", "/path2"  %></li>
-              <li><%= link_to "Register", "/path2"  %></li>
-              <li><%= link_to "Login", "/path3"  %></li>
-              <li><%= link_to "Logout", "/path3"  %></li>
+              <li><%= link_to "Register", "/register" unless user_signed_in?  %></li>
+              <li><%= link_to "Login", "/login" unless user_signed_in?  %></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -60,16 +57,35 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Codex</li>
-              <li><%= link_to "Species", "/path1"  %></li>
-              <li><%= link_to "Careers", "/path2"  %></li>
-              <li><%= link_to "Equiptment", "/path3"  %></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+        <% if user_signed_in? %>
+          <div class="span3">
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li class="nav-header">You are logged in as:</li>
+                <li><%= current_user.email %></li>
+                <li><%= link_to "Edit profile", "/me" %></li>
+                <li><%= link_to "Logout", "/logout" %></li>
+              </ul>
+            </div><!--/.well -->
+        
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li class="nav-header">My Characters</li>
+                <li><%= link_to "List characters", characters_path()  %></li>
+                <li><%= link_to "Create character", new_character_path()  %></li>
+              </ul>
+            </div><!--/.well -->
+            
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+                <li class="nav-header">Codex</li>
+                <li><%= link_to "Species", "/path1"  %></li>
+                <li><%= link_to "Careers", "/path2"  %></li>
+                <li><%= link_to "Equipment", "/path3"  %></li>
+              </ul>
+            </div><!--/.well -->
+          </div><!--/span-->
+        <% end %>
         <div class="span9">
           <%= bootstrap_flash %>
           <%= yield %>
