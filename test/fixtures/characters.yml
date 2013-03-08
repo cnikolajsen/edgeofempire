@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  species: MyString
+  gender: MyString
+  age: MyString
+  career: MyString
+  brawn: 1
+  agility: 1
+  intellect: 1
+  cunning: 1
+  willpower: 1
+  presence: 1
+
+two:
+  name: MyString
+  species: MyString
+  gender: MyString
+  age: MyString
+  career: MyString
+  brawn: 1
+  agility: 1
+  intellect: 1
+  cunning: 1
+  willpower: 1
+  presence: 1

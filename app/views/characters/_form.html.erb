@@ -1,0 +1,61 @@
+<%= form_for(@character) do |f| %>
+  <% if @character.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</h2>
+
+      <ul>
+      <% @character.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :species %><br />
+    <%= f.text_field :species %>
+  </div>
+  <div class="field">
+    <%= f.label :gender %><br />
+    <%= f.text_field :gender %>
+  </div>
+  <div class="field">
+    <%= f.label :age %><br />
+    <%= f.text_field :age %>
+  </div>
+  <div class="field">
+    <%= f.label :career %><br />
+    <%= f.text_field :career %>
+  </div>
+  <div class="field">
+    <%= f.label :brawn %><br />
+    <%= f.number_field :brawn %>
+  </div>
+  <div class="field">
+    <%= f.label :agility %><br />
+    <%= f.number_field :agility %>
+  </div>
+  <div class="field">
+    <%= f.label :intellect %><br />
+    <%= f.number_field :intellect %>
+  </div>
+  <div class="field">
+    <%= f.label :cunning %><br />
+    <%= f.number_field :cunning %>
+  </div>
+  <div class="field">
+    <%= f.label :willpower %><br />
+    <%= f.number_field :willpower %>
+  </div>
+  <div class="field">
+    <%= f.label :presence %><br />
+    <%= f.number_field :presence %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
