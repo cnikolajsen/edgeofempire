@@ -1,60 +1,41 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Character -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
 
-<p>
-  <b>Name:</b>
-  <%= @character.name %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @character.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:species) %>:</strong></dt>
+  <dd><%= @character.species %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:gender) %>:</strong></dt>
+  <dd><%= @character.gender %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:age) %>:</strong></dt>
+  <dd><%= @character.age %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:career) %>:</strong></dt>
+  <dd><%= @character.career %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:brawn) %>:</strong></dt>
+  <dd><%= @character.brawn %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:agility) %>:</strong></dt>
+  <dd><%= @character.agility %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:intellect) %>:</strong></dt>
+  <dd><%= @character.intellect %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:cunning) %>:</strong></dt>
+  <dd><%= @character.cunning %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:willpower) %>:</strong></dt>
+  <dd><%= @character.willpower %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:presence) %>:</strong></dt>
+  <dd><%= @character.presence %></dd>
+</dl>
 
-<p>
-  <b>Species:</b>
-  <%= @character.species %>
-</p>
-
-<p>
-  <b>Gender:</b>
-  <%= @character.gender %>
-</p>
-
-<p>
-  <b>Age:</b>
-  <%= @character.age %>
-</p>
-
-<p>
-  <b>Career:</b>
-  <%= @character.career %>
-</p>
-
-<p>
-  <b>Brawn:</b>
-  <%= @character.brawn %>
-</p>
-
-<p>
-  <b>Agility:</b>
-  <%= @character.agility %>
-</p>
-
-<p>
-  <b>Intellect:</b>
-  <%= @character.intellect %>
-</p>
-
-<p>
-  <b>Cunning:</b>
-  <%= @character.cunning %>
-</p>
-
-<p>
-  <b>Willpower:</b>
-  <%= @character.willpower %>
-</p>
-
-<p>
-  <b>Presence:</b>
-  <%= @character.presence %>
-</p>
-
-
-<%= link_to 'Edit', edit_character_path(@character) %> |
-<%= link_to 'Back', characters_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              characters_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_character_path(@character), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              character_path(@character),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>
