@@ -11,6 +11,7 @@ gem "meta_search",    '>= 1.1.0.pre'
 gem "less-rails"
 gem 'twitter-bootstrap-rails'
 gem "therubyracer", "~> 0.11.4"
+gem "seed_dump", "~> 0.4.2"
 
 # Gems used only for assets and not required
 # in production environments by default.

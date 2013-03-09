@@ -1,4 +1,6 @@
 EdgeOfEmpire::Application.routes.draw do
+  get "career/index"
+
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config

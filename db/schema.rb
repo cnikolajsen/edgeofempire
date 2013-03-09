@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130308144704) do
+ActiveRecord::Schema.define(:version => 20130309052111) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -46,6 +46,13 @@ ActiveRecord::Schema.define(:version => 20130308144704) do
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
+  create_table "careers", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "characters", :force => true do |t|
     t.string   "name"
     t.string   "species"
@@ -61,6 +68,52 @@ ActiveRecord::Schema.define(:version => 20130308144704) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "user_id"
+  end
+
+  create_table "races", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "wound_threshold"
+    t.integer  "strain_threshold"
+    t.integer  "starting_experience"
+    t.text     "special_ability"
+    t.integer  "brawn"
+    t.integer  "cunning"
+    t.integer  "presence"
+    t.integer  "agility"
+    t.integer  "intellect"
+    t.integer  "willpower"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  create_table "skills", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "characteristic"
+    t.string   "type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "specializations", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "career_id"
+  end
+
+  create_table "talents", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "activation"
+    t.boolean  "ranked"
+    t.integer  "cost"
+    t.integer  "specialization_id"
+    t.string   "talent_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "users", :force => true do |t|

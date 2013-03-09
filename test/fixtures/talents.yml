@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyText
+  activation: MyString
+  ranked: false
+  cost: 1
+  specialization_id: 1
+  talent_type: MyString
+
+two:
+  name: MyString
+  description: MyText
+  activation: MyString
+  ranked: false
+  cost: 1
+  specialization_id: 1
+  talent_type: MyString

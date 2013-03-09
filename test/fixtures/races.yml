@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyText
+  wound_threshold: 1
+  strain_threshold: 1
+  starting_experience: 1
+  special_ability: MyText
+  brawn: 1
+  cunning: 1
+  presence: 1
+  agility: 1
+  intellect: 1
+  willpower: 1
+
+two:
+  name: MyString
+  description: MyText
+  wound_threshold: 1
+  strain_threshold: 1
+  starting_experience: 1
+  special_ability: MyText
+  brawn: 1
+  cunning: 1
+  presence: 1
+  agility: 1
+  intellect: 1
+  willpower: 1

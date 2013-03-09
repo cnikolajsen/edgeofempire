@@ -7,4 +7,7 @@ class Character < ActiveRecord::Base
   validates_presence_of :brawn, :on => :create, :message => "can't be blank"
   
   belongs_to :user
+  
+  #has_many :skills
+  #has_many :talents
 end
