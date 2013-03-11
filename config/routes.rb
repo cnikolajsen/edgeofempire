@@ -8,7 +8,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :characters
   resources :skills
   resources :careers
-  resources :species
+  resources :races
   resources :equipment  
   
   devise_scope :user do

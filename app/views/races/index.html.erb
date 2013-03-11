@@ -1,4 +1,4 @@
-<%- model_class = Career -%>
+<%- model_class = Race -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
   <p>What a player chooses as a career for his character defines the overall and ongoing  commitment to a way f life for that character. A career is more than just what a character does for a living - it is his way of life, encompassing his goals, his passions, his training, and his destiny. Areas of focus may change over time, but a character will never truly stop being whatever it is he chose to be at his core.</p>
@@ -12,10 +12,10 @@
     </tr>
   </thead>
   <tbody>
-    <% @careers.each do |career| %>
+    <% @races.each do |race| %>
       <tr>
-        <td><%= link_to career.name, career_path(career.id) %></td>
-        <td><%= career.description %></td>
+        <td><%= link_to race.name, race_path(race.id) %></td>
+        <td><%= race.description %></td>
       </tr>
     <% end %>
   </tbody>
