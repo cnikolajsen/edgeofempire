@@ -6,8 +6,8 @@ class PagesController < ApplicationController
     @title = "Edge of the Empire Dummy Frontpage"
   end
 
-  def species
-    @species = Race.find(:all)
+  def species_list
+    @species = Race.find(:all, :order => :name)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,14 +15,13 @@ class PagesController < ApplicationController
     end
   end
 
-  def careers
-    @careers = Career.find(:all)
+  def equipment_list
+    @equipment = '' #Equipment.find(:all)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @careers }
+      format.json { render json: @equipment }
     end
   end
-
 
 end

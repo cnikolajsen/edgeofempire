@@ -1,0 +1,24 @@
+
+<div class="page-header">
+  <h1><%=t '.title', :default => 'Skills' %></h1>
+  <p>What a player chooses as a career for his character defines the overall and ongoing  commitment to a way f life for that character. A career is more than just what a character does for a living - it is his way of life, encompassing his goals, his passions, his training, and his destiny. Areas of focus may change over time, but a character will never truly stop being whatever it is he chose to be at his core.</p>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Characteristic</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @skills.each do |skill| %>
+      <tr>
+        <td><%= link_to skill.name, skill_path(skill.id) %></td>
+        <td><%= skill.characteristic %></td>
+        <td><%= skill.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -6,6 +6,10 @@ EdgeOfEmpire::Application.routes.draw do
   devise_for :users
 
   resources :characters
+  resources :skills
+  resources :careers
+  resources :species
+  resources :equipment  
   
   devise_scope :user do
     get "login", :to => "devise/sessions#new"
@@ -15,7 +19,7 @@ EdgeOfEmpire::Application.routes.draw do
   end
 
   get "home/index"
-  get "careers/index"
+  # get "careers/index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -23,9 +27,6 @@ EdgeOfEmpire::Application.routes.draw do
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
-
-  match 'careers' => 'pages#careers'
-  match 'species' => 'pages#species'
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
