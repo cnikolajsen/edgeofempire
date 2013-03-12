@@ -1,5 +1,11 @@
 EdgeOfEmpire::Application.routes.draw do
 
+  resources :adventures
+
+
+  resources :campaigns
+
+
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
