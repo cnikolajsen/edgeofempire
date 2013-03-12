@@ -1,7 +1,25 @@
 <%- model_class = Character -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%=t '.title', :default => @character.name %></h1>
 </div>
+
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <td><strong><%= model_class.human_attribute_name(:brawn) %> <%= @character.brawn %></strong></td>
+      <td><strong><%= model_class.human_attribute_name(:cunning) %> <%= @character.cunning %></strong></td>
+      <td><strong><%= model_class.human_attribute_name(:presence) %> <%= @character.presence %></strong></td>
+    </tr>
+    <tr>
+      <td><strong><%= model_class.human_attribute_name(:agility) %> <%= @character.agility %></strong></td>
+      <td><strong><%= model_class.human_attribute_name(:intellect) %> <%= @character.intellect %></strong></td>
+      <td><strong><%= model_class.human_attribute_name(:willpower) %> <%= @character.willpower %></strong></td>
+    </tr>
+     <tr>
+        <td colspan="2"><strong>Skills:</strong></td>
+  </tbody>
+</table>
+
 
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
@@ -14,8 +32,7 @@
   <dd><%= @character.age %></dd>
   <dt><strong><%= model_class.human_attribute_name(:career) %>:</strong></dt>
   <dd><%= @character.career %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:brawn) %>:</strong></dt>
-  <dd><%= @character.brawn %></dd>
+  
   <dt><strong><%= model_class.human_attribute_name(:agility) %>:</strong></dt>
   <dd><%= @character.agility %></dd>
   <dt><strong><%= model_class.human_attribute_name(:intellect) %>:</strong></dt>
