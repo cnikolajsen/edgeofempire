@@ -1,21 +1,24 @@
 <%- model_class = Career -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
-  <p>What a player chooses as a career for his character defines the overall and ongoing  commitment to a way f life for that character. A career is more than just what a character does for a living - it is his way of life, encompassing his goals, his passions, his training, and his destiny. Areas of focus may change over time, but a character will never truly stop being whatever it is he chose to be at his core.</p>
 </div>
-
 <table class="table table-striped">
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @careers.each do |career| %>
       <tr>
-        <td><%= link_to career.name, career_path(career.id) %></td>
+        <td><%= career.name %></td>
         <td><%= career.description %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      career_path(career), :class => 'btn btn-mini' %>
+        </td>
       </tr>
     <% end %>
   </tbody>

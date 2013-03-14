@@ -1,21 +1,42 @@
-<%- model_class = Race -%>
+  <%- model_class = Race -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
-  <p>What a player chooses as a career for his character defines the overall and ongoing  commitment to a way f life for that character. A career is more than just what a character does for a living - it is his way of life, encompassing his goals, his passions, his training, and his destiny. Areas of focus may change over time, but a character will never truly stop being whatever it is he chose to be at his core.</p>
+  <h1><%=t '.title', :default => 'Species' %></h1>
 </div>
-
 <table class="table table-striped">
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:wound_threshold) %></th>
+      <th><%= model_class.human_attribute_name(:strain_threshold) %></th>
+      <th><%= model_class.human_attribute_name(:starting_experience) %></th>
+      <th><%= model_class.human_attribute_name(:brawn) %></th>
+      <th><%= model_class.human_attribute_name(:cunning) %></th>
+      <th><%= model_class.human_attribute_name(:presence) %></th>
+      <th><%= model_class.human_attribute_name(:agility) %></th>
+      <th><%= model_class.human_attribute_name(:intellect) %></th>
+      <th><%= model_class.human_attribute_name(:willpower) %></th>
+      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @races.each do |race| %>
       <tr>
-        <td><%= link_to race.name, race_path(race.id) %></td>
+        <td><%= race.name %></td>
         <td><%= race.description %></td>
+        <td><%= race.wound_threshold %></td>
+        <td><%= race.strain_threshold %></td>
+        <td><%= race.starting_experience %></td>
+        <td><%= race.brawn %></td>
+        <td><%= race.cunning %></td>
+        <td><%= race.presence %></td>
+        <td><%= race.agility %></td>
+        <td><%= race.intellect %></td>
+        <td><%= race.willpower %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      race_path(race), :class => 'btn btn-mini' %>
+        </td>
       </tr>
     <% end %>
   </tbody>

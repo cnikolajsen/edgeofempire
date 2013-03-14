@@ -1,23 +1,28 @@
-
+<%- model_class = Skill -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => 'Skills' %></h1>
-  <p>What a player chooses as a career for his character defines the overall and ongoing  commitment to a way f life for that character. A career is more than just what a character does for a living - it is his way of life, encompassing his goals, his passions, his training, and his destiny. Areas of focus may change over time, but a character will never truly stop being whatever it is he chose to be at his core.</p>
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
-
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Characteristic</th>
-      <th>Description</th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:characteristic) %></th>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <!--<th><%= model_class.human_attribute_name(:type) %></th>-->
+      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @skills.each do |skill| %>
       <tr>
-        <td><%= link_to skill.name, skill_path(skill.id) %></td>
+        <td><%= skill.name %></td>
         <td><%= skill.characteristic %></td>
         <td><%= skill.description %></td>
+        <!--<td><%= skill.type %></td>-->
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      skill_path(skill), :class => 'btn btn-mini' %>
+        </td>
       </tr>
     <% end %>
   </tbody>

@@ -1,4 +1,34 @@
+<%- model_class = Race -%>
 <div class="page-header">
-  <h1><%= @race.name %></h1>
-  <p><%= @race.description.html_safe %></p>
+  <h1><%=t '.title', :default => @race.name %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @race.description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:wound_threshold) %>:</strong></dt>
+  <dd><%= @race.wound_threshold %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:strain_threshold) %>:</strong></dt>
+  <dd><%= @race.strain_threshold %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:starting_experience) %>:</strong></dt>
+  <dd><%= @race.starting_experience %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:special_ability) %>:</strong></dt>
+  <dd><%= @race.special_ability %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:brawn) %>:</strong></dt>
+  <dd><%= @race.brawn %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:cunning) %>:</strong></dt>
+  <dd><%= @race.cunning %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:presence) %>:</strong></dt>
+  <dd><%= @race.presence %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:agility) %>:</strong></dt>
+  <dd><%= @race.agility %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:intellect) %>:</strong></dt>
+  <dd><%= @race.intellect %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:willpower) %>:</strong></dt>
+  <dd><%= @race.willpower %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              races_path, :class => 'btn'  %>
 </div>

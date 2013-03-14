@@ -1,4 +1,13 @@
+<%- model_class = Career -%>
 <div class="page-header">
-  <h1><%= @career.name %></h1>
-  <p><%= @career.description.html_safe %></p>
+  <h1><%=t '.title', :default => @career.name %></h1>
+</div>
+
+<p>
+<%= @career.description.html_safe %>
+</p>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              careers_path, :class => 'btn'  %>
 </div>

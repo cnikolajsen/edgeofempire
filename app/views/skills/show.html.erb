@@ -1,5 +1,16 @@
+<%- model_class = Skill -%>
 <div class="page-header">
-  <h1><%= @skill.name %></h1>
-  <%= @skill.characteristic %>
-  <p><%= @skill.description %></p>
+  <h1><%=t '.title', :default => @skill.name %> <small>[<%= @skill.characteristic %>]</small></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @skill.description %></dd>
+  <dt><strong><%#= model_class.human_attribute_name(:type) %>:</strong></dt>
+  <dd><%#= @skill.type %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              skills_path, :class => 'btn'  %>
 </div>
