@@ -1,0 +1,22 @@
+<%- model_class = Weapon -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => @weapon.name %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @weapon.description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:skill_id) %>:</strong></dt>
+  <dd><%= @weapon.skill_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:damage) %>:</strong></dt>
+  <dd><%= @weapon.damage %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:crit) %>:</strong></dt>
+  <dd><%= @weapon.crit %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+  <dd><%= @weapon.price %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              weapons_path, :class => 'btn'  %>
+</div>

@@ -1,11 +1,5 @@
 EdgeOfEmpire::Application.routes.draw do
 
-  resources :adventures
-
-
-  resources :campaigns
-
-
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
@@ -16,7 +10,10 @@ EdgeOfEmpire::Application.routes.draw do
   resources :careers
   resources :races
   resources :equipment  
-  
+  resources :adventures
+  resources :campaigns
+  resources :weapons
+
   devise_scope :user do
     get "login", :to => "devise/sessions#new"
     get "logout", :to => "devise/sessions#destroy"
