@@ -1,0 +1,31 @@
+<%- model_class = Gear -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:price) %></th>
+      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @gear.each do |gear| %>
+      <tr>
+        <td><%= gear.name %></td>
+        <td><%= gear.description %></td>
+        <td><%= gear.price %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      gear_path(gear), :class => 'btn btn-mini' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_gear_path,
+            :class => 'btn btn-primary' %>

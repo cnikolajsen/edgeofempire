@@ -1,0 +1,20 @@
+<%- model_class = Armor -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => @armor.name %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+  <dd><%= @armor.description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
+  <dd><%= @armor.defense %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:soak) %>:</strong></dt>
+  <dd><%= @armor.soak %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+  <dd><%= @armor.price %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              armor_path, :class => 'btn'  %>
+</div>
