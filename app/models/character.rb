@@ -8,6 +8,8 @@ class Character < ActiveRecord::Base
   
   belongs_to :user
   
+  has_many :skills, :through => :character_skills
+  
   #has_many :skills
   #has_many :talents
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130314180529) do
+ActiveRecord::Schema.define(:version => 20130316061713) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -77,6 +77,14 @@ ActiveRecord::Schema.define(:version => 20130314180529) do
     t.text     "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "character_skills", :force => true do |t|
+    t.integer  "character_id"
+    t.integer  "skill_id"
+    t.integer  "ranks"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "characters", :force => true do |t|
@@ -180,6 +188,30 @@ ActiveRecord::Schema.define(:version => 20130314180529) do
   add_index "users", ["enabled"], :name => "index_users_on_enabled"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
+  create_table "weapon_qualities", :force => true do |t|
+    t.string   "name"
+    t.string   "trigger"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "weapon_qualities_weapons", :force => true do |t|
+    t.integer  "weapon_id"
+    t.integer  "weapon_quality_id"
+    t.integer  "ranks"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "weapon_quality_ranks", :force => true do |t|
+    t.integer  "weapon_id"
+    t.integer  "weapon_quality_id"
+    t.integer  "ranks"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "weapons", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -189,6 +221,7 @@ ActiveRecord::Schema.define(:version => 20130314180529) do
     t.integer  "price"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "range"
   end
 
 end
