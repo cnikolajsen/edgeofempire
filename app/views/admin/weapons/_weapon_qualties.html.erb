@@ -1,0 +1,3 @@
+<% qualities.each do |quality| %>
+  <%= WeaponQuality.find_by_id(quality.weapon_quality_id).name %><% if quality.ranks > 0 %> <%= quality.ranks %><% end %><% if quality != qualities.last %>,<% end %>
+<% end %>
