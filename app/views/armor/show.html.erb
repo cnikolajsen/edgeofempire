@@ -3,9 +3,9 @@
   <h1><%=t '.title', :default => @armor.name %></h1>
 </div>
 
+<p><%= @armor.description %></p>
+
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
-  <dd><%= @armor.description %></dd>
   <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
   <dd><%= @armor.defense %></dd>
   <dt><strong><%= model_class.human_attribute_name(:soak) %>:</strong></dt>
@@ -16,5 +16,5 @@
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              armor_path, :class => 'btn'  %>
+              "/armor", :class => 'btn'  %>
 </div>

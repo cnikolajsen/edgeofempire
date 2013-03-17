@@ -1,20 +1,30 @@
 <%- model_class = Weapon -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => @weapon.name %></h1>
+  <h1><%=t '.title', :default => @weapon.name %> <small><%= @weapon.skill.name %></small></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
-  <dd><%= @weapon.description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:skill_id) %>:</strong></dt>
-  <dd><%= @weapon.skill_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:damage) %>:</strong></dt>
-  <dd><%= @weapon.damage %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:crit) %>:</strong></dt>
-  <dd><%= @weapon.crit %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
-  <dd><%= @weapon.price %></dd>
-</dl>
+<p><%= @weapon.description %></p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:skill_id) %></th>
+      <th><%= model_class.human_attribute_name(:damage) %></th>
+      <th><%= model_class.human_attribute_name(:crit) %></th>
+      <th><%= model_class.human_attribute_name(:price) %></th>
+      <th>Special</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @weapon.skill.name %></td>
+      <td><%= @weapon.damage %></td>
+      <td><%= @weapon.crit %></td>
+      <td><%= @weapon.price %></td>
+      <td><%= render "weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></td>
+    </tr>
+  </tbody>
+</table>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

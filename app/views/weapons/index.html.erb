@@ -6,11 +6,11 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:skill_id) %></th>
       <th><%= model_class.human_attribute_name(:damage) %></th>
       <th><%= model_class.human_attribute_name(:crit) %></th>
       <th><%= model_class.human_attribute_name(:price) %></th>
+      <th>Special</th>
       <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -18,11 +18,11 @@
     <% @weapons.each do |weapon| %>
       <tr>
         <td><%= weapon.name %></td>
-        <td><%= weapon.description %></td>
-        <td><%= weapon.skill_id %></td>
+        <td><%= weapon.skill.name %></td>
         <td><%= weapon.damage %></td>
         <td><%= weapon.crit %></td>
         <td><%= weapon.price %></td>
+        <td><%= render "weapon_qualities", :qualities => weapon.weapon_quality_ranks %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       weapon_path(weapon), :class => 'btn btn-mini' %>

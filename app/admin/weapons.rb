@@ -4,9 +4,6 @@ ActiveAdmin.register Weapon do
   config.sort_order = "name_asc"
   config.per_page = 10
   
-  filter :name
-  filter :description
-
   index do |weapon|
     column :name
     column :skill_id do |skill|

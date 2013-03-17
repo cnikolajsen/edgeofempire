@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:defense) %></th>
       <th><%= model_class.human_attribute_name(:soak) %></th>
       <th><%= model_class.human_attribute_name(:price) %></th>
@@ -17,7 +16,6 @@
     <% @armor.each do |armor| %>
       <tr>
         <td><%= armor.name %></td>
-        <td><%= armor.description %></td>
         <td><%= armor.defense %></td>
         <td><%= armor.soak %></td>
         <td><%= armor.price %></td>
