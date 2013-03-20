@@ -7,9 +7,10 @@ gem 'rails', '3.2.12'
 
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
-gem "less-rails"
-gem 'twitter-bootstrap-rails'
-gem "therubyracer", "~> 0.11.4"
+gem "less-rails", "~> 2.2.3"
+gem 'twitter-bootstrap-rails', '2.1.3'
+#gem "therubyracer", "~> 0.11.4"
+gem "therubyracer", "~> 0.10.2"
 gem "seed_dump", "~> 0.4.2"
 
 group :development, :test do
