@@ -1,5 +1,5 @@
 ActiveAdmin.register Specialization do
-  menu :parent => "Careers"
+  menu false
 
   controller do
      def create

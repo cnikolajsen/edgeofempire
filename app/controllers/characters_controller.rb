@@ -45,6 +45,16 @@ class CharactersController < ApplicationController
     
     respond_to do |format|
       if @character.save
+
+        Skill.find(:all).each do |skill|
+          @character_skill = CharacterSkill.new()
+          @character_skill.character_id = @character.id
+          @character_skill.ranks = 0
+          @character_skill.skill_id = skill.id
+          @character_skill.save
+        end
+
+
         format.html { redirect_to @character, notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else

@@ -8,7 +8,6 @@
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:characteristic) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
-      <!--<th><%= model_class.human_attribute_name(:type) %></th>-->
       <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -18,7 +17,6 @@
         <td><%= skill.name %></td>
         <td><%= skill.characteristic %></td>
         <td><%= skill.description %></td>
-        <!--<td><%= skill.type %></td>-->
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       skill_path(skill), :class => 'btn btn-mini' %>

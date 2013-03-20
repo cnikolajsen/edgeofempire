@@ -1,6 +1,9 @@
 <%- model_class = Character -%>
+<% content_for :title do %>
+  <%= @character.name %> - <%= @character.race.name %> <%= @character.career.name %>
+<% end %>
 <div class="page-header">
-  <h1><%=t '.title', :default => @character.name %></h1>
+  <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name %> <%= @character.career.name %></small></h1>
 </div>
 
 <table class="table table-striped">
@@ -15,34 +18,43 @@
       <td><strong><%= model_class.human_attribute_name(:intellect) %> <%= @character.intellect %></strong></td>
       <td><strong><%= model_class.human_attribute_name(:willpower) %> <%= @character.willpower %></strong></td>
     </tr>
-     <tr>
-        <td colspan="2"><strong>Skills:</strong></td>
+    <tr>
+      <td colspan="2"><strong>Skills:</strong>
+        <% @character.character_skills.each do |character_skill| %>
+          <%= character_skill.skill.name %> <%= character_skill.ranks %> [<%#= character_skill.skill.characteristic %>]<% if @character.character_skills.last != character_skill %>,<% end %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Talents:</strong>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Soak:</strong>
+      </td>
+      <td><strong>Defense:</strong>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Wound Threshold:</strong>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Strain Threshold:</strong>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Equipment:</strong>
+      </td>
+    </tr>
+    
   </tbody>
 </table>
 
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @character.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:species) %>:</strong></dt>
-  <dd><%= @character.species %></dd>
   <dt><strong><%= model_class.human_attribute_name(:gender) %>:</strong></dt>
   <dd><%= @character.gender %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:age) %>:</strong></dt>
-  <dd><%= @character.age %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:career) %>:</strong></dt>
-  <dd><%= @character.career %></dd>
-  
-  <dt><strong><%= model_class.human_attribute_name(:agility) %>:</strong></dt>
-  <dd><%= @character.agility %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:intellect) %>:</strong></dt>
-  <dd><%= @character.intellect %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:cunning) %>:</strong></dt>
-  <dd><%= @character.cunning %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:willpower) %>:</strong></dt>
-  <dd><%= @character.willpower %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:presence) %>:</strong></dt>
-  <dd><%= @character.presence %></dd>
 </dl>
 
 <div class="form-actions">

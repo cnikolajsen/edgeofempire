@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyText
+  talent_1_1: 1
+  talent_1_2: 1
+  talent_1_3: 1
+  talent_1_4: 1
+  talent_2_1: 1
+  talent_2_2: 1
+  talent_3_3: 1
+  talent_4_4: 1
+  talent_3_1: 1
+  talent_3_2: 1
+  talent_3_3: 1
+  talent_3_4: 1
+  talent_4_1: 1
+  talent_4_2: 1
+  talent_4_3: 1
+  talent_4_4: 1
+
+two:
+  name: MyString
+  description: MyText
+  talent_1_1: 1
+  talent_1_2: 1
+  talent_1_3: 1
+  talent_1_4: 1
+  talent_2_1: 1
+  talent_2_2: 1
+  talent_3_3: 1
+  talent_4_4: 1
+  talent_3_1: 1
+  talent_3_2: 1
+  talent_3_3: 1
+  talent_3_4: 1
+  talent_4_1: 1
+  talent_4_2: 1
+  talent_4_3: 1
+  talent_4_4: 1

@@ -1,4 +1,4 @@
-class CharacterSkills < ActiveRecord::Base
+class CharacterSkill < ActiveRecord::Base
   attr_accessible :character_id, :ranks, :skill_id
   
   belongs_to :character

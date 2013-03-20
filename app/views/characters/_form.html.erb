@@ -6,9 +6,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :species, :class => 'control-label' %>
+    <%= f.label :race_id, :class => 'control-label' %>
     <div class="controls">
-      <%= select('character', 'species', Race.find(:all).collect  {|race| [race.name, race.id]}, {:prompt => "Select Species"}) %>
+      <%= select('character', 'race_id', Race.find(:all).collect  {|race| [race.name, race.id]}, {:prompt => "Select Species"}) %>
     </div>
   </div>
   <div class="control-group">
@@ -18,15 +18,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :age, :class => 'control-label' %>
+    <%= f.label :career_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :age, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :career, :class => 'control-label' %>
-    <div class="controls">
-      <%= select('character', 'career', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select Career"}) %>
+      <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select Career"}) %>
     </div>
   </div>
   <div class="control-group">

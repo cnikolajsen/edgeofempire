@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130316203056) do
+ActiveRecord::Schema.define(:version => 20130318085036) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -89,10 +89,9 @@ ActiveRecord::Schema.define(:version => 20130316203056) do
 
   create_table "characters", :force => true do |t|
     t.string   "name"
-    t.string   "species"
+    t.string   "race_id"
     t.string   "gender"
-    t.string   "age"
-    t.string   "career"
+    t.string   "career_id"
     t.integer  "brawn"
     t.integer  "agility"
     t.integer  "intellect"
@@ -143,6 +142,36 @@ ActiveRecord::Schema.define(:version => 20130316203056) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "career_id"
+  end
+
+  create_table "talent_tree_career_skills", :force => true do |t|
+    t.integer  "talent_tree_id"
+    t.integer  "skill_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "talent_trees", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "talent_1_1"
+    t.integer  "talent_1_2"
+    t.integer  "talent_1_3"
+    t.integer  "talent_1_4"
+    t.integer  "talent_2_1"
+    t.integer  "talent_2_2"
+    t.integer  "talent_3_3"
+    t.integer  "talent_4_4"
+    t.integer  "talent_3_1"
+    t.integer  "talent_3_2"
+    t.integer  "talent_3_4"
+    t.integer  "talent_4_1"
+    t.integer  "talent_4_2"
+    t.integer  "talent_4_3"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "talent_2_3"
+    t.integer  "talent_2_4"
   end
 
   create_table "talents", :force => true do |t|
