@@ -93,7 +93,7 @@ class CharactersController < ApplicationController
     @character.destroy
 
     respond_to do |format|
-      format.html { redirect_to characters_url }
+      format.html { redirect_to characters_url, notice: 'Character was successfully deleted.'  }
       format.json { head :no_content }
     end
   end
