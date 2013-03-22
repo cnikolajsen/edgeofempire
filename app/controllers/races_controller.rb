@@ -1,4 +1,6 @@
 class RacesController < ApplicationController
+  before_filter :set_up
+
   def index
     @races = Race.find(:all, :order => :name)
 
@@ -16,4 +18,10 @@ class RacesController < ApplicationController
       format.json { render json: @race }
     end
   end
+
+  def set_up
+    @page = 'races'
+    @title = "Races"
+  end
+  
 end

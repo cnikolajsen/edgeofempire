@@ -8,4 +8,8 @@ module PagesHelper
     end
   end
   
+  def current_page(page_icon)
+    @page == page_icon
+  end
+  
 end

@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_filter :set_up
+
   #before_filter :authenticate_user!
 
   #def index
@@ -24,4 +26,10 @@ class UsersController < ApplicationController
   #    render :action => 'new'
   #  end
   #end
+
+  def set_up
+    @page = 'users'
+    @title = "User"
+  end
+  
 end

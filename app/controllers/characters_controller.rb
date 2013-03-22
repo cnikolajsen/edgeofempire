@@ -1,4 +1,6 @@
 class CharactersController < ApplicationController
+  before_filter :set_up
+  
   # GET /characters
   # GET /characters.json
   def index
@@ -14,6 +16,7 @@ class CharactersController < ApplicationController
   # GET /characters/1.json
   def show
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | #{@title}"
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +28,8 @@ class CharactersController < ApplicationController
   # GET /characters/new.json
   def new
     @character = Character.new
+    @title = "New Character"
+    @page = 'new_character'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +40,7 @@ class CharactersController < ApplicationController
   # GET /characters/1/edit
   def edit
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | #{@title}"
   end
 
   # POST /characters
@@ -91,4 +97,12 @@ class CharactersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  private
+  
+  def set_up
+    @page = 'characters'
+    @title = "Characters"
+  end
+  
 end

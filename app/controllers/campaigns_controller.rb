@@ -1,4 +1,5 @@
 class CampaignsController < InheritedResources::Base
+  before_filter :set_up
   
   def create
     @campaign = Campaign.new(params[:campaign])
@@ -14,4 +15,10 @@ class CampaignsController < InheritedResources::Base
       end
     end
   end
+
+  def set_up
+    @page = 'campaigns'
+    @title = "Campaigns"
+  end
+  
 end
