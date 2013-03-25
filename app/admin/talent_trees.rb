@@ -4,7 +4,7 @@ ActiveAdmin.register TalentTree do
   index do
     column :name
     column :career_id do |career|
-      Career.find_by_id(career.career_id).name
+      Career.find_by_id(career.career_id).name unless !career.career_id
     end
     column :description
     default_actions
