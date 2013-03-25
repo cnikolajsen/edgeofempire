@@ -9,7 +9,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :skills
   resources :careers
   resources :races
-  resources :equipment  
+  resources :equipment
   resources :adventures
   resources :campaigns
   resources :weapons
@@ -36,6 +36,10 @@ EdgeOfEmpire::Application.routes.draw do
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
+
+  match 'characters/:id/talents' => 'characters#talents', :as => :talents
+  match 'characters/:id/skills' => 'characters#skills', :as => :skills
+  match 'characters/:id/equipment' => 'characters#equipment', :as => :equipment
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

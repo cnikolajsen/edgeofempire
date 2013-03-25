@@ -1,6 +1,7 @@
 class CharactersController < ApplicationController
   before_filter :set_up
-  
+  before_filter :authenticate_user!
+
   # GET /characters
   # GET /characters.json
   def index
@@ -41,6 +42,7 @@ class CharactersController < ApplicationController
   def edit
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
+    @character_page = 'basics'
   end
 
   # POST /characters
@@ -48,7 +50,7 @@ class CharactersController < ApplicationController
   def create
     @character = Character.new(params[:character])
     @character.user_id = current_user.id
-    
+
     respond_to do |format|
       if @character.save
 
@@ -97,12 +99,27 @@ class CharactersController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
+  def skills
+    @character = Character.find(params[:id])
+  end
+
+  def talents
+    @character = Character.find(params[:id])
+
+  end
+
+  def equipment
+    @character = Character.find(params[:id])
+
+  end
+
   private
-  
+
   def set_up
     @page = 'characters'
+    @character_page = 'basics'
     @title = "Characters"
   end
-  
+
 end

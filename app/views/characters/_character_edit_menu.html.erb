@@ -1,0 +1,6 @@
+<ul class="nav">
+  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Basics", edit_character_path(@character)  %></li>
+  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Skills", skills_url(:id => @character.id)   %></li>
+  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Talents", talents_url(:id => @character.id)  %></li>
+  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Equipment", equipment_url(:id => @character.id)   %></li>
+</ul>
