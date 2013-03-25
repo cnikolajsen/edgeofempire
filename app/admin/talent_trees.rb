@@ -1,10 +1,20 @@
 ActiveAdmin.register TalentTree do
   menu :parent => "Careers"
 
+  index do
+    column :name
+    column :career_id do |career|
+      Career.find_by_id(career.career_id).name
+    end
+    column :description
+    default_actions
+  end
+
   form do |f|
     f.inputs "Talent Tree Details" do
       f.input :name
       f.input :description
+      f.input :career_id, :as => :select, :collection => Career.all
       f.input :talent_1_1, :as => :select, :collection => Talent.all
       f.input :talent_1_2, :as => :select, :collection => Talent.all
       f.input :talent_1_3, :as => :select, :collection => Talent.all
@@ -29,15 +39,15 @@ ActiveAdmin.register TalentTree do
 
     f.actions
   end
-  
+
   show :title => :name do
     div talent_tree.description
-    
+
     div do
       strong "Career Skills: "
       render "talent_tree_career_skills", :skills => talent_tree.talent_tree_career_skills
     end
-    
+
     table do
       tr do
         td Talent.find_by_id(talent_tree.talent_1_1).name unless !talent_tree.talent_1_1

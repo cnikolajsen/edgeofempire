@@ -3,3 +3,27 @@
   <h1><%=t '.title', :default => "Edit skills for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
+
+<table>
+  <tr>
+    <th>Skills</th>
+    <th>Carrer?</th>
+    <th>Rank</th>
+  </tr>
+  <% @skills.each do |skill| %>
+    <tr>
+      <td><%= skill.name %></td>
+      <td><%#= @character.career.talent_trees.talent_tree_career_skill.each do %><%end%></td>
+      <td>
+        <select>
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </td>
+    </tr>
+  <% end %>
+</table>

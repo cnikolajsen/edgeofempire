@@ -102,6 +102,9 @@ class CharactersController < ApplicationController
 
   def skills
     @character = Character.find(params[:id])
+    @skills = Skill.find(:all)
+    
+    #@character
   end
 
   def talents

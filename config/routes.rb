@@ -6,6 +6,9 @@ EdgeOfEmpire::Application.routes.draw do
   devise_for :users
 
   resources :characters
+  #resources :characters do
+  #  resources :character_skills
+  #end
   resources :skills
   resources :careers
   resources :races
@@ -37,9 +40,9 @@ EdgeOfEmpire::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  match 'characters/:id/talents' => 'characters#talents', :as => :talents
-  match 'characters/:id/skills' => 'characters#skills', :as => :skills
-  match 'characters/:id/equipment' => 'characters#equipment', :as => :equipment
+  match 'characters/:id/talents' => 'characters#talents', :as => :character_talents
+  match 'characters/:id/skills' => 'characters#skills', :as => :character_skills
+  match 'characters/:id/equipment' => 'characters#equipment', :as => :character_equipment
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
