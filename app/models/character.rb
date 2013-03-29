@@ -1,5 +1,5 @@
 class Character < ActiveRecord::Base
-  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower
+  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :bio, :character_skills_attributes
   
   validates_presence_of :name
   validates_presence_of :race_id
@@ -19,6 +19,8 @@ class Character < ActiveRecord::Base
   
   belongs_to :race
   belongs_to :career
+  
+  accepts_nested_attributes_for :character_skills
   
   #has_many :skills
   #has_many :talents

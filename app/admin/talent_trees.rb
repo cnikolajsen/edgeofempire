@@ -6,7 +6,9 @@ ActiveAdmin.register TalentTree do
     column :career_id do |career|
       Career.find_by_id(career.career_id).name unless !career.career_id
     end
-    column :description
+    column :description do |desc|
+      truncate(desc.description)
+    end
     default_actions
   end
 

@@ -1,14 +1,14 @@
 ActiveAdmin.register Career do
-  index do                            
-    column :name                     
-    column :description                     
-    default_actions                   
+  index do
+    column :name
+    column :description do |career|
+      career.description.html_safe
+    end
+    default_actions
   end
-  
-  config.sort_order = "name_asc"
-  
-  config.filters = false
 
+  config.sort_order = "name_asc"
+  config.filters = false
 
   controller do
      def create

@@ -15,6 +15,7 @@ gem "seed_dump", "~> 0.4.2"
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'thin'
 end
 
 group :production, :staging do

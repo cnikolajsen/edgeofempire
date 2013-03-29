@@ -5,6 +5,7 @@
 <div class="page-header">
   <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name %> <%= @character.career.name %></small></h1>
 </div>
+<%= render :partial => 'character_edit_menu' %>
 
 <table class="table table-striped">
   <tbody>
@@ -56,6 +57,8 @@
   <dt><strong><%= model_class.human_attribute_name(:gender) %>:</strong></dt>
   <dd><%= @character.gender %></dd>
 </dl>
+
+<%= simple_format(@character.bio) %>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

@@ -1,29 +1,28 @@
-<%- model_class = Character -%>
+<%- model_class = CharacterSkill -%>
 <div class="page-header">
   <h1><%=t '.title', :default => "Edit skills for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
 
+<%= form_for @character do |character_form| %>
 <table>
   <tr>
     <th>Skills</th>
-    <th>Carrer?</th>
+    <th>Career?</th>
     <th>Rank</th>
   </tr>
-  <% @skills.each do |skill| %>
+  <%= character_form.fields_for :character_skills do |skill_fields| %>
     <tr>
-      <td><%= skill.name %></td>
-      <td><%#= @character.career.talent_trees.talent_tree_career_skill.each do %><%end%></td>
+      <td><%= character_form.label :ranks, Skill.find_by_id(skill_fields.object.skill_id).name, :class => 'control-label' %></td>
       <td>
-        <select>
-          <option>0</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
+        <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
       </td>
+      <td><%= skill_fields.number_field :ranks %></td>
     </tr>
   <% end %>
 </table>
+<div class="form-actions">
+  <%= character_form.submit nil, :class => 'btn btn-primary' %>
+</div>
+<% end %>
+

@@ -71,6 +71,17 @@
       <%= f.number_field :presence, :class => 'number_field' %>
     </div>
   </div>
+  <div class="control-group">
+    <%= f.label :bio, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :bio, :class => 'text_area' %>
+    </div>
+  </div>
+  
+  <% f.fields_for :character_skills do |skill_form| %>
+    <%= skill_form.number_field :skill_id, :as => :select, :collection => Skill.all %>
+  <% end %>
+  
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
