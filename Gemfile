@@ -12,10 +12,10 @@ gem 'twitter-bootstrap-rails', '2.1.3'
 #gem "therubyracer", "~> 0.11.4"
 gem "therubyracer", "~> 0.10.2"
 gem "seed_dump", "~> 0.4.2"
+gem 'thin'
 
 group :development, :test do
   gem 'sqlite3'
-  gem 'thin'
 end
 
 group :production, :staging do
