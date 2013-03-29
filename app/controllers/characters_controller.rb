@@ -18,6 +18,8 @@ class CharactersController < ApplicationController
   def show
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
+    
+    @soak = @character.brawn # plus armor soak value
 
     respond_to do |format|
       format.html # show.html.erb
