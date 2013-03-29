@@ -106,7 +106,7 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     #@character_skills = @character.character_skills
     logger.debug @character.character_skills.inspect
-    @skills = Skill.find(:all)
+    #@skills = Skill.find(:all)
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
       tt.talent_tree_career_skills.each do |skill|
