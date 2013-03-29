@@ -17,7 +17,7 @@
       <td>
         <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
       </td>
-      <td><%= skill_fields.number_field :ranks %></td>
+      <td><%= skill_fields.select :ranks, (0..5) %></td>
     </tr>
   <% end %>
 </table>
