@@ -22,14 +22,15 @@ class CharactersController < ApplicationController
     @title = "#{@character.name} | #{@title}"
     
     @soak = @character.brawn
-    @defense = 0 
+    @defense = 0
+    @equipment = Array.new
     
     # Add armor values to soak and defense.
     if !@character.character_armor.nil?
       @soak += @character.character_armor.armor.soak
       @defense += @character.character_armor.armor.defense
+      @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
     end
-    
 
     respond_to do |format|
       format.html # show.html.erb
@@ -132,15 +133,13 @@ class CharactersController < ApplicationController
   def talents
     @character_page = 'talents'
     @character = Character.find(params[:id])
-    
-    #@armor = Armor.find(:all)
   end
 
   def armor
     @character_page = 'armor'
     @character = Character.find(params[:id])
     
-    if !@character.character_armor.armor_id.nil?
+    if !@character.character_armor.nil?
       @armor = Armor.find_by_id(@character.character_armor.armor_id)
     end
   end

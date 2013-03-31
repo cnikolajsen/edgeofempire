@@ -6,7 +6,9 @@
   <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name %> <%= @character.career.name %></small></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
+<%= simple_format(@character.bio) %>
 
+<div class="well">
 <table class="table table-striped">
   <tbody>
     <tr>
@@ -45,13 +47,15 @@
     </tr>
     <tr>
       <td colspan="3"><strong>Equipment:</strong>
+        <% @equipment.each do |equipment| %>
+          <%= equipment %> <% if equipment.last != equipment %>,<% end %>
+        <% end %>
       </td>
     </tr>
     
   </tbody>
 </table>
-
-<%= simple_format(@character.bio) %>
+</div>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

@@ -10,13 +10,15 @@
     <%= armor_fields.select :armor_id, Armor.find(:all).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
   <% end %>
 
-  <div class="well">
-    <h3><%= @armor.name %></h3>
-    <span class="label">Defense <span class="label label-info"><%= @armor.defense %></span></span>
-    <span class="label">Soak <span class="label label-info"><%= @armor.soak %></span></span>
-    <span class="label">Price  <span class="label label-info"><%= @armor.price %></span></span><br />
-     <%= @armor.description %>
-  </div>
+  <% unless @armor.nil? %>
+    <div class="well">
+      <h3><%= @armor.name %></h3>
+      <span class="label">Defense <span class="label label-info"><%= @armor.defense %></span></span>
+      <span class="label">Soak <span class="label label-info"><%= @armor.soak %></span></span>
+      <span class="label">Price  <span class="label label-info"><%= @armor.price %></span></span><br />
+       <%= @armor.description %>
+    </div>
+  <% end %>
   
   <div class="form-actions">
     <%= character_form.submit nil, :class => 'btn btn-primary' %>
