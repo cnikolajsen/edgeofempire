@@ -1,28 +1,26 @@
-<%- model_class = CharacterSkill -%>
+<%- model_class = CharacterArmor -%>
 <div class="page-header">
   <h1><%=t '.title', :default => "Edit equipped armor for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
 
 <%= form_for @character do |character_form| %>
-<table>
-  <tr>
-    <th>Skills</th>
-    <th>Career?</th>
-    <th>Rank</th>
-  </tr>
-  <%#= character_form.fields_for :character_skills do |skill_fields| %>
-    <tr>
-      <td><%#= character_form.label :ranks, Skill.find_by_id(skill_fields.object.skill_id).name, :class => 'control-label' %></td>
-      <td>
-        <%# if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<%# end %>
-      </td>
-      <td><%#= skill_fields.select :ranks, (0..5) %></td>
-    </tr>
-  <%# end %>
-</table>
-<div class="form-actions">
-  <%= character_form.submit nil, :class => 'btn btn-primary' %>
-</div>
+  <%= character_form.fields_for :character_armor do |armor_fields| %>
+    <%#= character_form.label :armor_id, 'Select armor', :class => 'control-label' %>
+    <%= armor_fields.select :armor_id, Armor.find(:all).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
+  <% end %>
+
+  <div class="well">
+    <h3><%= @armor.name %></h3>
+    <span class="label">Defense <span class="label label-info"><%= @armor.defense %></span></span>
+    <span class="label">Soak <span class="label label-info"><%= @armor.soak %></span></span>
+    <span class="label">Price  <span class="label label-info"><%= @armor.price %></span></span><br />
+     <%= @armor.description %>
+  </div>
+  
+  <div class="form-actions">
+    <%= character_form.submit nil, :class => 'btn btn-primary' %>
+  </div>
 <% end %>
+
 

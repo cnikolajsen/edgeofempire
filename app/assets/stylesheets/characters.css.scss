@@ -4,14 +4,21 @@
 
 .green-dice {
   background-color: green;
+  margin: auto;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  
 }
 .yellow-dice {
   background-color: yellow;
 }
 .green-dice,
 .yellow-dice {
-  width: 8px;
-  height: 8px;
-  display: inline-block;
-  border: 1px solid black;
+width: 8px;
+height: 8px;
+display: inline-block;
+border: 1px solid black;
 }

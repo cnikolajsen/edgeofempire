@@ -21,7 +21,15 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
     
-    @soak = @character.brawn # plus armor soak value
+    @soak = @character.brawn
+    @defense = 0 
+    
+    # Add armor values to soak and defense.
+    if !@character.character_armor.nil?
+      @soak += @character.character_armor.armor.soak
+      @defense += @character.character_armor.armor.defense
+    end
+    
 
     respond_to do |format|
       format.html # show.html.erb
@@ -65,7 +73,11 @@ class CharactersController < ApplicationController
           @character_skill.skill_id = skill.id
           @character_skill.save
         end
-
+        
+        @character_armor = CharacterArmor.new()
+        @character_armor.character_id = @character.id
+        @character_armor.armor_id = nil
+        @character_armor.save
 
         format.html { redirect_to @character, notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
@@ -106,11 +118,9 @@ class CharactersController < ApplicationController
 
   def skills
     @character_page = 'skills'
-    
     @character = Character.find(params[:id])
-    #@character_skills = @character.character_skills
-    logger.debug @character.character_skills.inspect
-    #@skills = Skill.find(:all)
+    
+    #logger.debug @character.character_skills.inspect
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
       tt.talent_tree_career_skills.each do |skill|
@@ -122,13 +132,17 @@ class CharactersController < ApplicationController
   def talents
     @character_page = 'talents'
     @character = Character.find(params[:id])
-
+    
+    #@armor = Armor.find(:all)
   end
 
   def armor
     @character_page = 'armor'
     @character = Character.find(params[:id])
-
+    
+    if !@character.character_armor.armor_id.nil?
+      @armor = Armor.find_by_id(@character.character_armor.armor_id)
+    end
   end
 
   def weapons
