@@ -16,6 +16,8 @@ class CharactersController < ApplicationController
   # GET /characters/1
   # GET /characters/1.json
   def show
+    @character_page = 'view'
+    
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
     
@@ -103,6 +105,8 @@ class CharactersController < ApplicationController
   end
 
   def skills
+    @character_page = 'skills'
+    
     @character = Character.find(params[:id])
     #@character_skills = @character.character_skills
     logger.debug @character.character_skills.inspect
@@ -116,11 +120,25 @@ class CharactersController < ApplicationController
   end
 
   def talents
+    @character_page = 'talents'
+    @character = Character.find(params[:id])
+
+  end
+
+  def armor
+    @character_page = 'armor'
+    @character = Character.find(params[:id])
+
+  end
+
+  def weapons
+    @character_page = 'weapons'
     @character = Character.find(params[:id])
 
   end
 
   def equipment
+    @character_page = 'gear'
     @character = Character.find(params[:id])
 
   end

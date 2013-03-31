@@ -1,6 +1,9 @@
-<ul class="nav">
-  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Basics", edit_character_path(@character)  %></li>
-  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Skills", character_skills_url(:id => @character.id)   %></li>
-  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Talents", character_talents_url(:id => @character.id)  %></li>
-  <li<% if current_page('characters') %> class="active"<% end %>><%= link_to "Equipment", character_equipment_url(:id => @character.id)   %></li>
-</ul>
+  <ul class="nav nav-tabs">
+    <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", character_path(@character)  %></li>
+    <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Basics", edit_character_path(@character)  %></li>
+    <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", character_skills_url(:id => @character.id)   %></li>
+    <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Talents", character_talents_url(:id => @character.id)  %></li>
+    <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(:id => @character.id)   %></li>
+    <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(:id => @character.id)   %></li>
+    <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Equipment", character_gear_url(:id => @character.id)   %></li>
+  </ul>

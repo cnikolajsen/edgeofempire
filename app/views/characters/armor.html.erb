@@ -1,0 +1,28 @@
+<%- model_class = CharacterSkill -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => "Edit equipped armor for #{@character.name}" %></h1>
+</div>
+<%= render :partial => 'character_edit_menu' %>
+
+<%= form_for @character do |character_form| %>
+<table>
+  <tr>
+    <th>Skills</th>
+    <th>Career?</th>
+    <th>Rank</th>
+  </tr>
+  <%#= character_form.fields_for :character_skills do |skill_fields| %>
+    <tr>
+      <td><%#= character_form.label :ranks, Skill.find_by_id(skill_fields.object.skill_id).name, :class => 'control-label' %></td>
+      <td>
+        <%# if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<%# end %>
+      </td>
+      <td><%#= skill_fields.select :ranks, (0..5) %></td>
+    </tr>
+  <%# end %>
+</table>
+<div class="form-actions">
+  <%= character_form.submit nil, :class => 'btn btn-primary' %>
+</div>
+<% end %>
+

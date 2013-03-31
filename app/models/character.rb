@@ -16,6 +16,10 @@ class Character < ActiveRecord::Base
   
   has_many :character_skills
   has_many :skills, :through => :character_skills, :order => "name"
+  has_many :character_weapons
+  has_many :weapons, :through => :character_weapons, :order => "name"
+  has_many :character_gears
+  has_many :gears, :through => :character_gears, :order => "name"
   
   belongs_to :race
   belongs_to :career
