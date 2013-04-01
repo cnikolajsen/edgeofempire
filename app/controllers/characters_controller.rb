@@ -26,7 +26,7 @@ class CharactersController < ApplicationController
     @equipment = Array.new
     
     # Add armor values to soak and defense.
-    if !@character.character_armor.nil?
+    if !@character.character_armor.nil? and !@character.character_armor.armor_id.nil?
       @soak += @character.character_armor.armor.soak
       @defense += @character.character_armor.armor.defense
       @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
@@ -93,6 +93,13 @@ class CharactersController < ApplicationController
   # PUT /characters/1.json
   def update
     @character = Character.find(params[:id])
+    
+    if @character.character_armor.nil?
+      @character_armor = CharacterArmor.new()
+      @character_armor.character_id = @character.id
+      @character_armor.armor_id = nil
+      @character_armor.save
+    end
 
     respond_to do |format|
       if @character.update_attributes(params[:character])
