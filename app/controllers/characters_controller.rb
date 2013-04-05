@@ -25,13 +25,24 @@ class CharactersController < ApplicationController
     @defense = 0
     @equipment = Array.new
     
-    # Add armor values to soak and defense.
+    # Add weapons to equipment list
+    if !@character.character_weapons.nil?
+      @character.character_weapons.each do |cw|
+        @wq = Array.new
+        cw.weapon.weapon_quality_ranks.each do |q|
+          @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{' ' unless q.ranks = 0}#{q.ranks unless q.ranks = 0}"
+        end
+        @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq})"
+      end
+    end
+
+    # Add armor values to soak and defense and armor to equipment list.
     if !@character.character_armor.nil? and !@character.character_armor.armor_id.nil?
       @soak += @character.character_armor.armor.soak
       @defense += @character.character_armor.armor.defense
       @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
     end
-
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }

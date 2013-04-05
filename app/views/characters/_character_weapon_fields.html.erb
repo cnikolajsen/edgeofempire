@@ -13,7 +13,9 @@
        </div>
     </div>
   <% else %>
-    <%= f.select :weapon_id, Weapon.find(:all).collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
+    <div class="controls">
+      <%= f.select :weapon_id, Weapon.find(:all).collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
+    </div>
   <% end %>
   
 </li>
