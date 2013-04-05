@@ -1,0 +1,19 @@
+<li class="control-group nested-fields">
+  <% unless f.object.weapon_id.nil? %>
+    <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
+    <div class="well">
+      <h3><%= @weapon.name %> <small><%= @weapon.skill.name %></small></h3>
+      <span class="label">Damage <span class="label label-info"><%= @weapon.damage %></span></span>
+      <span class="label">Crit <span class="label label-info"><%= @weapon.crit %></span></span>
+      <span class="label">Price  <span class="label label-info"><%= @weapon.price %></span></span>
+      <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
+       <%= @weapon.description %>
+       <div class="controls">
+         <%= link_to_remove_association "remove", f %>
+       </div>
+    </div>
+  <% else %>
+    <%= f.select :weapon_id, Weapon.find(:all).collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
+  <% end %>
+  
+</li>
