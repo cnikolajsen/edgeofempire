@@ -24,7 +24,7 @@ class CharactersController < ApplicationController
     # Determine starting wound threshold. Species stat plus brawn.
     @wound_th = @character.brawn
     if !@character.race.wound_threshold.nil?
-      @wound_th += @character.race.wound_threshold.nil
+      @wound_th += @character.race.wound_threshold
     end
     # Then increase based on selected talents.
 
