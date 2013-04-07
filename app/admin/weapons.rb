@@ -26,9 +26,13 @@ ActiveAdmin.register Weapon do
       f.input :skill_id, :as => :select, :collection => Skill.where("name IN ('Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)')")
       f.input :damage
       f.input :crit  
-      f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Engaged']
-      
+      f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Engaged']  
       f.input :price
+      f.has_many :weapon_quality_ranks do |wqr_form|
+        wqr_form.input :weapon_quality_id, :as => :select, :collection => WeaponQuality.all
+        wqr_form.input :ranks
+      end
+      
     end
     f.actions
   end

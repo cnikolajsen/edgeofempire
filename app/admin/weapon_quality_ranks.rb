@@ -1,5 +1,5 @@
 ActiveAdmin.register WeaponQualityRank do
-  menu :parent => "Equipment"
+  menu false #:parent => "Equipment"
   
   index do
     column :weapon_id do |weapon|

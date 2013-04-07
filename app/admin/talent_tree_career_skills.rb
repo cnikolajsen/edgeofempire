@@ -1,5 +1,5 @@
 ActiveAdmin.register TalentTreeCareerSkill do
-  menu :parent => "Careers"
+  menu false #:parent => "Careers"
   
   index do
     column :talent_tree_id do |tree|
