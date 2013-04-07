@@ -1,0 +1,1 @@
+rake db:seed:dump WITH_ID=1 MODELS=armor,career,gear,race,skill,talent,talent_tree,talent_tree_career_skill,weapon,weapon_quality,weapon_quality_rank
