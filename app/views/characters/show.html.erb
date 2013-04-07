@@ -38,19 +38,13 @@
       <td><strong>Defense:</strong> <%= @defense %></td>
     </tr>
     <tr>
-      <td colspan="3"><strong>Wound Threshold:</strong>
-      </td>
+      <td colspan="3"><strong>Wound Threshold:</strong> <%= @wound_th %></td>
     </tr>
     <tr>
-      <td colspan="3"><strong>Strain Threshold:</strong>
-      </td>
+      <td colspan="3"><strong>Strain Threshold:</strong> <%= @strain_th %></td>
     </tr>
     <tr>
-      <td colspan="3"><strong>Equipment:</strong>
-        <% @equipment.each do |equipment| %>
-          <%= equipment %> <% if equipment.last != equipment %>,<% end %>
-        <% end %>
-      </td>
+      <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ')%></td>
     </tr>
     
   </tbody>

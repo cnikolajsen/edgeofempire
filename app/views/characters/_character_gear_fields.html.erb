@@ -1,0 +1,20 @@
+<li class="control-group nested-fields">
+  <% unless f.object.gear_id.nil? %>
+    <% @item = Gear.find_by_id(f.object.gear_id) %>
+    <div class="well">
+      <h3><%= @item.name %></h3>
+      <span class="label">Price  <span class="label label-info"><%= @item.price %></span></span>
+       <%= @item.description %>
+       <div class="controls">
+         <%= f.number_field :qty, :min => 0 %>
+         <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
+       </div>
+    </div>
+  <% else %>
+    <div class="controls">
+      <%= f.number_field :qty, :min => 0 %>
+      <%= f.select :gear_id, Gear.find(:all).collect  {|gear| [gear.name, gear.id]}, {:prompt => "Select Item"} %>
+    </div>
+  <% end %>
+  
+</li>

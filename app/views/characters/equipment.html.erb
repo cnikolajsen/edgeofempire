@@ -3,3 +3,17 @@
   <h1><%=t '.title', :default => "Edit Equipment for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
+
+<%= form_for @character do |character_form| %>
+<fieldset id="character-inventory"> 
+    <ul> 
+      <%= character_form.fields_for :character_gears do |item| %> 
+        <%= render 'character_gear_fields', :f => item %> 
+      <% end %> 
+    </ul> 
+    <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#character-inventory ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'btn btn-warning' %> 
+  </fieldset>
+  <div class="form-actions">
+    <%= character_form.submit nil, :class => 'btn btn-primary' %>
+  </div>
+<% end %>

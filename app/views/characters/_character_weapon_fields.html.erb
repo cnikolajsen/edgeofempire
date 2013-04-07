@@ -9,7 +9,7 @@
       <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
        <%= @weapon.description %>
        <div class="controls">
-         <%= link_to_remove_association "remove", f %>
+         <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
        </div>
     </div>
   <% else %>

@@ -21,6 +21,14 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
     
+    # Determine starting wound threshold. Species stat plus brawn.
+    @wound_th = @character.race.wound_threshold + @character.brawn
+    # Then increase based on selected talents.
+
+    # Determine starting strain threshold. Species stat plus willpower.
+    @strain_th = @character.race.strain_threshold + @character.willpower
+    # Then increase based on selected talents.
+    
     @soak = @character.brawn
     @defense = 0
     @equipment = Array.new
@@ -28,11 +36,13 @@ class CharactersController < ApplicationController
     # Add weapons to equipment list
     if !@character.character_weapons.nil?
       @character.character_weapons.each do |cw|
-        @wq = Array.new
-        cw.weapon.weapon_quality_ranks.each do |q|
-          @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{' ' unless q.ranks = 0}#{q.ranks unless q.ranks = 0}"
+        unless cw.weapon.nil?
+          @wq = Array.new
+          cw.weapon.weapon_quality_ranks.each do |q|
+            @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{' ' unless q.ranks = 0}#{q.ranks unless q.ranks = 0}"
+          end
+          @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq})"
         end
-        @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq})"
       end
     end
 
@@ -42,6 +52,14 @@ class CharactersController < ApplicationController
       @defense += @character.character_armor.armor.defense
       @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
     end
+
+    # Add general items to equipment list
+    if !@character.character_gears.nil?
+      @character.character_gears.each do |cg|
+        @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
+      end
+    end
+
     
     respond_to do |format|
       format.html # show.html.erb
@@ -103,6 +121,8 @@ class CharactersController < ApplicationController
   # PUT /characters/1
   # PUT /characters/1.json
   def update
+    logger.debug(params.inspect)
+    logger.debug(url_for(:only_path => true))
     @character = Character.find(params[:id])
     
     if @character.character_armor.nil?
@@ -110,6 +130,16 @@ class CharactersController < ApplicationController
       @character_armor.character_id = @character.id
       @character_armor.armor_id = nil
       @character_armor.save
+    end
+    
+    # Remove equipment with 0 quantity.
+    if !@character.character_gears.nil?
+      @character.character_gears.each do |cg|
+        if cg.qty < 1
+          @item = CharacterGear.find_by_id(cg.id)
+          @item.destroy
+        end
+      end
     end
 
     respond_to do |format|
