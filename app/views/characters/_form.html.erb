@@ -28,7 +28,6 @@
     <div class="controls">
       <%= f.radio_button :gender, 'Male', :class => 'text_field' %> Male
       <%= f.radio_button :gender, 'Female', :class => 'text_field' %> Female
-      <%#= select('character', 'gender', ['Male', 'Female'], {:prompt => "Select gender"}) %>
     </div>
   </div>
   <div class="control-group">
@@ -37,40 +36,54 @@
       <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}) %>
     </div>
   </div>
-  <div class="control-group">
-    <%= f.label :brawn, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :brawn, :in => 1...7, :class => 'number_field' %>
+  <% unless f.object.race_id.nil? %>
+    <div class="control-group">
+      <%= f.label :brawn, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :brawn, :in => @character.race.brawn...7, :class => 'number_field' %>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :agility, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :agility, :in => 1...7, :class => 'number_field' %>
+    <div class="control-group">
+      <%= f.label :agility, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :agility, :in => @character.race.agility...7, :class => 'number_field' %>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :intellect, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :intellect, :in => 1...7, :class => 'number_field' %>
+    <div class="control-group">
+      <%= f.label :intellect, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :intellect, :in => @character.race.intellect...7, :class => 'number_field' %>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :cunning, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :cunning, :in => 1...7, :class => 'number_field' %>
+    <div class="control-group">
+      <%= f.label :cunning, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :cunning, :in => @character.race.cunning...7, :class => 'number_field' %>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :willpower, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :willpower, :in => 1...7, :class => 'number_field' %>
+    <div class="control-group">
+      <%= f.label :willpower, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :willpower, :in => @character.race.willpower...7, :class => 'number_field' %>
+      </div>
     </div>
-  </div>
+    <div class="control-group">
+      <%= f.label :presence, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :presence, :in => @character.race.presence...7, :class => 'number_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :experience, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :experience, :min => 0, :class => 'number_field' %>
+      </div>
+    </div>
+  <% end %>
   <div class="control-group">
-    <%= f.label :presence, :class => 'control-label' %>
+    <%= f.label :credits, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :presence, :in => 1...7, :class => 'number_field' %>
+      <%= f.number_field :credits, :min => 0, :class => 'number_field' %>
     </div>
   </div>
   <div class="control-group">
@@ -80,11 +93,10 @@
     </div>
   </div>
   
-  <% f.fields_for :character_skills do |skill_form| %>
-    <%= skill_form.number_field :skill_id, :as => :select, :collection => Skill.all %>
-  <% end %>
+  <%# f.fields_for :character_skills do |skill_form| %>
+    <%#= skill_form.number_field :skill_id, :as => :select, :collection => Skill.all %>
+  <%# end %>
   
-
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

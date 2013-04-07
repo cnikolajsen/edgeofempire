@@ -17,10 +17,10 @@ class CharactersController < ApplicationController
   # GET /characters/1.json
   def show
     @character_page = 'view'
-    
+
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
-    
+
     # Determine starting wound threshold. Species stat plus brawn.
     @wound_th = @character.brawn
     if !@character.race.wound_threshold.nil?
@@ -34,11 +34,11 @@ class CharactersController < ApplicationController
       @strain_th += @character.race.strain_threshold
     end
     # Then increase based on selected talents.
-    
+
     @soak = @character.brawn
     @defense = 0
     @equipment = Array.new
-    
+
     # Add weapons to equipment list
     if !@character.character_weapons.nil?
       @character.character_weapons.each do |cw|
@@ -66,7 +66,7 @@ class CharactersController < ApplicationController
       end
     end
 
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
@@ -99,6 +99,14 @@ class CharactersController < ApplicationController
     @character = Character.new(params[:character])
     @character.user_id = current_user.id
 
+    @character.brawn = @character.race.brawn
+    @character.agility = @character.race.agility
+    @character.intellect = @character.race.intellect
+    @character.cunning = @character.race.cunning
+    @character.willpower = @character.race.willpower
+    @character.presence = @character.race.presence
+    @character.experience = @character.race.starting_experience
+
     respond_to do |format|
       if @character.save
 
@@ -109,7 +117,7 @@ class CharactersController < ApplicationController
           @character_skill.skill_id = skill.id
           @character_skill.save
         end
-        
+
         @character_armor = CharacterArmor.new()
         @character_armor.character_id = @character.id
         @character_armor.armor_id = nil
@@ -130,14 +138,14 @@ class CharactersController < ApplicationController
     logger.debug(params.inspect)
     logger.debug(url_for(:only_path => true))
     @character = Character.find(params[:id])
-    
+
     if @character.character_armor.nil?
       @character_armor = CharacterArmor.new()
       @character_armor.character_id = @character.id
       @character_armor.armor_id = nil
       @character_armor.save
     end
-    
+
     # Remove equipment with 0 quantity.
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
@@ -174,7 +182,7 @@ class CharactersController < ApplicationController
   def skills
     @character_page = 'skills'
     @character = Character.find(params[:id])
-    
+
     #logger.debug @character.character_skills.inspect
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
@@ -192,7 +200,7 @@ class CharactersController < ApplicationController
   def armor
     @character_page = 'armor'
     @character = Character.find(params[:id])
-    
+
     if !@character.character_armor.nil?
       @armor = Armor.find_by_id(@character.character_armor.armor_id)
     end
