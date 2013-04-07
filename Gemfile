@@ -13,8 +13,7 @@ gem 'twitter-bootstrap-rails', '2.1.3'
 gem "therubyracer", "~> 0.10.2"
 gem "seed_dump", "~> 0.4.2"
 gem 'thin'
-gem 'cocoon', '1.1.1'
-gem 'formtastic'
+gem 'cocoon', "1.1.2"
 
 group :development, :test do
   gem 'sqlite3'

@@ -48,7 +48,7 @@ GEM
       sass (>= 3.2.0)
       thor
     builder (3.0.4)
-    cocoon (1.1.1)
+    cocoon (1.1.2)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -173,9 +173,8 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
-  cocoon (= 1.1.1)
+  cocoon (= 1.1.2)
   coffee-rails (~> 3.2.1)
-  formtastic
   jquery-rails
   less-rails (~> 2.2.3)
   meta_search (>= 1.1.0.pre)

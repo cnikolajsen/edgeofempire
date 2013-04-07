@@ -20,19 +20,21 @@
   <div class="control-group">
     <%= f.label :race_id, :class => 'control-label' %>
     <div class="controls">
-      <%= select('character', 'race_id', Race.find(:all).collect  {|race| [race.name, race.id]}, {:prompt => "Select Species"}) %>
+      <%= select('character', 'race_id', Race.find(:all).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}) %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :gender, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :gender, :class => 'text_field' %>
+      <%= f.radio_button :gender, 'Male', :class => 'text_field' %> Male
+      <%= f.radio_button :gender, 'Female', :class => 'text_field' %> Female
+      <%#= select('character', 'gender', ['Male', 'Female'], {:prompt => "Select gender"}) %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :career_id, :class => 'control-label' %>
     <div class="controls">
-      <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select Career"}) %>
+      <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}) %>
     </div>
   </div>
   <div class="control-group">

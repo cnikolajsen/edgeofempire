@@ -22,11 +22,17 @@ class CharactersController < ApplicationController
     @title = "#{@character.name} | #{@title}"
     
     # Determine starting wound threshold. Species stat plus brawn.
-    @wound_th = @character.race.wound_threshold + @character.brawn
+    @wound_th = @character.brawn
+    if !@character.race.wound_threshold.nil?
+      @wound_th += @character.race.wound_threshold.nil
+    end
     # Then increase based on selected talents.
 
     # Determine starting strain threshold. Species stat plus willpower.
-    @strain_th = @character.race.strain_threshold + @character.willpower
+    @strain_th = @character.willpower
+    if !@character.race.strain_threshold.nil?
+      @strain_th += @character.race.strain_threshold
+    end
     # Then increase based on selected talents.
     
     @soak = @character.brawn
