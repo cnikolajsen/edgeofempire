@@ -27,3 +27,22 @@
 // .active_admin       applies to any Active Admin namespace
 // .admin_namespace    applies to the admin namespace (eg: /admin)
 // .other_namespace    applies to a custom namespace named other (eg: /other)
+
+table.talent-tree {
+  //border: 1px solid black !important;
+  table-layout: fixed;
+  
+  .talent {
+    border: 1px solid blue;
+  }
+  .link-1 {
+    background-color: blue;
+  }
+  .vertical-link.link-1 {
+    background: url(talent-link-vert.png) repeat-y 50%;
+  }
+  .horizontal-link.link-1 {
+    background: url(talent-link-hor.png) repeat-x 0 50%;
+  }
+  
+}

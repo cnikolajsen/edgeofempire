@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130407161236) do
+ActiveRecord::Schema.define(:version => 20130407203707) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -193,11 +193,33 @@ ActiveRecord::Schema.define(:version => 20130407161236) do
     t.integer  "talent_4_1"
     t.integer  "talent_4_2"
     t.integer  "talent_4_3"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.integer  "talent_2_3"
     t.integer  "talent_2_4"
     t.integer  "career_id"
+    t.integer  "talent_2_2_require_3_3"
+    t.integer  "talent_2_1_require_1_1"
+    t.integer  "talent_2_1_require_2_2"
+    t.integer  "talent_2_2_require_1_2"
+    t.integer  "talent_2_2_require_2_3"
+    t.integer  "talent_2_3_require_1_3"
+    t.integer  "talent_2_3_require_2_4"
+    t.integer  "talent_2_4_require_1_4"
+    t.integer  "talent_3_1_require_2_1"
+    t.integer  "talent_3_1_require_3_2"
+    t.integer  "talent_3_2_require_2_2"
+    t.integer  "talent_3_2_require_3_3"
+    t.integer  "talent_3_3_require_2_3"
+    t.integer  "talent_3_3_require_3_4"
+    t.integer  "talent_3_4_require_2_4"
+    t.integer  "talent_4_1_require_3_1"
+    t.integer  "talent_4_1_require_4_2"
+    t.integer  "talent_4_2_require_3_2"
+    t.integer  "talent_4_2_require_4_3"
+    t.integer  "talent_4_3_require_3_3"
+    t.integer  "talent_4_3_require_4_4"
+    t.integer  "talent_4_4_require_3_4"
   end
 
   create_table "talents", :force => true do |t|
