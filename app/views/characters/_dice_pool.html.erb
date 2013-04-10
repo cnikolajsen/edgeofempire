@@ -2,9 +2,13 @@
   score = score - ranks
 %>
 
-<% ranks.times do %>
-<div class="yellow-dice"></div>
-<% end %>
-<% score.times do %>
-<div class="green-dice"></div>
-<% end %>
+<span class="yellow-dice">
+  <% ranks.times do %>
+    <%= image_tag("dice/proficiency.png", :alt => "proficiency", :title => "Proficiency Dice") %>
+  <% end %>
+</span>
+<span class="green-dice">
+  <% score.times do %>
+    <%= image_tag("dice/ability.png", :alt => "ability", :title => "Ability Dice") %>
+  <% end %>
+</span>

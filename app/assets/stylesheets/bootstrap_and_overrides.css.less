@@ -1,5 +1,5 @@
 @import "twitter/bootstrap/bootstrap";
-body { 
+body {
 	padding-top: 60px;
 }
 
@@ -10,7 +10,7 @@ body {
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not 
+// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
 //       have the proper paths. So for now we use the absolute path.
 @fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
 @fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
@@ -45,7 +45,7 @@ footer {
 .control-group {
   .field_with_errors {
     label {
-      color: #b94a48; 
+      color: #b94a48;
     }
     .checkbox,
     .radio,
@@ -81,13 +81,30 @@ footer {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  
+
   h2 {
     font-size: 16px;
     line-height: 20px
   }
 }
 
+table.talent-tree {
+  table-layout: fixed;
+
+  .talent {
+    border: 1px solid blue;
+  }
+  .link-1 {
+    background-color: blue;
+  }
+  .vertical-link.link-1 {
+    background: url(talent-link-vert.png) repeat-y 50%;
+  }
+  .horizontal-link.link-1 {
+    background: url(talent-link-hor.png) repeat-x 0 50%;
+  }
+
+}
 
 
 
