@@ -26,28 +26,28 @@
       <td>
         <% if !tree.talent_1_1.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_1_1).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_1_1).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_1_1).description) %>
         <% end%>
       </td>
       <td></td>
       <td>
         <% if !tree.talent_1_2.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_1_2).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_1_2).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_1_2).description) %>
         <% end%>
       </td>
       <td></td>
       <td>
         <% if !tree.talent_1_3.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_1_3).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_1_3).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_1_3).description) %>
         <% end%>
       </td>
       <td></td>
       <td>
         <% if !tree.talent_1_4.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_1_4).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_1_4).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_1_4).description) %>
         <% end%>
       </td>
     </tr>
@@ -64,28 +64,28 @@
       <td>
         <% if !tree.talent_2_1.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_2_1).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_2_1).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_2_1).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_2_1_require_2_2.to_s %>'></td>
       <td>
         <% if !tree.talent_2_2.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_2_2).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_2_2).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_2_2).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_2_2_require_2_3.to_s %>'></td>
       <td>
         <% if !tree.talent_2_3.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_2_3).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_2_3).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_2_3).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_2_3_require_2_4.to_s %>'></td>
       <td>
         <% if !tree.talent_2_4.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_2_4).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_2_4).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_2_4).description) %>
         <% end %>
       </td>
     </tr>
@@ -102,28 +102,28 @@
       <td>
         <% if !tree.talent_3_1.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_3_1).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_3_1).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_3_1).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_3_1_require_3_2.to_s %>'></td>
       <td>
         <% if !tree.talent_3_2.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_3_2).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_3_2).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_3_2).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_3_2_require_3_3.to_s %>'></td>
       <td>
         <% if !tree.talent_3_3.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_3_3).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_3_3).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_3_3).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_3_3_require_3_4.to_s %>'></td>
       <td>
         <% if !tree.talent_3_4.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_3_4).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_3_4).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_3_4).description) %>
         <% end %>
       </td>
     </tr>
@@ -140,28 +140,28 @@
       <td>
         <% if !tree.talent_4_1.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_4_1).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_4_1).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_4_1).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_4_1_require_4_2.to_s %>'></td>
       <td>
         <% if !tree.talent_4_2.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_4_2).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_4_2).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_4_2).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_4_2_require_4_3.to_s %>'></td>
       <td>
         <% if !tree.talent_4_3.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_4_3).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_4_3).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_4_3).description) %>
         <% end %>
       </td>
       <td class='horizontal-link link-<%= tree.talent_4_3_require_4_4.to_s %>'></td>
       <td>
         <% if !tree.talent_4_4.nil? %>
           <strong><%= Talent.find_by_id(tree.talent_4_4).name %></strong><br />
-          <%= Talent.find_by_id(tree.talent_4_4).description %>
+          <%= text_replace_tokens(Talent.find_by_id(tree.talent_4_4).description) %>
         <% end %>
       </td>
     </tr>
