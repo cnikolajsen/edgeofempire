@@ -14,6 +14,7 @@
     <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#character-inventory ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'btn btn-warning' %> 
   </fieldset>
   <div class="form-actions">
+    <%= hidden_field_tag 'destination', 'gear' %>
     <%= character_form.submit nil, :class => 'btn btn-primary' %>
   </div>
 <% end %>

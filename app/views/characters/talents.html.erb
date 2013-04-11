@@ -3,3 +3,15 @@
   <h1><%=t '.title', :default => "Edit talents for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
+
+<%= form_for @character do |character_form| %>
+
+ <%= character_form.fields_for :character_talents do |talent_fields| %>
+ 
+ <% end %>
+  
+  <div class="form-actions">
+    <%= hidden_field_tag 'destination', 'talents' %>
+    <%= character_form.submit nil, :class => 'btn btn-primary' %>
+  </div>
+<% end %>

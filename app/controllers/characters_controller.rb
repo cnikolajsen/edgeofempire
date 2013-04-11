@@ -135,8 +135,8 @@ class CharactersController < ApplicationController
   # PUT /characters/1
   # PUT /characters/1.json
   def update
-    logger.debug(params.inspect)
-    logger.debug(url_for(:only_path => true))
+    #logger.debug(params.inspect)
+    #logger.debug(url_for(:only_path => true))
     @character = Character.find(params[:id])
 
     if @character.character_armor.nil?
@@ -158,7 +158,22 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.update_attributes(params[:character])
-        format.html { redirect_to @character, notice: 'Character was successfully updated.' }
+        if !params[:destination].nil?
+          if params[:destination] == 'gear'
+            message = 'Character equipment updated.'
+          elsif params[:destination] == 'weapons'
+            message = 'Character weapons updated.'
+          elsif params[:destination] == 'armor'
+            message = 'Character armor updated.'
+          elsif params[:destination] == 'talents'
+            message = 'Character talents updated.'
+          elsif params[:destination] == 'skills'
+            message = 'Character skills updated.'
+          end
+          format.html { redirect_to "character_#{params[:destination]}".to_sym, notice: message }
+        else
+          format.html { redirect_to @character, notice: 'Character was successfully updated.' }
+        end
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
