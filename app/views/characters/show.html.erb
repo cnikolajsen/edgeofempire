@@ -30,6 +30,21 @@
     </tr>
     <tr>
       <td colspan="3"><strong>Talents:</strong>
+        <% @talents.each_with_index do |element, index| %>
+          <% talent_name = Talent.find_by_id(element[0]).name %>
+          <%
+            count = ''
+            delimiter = ''
+            if element[1] > 1
+              count = " (#{element[1]})"
+            end
+
+            if index != @talents.length - 1
+              delimiter = ", "
+            end
+          %>
+          <%= "#{talent_name}#{count}#{delimiter}" %>
+        <% end %>
       </td>
     </tr>
     <tr>
@@ -46,7 +61,7 @@
     <tr>
       <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ')%></td>
     </tr>
-    
+
   </tbody>
 </table>
 </div>

@@ -1,4 +1,6 @@
 class CharactersController < ApplicationController
+  include TalentsHelper
+
   before_filter :set_up
   before_filter :authenticate_user!
 
@@ -21,10 +23,41 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
 
+    # Build character talent selection.
+    @talents = {}
+    @character.character_talents.each do |talent_tree|
+      #puts talent_tree.attributes
+      talent_tree.attributes.each do |key, value|
+        if key.match(/talent_[\d]_[\d]/) and !value.nil?
+          if @talents.has_key?(value)
+            @talents[value] = @talents[value] + 1
+          else
+            @talents[value] = 1
+          end
+        end
+      end
+    end
+
+    talent_alterations = {}
+    @talents.each do |id, count|
+      name = Talent.find(id).name.gsub(' ', '').downcase
+      if respond_to?("talent_parser_#{name}")
+        talent_alterations[id] = {}
+        talent_alterations[id] = send("talent_parser_#{name}", count)
+      end
+    end
+
     # Determine starting wound threshold. Species stat plus brawn.
     @wound_th = @character.brawn
     if !@character.race.wound_threshold.nil?
       @wound_th += @character.race.wound_threshold
+      talent_alterations.each do |talent_id, stat|
+        stat.each do |type, value|
+          if type == 'wound'
+            @wound_th += value
+          end
+        end
+      end
     end
     # Then increase based on selected talents.
 
@@ -32,6 +65,13 @@ class CharactersController < ApplicationController
     @strain_th = @character.willpower
     if !@character.race.strain_threshold.nil?
       @strain_th += @character.race.strain_threshold
+      talent_alterations.each do |talent_id, stat|
+        stat.each do |type, value|
+          if type == 'strain'
+            @strain_th += value
+          end
+        end
+      end
     end
     # Then increase based on selected talents.
 
@@ -59,13 +99,21 @@ class CharactersController < ApplicationController
       @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
     end
 
+    talent_alterations.each do |talent_id, stat|
+      stat.each do |type, value|
+        if type == 'soak'
+          @soak += value
+        end
+      end
+    end
+
+
     # Add general items to equipment list
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
-
 
     respond_to do |format|
       format.html # show.html.erb
