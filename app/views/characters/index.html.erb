@@ -16,8 +16,8 @@
     <% @characters.each do |character| %>
       <tr>
         <td><%= link_to character.name, character_path(character) %></td>
-        <td><%= character.race_id %></td>
-        <td><%= character.career_id %></td>
+        <td><%= character.race.name %></td>
+        <td><%= character.career.name %></td>
         <td><%=l character.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
