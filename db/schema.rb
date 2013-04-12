@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130407203707) do
+ActiveRecord::Schema.define(:version => 20130410101733) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -100,6 +100,29 @@ ActiveRecord::Schema.define(:version => 20130407203707) do
     t.integer  "ranks"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "character_talents", :force => true do |t|
+    t.integer  "character_id"
+    t.integer  "talent_tree_id"
+    t.integer  "talent_1_1"
+    t.integer  "talent_1_2"
+    t.integer  "talent_1_3"
+    t.integer  "talent_1_4"
+    t.integer  "talent_2_1"
+    t.integer  "talent_2_2"
+    t.integer  "talent_2_3"
+    t.integer  "talent_2_4"
+    t.integer  "talent_3_1"
+    t.integer  "talent_3_2"
+    t.integer  "talent_3_3"
+    t.integer  "talent_3_4"
+    t.integer  "talent_4_1"
+    t.integer  "talent_4_2"
+    t.integer  "talent_4_3"
+    t.integer  "talent_4_4"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "character_weapons", :force => true do |t|

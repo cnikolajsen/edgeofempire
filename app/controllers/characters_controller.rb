@@ -135,8 +135,6 @@ class CharactersController < ApplicationController
   # PUT /characters/1
   # PUT /characters/1.json
   def update
-    #logger.debug(params.inspect)
-    #logger.debug(url_for(:only_path => true))
     @character = Character.find(params[:id])
 
     if @character.character_armor.nil?
@@ -153,6 +151,79 @@ class CharactersController < ApplicationController
           @item = CharacterGear.find_by_id(cg.id)
           @item.destroy
         end
+      end
+    end
+
+    # Update talents.
+    if !params[:update_talents].nil?
+      @character.character_talents.each do |ct|
+        ct.destroy
+      end
+      @character.career.talent_trees.each do |tree|
+        #@character_talent_tree = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id)
+        #if @character_talent.empty?
+        @character_talent_tree = CharacterTalent.new()
+        @character_talent_tree.character_id = @character.id
+        @character_talent_tree.talent_tree_id = tree.id
+        #end
+
+        # Update first row talents.
+        if !params["tree_#{tree.id}-talent_1_1".to_sym].nil?
+          @character_talent_tree.talent_1_1 = tree.talent_1_1
+        end
+        if !params["tree_#{tree.id}-talent_1_2".to_sym].nil?
+          @character_talent_tree.talent_1_2 = tree.talent_1_2
+        end
+        if !params["tree_#{tree.id}-talent_1_3".to_sym].nil?
+          @character_talent_tree.talent_1_3 = tree.talent_1_3
+        end
+        if !params["tree_#{tree.id}-talent_1_4".to_sym].nil?
+          @character_talent_tree.talent_1_4 = tree.talent_1_4
+        end
+
+        # Update second row talents.
+        if !params["tree_#{tree.id}-talent_2_1".to_sym].nil?
+          @character_talent_tree.talent_2_1 = tree.talent_2_1
+        end
+        if !params["tree_#{tree.id}-talent_2_2".to_sym].nil?
+          @character_talent_tree.talent_2_2 = tree.talent_2_2
+        end
+        if !params["tree_#{tree.id}-talent_2_3".to_sym].nil?
+          @character_talent_tree.talent_2_3 = tree.talent_2_3
+        end
+        if !params["tree_#{tree.id}-talent_2_4".to_sym].nil?
+          @character_talent_tree.talent_2_4 = tree.talent_2_4
+        end
+
+        # Update third row talents.
+        if !params["tree_#{tree.id}-talent_3_1".to_sym].nil?
+          @character_talent_tree.talent_3_1 = tree.talent_3_1
+        end
+        if !params["tree_#{tree.id}-talent_3_2".to_sym].nil?
+          @character_talent_tree.talent_3_2 = tree.talent_3_2
+        end
+        if !params["tree_#{tree.id}-talent_3_3".to_sym].nil?
+          @character_talent_tree.talent_3_3 = tree.talent_3_3
+        end
+        if !params["tree_#{tree.id}-talent_3_4".to_sym].nil?
+          @character_talent_tree.talent_3_4 = tree.talent_3_4
+        end
+
+        # Update fourth row talents.
+        if !params["tree_#{tree.id}-talent_4_1".to_sym].nil?
+          @character_talent_tree.talent_4_1 = tree.talent_4_1
+        end
+        if !params["tree_#{tree.id}-talent_4_2".to_sym].nil?
+          @character_talent_tree.talent_4_2 = tree.talent_4_2
+        end
+        if !params["tree_#{tree.id}-talent_4_3".to_sym].nil?
+          @character_talent_tree.talent_4_3 = tree.talent_4_3
+        end
+        if !params["tree_#{tree.id}-talent_4_4".to_sym].nil?
+          @character_talent_tree.talent_4_4 = tree.talent_4_4
+        end
+
+        @character_talent_tree.save
       end
     end
 
@@ -198,7 +269,6 @@ class CharactersController < ApplicationController
     @character_page = 'skills'
     @character = Character.find(params[:id])
 
-    #logger.debug @character.character_skills.inspect
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
       tt.talent_tree_career_skills.each do |skill|
@@ -210,6 +280,11 @@ class CharactersController < ApplicationController
   def talents
     @character_page = 'talents'
     @character = Character.find(params[:id])
+
+    @talent_trees = Array.new
+    @character.career.talent_trees.each do |tree|
+      @talent_trees << tree
+    end
   end
 
   def armor

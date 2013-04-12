@@ -21,6 +21,9 @@ class Character < ActiveRecord::Base
   has_many :weapons, :through => :character_weapons, :order => "name"
   has_many :character_gears, :dependent => :destroy
   has_many :gears, :through => :character_gears, :order => "name"
+
+  has_many :character_talents, :dependent => :destroy
+  has_many :talents, :through => :character_talents, :order => "name"
   
   belongs_to :race
   belongs_to :career
