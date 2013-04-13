@@ -59,7 +59,7 @@
       <td colspan="3"><strong>Strain Threshold:</strong> <%= @strain_th %></td>
     </tr>
     <tr>
-      <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ')%></td>
+      <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ').html_safe %></td>
     </tr>
 
   </tbody>
