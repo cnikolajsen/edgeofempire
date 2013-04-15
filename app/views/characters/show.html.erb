@@ -8,7 +8,7 @@
 <%= render :partial => 'character_edit_menu' %>
 <%= simple_format(@character.bio) %>
 
-<div class="well">
+<div class="well span8">
 <table class="table table-striped">
   <tbody>
     <tr>
@@ -24,7 +24,9 @@
     <tr>
       <td colspan="3"><strong>Skills:</strong>
         <% @character.character_skills.each do |character_skill| %>
-          <%= character_skill.skill.name %> <%= character_skill.ranks %> [<%= render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => character_skill.ranks} %>]<% if @character.character_skills.last != character_skill %>,<% end %>
+          <%# if character_skill.ranks > 0 %>
+            <%= character_skill.skill.name %> <%= character_skill.ranks unless character_skill.ranks < 1  %> [<%= render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => character_skill.ranks} %>]<% if @character.character_skills.last != character_skill %>,<% end %>
+          <%# end %>
         <% end %>
       </td>
     </tr>
@@ -65,8 +67,20 @@
   </tbody>
 </table>
 </div>
+<div class="well well-small span3">
+  <h5>Experience Points</h5>
+  Earned: <%= @character.experience %><br />
+  Spent:
+</div>
+<div class="well well-small span3">
+  <h5>Credits</h5>
+  <%= @character.credits %>
+</div>
+<div class="well well-small span3">
+  <h5>Obligation</h5>
+</div>
 
-<div class="form-actions">
+<div class="form-actions span11">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               characters_path, :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),

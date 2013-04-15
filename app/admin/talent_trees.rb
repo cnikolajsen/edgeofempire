@@ -17,55 +17,47 @@ ActiveAdmin.register TalentTree do
       f.input :name
       f.input :description
       f.input :career_id, :as => :select, :collection => Career.all
-      f.input :talent_1_1, :as => :select, :collection => Talent.all
-      f.input :talent_1_2, :as => :select, :collection => Talent.all
-      f.input :talent_1_3, :as => :select, :collection => Talent.all
-      f.input :talent_1_4, :as => :select, :collection => Talent.all
 
-      f.input :talent_2_1, :as => :select, :collection => Talent.all
-      f.input :talent_2_1_require_1_1, :as => :boolean
-      f.input :talent_2_1_require_2_2, :as => :boolean
+      f.input :talent_1_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 1"
+      f.input :talent_2_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 2"
+      f.input :talent_2_1_require_1_1, :as => :boolean, :label => "Link row 2 with row 1"
+      f.input :talent_2_1_require_2_2, :as => :boolean, :label => "Link row 2 right"
+      f.input :talent_3_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 3"
+      f.input :talent_3_1_require_2_1, :as => :boolean, :label => "Link row 3 with row 2"
+      f.input :talent_3_1_require_3_2, :as => :boolean, :label => "Link row 3 right"
+      f.input :talent_4_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 4"
+      f.input :talent_4_1_require_3_1, :as => :boolean, :label => "Link row 4 with row 3"
+      f.input :talent_4_1_require_4_2, :as => :boolean, :label => "Link row 4 right"
 
-      f.input :talent_2_2, :as => :select, :collection => Talent.all
-      f.input :talent_2_2_require_1_2, :as => :boolean
-      f.input :talent_2_2_require_2_3, :as => :boolean
+      f.input :talent_1_2, :as => :select, :collection => Talent.all, :label => "Column 2 row 1"
+      f.input :talent_2_2, :as => :select, :collection => Talent.all, :label => "Column 2 row 2"
+      f.input :talent_2_2_require_1_2, :as => :boolean, :label => "Link row 2 with row 1"
+      f.input :talent_2_2_require_2_3, :as => :boolean, :label => "Link row 2 right"
+      f.input :talent_3_2, :as => :select, :collection => Talent.all, :label => "Column 2 row 3"
+      f.input :talent_3_2_require_2_2, :as => :boolean, :label => "Link row 3 with row 2"
+      f.input :talent_3_2_require_3_3, :as => :boolean, :label => "Link row 3 right"
+      f.input :talent_4_2, :as => :select, :collection => Talent.all, :label => "Column 2 row 4"
+      f.input :talent_4_2_require_3_2, :as => :boolean, :label => "Link row 4 with row 3"
+      f.input :talent_4_2_require_4_3, :as => :boolean, :label => "Link row 4 right"
 
-      f.input :talent_2_3, :as => :select, :collection => Talent.all
-      f.input :talent_2_3_require_1_3, :as => :boolean
-      f.input :talent_2_3_require_2_4, :as => :boolean
+      f.input :talent_1_3, :as => :select, :collection => Talent.all, :label => "Column 3 row 1"
+      f.input :talent_2_3, :as => :select, :collection => Talent.all, :label => "Column 3 row 2"
+      f.input :talent_2_3_require_1_3, :as => :boolean, :label => "Link row 2 with row 1"
+      f.input :talent_2_3_require_2_4, :as => :boolean, :label => "Link row 2 right"
+      f.input :talent_3_3, :as => :select, :collection => Talent.all, :label => "Column 3 row 3"
+      f.input :talent_3_3_require_2_3, :as => :boolean, :label => "Link row 3 with row 2"
+      f.input :talent_3_3_require_3_4, :as => :boolean, :label => "Link row 3 right"
+      f.input :talent_4_3, :as => :select, :collection => Talent.all, :label => "Column 3 row 4"
+      f.input :talent_4_3_require_3_3, :as => :boolean, :label => "Link row 4 with row 3"
+      f.input :talent_4_3_require_4_4, :as => :boolean, :label => "Link row 4 right"
 
-      f.input :talent_2_4, :as => :select, :collection => Talent.all
-      f.input :talent_2_4_require_1_4, :as => :boolean
-
-      f.input :talent_3_1, :as => :select, :collection => Talent.all
-      f.input :talent_3_1_require_2_1, :as => :boolean
-      f.input :talent_3_1_require_3_2, :as => :boolean
-
-      f.input :talent_3_2, :as => :select, :collection => Talent.all
-      f.input :talent_3_2_require_2_2, :as => :boolean
-      f.input :talent_3_2_require_3_3, :as => :boolean
-
-      f.input :talent_3_3, :as => :select, :collection => Talent.all
-      f.input :talent_3_3_require_2_3, :as => :boolean
-      f.input :talent_3_3_require_3_4, :as => :boolean
-
-      f.input :talent_3_4, :as => :select, :collection => Talent.all
-      f.input :talent_3_4_require_2_4, :as => :boolean
-
-      f.input :talent_4_1, :as => :select, :collection => Talent.all
-      f.input :talent_4_1_require_3_1, :as => :boolean
-      f.input :talent_4_1_require_4_2, :as => :boolean
-
-      f.input :talent_4_2, :as => :select, :collection => Talent.all
-      f.input :talent_4_2_require_3_2, :as => :boolean
-      f.input :talent_4_2_require_4_3, :as => :boolean
-
-      f.input :talent_4_3, :as => :select, :collection => Talent.all
-      f.input :talent_4_3_require_3_3, :as => :boolean
-      f.input :talent_4_3_require_4_4, :as => :boolean
-
-      f.input :talent_4_4, :as => :select, :collection => Talent.all
-      f.input :talent_4_4_require_3_4, :as => :boolean
+      f.input :talent_1_4, :as => :select, :collection => Talent.all, :label => "Column 4 row 1"
+      f.input :talent_2_4, :as => :select, :collection => Talent.all, :label => "Column 4 row 2"
+      f.input :talent_2_4_require_1_4, :as => :boolean, :label => "Link row 2 with row 1"
+      f.input :talent_3_4, :as => :select, :collection => Talent.all, :label => "Column 4 row 3"
+      f.input :talent_3_4_require_2_4, :as => :boolean, :label => "Link row 3 with row 2"
+      f.input :talent_4_4, :as => :select, :collection => Talent.all, :label => "Column 4 row 4"
+      f.input :talent_4_4_require_3_4, :as => :boolean, :label => "Link row 4 with row 3"
 
       f.has_many :talent_tree_career_skills do |skill_form|
         skill_form.input :skill_id, :as => :select, :collection => Skill.all

@@ -85,14 +85,19 @@ class CharactersController < ApplicationController
         unless cw.weapon.nil?
           @wq = Array.new
           cw.weapon.weapon_quality_ranks.each do |q|
-            @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{' ' unless q.ranks = 0}#{q.ranks unless q.ranks = 0}"
+            logger.debug(q.ranks)
+            ranks = ''
+            if q.ranks > 0
+              ranks = " #{q.ranks}"
+            end
+            @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
           end
 
           character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, cw.weapon.skill.id)
           ranks = character_skill_ranks.first.ranks
           dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
-          @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq})"
+          @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
         end
       end
     end

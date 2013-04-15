@@ -1,3 +1,5 @@
 <% skills.each do |skill| %>
-  <%= Skill.find_by_id(skill.skill_id).name %><% if skill != skills.last %>,<% end %>
+  <% if !skill.skill_id.nil? %>
+    <%= Skill.find_by_id(skill.skill_id).name %><% if skill != skills.last %>,<% end %>
+  <% end%>
 <% end %>
