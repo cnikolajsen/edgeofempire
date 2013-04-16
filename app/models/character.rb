@@ -32,8 +32,6 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_armor, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_weapons, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
-  
-  
-  #has_many :skills
-  #has_many :talents
+
+  default_scope order('name ASC')
 end

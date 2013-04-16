@@ -85,7 +85,6 @@ class CharactersController < ApplicationController
         unless cw.weapon.nil?
           @wq = Array.new
           cw.weapon.weapon_quality_ranks.each do |q|
-            logger.debug(q.ranks)
             ranks = ''
             if q.ranks > 0
               ranks = " #{q.ranks}"
