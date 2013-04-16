@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130410101733) do
+ActiveRecord::Schema.define(:version => 20130416072925) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -123,6 +123,10 @@ ActiveRecord::Schema.define(:version => 20130410101733) do
     t.integer  "talent_4_4"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "talent_5_1"
+    t.integer  "talent_5_2"
+    t.integer  "talent_5_3"
+    t.integer  "talent_5_4"
   end
 
   create_table "character_weapons", :force => true do |t|
@@ -243,6 +247,17 @@ ActiveRecord::Schema.define(:version => 20130410101733) do
     t.integer  "talent_4_3_require_3_3"
     t.integer  "talent_4_3_require_4_4"
     t.integer  "talent_4_4_require_3_4"
+    t.integer  "talent_5_1"
+    t.integer  "talent_5_1_require_4_1"
+    t.integer  "talent_5_1_require_5_2"
+    t.integer  "talent_5_2"
+    t.integer  "talent_5_2_require_4_2"
+    t.integer  "talent_5_2_require_5_3"
+    t.integer  "talent_5_3"
+    t.integer  "talent_5_3_require_4_3"
+    t.integer  "talent_5_3_require_5_4"
+    t.integer  "talent_5_4"
+    t.integer  "talent_5_4_require_4_4"
   end
 
   create_table "talents", :force => true do |t|

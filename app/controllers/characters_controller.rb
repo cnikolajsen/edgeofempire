@@ -280,6 +280,20 @@ class CharactersController < ApplicationController
           @character_talent_tree.talent_4_4 = tree.talent_4_4
         end
 
+        # Update fifth row talents.
+        if !params["tree_#{tree.id}-talent_5_1".to_sym].nil?
+          @character_talent_tree.talent_5_1 = tree.talent_5_1
+        end
+        if !params["tree_#{tree.id}-talent_5_2".to_sym].nil?
+          @character_talent_tree.talent_5_2 = tree.talent_5_2
+        end
+        if !params["tree_#{tree.id}-talent_5_3".to_sym].nil?
+          @character_talent_tree.talent_5_3 = tree.talent_5_3
+        end
+        if !params["tree_#{tree.id}-talent_5_4".to_sym].nil?
+          @character_talent_tree.talent_5_4 = tree.talent_5_4
+        end
+
         @character_talent_tree.save
       end
     end

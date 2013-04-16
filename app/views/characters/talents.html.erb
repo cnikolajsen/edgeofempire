@@ -181,6 +181,48 @@
             <% end %>
           </td>
         </tr>
+        <tr>
+          <td class='vertical-link link-<%= tree.talent_5_1_require_4_1.to_s %>'></td>
+          <td></td>
+          <td class='vertical-link link-<%= tree.talent_5_2_require_4_2.to_s %>'></td>
+          <td></td>
+          <td class='vertical-link link-<%= tree.talent_5_3_require_4_3.to_s %>'></td>
+          <td></td>
+          <td class='vertical-link link-<%= tree.talent_5_4_require_4_4.to_s %>'></td>
+        </tr>
+        <tr>
+          <td>
+            <% if !tree.talent_5_1.nil? %>
+              <strong><%= Talent.find_by_id(tree.talent_5_1).name %></strong>
+              <%= check_box_tag "tree_#{tree.id}-talent_5_1", tree.talent_5_1, (@character_tree_talents.first.talent_5_1 unless @character_tree_talents.first.nil?) %><br />
+              <%= text_replace_tokens(Talent.find_by_id(tree.talent_5_1).description) %>
+            <% end %>
+          </td>
+          <td class='horizontal-link link-<%= tree.talent_5_1_require_5_2.to_s %>'></td>
+          <td>
+            <% if !tree.talent_5_2.nil? %>
+              <strong><%= Talent.find_by_id(tree.talent_5_2).name %></strong>
+              <%= check_box_tag "tree_#{tree.id}-talent_5_2", tree.talent_5_2, (@character_tree_talents.first.talent_5_2 unless @character_tree_talents.first.nil?) %><br />
+              <%= text_replace_tokens(Talent.find_by_id(tree.talent_5_2).description) %>
+            <% end %>
+          </td>
+          <td class='horizontal-link link-<%= tree.talent_5_2_require_5_3.to_s %>'></td>
+          <td>
+            <% if !tree.talent_5_3.nil? %>
+              <strong><%= Talent.find_by_id(tree.talent_5_3).name %></strong>
+              <%= check_box_tag "tree_#{tree.id}-talent_5_3", tree.talent_5_3, (@character_tree_talents.first.talent_5_3 unless @character_tree_talents.first.nil?) %><br />
+              <%= text_replace_tokens(Talent.find_by_id(tree.talent_5_3).description) %>
+            <% end %>
+          </td>
+          <td class='horizontal-link link-<%= tree.talent_5_3_require_5_4.to_s %>'></td>
+          <td>
+            <% if !tree.talent_5_4.nil? %>
+              <strong><%= Talent.find_by_id(tree.talent_5_4).name %></strong>
+              <%= check_box_tag "tree_#{tree.id}-talent_5_4", tree.talent_5_4, (@character_tree_talents.first.talent_5_4 unless @character_tree_talents.first.nil?) %><br />
+              <%= text_replace_tokens(Talent.find_by_id(tree.talent_5_4).description) %>
+            <% end %>
+          </td>
+        </tr>
       </table>
     </div>
  <% end %>
