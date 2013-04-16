@@ -3,6 +3,9 @@ ActiveAdmin.register TalentTree do
 
   config.sort_order = "career_id_asc"
   config.sort_order = "name_asc"
+  
+  filter :name
+  filter :career_id
 
   index do
     column :name
