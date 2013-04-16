@@ -1,6 +1,8 @@
 ActiveAdmin.register WeaponQuality do
   menu :label => "Weapon Qualities", :parent => "Equipment"
-  
+
+  config.sort_order = "name_asc"
+
   controller do
      def create
        create! do |format|

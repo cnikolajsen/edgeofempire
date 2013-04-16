@@ -1,9 +1,9 @@
 ActiveAdmin.register Weapon do
   menu :label => "Weapons", :parent => "Equipment"
-  
+
   config.sort_order = "name_asc"
   config.per_page = 10
-  
+
   index do |weapon|
     column :name
     column :skill_id do |skill|

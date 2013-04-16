@@ -1,6 +1,9 @@
 ActiveAdmin.register TalentTree do
   menu :parent => "Careers"
 
+  config.sort_order = "career_id_asc"
+  config.sort_order = "name_asc"
+
   index do
     column :name
     column :career_id do |career|

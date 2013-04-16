@@ -1,6 +1,8 @@
 ActiveAdmin.register Race do
   config.sort_order = "name_asc"
 
+  config.sort_order = "name_asc"
+
   controller do
      def create
        create! do |format|
