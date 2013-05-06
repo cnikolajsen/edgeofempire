@@ -1,4 +1,5 @@
 class CharactersController < ApplicationController
+  prawnto :prawn => { :size => "A4", :margin => 0 }
   include TalentsHelper
 
   before_filter :set_up
@@ -123,10 +124,21 @@ class CharactersController < ApplicationController
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
+    
+    # Specific for the PDF.
+    @knowledge_skills = ['Knowledge']
+    @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
+    @career_skill_ids = Array.new
+    @character.career.talent_trees.each do |tt|
+      tt.talent_tree_career_skills.each do |skill|
+        @career_skill_ids << skill.skill_id
+      end
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
+      format.pdf # show.pdf.prawn
     end
   end
 
