@@ -95,9 +95,12 @@ class CharactersController < ApplicationController
 
           character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, cw.weapon.skill.id)
           ranks = character_skill_ranks.first.ranks
-          dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
-          @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+          if params[:format] != 'pdf'
+            dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
+
+            @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+          end
         end
       end
     end
@@ -124,7 +127,7 @@ class CharactersController < ApplicationController
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
-    
+
     # Specific for the PDF.
     @knowledge_skills = ['Knowledge']
     @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
