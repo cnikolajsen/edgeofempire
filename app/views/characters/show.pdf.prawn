@@ -1,8 +1,4 @@
 
-if @pdf_prettysheet == 'on'
-  pdf.image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
-end
-
 #===== Character details =====
 fill_color "6d7b68"
 pdf.draw_text "CHARACTER", :size => 7, :style => :bold, :at => [74, y - 22]
@@ -322,10 +318,6 @@ bounding_box([70, 28], :width => 80, :height => 15) do
 end
 
 pdf.start_new_page
-# Background image.
-if @pdf_prettysheet == 'on'
-  pdf.image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
-end
 
 # Page graphics.
 stroke do
