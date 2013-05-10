@@ -147,12 +147,10 @@ class CharactersController < ApplicationController
       end
     end
 
-    
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
-      format.pdf # show.pdf.prawn
+      format.pdf { @character }# show.pdf.prawn
     end
   end
 
