@@ -1,6 +1,6 @@
 
 #===== Character details =====
-fill_color "6d7b68"
+fill_color("6d7b68")
 pdf.draw_text("CHARACTER", :size => 7, :style => :bold, :at => [74, y - 22])
 fill_color("505b4d")
 pdf.draw_text("CHARACTER NAME", :size => 11, :style => :bold, :at => [74, y - 39])
