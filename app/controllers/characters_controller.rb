@@ -1,5 +1,5 @@
 class CharactersController < ApplicationController
-  prawnto :prawn => { :size => "A4", :margin => 0 }
+  prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
 
   before_filter :set_up

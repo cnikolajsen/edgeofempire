@@ -1,3 +1,4 @@
+pdf.font "Courier"
 if @pdf_prettysheet == 'on'
   pdf.image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
 end
@@ -87,7 +88,7 @@ other = Array.new
 end
 
 combat_skills = combat.map do |skill|
-  pdf.font "Helvetica", :size=> 8
+  pdf.font "Courier", :size=> 8
   dice_ability = "#{Rails.root}/public/dice/blank.png"
   dice_proficiency = "#{Rails.root}/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
@@ -112,7 +113,7 @@ combat_skills = combat.map do |skill|
 end
 
 knowledge_skills = knowledge.map do |skill|
-  pdf.font "Helvetica", :size=> 8
+  pdf.font "Courier", :size=> 8
   dice_ability = "#{Rails.root}/public/dice/blank.png"
   dice_proficiency = "#{Rails.root}/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
@@ -137,7 +138,7 @@ knowledge_skills = knowledge.map do |skill|
 end
 
 general_skills = other.map do |skill|
-  pdf.font "Helvetica", :size=> 8
+  pdf.font "Courier", :size=> 8
   dice_ability = "#{Rails.root}/public/dice/blank.png"
   dice_proficiency = "#{Rails.root}/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
@@ -257,7 +258,7 @@ pdf.draw_text "WEAPONS", :size => 6, :style => :bold, :at => [298, 164]
 fill_color "000000"
 
 weapons = @character.weapons.map do |weapon|
-  pdf.font "Helvetica", :size=> 8
+  pdf.font "Courier", :size=> 8
   character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
   ranks = character_skill_ranks.first.ranks
   
