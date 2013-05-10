@@ -1,4 +1,4 @@
-prettysheet == 'on'
+prettysheet = 'on'
 
 if params[:gfx]
   prettysheet = params[:gfx]
