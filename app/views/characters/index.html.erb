@@ -20,8 +20,10 @@
         <td><%= character.career.name %></td>
         <td><%=l character.created_at %></td>
         <td>
+          <%= link_to 'PDF',
+                      character_path(character, :format => 'pdf'), :class => 'btn btn-mini btn-info', :target => "_blank" %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_character_path(character), :class => 'btn btn-mini' %>
+                      edit_character_path(character), :class => 'btn btn-mini btn-success' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       character_path(character),
                       :method => :delete,
