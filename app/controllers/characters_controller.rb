@@ -1,5 +1,5 @@
 class CharactersController < ApplicationController
-  prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
+  #prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
 
   before_filter :set_up
@@ -150,7 +150,10 @@ class CharactersController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
-      format.pdf { @character }# show.pdf.prawn
+      format.pdf do
+        pdf = CharacterSheetPdf.new(@character, view_context)
+        send_data pdf.render, filename: "invoice_#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline"
+      end
     end
   end
 

@@ -16,8 +16,8 @@ gem 'thin'
 gem 'cocoon', "1.1.2"
 #gem "prawn", "1.0.0.rc2"
 gem "prawn", "~> 0.12.0"
-gem "prawnto", "~> 0.1.1"
-gem "prawnto_2", :require => "prawnto"
+#gem "prawnto", "~> 0.1.1"
+#gem "prawnto_2", :require => "prawnto"
 
 group :development, :test do
   gem 'sqlite3'
