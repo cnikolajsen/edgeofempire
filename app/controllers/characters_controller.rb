@@ -129,14 +129,25 @@ class CharactersController < ApplicationController
     end
 
     # Specific for the PDF.
-    @knowledge_skills = ['Knowledge']
-    @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
-    @career_skill_ids = Array.new
-    @character.career.talent_trees.each do |tt|
-      tt.talent_tree_career_skills.each do |skill|
-        @career_skill_ids << skill.skill_id
+    if params[:format] == 'pdf'
+      @knowledge_skills = ['Knowledge']
+      @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
+      @career_skill_ids = Array.new
+      @character.career.talent_trees.each do |tt|
+        tt.talent_tree_career_skills.each do |skill|
+          @career_skill_ids << skill.skill_id
+        end
+      end
+      if params[:gfx] == 'off'
+        @pdf_prettysheet = 'off'
+        @pdf_border_color = "000000"
+      else
+        @pdf_prettysheet = 'on'
+        @pdf_border_color = "c8c8c8"
       end
     end
+
+    
 
     respond_to do |format|
       format.html # show.html.erb

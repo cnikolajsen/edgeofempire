@@ -1,17 +1,5 @@
-if params[:gfx]
-  prettysheet = params[:gfx]
-else
-  prettysheet = 'on'
-end
 
-if prettysheet == 'on'
-  border_color = "c8c8c8"
-else
-  border_color = "000000"
-end
-
-
-if prettysheet == 'on'
+if @pdf_prettysheet == 'on'
   pdf.image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
 end
 
@@ -335,13 +323,13 @@ end
 
 pdf.start_new_page
 # Background image.
-if prettysheet == 'on'
+if @pdf_prettysheet == 'on'
   pdf.image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
 end
 
 # Page graphics.
 stroke do
-  stroke_color border_color
+  stroke_color @pdf_border_color
   self.line_width = 2
   rounded_rectangle [67, 792], 327, 165, 5
   rounded_rectangle [67, 615], 327, 195, 5
@@ -360,7 +348,7 @@ stroke do
 
 end
 stroke do
-  stroke_color border_color
+  stroke_color @pdf_border_color
   self.line_width = 1
   # Motivations inner.
   vertical_line	739, 636, :at => 230
