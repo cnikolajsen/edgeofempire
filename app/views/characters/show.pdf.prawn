@@ -12,7 +12,7 @@ end
 
 
 if prettysheet == 'on'
-  pdf.image "#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0]
+  pdf.image "#{Rails.root}/app/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0]
 end
 
 #===== Character details =====
@@ -101,17 +101,17 @@ end
 
 combat_skills = combat.map do |skill|
   pdf.font "Helvetica", :size=> 8
-  dice_ability = "#{Rails.root}/public/dice/blank.png"
-  dice_proficiency = "#{Rails.root}/public/dice/blank.png"
+  dice_ability = "#{Rails.root}/app/public/dice/blank.png"
+  dice_proficiency = "#{Rails.root}/app/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"
   elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-    dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
   else
-    dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
     if skill.ranks > 0
-      dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+      dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"    
     end
   end
   [
@@ -126,17 +126,17 @@ end
 
 knowledge_skills = knowledge.map do |skill|
   pdf.font "Helvetica", :size=> 8
-  dice_ability = "#{Rails.root}/public/dice/blank.png"
-  dice_proficiency = "#{Rails.root}/public/dice/blank.png"
+  dice_ability = "#{Rails.root}/app/public/dice/blank.png"
+  dice_proficiency = "#{Rails.root}/app/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"
   elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-    dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
   else
-    dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
     if skill.ranks > 0
-      dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+      dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"    
     end
   end
   [
@@ -151,17 +151,17 @@ end
 
 general_skills = other.map do |skill|
   pdf.font "Helvetica", :size=> 8
-  dice_ability = "#{Rails.root}/public/dice/blank.png"
-  dice_proficiency = "#{Rails.root}/public/dice/blank.png"
+  dice_ability = "#{Rails.root}/app/public/dice/blank.png"
+  dice_proficiency = "#{Rails.root}/app/public/dice/blank.png"
   if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"
   elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-    dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
-    dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+    dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
   else
-    dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
+    dice_ability = "#{Rails.root}/app/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
     if skill.ranks > 0
-      dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+      dice_proficiency = "#{Rails.root}/app/public/dice/proficiency_#{skill.ranks}.png"    
     end
   end
   [
@@ -336,7 +336,7 @@ end
 pdf.start_new_page
 # Background image.
 if prettysheet == 'on'
-  pdf.image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
+  pdf.image "#{Rails.root}/app/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
 end
 
 # Page graphics.
