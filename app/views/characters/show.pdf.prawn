@@ -1,3 +1,20 @@
+if params[:gfx]
+  prettysheet = params[:gfx]
+else
+  prettysheet = 'on'
+end
+
+if prettysheet == 'on'
+  border_color = "c8c8c8"
+else
+  border_color = "000000"
+end
+
+
+if prettysheet == 'on'
+  pdf.image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
+end
+
 #===== Character details =====
 fill_color "6d7b68"
 pdf.draw_text "CHARACTER", :size => 7, :style => :bold, :at => [74, y - 22]
@@ -318,8 +335,10 @@ end
 
 pdf.start_new_page
 # Background image.
-pdf.image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
-border_color = "c8c8c8"
+if prettysheet == 'on'
+  pdf.image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
+end
+
 # Page graphics.
 stroke do
   stroke_color border_color
