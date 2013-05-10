@@ -14,7 +14,8 @@ gem "therubyracer", "~> 0.10.2"
 gem "seed_dump", "~> 0.4.2"
 gem 'thin'
 gem 'cocoon', "1.1.2"
-gem "prawn", "1.0.0.rc2"
+#gem "prawn", "1.0.0.rc2"
+gem "prawn", "~> 0.12.0"
 gem "prawnto", "~> 0.1.1"
 gem "prawnto_2", :require => "prawnto"
 
