@@ -11,9 +11,9 @@ else
 end
 
 
-if prettysheet == 'on'
+#if prettysheet == 'on'
   pdf.image "#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0]
-end
+#end
 
 #===== Character details =====
 fill_color "6d7b68"
