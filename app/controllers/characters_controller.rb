@@ -219,7 +219,7 @@ class CharactersController < ApplicationController
     # Remove equipment with 0 quantity.
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
-        if cg.qty < 1
+        if cg.qty.nil? || cg.qty < 1
           @item = CharacterGear.find_by_id(cg.id)
           @item.destroy
         end

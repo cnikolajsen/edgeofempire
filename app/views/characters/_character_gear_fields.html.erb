@@ -12,7 +12,7 @@
     </div>
   <% else %>
     <div class="controls">
-      <%= f.number_field :qty, :min => 0 %>
+      <%= f.number_field :qty, :min => 0, :value => 1 %>
       <%= f.select :gear_id, Gear.find(:all).collect  {|gear| [gear.name, gear.id]}, {:prompt => "Select Item"} %>
     </div>
   <% end %>
