@@ -1,5 +1,5 @@
 class CharactersController < ApplicationController
-  prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
+  #prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
 
   before_filter :set_up
@@ -129,28 +129,28 @@ class CharactersController < ApplicationController
     end
 
     # Specific for the PDF.
+    pdf_vars = Hash.new
     if params[:format] == 'pdf'
-      @knowledge_skills = ['Knowledge']
-      @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
-      @career_skill_ids = Array.new
-      @character.career.talent_trees.each do |tt|
-        tt.talent_tree_career_skills.each do |skill|
-          @career_skill_ids << skill.skill_id
-        end
-      end
       if params[:gfx] == 'off'
-        @pdf_prettysheet = 'off'
-        @pdf_border_color = "000000"
+        pdf_vars['pdf_background'] = 'off'
+        pdf_vars['pdf_border_color'] = "000000"
       else
-        @pdf_prettysheet = 'on'
-        @pdf_border_color = "c8c8c8"
+        pdf_vars['pdf_background'] = 'on'
+        pdf_vars['pdf_border_color'] = "c8c8c8"
       end
     end
+    pdf_vars['soak'] = @soak
+    pdf_vars['wound_th'] = @wound_th
+    pdf_vars['strain_th'] = @strain_th
+    pdf_vars['defense'] = @defense
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
-      format.pdf { @character }# show.pdf.prawn
+      format.pdf do
+        pdf = CharacterSheetPdf.new(@character, view_context, pdf_vars)
+        send_data pdf.render, filename: "Character_Sheet_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
+      end
     end
   end
 
