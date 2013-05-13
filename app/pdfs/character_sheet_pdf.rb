@@ -4,13 +4,13 @@ class CharacterSheetPdf < Prawn::Document
     super( :margin => [0,0,0,0] )
     @character = character
     @view = view
-    
+
     #text "Invoice #{@character.id}"
-    
+
     if pdf_vars['pdf_background'] == 'on'
       image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
     end
-    
+
     #===== Character details =====
     fill_color "6d7b68"
     draw_text "CHARACTER", :size => 7, :style => :bold, :at => [74, y - 22]
@@ -25,7 +25,7 @@ class CharacterSheetPdf < Prawn::Document
     draw_text "#{@character.career.name}", :size => 10, :at => [195, y - 76]
     text_box "#{@character.user.email}", :size => 8, :at => [458, y - 90]
     #===== /Character details =====
-    
+
     #===== Vitals =====
     fill_color "ffffff"
     draw_text "SOAK VALUE", :size => 7, :style => :bold, :at => [105, 669]
@@ -82,7 +82,7 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "a99f8f"
     draw_text "SKILLS", :size => 6, :style => :bold, :at => [302, y - 13]
     fill_color "000000"
-    
+
     @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
@@ -104,7 +104,7 @@ class CharacterSheetPdf < Prawn::Document
       end
     end
     dice_ability = "#{Rails.root}/public/dice/blank.png"
-   
+
     combat_skills = combat.map do |skill|
       font "Helvetica", :size=> 8
       dice_ability = "#{Rails.root}/public/dice/blank.png"
@@ -117,11 +117,11 @@ class CharacterSheetPdf < Prawn::Document
       else
         dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
         if skill.ranks > 0
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
         end
       end
       [
-        "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})", 
+        "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
         if @career_skill_ids.include?(skill.skill.id)
           'Yes'
         end,
@@ -129,7 +129,7 @@ class CharacterSheetPdf < Prawn::Document
         {:image => dice_proficiency, :fit => [58, 13], :position => :left, :vposition => :center}
       ]
     end
-    
+
     knowledge_skills = knowledge.map do |skill|
       font "Helvetica", :size=> 8
       dice_ability = "#{Rails.root}/public/dice/blank.png"
@@ -142,7 +142,7 @@ class CharacterSheetPdf < Prawn::Document
       else
         dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
         if skill.ranks > 0
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
         end
       end
       [
@@ -167,7 +167,7 @@ class CharacterSheetPdf < Prawn::Document
       else
         dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
         if skill.ranks > 0
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"    
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
         end
       end
       [
@@ -179,7 +179,7 @@ class CharacterSheetPdf < Prawn::Document
         {:image => dice_proficiency, :fit => [58, 13], :position => :left, :vposition => :center}
       ]
     end
-    
+
     bounding_box([64, 505], :width => 242, :height => 335) do
       table [
        ['General skills', 'Career?', 'Dice pool']
@@ -279,7 +279,7 @@ class CharacterSheetPdf < Prawn::Document
         font "Helvetica", :size=> 8
         character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
         ranks = character_skill_ranks.first.ranks
-      
+
         unless weapon.nil?
           @wq = Array.new
           weapon.weapon_quality_ranks.each do |q|
@@ -291,7 +291,7 @@ class CharacterSheetPdf < Prawn::Document
           end
         end
         weapon_data = @wq.join(',')
-      
+
         [
           weapon.name,
           "#{weapon.skill.name}",
@@ -301,7 +301,7 @@ class CharacterSheetPdf < Prawn::Document
           weapon_data
         ]
       end
-   
+
       bounding_box([68, 155], :width => 242, :height => 335) do
         table [
          ['WEAPON', 'SKILL', 'DAMAGE', 'RANGE', 'CRIT', 'SPECIAL']
@@ -314,7 +314,7 @@ class CharacterSheetPdf < Prawn::Document
         },
         :width => 491,
         :column_widths => [115, 100, 42, 42, 42, 150]
-        
+
         table weapons,
           :cell_style => {
             #:background_color => "FFFFFF",
@@ -345,9 +345,9 @@ class CharacterSheetPdf < Prawn::Document
     stroke do
       stroke_color pdf_vars['pdf_border_color']
       self.line_width = 2
-      rounded_rectangle [67, 792], 327, 165, 5
+      rounded_rectangle [67, 791], 327, 165, 5
       rounded_rectangle [67, 615], 327, 195, 5
-      rounded_rectangle [405, 792], 153, 372, 5
+      rounded_rectangle [405, 791], 153, 371, 5
       rounded_rectangle [67, 410], 491, 112, 5
       rounded_rectangle [67, 289], 491, 289, 5
     end
@@ -359,6 +359,14 @@ class CharacterSheetPdf < Prawn::Document
       fill_and_stroke_rectangle [76, 585], 309, 153
       # Character description.
       fill_and_stroke_rectangle [413, 739], 138, 310
+      # Credits
+      fill_and_stroke_rectangle [76, 403], 155, 18
+      # Weapons
+      fill_and_stroke_rectangle [76, 379], 155, 72
+      # Gear
+      fill_and_stroke_rectangle [236, 379], 155, 72
+      # Resources
+      fill_and_stroke_rectangle [395, 379], 155, 72
 
     end
     stroke do
@@ -386,6 +394,12 @@ class CharacterSheetPdf < Prawn::Document
       horizontal_line 413, 530, :at => 628
       horizontal_line 413, 530, :at => 606
       horizontal_line 413, 530, :at => 523
+
+      #Equipment log inner
+      horizontal_line 76, 190, :at => 359
+      horizontal_line 236, 347, :at => 359
+      horizontal_line 395, 505, :at => 359
+
     end
 
     fill_color "787878"
@@ -405,6 +419,10 @@ class CharacterSheetPdf < Prawn::Document
     draw_text "EYES", :size => 7, :style => :bold, :at => [425, 610]
     draw_text "NOTABLE FEATURES", :size => 7, :style => :bold, :at => [425, 589]
     draw_text "OTHER", :size => 7, :style => :bold, :at => [425, 507]
+    draw_text "CREDITS", :size => 7, :style => :bold, :at => [85, 392]
+    draw_text "WEAPONS & ARMOR", :size => 7, :style => :bold, :at => [85, 365]
+    draw_text "PERSONAL GEAR", :size => 7, :style => :bold, :at => [245, 365]
+    draw_text "ASSETS & RESOURCES", :size => 7, :style => :bold, :at => [406, 365]
 
     fill_color "6d7b68"
     draw_text "MOTIVATIONS", :size => 7, :style => :bold, :at => [335, 754]
@@ -414,8 +432,8 @@ class CharacterSheetPdf < Prawn::Document
     draw_text "TALENT AND SPECIAL ABILITES", :size => 7, :style => :bold, :at => [437, 272]
 
     #rounded_rectangle [300, 300], 100, 200, 20
-    
+
   end
-  
-  
+
+
 end
