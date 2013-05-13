@@ -1,5 +1,5 @@
 class Character < ActiveRecord::Base
-  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes
+  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes, :height, :build, :hair, :eyes, :notable_features, :other
   
   validates_presence_of :name
   validates_presence_of :race_id

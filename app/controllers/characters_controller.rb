@@ -79,6 +79,8 @@ class CharactersController < ApplicationController
     @soak = @character.brawn
     @defense = 0
     @equipment = Array.new
+    @pdf_weapons_and_armor = Array.new
+    @pdf_personal_gear = Array.new
 
     # Add weapons to equipment list
     if !@character.character_weapons.nil?
@@ -100,6 +102,8 @@ class CharactersController < ApplicationController
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
             @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+          else
+            @pdf_weapons_and_armor << cw.weapon.name
           end
         end
       end
@@ -110,6 +114,7 @@ class CharactersController < ApplicationController
       @soak += @character.character_armor.armor.soak
       @defense += @character.character_armor.armor.defense
       @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
+      @pdf_weapons_and_armor << @character.character_armor.armor.name
     end
 
     talent_alterations.each do |talent_id, stat|
@@ -125,6 +130,7 @@ class CharactersController < ApplicationController
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
+        @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
 
@@ -143,6 +149,9 @@ class CharactersController < ApplicationController
     pdf_vars['wound_th'] = @wound_th
     pdf_vars['strain_th'] = @strain_th
     pdf_vars['defense'] = @defense
+    pdf_vars['weapons_armor'] = @pdf_weapons_and_armor
+    pdf_vars['personal_gear'] = @pdf_personal_gear
+    logger.debug(pdf_vars)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -241,12 +250,9 @@ class CharactersController < ApplicationController
         ct.destroy
       end
       @character.career.talent_trees.each do |tree|
-        #@character_talent_tree = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id)
-        #if @character_talent.empty?
         @character_talent_tree = CharacterTalent.new()
         @character_talent_tree.character_id = @character.id
         @character_talent_tree.talent_tree_id = tree.id
-        #end
 
         # Update first row talents.
         if !params["tree_#{tree.id}-talent_1_1".to_sym].nil?
@@ -321,6 +327,21 @@ class CharactersController < ApplicationController
         @character_talent_tree.save
       end
     end
+    
+    # Update character skill entries for character to add in new skills created since the character was created.
+    existing_skills = Array.new
+    @character.character_skills.each do |skill|
+      existing_skills << skill.skill.id
+    end
+    Skill.find(:all).each do |skill|
+      if !existing_skills.include?(skill.id)
+        @character_skill = CharacterSkill.new()
+        @character_skill.character_id = @character.id
+        @character_skill.ranks = 0
+        @character_skill.skill_id = skill.id
+        @character_skill.save
+      end
+    end
 
     respond_to do |format|
       if @character.update_attributes(params[:character])
@@ -363,7 +384,7 @@ class CharactersController < ApplicationController
   def skills
     @character_page = 'skills'
     @character = Character.find(params[:id])
-
+    
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
       tt.talent_tree_career_skills.each do |skill|

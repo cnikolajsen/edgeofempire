@@ -31,6 +31,49 @@
     </div>
   </div>
   <div class="control-group">
+    <%= f.label :age, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :age, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :height, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :height, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :build, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :build, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :hair, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :hair, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :eyes, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :eyes, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :notable_features, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :notable_features, :class => 'text_area' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :other, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :other, :class => 'text_area' %>
+    </div>
+  </div>
+  
+  <div class="control-group">
     <%= f.label :career_id, :class => 'control-label' %>
     <div class="controls">
       <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}) %>
@@ -92,10 +135,6 @@
       <%= f.text_area :bio, :class => 'text_area' %>
     </div>
   </div>
-  
-  <%# f.fields_for :character_skills do |skill_form| %>
-    <%#= skill_form.number_field :skill_id, :as => :select, :collection => Skill.all %>
-  <%# end %>
   
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>

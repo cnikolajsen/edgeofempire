@@ -431,8 +431,20 @@ class CharacterSheetPdf < Prawn::Document
     draw_text "EQUIPMENT LOG", :size => 7, :style => :bold, :at => [492, 395]
     draw_text "TALENT AND SPECIAL ABILITES", :size => 7, :style => :bold, :at => [437, 272]
 
-    #rounded_rectangle [300, 300], 100, 200, 20
-
+    fill_color "000000"
+    # Box contents - Character Description.
+    draw_text @character.gender, :size => 7, :style => :normal, :at => [460, 712]
+    draw_text  @character.age, :size => 7, :style => :normal, :at => [460, 692]
+    draw_text  @character.height, :size => 7, :style => :normal, :at => [460, 671]
+    draw_text  @character.build, :size => 7, :style => :normal, :at => [460, 650]
+    draw_text  @character.hair, :size => 7, :style => :normal, :at => [460, 632]
+    draw_text  @character.eyes, :size => 7, :style => :normal, :at => [460, 610]
+    text_box @character.notable_features, :at => [425, 585], :width => 110, :height => 60, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    text_box @character.other, :at => [425, 503], :width => 110, :height => 65, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    # Box contents - Weapons & Armor.
+    text_box pdf_vars['weapons_armor'].join("\n"), :at => [80, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    # Box contents - Personal Gear.
+    text_box pdf_vars['personal_gear'].join(', '), :at => [240, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
   end
 
 

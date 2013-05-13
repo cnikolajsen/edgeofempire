@@ -3,17 +3,19 @@
   <h1><%=t '.title', :default => "Edit skills for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
-
+<% logger.debug(@character.character_skills.inspect) %>
 <%= form_for @character do |character_form| %>
 <table>
   <tr>
     <th>Skills</th>
+    <th>Characteristic</th>
     <th>Career?</th>
     <th>Rank</th>
   </tr>
   <%= character_form.fields_for :character_skills do |skill_fields| %>
     <tr>
       <td><%= character_form.label :ranks, Skill.find_by_id(skill_fields.object.skill_id).name, :class => 'control-label' %></td>
+      <td><%= Skill.find_by_id(skill_fields.object.skill_id).characteristic.truncate(3, :omission => '') %></td>
       <td>
         <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
       </td>
