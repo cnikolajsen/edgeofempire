@@ -151,7 +151,7 @@ class CharactersController < ApplicationController
     pdf_vars['defense'] = @defense
     pdf_vars['weapons_armor'] = @pdf_weapons_and_armor
     pdf_vars['personal_gear'] = @pdf_personal_gear
-    logger.debug(pdf_vars)
+    pdf_vars['talents'] = @talents
 
     respond_to do |format|
       format.html # show.html.erb

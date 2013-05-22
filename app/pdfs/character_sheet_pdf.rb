@@ -434,18 +434,61 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "000000"
     # Box contents - Character Description.
     draw_text @character.gender, :size => 7, :style => :normal, :at => [460, 712]
-    draw_text  @character.age, :size => 7, :style => :normal, :at => [460, 692]
-    draw_text  @character.height, :size => 7, :style => :normal, :at => [460, 671]
-    draw_text  @character.build, :size => 7, :style => :normal, :at => [460, 650]
-    draw_text  @character.hair, :size => 7, :style => :normal, :at => [460, 632]
-    draw_text  @character.eyes, :size => 7, :style => :normal, :at => [460, 610]
+    draw_text @character.age, :size => 7, :style => :normal, :at => [460, 692]
+    draw_text @character.height, :size => 7, :style => :normal, :at => [460, 671]
+    draw_text @character.build, :size => 7, :style => :normal, :at => [460, 650]
+    draw_text @character.hair, :size => 7, :style => :normal, :at => [460, 632]
+    draw_text @character.eyes, :size => 7, :style => :normal, :at => [460, 610]
     text_box @character.notable_features, :at => [425, 585], :width => 110, :height => 60, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
     text_box @character.other, :at => [425, 503], :width => 110, :height => 65, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    # Box contents - Credits.
+    text_box @character.credits.to_s, :at => [130, 398], :width => 90, :height => 18, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :right, :valign => :top
     # Box contents - Weapons & Armor.
     text_box pdf_vars['weapons_armor'].join("\n"), :at => [80, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
     # Box contents - Personal Gear.
     text_box pdf_vars['personal_gear'].join(', '), :at => [240, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
-  end
 
+  #===== TALENTS =====
+  #fill_color "a99f8f"
+  #draw_text "WEAPONS", :size => 6, :style => :bold, :at => [298, 164]
+  fill_color "000000"
+  if !pdf_vars['talents'].nil?
+    talents = pdf_vars['talents'].map do |talent_id, index|
+      talent = Talent.find_by_id(talent_id)
+      font "Helvetica", :size=> 8
+      [
+        talent.name,
+        "",
+        talent.description,
+      ]
+    end
+
+    bounding_box([68, 155], :width => 242, :height => 335) do
+      table [
+       ['NAME', 'PAGE #', 'ABILITY SUMMARY']
+      ],
+      :cell_style => {
+        :height => 10,
+        :padding => 1,
+        :size => 5,
+        :align => :center
+      },
+      :width => 491,
+      :column_widths => [100, 100, 291]
+
+      table talents,
+        :cell_style => {
+          #:background_color => "FFFFFF",
+          :height => 12,
+          :padding => [2, 3],
+          :size => 6
+        },
+        :width => 491,
+        :column_widths => [100, 100, 291]
+    end
+  end
+  #===== /TALENTS =====
+  
+  end
 
 end
