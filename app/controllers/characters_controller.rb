@@ -1,6 +1,7 @@
 class CharactersController < ApplicationController
   #prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
+  include RacesHelper
 
   before_filter :set_up
   before_filter :authenticate_user!
@@ -133,7 +134,14 @@ class CharactersController < ApplicationController
         @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
-
+    
+    # Apply species special abilities.
+    race_alterations = {}
+    if respond_to?("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
+      race_alterations = {}
+      race_alterations = send("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
+    end
+logger.debug(race_alterations)
     # Specific for the PDF.
     pdf_vars = Hash.new
     if params[:format] == 'pdf'
@@ -390,6 +398,9 @@ class CharactersController < ApplicationController
       tt.talent_tree_career_skills.each do |skill|
         @career_skill_ids << skill.skill_id
       end
+    end
+    @character.career.career_skills.each do |skill|
+      @career_skill_ids << skill.skill_id
     end
   end
 
