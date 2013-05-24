@@ -24,11 +24,21 @@ class CharactersController < ApplicationController
 
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
+    
+    @specializations = Array.new
+    unless @character.specialization_1.nil?
+      @specializations << TalentTree.find_by_id(@character.specialization_1).name
+    end
+    unless @character.specialization_2.nil?
+      @specializations << TalentTree.find_by_id(@character.specialization_2).name
+    end
+    unless @character.specialization_3.nil?
+      @specializations << TalentTree.find_by_id(@character.specialization_3).name
+    end
 
     # Build character talent selection.
     @talents = {}
     @character.character_talents.each do |talent_tree|
-      #puts talent_tree.attributes
       talent_tree.attributes.each do |key, value|
         if key.match(/talent_[\d]_[\d]/) and !value.nil?
           if @talents.has_key?(value)
@@ -160,6 +170,7 @@ logger.debug(race_alterations)
     pdf_vars['weapons_armor'] = @pdf_weapons_and_armor
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
+    pdf_vars['specializations'] = @specializations
 
     respond_to do |format|
       format.html # show.html.erb

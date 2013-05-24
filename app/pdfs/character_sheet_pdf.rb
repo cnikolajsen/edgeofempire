@@ -23,6 +23,7 @@ class CharacterSheetPdf < Prawn::Document
     draw_text "#{@character.name}", :size => 14, :at => [195, y - 39]
     draw_text "#{@character.race.name}", :size => 10, :at => [195, y - 58]
     draw_text "#{@character.career.name}", :size => 10, :at => [195, y - 76]
+    draw_text pdf_vars['specializations'].join(' / '), :size => 10, :at => [195, y - 95]
     text_box "#{@character.user.email}", :size => 8, :at => [458, y - 90]
     #===== /Character details =====
 
@@ -458,14 +459,14 @@ class CharacterSheetPdf < Prawn::Document
       font "Helvetica", :size=> 8
       [
         talent.name,
-        "",
+        talent.activation,
         talent.description,
       ]
     end
 
     bounding_box([68, 155], :width => 242, :height => 335) do
       table [
-       ['NAME', 'PAGE #', 'ABILITY SUMMARY']
+       ['NAME', 'ACTIVATION', 'ABILITY SUMMARY']
       ],
       :cell_style => {
         :height => 10,
