@@ -3,7 +3,8 @@
   <h1><%=t '.title', :default => "Edit talents for #{@character.name}" %></h1>
 </div>
 <%= render :partial => 'character_edit_menu' %>
-
+<div class="row-fluid">
+<div class="span9">
 <%= form_for @character do |character_form| %>
   <%= hidden_field_tag 'update_talents', 'true' %>
 
@@ -23,7 +24,7 @@
           <col width="22%" />
         </colgroup>
         <tr>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_1_1.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_1_1).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_1_1", tree.talent_1_1, (@character_tree_talents.first.talent_1_1 unless @character_tree_talents.first.nil?) %><br />
@@ -31,7 +32,7 @@
             <% end%>
           </td>
           <td></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_1_2.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_1_2).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_1_2", tree.talent_1_2, (@character_tree_talents.first.talent_1_2 unless @character_tree_talents.first.nil?) %><br />
@@ -39,7 +40,7 @@
             <% end%>
           </td>
           <td></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_1_3.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_1_3).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_1_3", tree.talent_1_3, (@character_tree_talents.first.talent_1_3 unless @character_tree_talents.first.nil?) %><br />
@@ -47,7 +48,7 @@
             <% end%>
           </td>
           <td></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_1_4.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_1_4).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_1_4", tree.talent_1_4, (@character_tree_talents.first.talent_1_4 unless @character_tree_talents.first.nil?) %><br />
@@ -65,7 +66,7 @@
           <td class='vertical-link link-<%= tree.talent_2_4_require_1_4.to_s %>'></td>
         </tr>
         <tr>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_2_1.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_2_1).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_2_1", tree.talent_2_1, (@character_tree_talents.first.talent_2_1 unless @character_tree_talents.first.nil?) %><br />
@@ -73,7 +74,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_2_1_require_2_2.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_2_2.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_2_2).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_2_2", tree.talent_2_2, (@character_tree_talents.first.talent_2_2 unless @character_tree_talents.first.nil?) %><br />
@@ -81,7 +82,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_2_2_require_2_3.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_2_3.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_2_3).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_2_3", tree.talent_2_3, (@character_tree_talents.first.talent_2_3 unless @character_tree_talents.first.nil?) %><br />
@@ -89,7 +90,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_2_3_require_2_4.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_2_4.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_2_4).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_2_4", tree.talent_2_4, (@character_tree_talents.first.talent_2_4 unless @character_tree_talents.first.nil?) %><br />
@@ -107,7 +108,7 @@
           <td class='vertical-link link-<%= tree.talent_3_4_require_2_4.to_s %>'></td>
         </tr>
         <tr>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_3_1.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_3_1).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_3_1", tree.talent_3_1, (@character_tree_talents.first.talent_3_1 unless @character_tree_talents.first.nil?) %><br />
@@ -115,7 +116,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_3_1_require_3_2.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_3_2.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_3_2).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_3_2", tree.talent_3_2, (@character_tree_talents.first.talent_3_2 unless @character_tree_talents.first.nil?) %><br />
@@ -123,7 +124,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_3_2_require_3_3.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_3_3.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_3_3).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_3_3", tree.talent_3_3, (@character_tree_talents.first.talent_3_3 unless @character_tree_talents.first.nil?) %><br />
@@ -131,7 +132,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_3_3_require_3_4.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_3_4.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_3_4).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_3_4", tree.talent_3_4, (@character_tree_talents.first.talent_3_4 unless @character_tree_talents.first.nil?) %><br />
@@ -149,7 +150,7 @@
           <td class='vertical-link link-<%= tree.talent_4_4_require_3_4.to_s %>'></td>
         </tr>
         <tr>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_4_1.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_4_1).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_4_1", tree.talent_4_1, (@character_tree_talents.first.talent_4_1 unless @character_tree_talents.first.nil?) %><br />
@@ -157,7 +158,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_4_1_require_4_2.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_4_2.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_4_2).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_4_2", tree.talent_4_2, (@character_tree_talents.first.talent_4_2 unless @character_tree_talents.first.nil?) %><br />
@@ -165,7 +166,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_4_2_require_4_3.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_4_3.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_4_3).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_4_3", tree.talent_4_3, (@character_tree_talents.first.talent_4_3 unless @character_tree_talents.first.nil?) %><br />
@@ -173,7 +174,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_4_3_require_4_4.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_4_4.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_4_4).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_4_4", tree.talent_4_4, (@character_tree_talents.first.talent_4_4 unless @character_tree_talents.first.nil?) %><br />
@@ -191,7 +192,7 @@
           <td class='vertical-link link-<%= tree.talent_5_4_require_4_4.to_s %>'></td>
         </tr>
         <tr>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_5_1.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_5_1).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_5_1", tree.talent_5_1, (@character_tree_talents.first.talent_5_1 unless @character_tree_talents.first.nil?) %><br />
@@ -199,7 +200,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_5_1_require_5_2.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_5_2.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_5_2).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_5_2", tree.talent_5_2, (@character_tree_talents.first.talent_5_2 unless @character_tree_talents.first.nil?) %><br />
@@ -207,7 +208,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_5_2_require_5_3.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_5_3.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_5_3).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_5_3", tree.talent_5_3, (@character_tree_talents.first.talent_5_3 unless @character_tree_talents.first.nil?) %><br />
@@ -215,7 +216,7 @@
             <% end %>
           </td>
           <td class='horizontal-link link-<%= tree.talent_5_3_require_5_4.to_s %>'></td>
-          <td>
+          <td class="talent-box">
             <% if !tree.talent_5_4.nil? %>
               <strong><%= Talent.find_by_id(tree.talent_5_4).name %></strong>
               <%= check_box_tag "tree_#{tree.id}-talent_5_4", tree.talent_5_4, (@character_tree_talents.first.talent_5_4 unless @character_tree_talents.first.nil?) %><br />
@@ -232,3 +233,28 @@
     <%= character_form.submit nil, :class => 'btn btn-primary' %>
   </div>
 <% end %>
+</div>
+<div class="well well-small span3">
+  <h5>Select Specializations</h5>
+  <%= form_for @character do |specializations_form| %>
+    <%= select('character', 'specialization_1', TalentTree.where("career_id = ?", @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}) %>
+    <% unless @character.specialization_1.nil? %>
+      <%= select('character', 'specialization_2', TalentTree.find(:all, :conditions => ['id not in (?)', @character.specialization_1]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}) %>
+    <% end %>
+    <% unless @character.specialization_2.nil? %>
+      <%= select('character', 'specialization_3', TalentTree.find(:all, :conditions => ['id not in (?)', [@character.specialization_1, @character.specialization_2]]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}) %>
+    <% end %>
+    <div class="form-actions">
+      <%= hidden_field_tag 'destination', 'talents' %>
+      <%= specializations_form.submit nil, :class => 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+<div class="well well-small span3">
+  <h5>Selecting Specializations</h5>
+  <p>Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.</p>
+  <p>The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.</p>
+  <p>Purchasing an additional specialization within a character's career costs 5 experience. Purchasing an additional specialization outside of a character's career costs 10 experience.</p>
+  <p>Each character may only have three specializations purchased at any one time. If a character wishes to learn a new specialization he must discard one of his current specializations, and lose some of what he has learned from that specialization.</p>
+</div>
+</div>

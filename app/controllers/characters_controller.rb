@@ -257,7 +257,20 @@ logger.debug(race_alterations)
       @character.character_talents.each do |ct|
         ct.destroy
       end
-      @character.career.talent_trees.each do |tree|
+      
+      @talent_trees = Array.new
+      unless @character.specialization_1.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_1)
+      end
+      unless @character.specialization_2.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_2)
+      end
+      unless @character.specialization_3.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_3)
+      end
+      
+      #@character.career.talent_trees.each do |tree|
+      @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.new()
         @character_talent_tree.character_id = @character.id
         @character_talent_tree.talent_tree_id = tree.id
@@ -409,8 +422,14 @@ logger.debug(race_alterations)
     @character = Character.find(params[:id])
 
     @talent_trees = Array.new
-    @character.career.talent_trees.each do |tree|
-      @talent_trees << tree
+    unless @character.specialization_1.nil?
+      @talent_trees << TalentTree.find_by_id(@character.specialization_1)
+    end
+    unless @character.specialization_2.nil?
+      @talent_trees << TalentTree.find_by_id(@character.specialization_2)
+    end
+    unless @character.specialization_3.nil?
+      @talent_trees << TalentTree.find_by_id(@character.specialization_3)
     end
   end
 

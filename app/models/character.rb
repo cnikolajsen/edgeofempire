@@ -1,5 +1,5 @@
 class Character < ActiveRecord::Base
-  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes, :height, :build, :hair, :eyes, :notable_features, :other
+  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes, :height, :build, :hair, :eyes, :notable_features, :other, :specialization_1, :specialization_2, :specialization_3
   
   validates_presence_of :name
   validates_presence_of :race_id
@@ -34,4 +34,5 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
 
   default_scope order('name ASC')
+  
 end
