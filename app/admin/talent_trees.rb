@@ -106,28 +106,28 @@ ActiveAdmin.register TalentTree do
       tr do
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_1_1)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_1_2)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_1_3)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_1_4)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
@@ -144,28 +144,28 @@ ActiveAdmin.register TalentTree do
       tr do
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_2_1)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_2_1_require_2_2.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_2_2)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_2_2_require_2_3.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_2_3)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_2_3_require_2_4.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_2_4)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
@@ -182,28 +182,28 @@ ActiveAdmin.register TalentTree do
       tr do
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_3_1)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_3_1_require_3_2.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_3_2)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_3_2_require_3_3.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_3_3)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_3_3_require_3_4.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_3_4)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
@@ -220,28 +220,28 @@ ActiveAdmin.register TalentTree do
       tr do
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_4_1)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_4_1_require_4_2.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_4_2)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_4_2_require_4_3.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_4_3)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_4_3_require_4_4.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_4_4)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
@@ -258,28 +258,28 @@ ActiveAdmin.register TalentTree do
       tr do
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_5_1)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_5_1_require_5_2.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_5_2)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_5_2_require_5_3.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_5_3)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
         td '', :class => 'horizontal-link link-' + talent_tree.talent_5_3_require_5_4.to_s
         td :class => 'talent' do
           talent = Talent.find_by_id(talent_tree.talent_5_4)
-          span strong link_to(talent.name, edit_admin_talent_path(talent.id))
+          span strong link_to(talent.name, admin_talent_path(talent.id))
           br strong talent.activation
           span text_replace_tokens(talent.description)
         end
