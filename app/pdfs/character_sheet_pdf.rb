@@ -196,7 +196,7 @@ class CharacterSheetPdf < Prawn::Document
 
       table general_skills,
         :cell_style => {
-          :height => 15,
+          :height => 14,
           :padding => 1,
         },
         :width => 242,
@@ -453,7 +453,7 @@ class CharacterSheetPdf < Prawn::Document
   #fill_color "a99f8f"
   #draw_text "WEAPONS", :size => 6, :style => :bold, :at => [298, 164]
   fill_color "000000"
-  if !pdf_vars['talents'].nil?
+  if !pdf_vars['talents'].empty?
     talents = pdf_vars['talents'].map do |talent_id, index|
       talent = Talent.find_by_id(talent_id)
       font "Helvetica", :size=> 8
