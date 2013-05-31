@@ -52,6 +52,7 @@
               <li<% if current_page('races') %> class="active"<% end %>><%= link_to "Races", races_path  %></li>
               <li<% if current_page('careers') %> class="active"<% end %>><%= link_to "Careers", careers_path  %></li>
               <li<% if current_page('skills') %> class="active"<% end %>><%= link_to "Skills", skills_path  %></li>
+              <li<% if current_page('talents') %> class="active"<% end %>><%= link_to "Talents", talents_path  %></li>
               <li class="dropdown <% if current_page('weapons') or current_page('armor') or current_page('gear') %>active<% end %>">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Equipment<b class="caret"></b></a>
                 <ul class="dropdown-menu">
