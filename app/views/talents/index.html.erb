@@ -7,7 +7,7 @@
   <div class="well well-small">
     <h4><%= talent.name %></h4>
     <strong>Activation:</strong> <%= talent.activation %><br  />
-    <strong>Ranked:</strong> <em>TODO</em><%#= talent.ranked %><br  />
+    <strong>Ranked:</strong> <%= talent.ranked? ? 'Yes' : 'No' %><br  />
     <% 
       trees = TalentTree.find(:all, :conditions => ['talent_1_1 = :talent OR talent_1_2 = :talent OR talent_1_3 = :talent OR talent_1_4 = :talent OR talent_2_1 = :talent OR talent_2_2 = :talent OR talent_2_3 = :talent OR talent_2_4 = :talent OR talent_3_1 = :talent OR talent_3_2 = :talent OR talent_3_3 = :talent OR talent_3_4 = :talent OR talent_4_1 = :talent OR talent_4_2 = :talent OR talent_4_3 = :talent OR talent_4_4 = :talent OR talent_5_1 = :talent OR talent_5_2 = :talent OR talent_5_3 = :talent OR talent_5_4 = :talent', {:talent => "#{talent.id}"}]) 
       used_in_trees = Array.new

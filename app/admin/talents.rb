@@ -10,6 +10,7 @@ ActiveAdmin.register Talent do
       truncate(desc.description)
     end
     column :activation
+    column :ranked
     default_actions
   end
   
@@ -33,6 +34,8 @@ ActiveAdmin.register Talent do
   end
 
   filter :name
+  filter :ranked
+  filter :activation, :as => :select, :collection => proc { ['Active (Incidental)', 'Active (Action)', 'Active (Maneuver)', 'Passive'] }
 
   controller do
      def create
