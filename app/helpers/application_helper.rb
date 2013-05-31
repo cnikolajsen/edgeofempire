@@ -21,6 +21,10 @@ module ApplicationHelper
     text = text.gsub(/\[proficiency\]/, image_tag("dice/proficiency.png", :alt => "Proficiency", :class => 'dice'))
     text = text.gsub(/\[setback\]/, image_tag("dice/setback.png", :alt => "Setback", :class => 'dice'))
     text = text.gsub(/\[triumph\]/, image_tag("dice/triumph.png", :alt => "Triumph", :class => 'dice'))
+    text = text.gsub(/\[success\]/, image_tag("dice/success.png", :alt => "Success", :class => 'dice'))
+    text = text.gsub(/\[failure\]/, image_tag("dice/failure.png", :alt => "Failure", :class => 'dice'))
+    text = text.gsub(/\[force_white\]/, image_tag("dice/force_white.png", :alt => "Light Side", :class => 'dice'))
+    text = text.gsub(/\[force_black\]/, image_tag("dice/force_black.png", :alt => "Dark side", :class => 'dice'))
     
     text.html_safe
   end
