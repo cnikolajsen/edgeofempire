@@ -1,6 +1,6 @@
 <%- model_class = Weapon -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => @weapon.name %> <small><%= @weapon.skill.name %></small></h1>
+  <h1><%=t '.title', :default => @weapon.name %> <small><%= @weapon.skill.name unless @weapon.skill.nil? %></small></h1>
 </div>
 
 <p><%= @weapon.description %></p>
@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><%= @weapon.skill.name %></td>
+      <td><%= @weapon.skill.name unless @weapon.skill.nil? %></td>
       <td><%= @weapon.damage %></td>
       <td><%= @weapon.crit %></td>
       <td><%= @weapon.price %></td>
