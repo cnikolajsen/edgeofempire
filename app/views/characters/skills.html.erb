@@ -13,14 +13,17 @@
     <th>Rank</th>
   </tr>
   <%= character_form.fields_for :character_skills do |skill_fields| %>
-    <tr>
-      <td><%= character_form.label :ranks, Skill.find_by_id(skill_fields.object.skill_id).name, :class => 'control-label' %></td>
-      <td><%= Skill.find_by_id(skill_fields.object.skill_id).characteristic.truncate(3, :omission => '') %></td>
-      <td>
-        <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
-      </td>
-      <td><%= skill_fields.select :ranks, (0..5) %></td>
-    </tr>
+    <% skill = Skill.find_by_id(skill_fields.object.skill_id) %>
+    <% unless skill.nil? %>
+      <tr>
+        <td><%= character_form.label :ranks, skill.name, :class => 'control-label' %></td>
+        <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
+        <td>
+          <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
+        </td>
+        <td><%= skill_fields.select :ranks, (0..5) %></td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
 <div class="form-actions">

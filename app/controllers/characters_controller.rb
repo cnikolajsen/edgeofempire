@@ -363,7 +363,7 @@ logger.debug(race_alterations)
     # Update character skill entries for character to add in new skills created since the character was created.
     existing_skills = Array.new
     @character.character_skills.each do |skill|
-      existing_skills << skill.skill.id
+      existing_skills << skill.skill.id unless skill.skill.nil?
     end
     Skill.find(:all).each do |skill|
       if !existing_skills.include?(skill.id)

@@ -248,33 +248,37 @@
     </div>
  <% end %>
 
-  <div class="form-actions">
-    <%= hidden_field_tag 'destination', 'talents' %>
-    <%= character_form.submit nil, :class => 'btn btn-primary' %>
-  </div>
-<% end %>
-</div>
-<div class="well well-small span3">
-  <h5>Select Specializations</h5>
-  <%= form_for @character do |specializations_form| %>
-    <%= select('character', 'specialization_1', TalentTree.where("career_id = ?", @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}) %>
-    <% unless @character.specialization_1.nil? %>
-      <%= select('character', 'specialization_2', TalentTree.find(:all, :conditions => ['id not in (?)', @character.specialization_1]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}) %>
-    <% end %>
-    <% unless @character.specialization_2.nil? %>
-      <%= select('character', 'specialization_3', TalentTree.find(:all, :conditions => ['id not in (?)', [@character.specialization_1, @character.specialization_2]]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}) %>
-    <% end %>
+  <% unless @character.specialization_1.nil? %>
     <div class="form-actions">
       <%= hidden_field_tag 'destination', 'talents' %>
-      <%= specializations_form.submit nil, :class => 'btn btn-primary' %>
+      <%= character_form.submit nil, :class => 'btn btn-primary' %>
     </div>
   <% end %>
+<% end %>
 </div>
-<div class="well well-small span3">
-  <h5>Selecting Specializations</h5>
-  <p>Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.</p>
-  <p>The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.</p>
-  <p>Purchasing an additional specialization within a character’s career costs ten times the total number of specializations he would possess with this new specialization. So a character with one specialization could purchase a second career specialization for 20 experience. If he wished to purchase a third career specialization, it would cost 30 experience.</p>
-  <p>Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third specialization that was also a non-career specialization would cost 40 experience.</p>
+<div class="span3">
+  <div class="well well-small">
+    <h5>Select Specializations</h5>
+    <%= form_for @character do |specializations_form| %>
+      <%= select('character', 'specialization_1', TalentTree.where("career_id = ?", @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}) %>
+      <% unless @character.specialization_1.nil? %>
+        <%= select('character', 'specialization_2', TalentTree.find(:all, :conditions => ['id not in (?)', @character.specialization_1]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}) %>
+      <% end %>
+      <% unless @character.specialization_2.nil? %>
+        <%= select('character', 'specialization_3', TalentTree.find(:all, :conditions => ['id not in (?)', [@character.specialization_1, @character.specialization_2]]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}) %>
+      <% end %>
+      <div class="form-actions">
+        <%= hidden_field_tag 'destination', 'talents' %>
+        <%= specializations_form.submit nil, :class => 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+  <div class="well well-small">
+    <h5>Selecting Specializations</h5>
+    <p>Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.</p>
+    <p>The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.</p>
+    <p>Purchasing an additional specialization within a character’s career costs ten times the total number of specializations he would possess with this new specialization. So a character with one specialization could purchase a second career specialization for 20 experience. If he wished to purchase a third career specialization, it would cost 30 experience.</p>
+    <p>Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third specialization that was also a non-career specialization would cost 40 experience.</p>
+  </div>
 </div>
 </div>
