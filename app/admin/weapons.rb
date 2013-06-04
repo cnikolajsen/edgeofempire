@@ -6,8 +6,11 @@ ActiveAdmin.register Weapon do
 
   index do |weapon|
     column :name
-    column :skill_id do |skill|
-      Skill.find_by_id(skill.skill_id).name
+    column :skill_id do |s|
+      skill = Skill.find_by_id(s.skill_id)
+      unless skill.nil?
+        skill.name
+      end
     end
     column :damage
     column :crit

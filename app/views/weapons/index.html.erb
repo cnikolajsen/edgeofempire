@@ -18,7 +18,7 @@
     <% @weapons.each do |weapon| %>
       <tr>
         <td><%= weapon.name %></td>
-        <td><%= weapon.skill.name %></td>
+        <td><%= weapon.skill.name unless weapon.skill.nil? %></td>
         <td><%= weapon.damage %></td>
         <td><%= weapon.crit %></td>
         <td><%= weapon.price %></td>
