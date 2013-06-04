@@ -112,7 +112,7 @@ class CharactersController < ApplicationController
           if params[:format] != 'pdf'
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
-            @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} [#{dice}]; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+            @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
           else
             @pdf_weapons_and_armor << cw.weapon.name
           end
