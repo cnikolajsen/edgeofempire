@@ -5,6 +5,12 @@
 <div class="page-header">
   <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name %> <%= @character.career.name %></small></h1>
 </div>
+<% unless @character_state['state_message'].nil? %>
+  <div class="alert alert-<%= @character_state['state_alert_class'] %>">
+    <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
+  </div>
+<% end %>
+
 <%= render :partial => 'character_edit_menu' %>
 <div class="row-fluid">
   <div class="well span12">
@@ -72,7 +78,7 @@
     </tbody>
   </table>
   </div>
-  <div class="well well-small span3">
+  <div class="well well-small span3">route
     <h5>Experience Points</h5>
     Earned: <%= @character.experience %><br />
     Spent:
@@ -83,6 +89,11 @@
   </div>
   <div class="well well-small span3">
     <h5>Obligation</h5>
+  </div>
+  <div class="well span3">
+    <%= link_to "Creation", creation_character_path(@character), :class => 'btn' if @character.may_create? && !@character.creation? %>
+    <%= link_to "Activate", activate_character_path(@character), :class => 'btn' if @character.may_activate? %>
+    <%= link_to "Retire", retire_character_path(@character), :class => 'btn' if @character.may_retire? %>
   </div>
 </div>
 <div class="row-fluid">

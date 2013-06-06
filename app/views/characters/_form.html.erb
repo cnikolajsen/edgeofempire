@@ -79,7 +79,7 @@
       <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}) %>
     </div>
   </div>
-  <% unless f.object.race_id.nil? %>
+  <% unless f.object.race_id.nil? || @character.race.nil? %>
     <div class="control-group">
       <%= f.label :brawn, :class => 'control-label' %>
       <div class="controls">

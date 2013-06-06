@@ -1,6 +1,12 @@
 <%- model_class = Character -%>
 <div class="page-header">
   <h1><%=t '.title', :default => "Edit #{@character.name}" %></h1>
+
+  <% unless @character_state['state_message'].nil? %>
+    <div class="alert alert-<%= @character_state['state_alert_class'] %>">
+      <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
+    </div>
+  <% end %>
 </div>
 <%= render :partial => 'character_edit_menu' %>
 

@@ -46,6 +46,9 @@ EdgeOfEmpire::Application.routes.draw do
   match 'characters/:id/armor' => 'characters#armor', :as => :character_armor
   match 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
   match 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
+  match 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
+  match 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
+  match 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
+      <th></th>
       <th><%= model_class.human_attribute_name(:race_id) %></th>
       <th><%= model_class.human_attribute_name(:career_id) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
@@ -16,9 +17,18 @@
     <% @characters.each do |character| %>
       <tr>
         <td><%= link_to character.name, character_path(character) %></td>
+        <td>
+          <% if character.creation? %>
+              <span class="label label-warning">Creation</span>
+          <% elsif character.active? %>
+              <span class="label label-success">Active</span>
+          <% elsif character.retired? %>
+              <span class="label label-inverse">Retired</span>
+          <% end %>
+        </td>
         <td><%= character.race.name %></td>
         <td><%= character.career.name %></td>
-        <td><%=l character.created_at %></td>
+        <td><%=l character.created_at, :format => :short %></td>
         <td>
           <%= link_to 'PDF',
                       character_path(character, :format => 'pdf'), :class => 'btn btn-mini btn-info', :target => "_blank" %>

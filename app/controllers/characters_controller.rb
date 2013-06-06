@@ -2,6 +2,7 @@ class CharactersController < ApplicationController
   #prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
   include RacesHelper
+  include CharactersHelper
 
   before_filter :set_up
   before_filter :authenticate_user!
@@ -24,7 +25,8 @@ class CharactersController < ApplicationController
 
     @character = Character.find(params[:id])
     @title = "#{@character.name} | #{@title}"
-    
+    @character_state = character_state(@character)
+
     @specializations = Array.new
     unless @character.specialization_1.nil?
       @specializations << TalentTree.find_by_id(@character.specialization_1).name
@@ -144,7 +146,7 @@ class CharactersController < ApplicationController
         @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
-    
+
     # Apply species special abilities.
     race_alterations = {}
     if respond_to?("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
@@ -198,6 +200,8 @@ logger.debug(race_alterations)
   # GET /characters/1/edit
   def edit
     @character = Character.find(params[:id])
+    @character_state = character_state(@character)
+
     @title = "#{@character.name} | #{@title}"
     @character_page = 'basics'
   end
@@ -208,13 +212,15 @@ logger.debug(race_alterations)
     @character = Character.new(params[:character])
     @character.user_id = current_user.id
 
-    @character.brawn = @character.race.brawn
-    @character.agility = @character.race.agility
-    @character.intellect = @character.race.intellect
-    @character.cunning = @character.race.cunning
-    @character.willpower = @character.race.willpower
-    @character.presence = @character.race.presence
-    @character.experience = @character.race.starting_experience
+    unless @character.race.nil?
+      @character.brawn = @character.race.brawn
+      @character.agility = @character.race.agility
+      @character.intellect = @character.race.intellect
+      @character.cunning = @character.race.cunning
+      @character.willpower = @character.race.willpower
+      @character.presence = @character.race.presence
+      @character.experience = @character.race.starting_experience
+    end
 
     respond_to do |format|
       if @character.save
@@ -246,6 +252,10 @@ logger.debug(race_alterations)
   def update
     @character = Character.find(params[:id])
 
+    if @character.aasm_state.nil?
+      @character.aasm_state = 'creation'
+    end
+
     if @character.character_armor.nil?
       @character_armor = CharacterArmor.new()
       @character_armor.character_id = @character.id
@@ -268,7 +278,7 @@ logger.debug(race_alterations)
       @character.character_talents.each do |ct|
         ct.destroy
       end
-      
+
       @talent_trees = Array.new
       unless @character.specialization_1.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_1)
@@ -279,7 +289,7 @@ logger.debug(race_alterations)
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
-      
+
       #@character.career.talent_trees.each do |tree|
       @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.new()
@@ -359,7 +369,7 @@ logger.debug(race_alterations)
         @character_talent_tree.save
       end
     end
-    
+
     # Update character skill entries for character to add in new skills created since the character was created.
     existing_skills = Array.new
     @character.character_skills.each do |skill|
@@ -416,7 +426,8 @@ logger.debug(race_alterations)
   def skills
     @character_page = 'skills'
     @character = Character.find(params[:id])
-    
+    @character_state = character_state(@character)
+
     @career_skill_ids = Array.new
     @character.career.talent_trees.each do |tt|
       tt.talent_tree_career_skills.each do |skill|
@@ -431,6 +442,7 @@ logger.debug(race_alterations)
   def talents
     @character_page = 'talents'
     @character = Character.find(params[:id])
+    @character_state = character_state(@character)
 
     @talent_trees = Array.new
     unless @character.specialization_1.nil?
@@ -456,14 +468,34 @@ logger.debug(race_alterations)
   def weapons
     @character_page = 'weapons'
     @character = Character.find(params[:id])
-
   end
 
   def equipment
     @character_page = 'gear'
     @character = Character.find(params[:id])
-
   end
+
+  def set_activate
+    @character = Character.find(params[:id])
+    @character.activate
+    @character.save
+    redirect_to @character, notice: 'Character activated. Character creation rules no longer apply.'
+  end
+
+  def set_retired
+    @character = Character.find(params[:id])
+    @character.retire
+    @character.save
+    redirect_to @character, notice: 'Character taken off duty. Character is now read only.'
+  end
+
+  def set_creation
+    @character = Character.find(params[:id])
+    @character.create
+    @character.save
+    redirect_to @character, notice: 'Character put into creation mode. Special rules apply.'
+  end
+
 
   private
 
