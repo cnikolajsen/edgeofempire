@@ -90,7 +90,10 @@
     <%= @character.credits %>
   </div>
   <div class="well well-small span3">
-    <h5>Obligation</h5>
+    <h4>Obligation</h4>
+    <% @character.obligations.each do |obl| %>
+      <strong><%= obl.name %></strong><br /><%= text_replace_tokens(obl.description) %>
+    <% end %>
   </div>
   <div class="well span3">
     <%= link_to "Creation", creation_character_path(@character), :class => 'btn' if @character.may_create? && !@character.creation? %>

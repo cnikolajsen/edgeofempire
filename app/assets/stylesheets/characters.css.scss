@@ -43,11 +43,13 @@ table.talent-tree td.talent-box:hover {
 	-webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px;
 }
 
+#character-obligations ul,
 #character-weapons ul,
 #character-inventory ul {
   margin: 0;
 }
 
+#character-obligations li,
 #character-weapons li,
 #character-inventory li {
   list-style: none;

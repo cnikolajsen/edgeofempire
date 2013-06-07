@@ -121,6 +121,19 @@
   </div>
 
   <div class="row-fluid">
+    <div class="span12 well">
+      <fieldset id="character-obligations">
+          <ul>
+            <%= f.fields_for :character_obligations do |obligation| %>
+              <%= render 'character_obligation_fields', :f => obligation %>
+            <% end %>
+          </ul>
+          <%= link_to_add_association 'Add obligation', f, :character_obligations, 'data-association-insertion-node' => "#character-obligations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|obligation| obligation.build_obligation; obligation }, :class => 'btn btn-warning' %>
+        </fieldset>
+    </div>
+  </div>
+
+  <div class="row-fluid">
     <div class="span6 well">
       <div class="control-group" style="margin-bottom: 0px;">
         <%= f.text_area :bio, :class => 'text_area input-block-level', :style => "height: 350px" %>

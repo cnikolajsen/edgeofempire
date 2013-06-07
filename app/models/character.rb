@@ -19,7 +19,7 @@ class Character < ActiveRecord::Base
     end
   end
 
-  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes, :height, :build, :hair, :eyes, :notable_features, :other, :specialization_1, :specialization_2, :specialization_3
+  attr_accessible :age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :height, :build, :hair, :eyes, :notable_features, :other, :specialization_1, :specialization_2, :specialization_3,  :character_skills_attributes, :character_armor_attributes, :character_weapons_attributes, :character_gears_attributes, :character_obligations_attributes
 
   validates_presence_of :name
   validates_presence_of :race_id
@@ -35,6 +35,8 @@ class Character < ActiveRecord::Base
   has_many :weapons, :through => :character_weapons, :order => "name"
   has_many :character_gears, :dependent => :destroy
   has_many :gears, :through => :character_gears, :order => "name"
+  has_many :character_obligations, :dependent => :destroy
+  has_many :obligations, :through => :character_obligations, :order => "name"
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents, :order => "name"
@@ -46,6 +48,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_armor, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_weapons, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :character_obligations, :reject_if => :all_blank, :allow_destroy => true
 
   default_scope order('name ASC')
 
