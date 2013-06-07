@@ -19,6 +19,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :armor
   resources :gear
   resources :talents
+  resources :obligations
 
   devise_scope :user do
     get "login", :to => "devise/sessions#new"

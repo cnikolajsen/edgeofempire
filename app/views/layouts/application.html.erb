@@ -61,6 +61,7 @@
                   <li<% if current_page('gear') %> class="active"<% end %>><%= link_to "Gear", "/gear"  %></li>
                 </ul>
               </li>
+              <li<% if current_page('obligations') %> class="active"<% end %>><%= link_to "Obligations", obligations_path  %></li>
               
               <% else %>
                 <li><%= link_to "Register", "/register" unless user_signed_in?  %></li>
