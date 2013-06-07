@@ -12,11 +12,13 @@
 <% end %>
 
 <%= render :partial => 'character_edit_menu' %>
-<div class="row-fluid">
-  <div class="well span12">
-  <%= simple_format(@character.bio) %>
+<% unless @character.bio.empty? %>
+  <div class="row-fluid">
+    <div class="well span12">
+      <%= simple_format(@character.bio) %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <div class="row-fluid">
   <div class="well span9">
@@ -78,7 +80,7 @@
     </tbody>
   </table>
   </div>
-  <div class="well well-small span3">route
+  <div class="well well-small span3">
     <h5>Experience Points</h5>
     Earned: <%= @character.experience %><br />
     Spent:

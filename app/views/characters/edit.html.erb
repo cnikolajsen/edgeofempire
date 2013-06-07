@@ -8,6 +8,19 @@
     </div>
   <% end %>
 </div>
-<%= render :partial => 'character_edit_menu' %>
 
-<%= render :partial => 'form' %>
+<div class="row-fluid">
+  <div class="span9">
+    <%= render :partial => 'character_edit_menu' %>
+    <%= render :partial => 'form' %>
+  </div>
+  <div class="span3 well">
+    <% if @character.active? %>
+      Some information about spending experience points on active character.
+    <% elsif @character.creation? %>
+      Some information about character creation.
+    <% elsif @character.retired? %>
+      This character has been retired and can not be modified.
+    <% end>%>
+  </div>
+</div>

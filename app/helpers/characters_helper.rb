@@ -6,12 +6,12 @@ module CharactersHelper
       @return['state_short'] = "Creation"
       @return['state_message'] = "This character is in it creation phase. Special rules may apply."
       @return['state_label_class'] = "warning"
-      @return['state_alert_class'] = "info"
+      @return['state_alert_class'] = "warning"
     elsif character.active?
       @return['state_short'] = "Active"
-      @return['state_message'] = ""
+      @return['state_message'] = "Character is marked active and can spend experience points normally."
       @return['state_label_class'] = "success"
-      @return['state_alert_class'] = "info"
+      @return['state_alert_class'] = "success"
     elsif character.retired?
       @return['state_short'] = "Retired"
       @return['state_message'] = "Character taken off duty and is read only."
