@@ -14,7 +14,7 @@ class Character < ActiveRecord::Base
       transitions :from => :active, :to => :retired
     end
 
-    event :create do
+    event :set_create do
       transitions :to => :creation
     end
   end

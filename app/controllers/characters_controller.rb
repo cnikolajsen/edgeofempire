@@ -238,7 +238,7 @@ logger.debug(race_alterations)
         @character_armor.armor_id = nil
         @character_armor.save
 
-        format.html { redirect_to @character, notice: 'Character was successfully created.' }
+        format.html { redirect_to edit_character_path(@character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
         format.html { render action: "new" }
@@ -491,7 +491,7 @@ logger.debug(race_alterations)
 
   def set_creation
     @character = Character.find(params[:id])
-    @character.create
+    @character.set_create
     @character.save
     redirect_to @character, notice: 'Character put into creation mode. Special rules apply.'
   end

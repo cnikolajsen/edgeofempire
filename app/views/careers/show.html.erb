@@ -1,4 +1,5 @@
 <%- model_class = Career -%>
+<article>
 <div class="page-header">
   <h1><%=t '.title', :default => @career.name %></h1>
 </div>
@@ -232,3 +233,4 @@
   <%= link_to t('.back', :default => t("helpers.links.back")),
               careers_path, :class => 'btn'  %>
 </div>
+</article>

@@ -96,7 +96,7 @@
     <% end %>
   </div>
   <div class="well span3">
-    <%= link_to "Creation", creation_character_path(@character), :class => 'btn' if @character.may_create? && !@character.creation? %>
+    <%= link_to "Creation", creation_character_path(@character), :class => 'btn' if @character.may_set_create? && !@character.creation? %>
     <%= link_to "Activate", activate_character_path(@character), :class => 'btn' if @character.may_activate? %>
     <%= link_to "Retire", retire_character_path(@character), :class => 'btn' if @character.may_retire? %>
   </div>

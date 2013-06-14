@@ -1,12 +1,11 @@
 <li class="control-group nested-fields">
-  <% logger.debug(f.object.inspect) %>
   <% unless f.object.obligation_id.nil? %>
     <% @obligation = Obligation.find_by_id(f.object.obligation_id) %>
-    <h3><%= @obligation.name %></h3>
+    <h4><%= @obligation.name %></h4>
      <%= text_replace_tokens(@obligation.description) %><br />
      <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
   <% else %>
-      <%= f.select :obligation_id, Obligation.find(:all).collect  {|obligation| [obligation.name, obligation.id]}, {:prompt => "Select Obligation"} %>
+      <%= f.select :obligation_id, Obligation.find(:all).collect  {|obligation| ["#{obligation.range} | #{obligation.name}", obligation.id]}, {:prompt => "Select Obligation"} %>
   <% end %>
   
 </li>

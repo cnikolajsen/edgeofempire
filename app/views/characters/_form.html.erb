@@ -71,9 +71,9 @@
     </div>
   </div>
 
-  <div class="row-fluid">
-    <div class="span6 well">
-      <% unless f.object.race_id.nil? || @character.race.nil? %>
+  <% unless @character.new_record? %>
+    <div class="row-fluid">
+      <div class="span6 well">
         <div class="control-group" style="margin-bottom: 0px;">
           <%= f.label :brawn, :class => 'control-label' %>
           <div class="controls">
@@ -100,39 +100,48 @@
             <%= f.number_field :presence, :in => @character.race.presence...7, :class => 'number_field input-block-level' %>
           </div>
         </div>
-      <% end %>
-    </div>
-    <div class="span6 well" style="height:220px;">
-      <% unless f.object.race_id.nil? || @character.race.nil? %>
+      </div>
+      <div class="span6 well" style="height:220px;">
         <div class="control-group">
           <%= f.label :experience, :class => 'control-label' %>
           <div class="controls">
             <%= f.number_field :experience, :min => 0, :class => 'number_field input-block-level' %>
           </div>
         </div>
-      <% end %>
-      <div class="control-group" style="margin-bottom: 0px;">
-        <%= f.label :credits, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.number_field :credits, :min => 0, :class => 'number_field input-block-level' %>
+        <div class="control-group" style="margin-bottom: 0px;">
+          <%= f.label :credits, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.number_field :credits, :min => 0, :class => 'number_field input-block-level' %>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="row-fluid">
-    <div class="span12 well">
-      <fieldset id="character-obligations">
-          <ul>
-            <%= f.fields_for :character_obligations do |obligation| %>
-              <%= render 'character_obligation_fields', :f => obligation %>
-            <% end %>
-          </ul>
-          <%= link_to_add_association 'Add obligation', f, :character_obligations, 'data-association-insertion-node' => "#character-obligations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|obligation| obligation.build_obligation; obligation }, :class => 'btn btn-warning' %>
-        </fieldset>
+    
+    <div class="row-fluid">
+      <div class="span6 well">
+        <h3>Obligations</h3>
+        <fieldset id="character-obligations">
+            <ul>
+              <%= f.fields_for :character_obligations do |obligation| %>
+                <%= render 'character_obligation_fields', :f => obligation %>
+              <% end %>
+            </ul>
+            <%= link_to_add_association 'Add obligation', f, :character_obligations, 'data-association-insertion-node' => "#character-obligations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|obligation| obligation.build_obligation; obligation }, :class => 'btn btn-warning' %>
+          </fieldset>
+      </div>
+      <div class="span6 well">
+        <h3>Motivations</h3>
+        <fieldset id="character-motivations">
+            <ul>
+              <%#= f.fields_for :character_motivations do |motivation| %>
+                <%#= render 'character_motivation_fields', :f => motivation %>
+              <%# end %>
+            </ul>
+            <%#= link_to_add_association 'Add motivation', f, :character_motivations, 'data-association-insertion-node' => "#character-motivations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|motivation| motivation.build_motivation; motivation }, :class => 'btn btn-warning' %>
+          </fieldset>
+      </div>
     </div>
-  </div>
-
+  <% end %>
   <div class="row-fluid">
     <div class="span6 well">
       <div class="control-group" style="margin-bottom: 0px;">
