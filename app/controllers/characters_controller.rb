@@ -153,7 +153,7 @@ class CharactersController < ApplicationController
       race_alterations = {}
       race_alterations = send("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
     end
-logger.debug(race_alterations)
+
     # Specific for the PDF.
     pdf_vars = Hash.new
     if params[:format] == 'pdf'
@@ -290,80 +290,25 @@ logger.debug(race_alterations)
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
 
-      #@character.career.talent_trees.each do |tree|
       @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.new()
         @character_talent_tree.character_id = @character.id
         @character_talent_tree.talent_tree_id = tree.id
 
-        # Update first row talents.
-        if !params["tree_#{tree.id}-talent_1_1".to_sym].nil?
-          @character_talent_tree.talent_1_1 = tree.talent_1_1
-        end
-        if !params["tree_#{tree.id}-talent_1_2".to_sym].nil?
-          @character_talent_tree.talent_1_2 = tree.talent_1_2
-        end
-        if !params["tree_#{tree.id}-talent_1_3".to_sym].nil?
-          @character_talent_tree.talent_1_3 = tree.talent_1_3
-        end
-        if !params["tree_#{tree.id}-talent_1_4".to_sym].nil?
-          @character_talent_tree.talent_1_4 = tree.talent_1_4
-        end
-
-        # Update second row talents.
-        if !params["tree_#{tree.id}-talent_2_1".to_sym].nil?
-          @character_talent_tree.talent_2_1 = tree.talent_2_1
-        end
-        if !params["tree_#{tree.id}-talent_2_2".to_sym].nil?
-          @character_talent_tree.talent_2_2 = tree.talent_2_2
-        end
-        if !params["tree_#{tree.id}-talent_2_3".to_sym].nil?
-          @character_talent_tree.talent_2_3 = tree.talent_2_3
-        end
-        if !params["tree_#{tree.id}-talent_2_4".to_sym].nil?
-          @character_talent_tree.talent_2_4 = tree.talent_2_4
-        end
-
-        # Update third row talents.
-        if !params["tree_#{tree.id}-talent_3_1".to_sym].nil?
-          @character_talent_tree.talent_3_1 = tree.talent_3_1
-        end
-        if !params["tree_#{tree.id}-talent_3_2".to_sym].nil?
-          @character_talent_tree.talent_3_2 = tree.talent_3_2
-        end
-        if !params["tree_#{tree.id}-talent_3_3".to_sym].nil?
-          @character_talent_tree.talent_3_3 = tree.talent_3_3
-        end
-        if !params["tree_#{tree.id}-talent_3_4".to_sym].nil?
-          @character_talent_tree.talent_3_4 = tree.talent_3_4
-        end
-
-        # Update fourth row talents.
-        if !params["tree_#{tree.id}-talent_4_1".to_sym].nil?
-          @character_talent_tree.talent_4_1 = tree.talent_4_1
-        end
-        if !params["tree_#{tree.id}-talent_4_2".to_sym].nil?
-          @character_talent_tree.talent_4_2 = tree.talent_4_2
-        end
-        if !params["tree_#{tree.id}-talent_4_3".to_sym].nil?
-          @character_talent_tree.talent_4_3 = tree.talent_4_3
-        end
-        if !params["tree_#{tree.id}-talent_4_4".to_sym].nil?
-          @character_talent_tree.talent_4_4 = tree.talent_4_4
-        end
-
-        # Update fifth row talents.
-        if !params["tree_#{tree.id}-talent_5_1".to_sym].nil?
-          @character_talent_tree.talent_5_1 = tree.talent_5_1
-        end
-        if !params["tree_#{tree.id}-talent_5_2".to_sym].nil?
-          @character_talent_tree.talent_5_2 = tree.talent_5_2
-        end
-        if !params["tree_#{tree.id}-talent_5_3".to_sym].nil?
-          @character_talent_tree.talent_5_3 = tree.talent_5_3
-        end
-        if !params["tree_#{tree.id}-talent_5_4".to_sym].nil?
-          @character_talent_tree.talent_5_4 = tree.talent_5_4
+        # Save data for 5 rows with 4 columns.
+        5.times do |r_key|
+          4.times do |c_key|
+            if !params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"].nil?
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = tree["talent_#{r_key + 1}_#{c_key + 1}"]
+              talent_options = Array.new
+              3.times do |o_key|
+                unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
+                  talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
+                end
+              end
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
+            end
+          end
         end
 
         @character_talent_tree.save
