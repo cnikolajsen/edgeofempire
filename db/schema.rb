@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607121235) do
+ActiveRecord::Schema.define(:version => 20130626110826) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -135,12 +135,32 @@ ActiveRecord::Schema.define(:version => 20130607121235) do
     t.integer  "talent_4_2"
     t.integer  "talent_4_3"
     t.integer  "talent_4_4"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "talent_5_1"
     t.integer  "talent_5_2"
     t.integer  "talent_5_3"
     t.integer  "talent_5_4"
+    t.string   "talent_1_1_options"
+    t.string   "talent_1_2_options"
+    t.string   "talent_1_3_options"
+    t.string   "talent_1_4_options"
+    t.string   "talent_2_1_options"
+    t.string   "talent_2_2_options"
+    t.string   "talent_2_3_options"
+    t.string   "talent_2_4_options"
+    t.string   "talent_3_1_options"
+    t.string   "talent_3_2_options"
+    t.string   "talent_3_3_options"
+    t.string   "talent_3_4_options"
+    t.string   "talent_4_1_options"
+    t.string   "talent_4_2_options"
+    t.string   "talent_4_3_options"
+    t.string   "talent_4_4_options"
+    t.string   "talent_5_1_options"
+    t.string   "talent_5_2_options"
+    t.string   "talent_5_3_options"
+    t.string   "talent_5_4_options"
   end
 
   create_table "character_weapons", :force => true do |t|

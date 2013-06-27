@@ -1,0 +1,32 @@
+  <% talent = Talent.find_by_id(talent_tree["talent_#{row}_#{column}"]) %>
+  <td class="talent-box <%= talent.activation %>">
+    <strong><%= talent.name %></strong>
+    <%= check_box_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}", talent_tree["talent_#{row}_#{column}"], (@character_tree_talents.first["talent_#{row}_#{column}"] unless @character_tree_talents.first.nil?) %><br />
+    <%= text_replace_tokens(talent.description) %>
+    <%
+      parser_name = talent.name.gsub(' ', '').downcase
+      if respond_to?("talent_parser_#{parser_name}")
+        talent_alterations = send("talent_parser_#{parser_name}", 0)
+      end
+
+      option_enabled = false
+      unless @character_tree_talents.first["talent_#{row}_#{column}"].nil?
+        option_enabled = true
+      end
+    %>
+    <% if !talent_alterations.nil? %>
+      <% if !talent_alterations['on_purchase'].nil? %>
+        <% talent_alterations['on_purchase']['amount'].times do |i| %>
+          <% if talent_alterations['on_purchase']['type'] == 'select_characteristic' %>
+            <% unless talent_alterations['on_purchase']['select_options'].nil? %>
+              <%= select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations['on_purchase']['select_options'], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless  @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :disabled => !option_enabled %>
+            <% end %>
+          <% elsif talent_alterations['on_purchase']['type'] == 'select_skill' %>
+            <% unless talent_alterations['on_purchase']['select_options'].nil? %>
+              <%= select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations['on_purchase']['select_options'], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless  @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :disabled => !option_enabled %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </td>
