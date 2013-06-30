@@ -42,7 +42,8 @@ class CharactersController < ApplicationController
     @talents = {}
     @character.character_talents.each do |talent_tree|
       talent_tree.attributes.each do |key, value|
-        if key.match(/talent_[\d]_[\d]/) and !value.nil?
+        if key.match(/talent_[\d]_[\d]$/) and !value.nil?
+          #logger.debug("#{key}: #{value}")
           if @talents.has_key?(value)
             @talents[value] = @talents[value] + 1
           else
@@ -289,11 +290,14 @@ class CharactersController < ApplicationController
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
-
+      
       @talent_trees.each do |tree|
-        @character_talent_tree = CharacterTalent.new()
-        @character_talent_tree.character_id = @character.id
-        @character_talent_tree.talent_tree_id = tree.id
+        @character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
+
+        if @character_talent_tree.id.nil?
+          @character_talent_tree.character_id = @character.id
+          @character_talent_tree.talent_tree_id = tree.id
+        end
 
         # Save data for 5 rows with 4 columns.
         5.times do |r_key|

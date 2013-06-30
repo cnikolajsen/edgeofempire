@@ -126,16 +126,16 @@
   <div class="well well-small">
     <h5>Select Specializations</h5>
     <%= form_for @character do |specializations_form| %>
-      <%= select('character', 'specialization_1', TalentTree.where("career_id = ?", @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}) %>
+      <%= select('character', 'specialization_1', TalentTree.where("career_id = ?", @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}, :class => 'input-block-level') %>
       <% unless @character.specialization_1.nil? %>
-        <%= select('character', 'specialization_2', TalentTree.find(:all, :conditions => ['id not in (?)', @character.specialization_1]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}) %>
+        <%= select('character', 'specialization_2', TalentTree.find(:all, :conditions => ['id not in (?)', @character.specialization_1]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}, :class => 'input-block-level') %>
       <% end %>
       <% unless @character.specialization_2.nil? %>
-        <%= select('character', 'specialization_3', TalentTree.find(:all, :conditions => ['id not in (?)', [@character.specialization_1, @character.specialization_2]]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}) %>
+        <%= select('character', 'specialization_3', TalentTree.find(:all, :conditions => ['id not in (?)', [@character.specialization_1, @character.specialization_2]]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}, :class => 'input-block-level') %>
       <% end %>
       <div class="form-actions">
         <%= hidden_field_tag 'destination', 'talents' %>
-        <%= specializations_form.submit nil, :class => 'btn btn-primary' %>
+        <%= specializations_form.submit 'Save specializations', :class => 'btn btn-primary' %>
       </div>
     <% end %>
   </div>
