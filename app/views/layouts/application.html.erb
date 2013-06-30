@@ -62,6 +62,19 @@
                 </ul>
               </li>
               <li<% if current_page('obligations') %> class="active"<% end %>><%= link_to "Obligations", obligations_path  %></li>
+              <li class="dropdown <% if current_page('human_names') %>active<% end %>">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="nav-header">Names</li>
+                  <li<% if current_page('human_names') %> class="active"<% end %>><%= link_to "Human names", "/names/human" %></li>
+                  <li<% if current_page('bothan_names') %> class="active"<% end %>><%= link_to "Bothan names", "/names/bothan" %></li>
+                  <li<% if current_page('rodian_names') %> class="active"<% end %>><%= link_to "Rodian names", "/names/rodian" %></li>
+                  <li<% if current_page('trandoshan_names') %> class="active"<% end %>><%= link_to "Trandoshan names", "/names/trandoshan"%></li>
+                  <li<% if current_page('twilek_names') %> class="active"<% end %>><%= link_to "Twi'lek names", "/names/twilek" %></li>
+                  <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", "/names/droid" %></li>
+                  <li class="divider"></li>
+                </ul>
+              </li>
               
               <% else %>
                 <li><%= link_to "Register", "/register" unless user_signed_in?  %></li>
