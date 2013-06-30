@@ -19,22 +19,22 @@
         <td><%= link_to character.name, character_path(character) %></td>
         <td>
           <% if character.creation? %>
-              <span class="label label-warning">Creation</span>
+              <span class="label label-warning" title="Character creation mode"><i class='icon-wrench'></i></span>
           <% elsif character.active? %>
-              <span class="label label-success">Active</span>
+              <span class="label label-success" title="Active character"><i class='icon-ok'></i></span>
           <% elsif character.retired? %>
-              <span class="label label-inverse">Retired</span>
+              <span class="label label-inverse" title="Character retired"><i class='icon-fire'></i></span>
           <% end %>
         </td>
         <td><%= character.race.name %></td>
         <td><%= character.career.name %></td>
         <td><%=l character.created_at, :format => :short %></td>
         <td>
-          <%= link_to 'PDF',
+          <%= link_to "<i class='icon-print' title='PDF'></i>".html_safe,
                       character_path(character, :format => 'pdf'), :class => 'btn btn-mini btn-info', :target => "_blank" %>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_character_path(character), :class => 'btn btn-mini btn-success' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+          <%= link_to "<i class='icon-pencil' title='Edit'></i>".html_safe,
+                      edit_character_path(character), :class => 'btn btn-mini btn-primary' %>
+          <%= link_to "<i class='icon-trash' title='Delete'></i>".html_safe,
                       character_path(character),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
