@@ -64,6 +64,10 @@ class PagesController < ApplicationController
     @description = Hash.new()
     @description = []
     @step_one = ""
+    
+    respond_to do |format|
+      format.html {render :template => '/pages/naming_tables'}
+    end
   end
 
   def trandoshan_naming_tables
@@ -73,6 +77,10 @@ class PagesController < ApplicationController
     @description = Hash.new()
     @description = []
     @step_one = ""
+
+    respond_to do |format|
+      format.html {render :template => '/pages/naming_tables'}
+    end
   end
 
   def twilek_naming_tables
@@ -82,6 +90,10 @@ class PagesController < ApplicationController
     @description = Hash.new()
     @description = []
     @step_one = ""
+
+    respond_to do |format|
+      format.html {render :template => '/pages/naming_tables'}
+    end
   end
 
   def droid_naming_tables
@@ -91,6 +103,10 @@ class PagesController < ApplicationController
     @description = Hash.new()
     @description = []
     @step_one = ""
+
+    respond_to do |format|
+      format.html {render :template => '/pages/naming_tables'}
+    end
   end
 
 end
