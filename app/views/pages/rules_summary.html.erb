@@ -1,0 +1,21 @@
+<div class="row-fluid">
+  <div class="span9" data-spy="scroll" data-target="#rules-menu">
+    <% @rules.each do |r| %>
+      <section id="<%= r[:id] %>">
+        <div class="page-header">
+          <h1><%= r[:title] %></h1>
+        </div>
+        <%= text_replace_tokens(r[:text]).html_safe %>
+      </section>
+    <% end %>
+  </div>
+  <div class="span3">
+    <div class="rules-nav"  id="rules-menu">
+      <ul class="nav nav-list bs-docs-sidenav affix">
+        <% @rules.each do |r| %>
+          <li><a href="#<%= r[:id] %>"><i class="icon-chevron-left"></i><%= r[:title] %></a></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
