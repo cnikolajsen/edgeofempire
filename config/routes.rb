@@ -35,6 +35,7 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/trandoshan", :to => "pages#trandoshan_naming_tables"
   get "names/twilek", :to => "pages#twilek_naming_tables"
   get "names/droid", :to => "pages#droid_naming_tables"
+  get "rules", :to => "pages#rules_summary"
   # get "careers/index"
 
   # The priority is based upon order of creation:
