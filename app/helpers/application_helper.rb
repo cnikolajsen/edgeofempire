@@ -14,6 +14,7 @@ module ApplicationHelper
     
     text = text.gsub(/\[ability\]/, image_tag("dice/ability.png", :alt => "Ability", :class => 'dice'))
     text = text.gsub(/\[advantage\]/, image_tag("dice/advantage.png", :alt => "Advantage", :class => 'dice'))
+    text = text.gsub(/\[threat\]/, image_tag("dice/threat.png", :alt => "Threat", :class => 'dice'))
     text = text.gsub(/\[boost\]/, image_tag("dice/boost.png", :alt => "Boost", :class => 'dice'))
     text = text.gsub(/\[challenge\]/, image_tag("dice/challenge.png", :alt => "Challenge", :class => 'dice'))
     text = text.gsub(/\[difficulty\]/, image_tag("dice/difficulty.png", :alt => "Difficulty", :class => 'dice'))
