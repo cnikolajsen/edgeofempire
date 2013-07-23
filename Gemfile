@@ -19,6 +19,7 @@ gem "aasm", "~> 3.0.19"
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'quiet_assets', :group => :development
 end
 
 group :production, :staging do

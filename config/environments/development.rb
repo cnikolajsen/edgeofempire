@@ -34,7 +34,14 @@ EdgeOfEmpire::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = false
+
+  # Set this to false to show assets logs again.
+  config.quiet_assets = true
   
   # In production, :host should be set to the actual host of your application.application.html.erb
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  
+  # Set log level to warn to make the log very quit. Use logger.warn() for debug
+  # output instead of logger.debug.
+  config.log_level = :warn
 end
