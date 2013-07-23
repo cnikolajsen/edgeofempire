@@ -43,11 +43,20 @@ class CharactersController < ApplicationController
     @character.character_talents.each do |talent_tree|
       talent_tree.attributes.each do |key, value|
         if key.match(/talent_[\d]_[\d]$/) and !value.nil?
-          #logger.debug("#{key}: #{value}")
           if @talents.has_key?(value)
-            @talents[value] = @talents[value] + 1
+            @talents[value]['count'] = @talents[value]['count'] + 1
+            talent_tree["#{key}_options"].each do |opt|
+              @talents[value]['options'] << opt.capitalize
+            end
           else
-            @talents[value] = 1
+            @talents[value] = {}
+            @talents[value]['count'] = 1
+            @talents[value]['options'] = Array.new
+            unless talent_tree["#{key}_options"].empty?
+              talent_tree["#{key}_options"].each do |opt|
+                @talents[value]['options'] << opt.capitalize
+              end
+            end
           end
         end
       end
@@ -69,7 +78,7 @@ class CharactersController < ApplicationController
       talent_alterations.each do |talent_id, stat|
         stat.each do |type, value|
           if type == 'wound'
-            @wound_th += value
+            @wound_th += value['count']
           end
         end
       end
@@ -83,7 +92,7 @@ class CharactersController < ApplicationController
       talent_alterations.each do |talent_id, stat|
         stat.each do |type, value|
           if type == 'strain'
-            @strain_th += value
+            @strain_th += value['count']
           end
         end
       end
@@ -290,7 +299,7 @@ class CharactersController < ApplicationController
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
-      
+
       @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
 

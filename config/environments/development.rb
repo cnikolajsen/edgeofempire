@@ -40,7 +40,7 @@ EdgeOfEmpire::Application.configure do
   
   # In production, :host should be set to the actual host of your application.application.html.erb
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  
+
   # Set log level to warn to make the log very quit. Use logger.warn() for debug
   # output instead of logger.debug.
   config.log_level = :warn

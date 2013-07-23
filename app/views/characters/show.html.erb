@@ -50,10 +50,18 @@
             <%
               count = ''
               delimiter = ''
-              if element[1] > 1
-                count = " (#{element[1]})"
+              options = ''
+              if element[1]['count'] > 1
+                unless element[1]['options'].empty?
+                  options = " - #{element[1]['options'].join(', ')}"
+                end
+                count = " (x#{element[1]['count']}#{options})"
+              else
+                unless element[1]['options'].empty?
+                  count = " (#{element[1]['options'].join(', ')})"
+                end
               end
-  
+
               if index != @talents.length - 1
                 delimiter = ", "
               end
