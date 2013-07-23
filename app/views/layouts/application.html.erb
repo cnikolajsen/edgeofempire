@@ -62,8 +62,8 @@
                 </ul>
               </li>
               <li<% if current_page('obligations') %> class="active"<% end %>><%= link_to "Obligations", obligations_path  %></li>
-              <li class="dropdown <% if current_page('human_names') %>active<% end %>">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
+              <li class="dropdown <% if @parent_page == 'misc' %>active<% end %>">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Misc.<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li class="dropdown-submenu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown-child">Names<b class="caret"></b></a>
@@ -76,6 +76,7 @@
                       <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", "/names/droid" %></li>
                     </ul>
                   </li>
+                  <li<% if current_page('rules_summary') %> class="active"<% end %>><%= link_to "Rules Summary", rules_path %></li>
                 </ul>
               </li>
               
