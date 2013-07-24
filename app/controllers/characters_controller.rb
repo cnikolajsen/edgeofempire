@@ -71,13 +71,39 @@ class CharactersController < ApplicationController
       end
     end
 
+    # Determine characteristic increases from talents.
+    talent_alterations.each do |talent_id, stat|
+      stat.each do |type, value|
+        if type == :on_purchase && value[:type] == :select_characteristic
+          if @talents[talent_id]['options'].include?('Brawn') && @character.brawn < 6
+            @character.brawn += 1
+          end
+          if @talents[talent_id]['options'].include?('Agility') && @character.agility < 6
+            @character.agility += 1
+          end
+          if @talents[talent_id]['options'].include?('Cunning') && @character.cunning < 6
+            @character.cunning += 1
+          end
+          if @talents[talent_id]['options'].include?('Intellect') && @character.intellect < 6
+            @character.intellect += 1
+          end
+          if @talents[talent_id]['options'].include?('Presence') && @character.presence < 6
+            @character.presence += 1
+          end
+          if @talents[talent_id]['options'].include?('Willpower') && @character.willpower < 6
+            @character.willpower += 1
+          end
+        end
+      end
+    end
+
     # Determine starting wound threshold. Species stat plus brawn.
     @wound_th = @character.brawn
     if !@character.race.wound_threshold.nil?
       @wound_th += @character.race.wound_threshold
       talent_alterations.each do |talent_id, stat|
         stat.each do |type, value|
-          if type == 'wound'
+          if type == :wound
             @wound_th += value['count']
           end
         end
@@ -91,7 +117,7 @@ class CharactersController < ApplicationController
       @strain_th += @character.race.strain_threshold
       talent_alterations.each do |talent_id, stat|
         stat.each do |type, value|
-          if type == 'strain'
+          if type == :strain
             @strain_th += value['count']
           end
         end
@@ -142,7 +168,7 @@ class CharactersController < ApplicationController
 
     talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
-        if type == 'soak'
+        if type == :soak
           @soak += value
         end
       end
