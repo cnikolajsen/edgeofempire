@@ -285,9 +285,9 @@ class CharactersController < ApplicationController
 
     # Update talents.
     if !params[:update_talents].nil?
-      @character.character_talents.each do |ct|
-        ct.destroy
-      end
+      #@character.character_talents.each do |ct|
+      #  ct.destroy
+      #end
 
       @talent_trees = Array.new
       unless @character.specialization_1.nil?
