@@ -411,16 +411,6 @@ class CharactersController < ApplicationController
     @character_page = 'skills'
     @character = Character.find(params[:id])
     @character_state = character_state(@character)
-
-    @career_skill_ids = Array.new
-    @character.career.talent_trees.each do |tt|
-      tt.talent_tree_career_skills.each do |skill|
-        @career_skill_ids << skill.skill_id
-      end
-    end
-    @character.career.career_skills.each do |skill|
-      @career_skill_ids << skill.skill_id
-    end
   end
 
   def talents
@@ -479,7 +469,6 @@ class CharactersController < ApplicationController
     @character.save
     redirect_to @character, notice: 'Character put into creation mode. Special rules apply.'
   end
-
 
   private
 

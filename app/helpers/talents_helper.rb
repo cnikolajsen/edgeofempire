@@ -107,26 +107,13 @@ module TalentsHelper
     @return[:on_purchase][:amount] = 2
     @return[:on_purchase][:type] = :select_skill
 
-    career_skill_ids = Array.new
-    @character.career.talent_trees.each do |tt|
-      tt.talent_tree_career_skills.each do |skill|
-        career_skill_ids << skill.skill_id
-      end
-    end
-    @character.career.career_skills.each do |skill|
-      career_skill_ids << skill.skill_id
-    end
-
     options = Array.new(1)
     Skill.all.each do |skill|
-      unless career_skill_ids.include?(skill.id)
+      unless is_career_skill(skill.id, true)
         options << [skill.name, skill.id]
       end
     end
     @return[:on_purchase][:select_options] = options
-
-
-    #TODO build a hash of available skills not already a career skill.
 
     @return
   end

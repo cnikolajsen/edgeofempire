@@ -25,7 +25,7 @@
         <td><%= character_form.label :ranks, skill.name, :class => 'control-label' %></td>
         <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
         <td>
-          <% if( @career_skill_ids.include?(skill_fields.object.skill_id)) %>YES<% end %>
+          <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
         </td>
         <td><%= skill_fields.select :ranks, (0..5) %></td>
       </tr>

@@ -22,4 +22,42 @@ module CharactersHelper
      @return
   end
 
+  def is_career_skill(skill_id, talent_select = false)
+    # Build an array of career skill ids granted by character's career.
+    career_skill_ids = Array.new
+    @character.career.career_skills.each do |skill|
+      career_skill_ids << skill.skill_id
+    end
+
+    # Then add bonus career skills ids from specializations.
+    @character.career.talent_trees.each do |tt|
+      tt.talent_tree_career_skills.each do |skill|
+        career_skill_ids << skill.skill_id
+      end
+    end
+
+    # And finally add career skill ids granted by talents.
+    if !talent_select
+      @character.character_talents.each do |character_talent|
+        # Check if the ids for the talents Insight or Well Rounded is selected
+        # on the character.
+        character_talent.attributes.each do |key, value|
+          if key.match(/talent_[\d]_[\d]$/) and !value.nil?
+            if value == 80
+              character_talent["#{key}_options"].each do |skill_id|
+                career_skill_ids << skill_id.to_i
+              end
+            end
+            if value == 111
+              career_skill_ids << 18
+              career_skill_ids << 27
+            end
+          end
+        end
+      end
+    end
+
+    career_skill_ids.include?(skill_id)
+  end
+
 end
