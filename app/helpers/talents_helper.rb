@@ -60,12 +60,12 @@ module TalentsHelper
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 1
     @return[:on_purchase][:type] = :select_skill
-    skills = Skill.where("name LIKE 'Knowledge%'")
-    options = Hash.new
-    skills.each do |skill|
-    #  options[] = skill.name
+
+    options = Array.new(1)
+    Skill.where("name LIKE 'Knowledge%'").each do |skill|
+      options << [skill.name, skill.id]
     end
-    @return[:on_purchase][:select_options] = [["Select knowledge", ""], ["Knowledge 1", "knowledge_1"], ["Knowledge 2", "knowledge_2"]]
+    @return[:on_purchase][:select_options] = options
 
     @return
   end
@@ -106,7 +106,26 @@ module TalentsHelper
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 2
     @return[:on_purchase][:type] = :select_skill
-    @return[:on_purchase][:select_options] = [["Select skill", ""], ["Skill 1", "skill_1"], ["Skill 2", "skill_2"]]
+
+    career_skill_ids = Array.new
+    @character.career.talent_trees.each do |tt|
+      tt.talent_tree_career_skills.each do |skill|
+        career_skill_ids << skill.skill_id
+      end
+    end
+    @character.career.career_skills.each do |skill|
+      career_skill_ids << skill.skill_id
+    end
+
+    options = Array.new(1)
+    Skill.all.each do |skill|
+      unless career_skill_ids.include?(skill.id)
+        options << [skill.name, skill.id]
+      end
+    end
+    @return[:on_purchase][:select_options] = options
+
+
     #TODO build a hash of available skills not already a career skill.
 
     @return
