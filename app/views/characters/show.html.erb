@@ -53,12 +53,13 @@
               options = ''
               if element[1]['count'] > 1
                 unless element[1]['options'].empty?
-                  options = " - #{element[1]['options'].join(', ')}"
+                  options = " (#{element[1]['options'].join(', ')})"
+                else
+                  options = " (#{element[1]['count']})"
                 end
-                count = " (x#{element[1]['count']}#{options})"
               else
                 unless element[1]['options'].empty?
-                  count = " (#{element[1]['options'].join(', ')})"
+                  options = " (#{element[1]['options'].join(', ')})"
                 end
               end
 
@@ -66,7 +67,7 @@
                 delimiter = ", "
               end
             %>
-            <%= "#{talent_name}#{count}#{delimiter}" %>
+            <%= "#{talent_name}#{options}#{delimiter}" %>
           <% end %>
         </td>
       </tr>

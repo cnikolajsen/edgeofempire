@@ -46,7 +46,12 @@ class CharactersController < ApplicationController
           if @talents.has_key?(value)
             @talents[value]['count'] = @talents[value]['count'] + 1
             talent_tree["#{key}_options"].each do |opt|
-              @talents[value]['options'] << opt.capitalize
+              opt_test = opt.to_i
+              if opt_test.is_a? Integer and opt_test > 0
+                @talents[value]['options'] << Skill.find_by_id(opt).name
+              else
+                @talents[value]['options'] << opt.capitalize
+              end
             end
           else
             @talents[value] = {}
@@ -54,7 +59,12 @@ class CharactersController < ApplicationController
             @talents[value]['options'] = Array.new
             unless talent_tree["#{key}_options"].empty?
               talent_tree["#{key}_options"].each do |opt|
-                @talents[value]['options'] << opt.capitalize
+                opt_test = opt.to_i
+                if opt_test.is_a? Integer and opt_test > 0
+                  @talents[value]['options'] << Skill.find_by_id(opt).name
+                else
+                  @talents[value]['options'] << opt.capitalize
+                end
               end
             end
           end
