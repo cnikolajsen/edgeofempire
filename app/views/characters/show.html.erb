@@ -101,7 +101,7 @@
   <div class="well well-small span3">
     <h4>Obligation</h4>
     <% @character.obligations.each do |obl| %>
-      <strong><%= obl.name %></strong><br /><%= text_replace_tokens(obl.description) %>
+      <h5><%= obl.name %></h5><%= text_replace_tokens(obl.description) %>
     <% end %>
   </div>
 </div>

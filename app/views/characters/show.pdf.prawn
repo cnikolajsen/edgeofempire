@@ -104,7 +104,7 @@ combat_skills = combat.map do |skill|
   end
   [
     "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-    if @career_skill_ids.include?(skill.skill.id)
+    if is_career_skill(skill.skill.id)
       'Yes'
     end,
     {:image => dice_ability},
@@ -129,7 +129,7 @@ knowledge_skills = knowledge.map do |skill|
   end
   [
     "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-    if @career_skill_ids.include?(skill.skill.id)
+    if is_career_skill(skill.skill.id)
       'Yes'
     end,
     {:image => dice_ability},
@@ -154,7 +154,7 @@ general_skills = other.map do |skill|
   end
   [
     "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-    if @career_skill_ids.include?(skill.skill.id)
+    if is_career_skill(skill.skill.id)
       'Yes'
     end,
     {:image => dice_ability},

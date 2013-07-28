@@ -1,11 +1,10 @@
 class CharacterSheetPdf < Prawn::Document
+  include CharactersHelper
 
   def initialize(character, view, pdf_vars)
     super( :margin => [0,0,0,0] )
     @character = character
     @view = view
-
-    #text "Invoice #{@character.id}"
 
     if pdf_vars['pdf_background'] == 'on'
       image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
@@ -85,12 +84,6 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "000000"
 
     @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
-    @career_skill_ids = Array.new
-    @character.career.talent_trees.each do |tt|
-      tt.talent_tree_career_skills.each do |skill|
-        @career_skill_ids << skill.skill_id
-      end
-    end
 
     combat = Array.new
     knowledge = Array.new
@@ -123,7 +116,7 @@ class CharacterSheetPdf < Prawn::Document
       end
       [
         "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-        if @career_skill_ids.include?(skill.skill.id)
+        if is_career_skill(skill.skill.id)
           'Yes'
         end,
         {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
@@ -148,7 +141,7 @@ class CharacterSheetPdf < Prawn::Document
       end
       [
         "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-        if @career_skill_ids.include?(skill.skill.id)
+        if is_career_skill(skill.skill.id)
           'Yes'
         end,
         {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
@@ -173,7 +166,7 @@ class CharacterSheetPdf < Prawn::Document
       end
       [
         "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-        if @career_skill_ids.include?(skill.skill.id)
+        if is_career_skill(skill.skill.id)
           'Yes'
         end,
         {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
