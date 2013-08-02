@@ -40,30 +40,34 @@ class CharactersController < ApplicationController
 
     # Build character talent selection.
     @talents = {}
-    @character.character_talents.each do |talent_tree|
-      talent_tree.attributes.each do |key, value|
-        if key.match(/talent_[\d]_[\d]$/) and !value.nil?
-          if @talents.has_key?(value)
-            @talents[value]['count'] = @talents[value]['count'] + 1
-            talent_tree["#{key}_options"].each do |opt|
-              opt_test = opt.to_i
-              if opt_test.is_a? Integer and opt_test > 0
-                @talents[value]['options'] << Skill.find_by_id(opt).name
-              else
-                @talents[value]['options'] << opt.capitalize
-              end
-            end
-          else
-            @talents[value] = {}
-            @talents[value]['count'] = 1
-            @talents[value]['options'] = Array.new
-            unless talent_tree["#{key}_options"].empty?
+    unless @character.character_talents.empty?
+      @character.character_talents.each do |talent_tree|
+        talent_tree.attributes.each do |key, value|
+          if key.match(/talent_[\d]_[\d]$/) and !value.nil?
+            if @talents.has_key?(value)
+              @talents[value]['count'] = @talents[value]['count'] + 1
               talent_tree["#{key}_options"].each do |opt|
                 opt_test = opt.to_i
                 if opt_test.is_a? Integer and opt_test > 0
                   @talents[value]['options'] << Skill.find_by_id(opt).name
                 else
                   @talents[value]['options'] << opt.capitalize
+                end
+              end
+            else
+              @talents[value] = {}
+              @talents[value]['count'] = 1
+              @talents[value]['options'] = Array.new
+              unless talent_tree["#{key}_options"].nil?
+                unless talent_tree["#{key}_options"].empty?
+                  talent_tree["#{key}_options"].each do |opt|
+                    opt_test = opt.to_i
+                    if opt_test.is_a? Integer and opt_test > 0
+                      @talents[value]['options'] << Skill.find_by_id(opt).name
+                    else
+                      @talents[value]['options'] << opt.capitalize
+                    end
+                  end
                 end
               end
             end
