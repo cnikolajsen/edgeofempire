@@ -372,8 +372,9 @@ class CharacterSheetPdf < Prawn::Document
         :cell_style => {
           :height => 10,
           :padding => 1,
-          :size => 5,
-          :align => :center
+          :size => 6,
+          :align => :center,
+          :background_color => "FFFFFF"
         },
         :width => 242,
         :column_widths => [100, 22, 120]
@@ -382,6 +383,7 @@ class CharacterSheetPdf < Prawn::Document
           :cell_style => {
             :height => 15,
             :padding => 1,
+            :background_color => "FFFFFF"
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60]
@@ -395,7 +397,8 @@ class CharacterSheetPdf < Prawn::Document
           :height => 10,
           :padding => 1,
           :size => 5,
-          :align => :center
+          :align => :center,
+          :background_color => "FFFFFF"
         },
         :width => 242,
         :column_widths => [100, 22, 120]
@@ -404,12 +407,13 @@ class CharacterSheetPdf < Prawn::Document
           :cell_style => {
             :height => 15,
             :padding => 1,
+            :background_color => "FFFFFF",
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60]
       end
 
-      bounding_box([((bounds.width / 2) + 20), (bounds.top - 125)], :width => (bounds.width / 2 - 20)) do
+      bounding_box([((bounds.width / 2) + 20), (bounds.top - 110)], :width => (bounds.width / 2 - 20)) do
         table [
          ['Knowledge skills', 'Career?', 'Dice pool']
         ],
@@ -417,7 +421,8 @@ class CharacterSheetPdf < Prawn::Document
           :height => 10,
           :padding => 1,
           :size => 5,
-          :align => :center
+          :align => :center,
+          :background_color => "FFFFFF"
         },
         :width => 242,
         :column_widths => [100, 22, 120]
@@ -426,6 +431,7 @@ class CharacterSheetPdf < Prawn::Document
           :cell_style => {
             :height => 15,
             :padding => 1,
+            :background_color => "FFFFFF"
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60]
@@ -453,6 +459,10 @@ class CharacterSheetPdf < Prawn::Document
        #     :width => 242,
        #     :column_widths => [100, 22, 60, 60]
       #end
+      
+      bounding_box([((bounds.width / 2) + 20), (bounds.top - 225)], :width => (bounds.width / 2 - 30), :height => 100) do
+        stroke_bounds
+      end
     end
     #===== /Skills =====
 
@@ -497,7 +507,7 @@ class CharacterSheetPdf < Prawn::Document
           ]
         end
 
-        bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => bounds.width, :height => bounds.height) do
+        bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
           table [
            ['WEAPON', 'SKILL', 'DAMAGE', 'RANGE', 'CRIT', 'SPECIAL']
           ],
@@ -505,20 +515,21 @@ class CharacterSheetPdf < Prawn::Document
             :height => 10,
             :padding => 1,
             :size => 5,
-            :align => :center
+            :align => :center,
+            :background_color => "FFFFFF",
           },
-          :width => 491,
-          :column_widths => [115, 100, 42, 42, 42, 150]
+          :width => bounds.width,
+          :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
 
           table weapons,
             :cell_style => {
-              #:background_color => "FFFFFF",
+              :background_color => "FFFFFF",
               :height => 12,
               :padding => [2, 3],
               :size => 6
             },
-            :width => 491,
-            :column_widths => [115, 100, 42, 42, 42, 150]
+            :width => bounds.width,
+            :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
         end
       end
     end
