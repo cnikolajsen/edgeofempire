@@ -521,8 +521,8 @@ class CharactersController < ApplicationController
       :specialization_1,
       :specialization_2,
       :specialization_3,
-      :character_weapons_attributes,
-      :character_gears_attributes,
+      character_gears_attributes: [ :id, :gear_id, :qty, :_destroy ],
+      character_weapons_attributes: [ :id, :weapon_id, :_destroy ],
       character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
       character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
       character_armor_attributes: [ :armor_id ]
