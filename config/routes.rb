@@ -1,4 +1,10 @@
 EdgeOfEmpire::Application.routes.draw do
+  # The priority is based upon order of creation: first created -> highest priority.
+  # See how all your routes lay out with "rake routes".
+
+  # You can have the root of your site routed with "root"
+  # root 'welcome#index'
+  root :to => 'pages#home'
 
   ActiveAdmin.routes(self)
 
@@ -38,30 +44,27 @@ EdgeOfEmpire::Application.routes.draw do
   get "rules", :to => "pages#rules_summary"
   # get "careers/index"
 
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
+  # Example of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
 
-  # Sample of named route:
+  # Example of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  match 'characters/:id/talents' => 'characters#talents', :as => :character_talents
-  match 'characters/:id/skills' => 'characters#skills', :as => :character_skills
-  match 'characters/:id/armor' => 'characters#armor', :as => :character_armor
-  match 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
-  match 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
-  match 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
-  match 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
-  match 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
+  get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
+  get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
+  get 'characters/:id/armor' => 'characters#armor', :as => :character_armor
+  get 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
+  get 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
+  get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
+  get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
+  get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  # Sample resource route with options:
+  # Example resource route with options:
   #   resources :products do
   #     member do
   #       get 'short'
@@ -73,34 +76,31 @@ EdgeOfEmpire::Application.routes.draw do
   #     end
   #   end
 
-  # Sample resource route with sub-resources:
+  # Example resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
   #     resource :seller
   #   end
 
-  # Sample resource route with more complex sub-resources
+  # Example resource route with more complex sub-resources:
   #   resources :products do
   #     resources :comments
   #     resources :sales do
-  #       get 'recent', :on => :collection
+  #       get 'recent', on: :collection
   #     end
   #   end
 
-  # Sample resource route within a namespace:
+  # Example resource route with concerns:
+  #   concern :toggleable do
+  #     post 'toggle'
+  #   end
+  #   resources :posts, concerns: :toggleable
+  #   resources :photos, concerns: :toggleable
+
+  # Example resource route within a namespace:
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-   root :to => 'pages#home'
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
 end

@@ -7,7 +7,8 @@
 <%= form_for @character do |character_form| %>
   <%= character_form.fields_for :character_armor do |armor_fields| %>
     <%#= character_form.label :armor_id, 'Select armor', :class => 'control-label' %>
-    <%= armor_fields.select :armor_id, Armor.find(:all).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
+    <%= armor_fields.select :armor_id, Armor.where(:true).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
+    <%#= collection_select(:character_armor, :armor_id, Armor.all, :id, :name) %>
   <% end %>
 
   <% unless @armor.nil? %>

@@ -1,5 +1,5 @@
 class Weapon < ActiveRecord::Base
-  attr_accessible :crit, :damage, :description, :name, :price, :skill_id, :range
+  #attr_accessible :crit, :damage, :description, :name, :price, :skill_id, :range
   
   belongs_to :skill
   has_many :weapon_qualities, :through => :weapon_quality_ranks
@@ -8,6 +8,6 @@ class Weapon < ActiveRecord::Base
   has_many :characters, :through => :character_weapons
   has_many :character_weapons
 
-  default_scope order('name ASC')
+  default_scope { order('name ASC') }
 
 end

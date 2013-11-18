@@ -5,5 +5,11 @@ class AdventuresController < InheritedResources::Base
     @page = 'adventures'
     @title = "Adventures"
   end
+
+private
+  def adventure_params
+    params.require(:adventure).permit( :campaign_id, :description, :name )
+  end
+
   
 end

@@ -259,7 +259,7 @@ class CharactersController < ApplicationController
   # POST /characters
   # POST /characters.json
   def create
-    @character = Character.new(params[:character])
+    @character = Character.new(character_params)
     @character.user_id = current_user.id
 
     unless @character.race.nil?
@@ -275,7 +275,7 @@ class CharactersController < ApplicationController
     respond_to do |format|
       if @character.save
 
-        Skill.find(:all).each do |skill|
+        Skill.where(true).each do |skill|
           @character_skill = CharacterSkill.new()
           @character_skill.character_id = @character.id
           @character_skill.ranks = 0
@@ -305,6 +305,8 @@ class CharactersController < ApplicationController
     if @character.aasm_state.nil?
       @character.aasm_state = 'creation'
     end
+
+    logger.debug(@character.inspect)
 
     if @character.character_armor.nil?
       @character_armor = CharacterArmor.new()
@@ -373,7 +375,7 @@ class CharactersController < ApplicationController
     @character.character_skills.each do |skill|
       existing_skills << skill.skill.id unless skill.skill.nil?
     end
-    Skill.find(:all).each do |skill|
+    Skill.where(true).each do |skill|
       if !existing_skills.include?(skill.id)
         @character_skill = CharacterSkill.new()
         @character_skill.character_id = @character.id
@@ -384,7 +386,7 @@ class CharactersController < ApplicationController
     end
 
     respond_to do |format|
-      if @character.update_attributes(params[:character])
+      if @character.update_attributes(character_params)
         if !params[:destination].nil?
           if params[:destination] == 'gear'
             message = 'Character equipment updated.'
@@ -490,6 +492,41 @@ class CharactersController < ApplicationController
     @page = 'characters'
     @character_page = 'basics'
     @title = "Characters"
+  end
+
+  def character_params
+    #params.required(:character).permit(:age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :height, :build, :hair, :eyes, :notable_features, :other, :specialization_1, :specialization_2, :specialization_3, :character_skills_attributes, :character_armor_attributes [:id, :armor_id], :character_weapons_attributes, :character_gears_attributes, :character_obligations_attributes)
+
+    params.require(:character).permit( 
+      :age,
+      :agility,
+      :brawn,
+      :career_id,
+      :cunning,
+      :gender,
+      :intellect,
+      :name,
+      :presence,
+      :race_id,
+      :willpower,
+      :experience,
+      :credits,
+      :bio,
+      :height,
+      :build,
+      :hair,
+      :eyes,
+      :notable_features,
+      :other,
+      :specialization_1,
+      :specialization_2,
+      :specialization_3,
+      :character_weapons_attributes,
+      :character_gears_attributes,
+      character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
+      character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
+      character_armor_attributes: [ :armor_id ]
+    )
   end
 
 end

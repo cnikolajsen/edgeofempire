@@ -1,7 +1,7 @@
 class Skill < ActiveRecord::Base
-  attr_accessible :characteristic, :description, :name
+  #attr_accessible :characteristic, :description, :name
 
-  default_scope :order => 'name'
+  default_scope { order('name ASC') }
 
   belongs_to :career
   has_many :character_skills
