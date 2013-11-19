@@ -1,22 +1,17 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require_tree .
- */
+*/
 
- .bs-docs-sidenav {
+/*.bs-docs-sidenav {
    width: 175px;
    margin: 30px 0 0;
    padding: 0;
    background-color: #fff;
+   border: 1px solid #e5e5e5;
    -webkit-border-radius: 6px;
       -moz-border-radius: 6px;
            border-radius: 6px;
@@ -24,13 +19,14 @@
       -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
            box-shadow: 0 1px 4px rgba(0,0,0,.065);
  }
- .bs-docs-sidenav > li > a {
-   display: block;
+ /*.bs-docs-sidenav > li > a {
+   /*display: block;
    width: 190px \9;
    margin: 0 0 -1px;
    padding: 8px 14px;
-   border: 1px solid #e5e5e5;
+   border-bottom: 1px solid #e5e5e5;
  }
+ /*
  .bs-docs-sidenav > li:first-child > a {
    -webkit-border-radius: 6px 6px 0 0;
       -moz-border-radius: 6px 6px 0 0;
@@ -50,9 +46,9 @@
    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
       -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
            box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
- }
+ }*/
  /* Chevrons */
- .bs-docs-sidenav .icon-chevron-left {
+ /*.bs-docs-sidenav .icon-chevron-left {
    float: left;
    margin-top: 2px;
    margin-left: -6px;
@@ -67,7 +63,7 @@
  .bs-docs-sidenav .active .icon-chevron-left,
  .bs-docs-sidenav .active a:hover .icon-chevron-left {
    background-image: none !important;
-   /*background-image: url(../img/glyphicons-halflings-white.png);*/
+   
    opacity: 1;
  }
  .bs-docs-sidenav.affix {
@@ -77,4 +73,4 @@
    position: absolute;
    top: auto;
    bottom: 270px;
- }
+ }*/
