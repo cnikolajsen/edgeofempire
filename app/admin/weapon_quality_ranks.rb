@@ -1,4 +1,6 @@
 ActiveAdmin.register WeaponQualityRank do
+  permit_params :ranks, :weapon_id, :weapon_quality_id
+
   menu false #:parent => "Equipment"
   
   index do

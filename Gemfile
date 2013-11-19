@@ -31,7 +31,7 @@ gem "aasm", "~> 3.0.19"
 #gem 'protected_attributes'
 
 group :development, :test do
-  gem 'sqlite3'
+  #gem 'sqlite3'
   gem 'quiet_assets', :group => :development
 end
 
@@ -40,7 +40,7 @@ group :production, :staging do
 end
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 2.3.1'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'

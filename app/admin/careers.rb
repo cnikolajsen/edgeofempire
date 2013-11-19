@@ -1,4 +1,7 @@
 ActiveAdmin.register Career do
+  permit_params :name, :description,
+    career_skills_attributes: [ :id, :career_id, :skill_id, :_destroy ]
+
   index do
     column :name
     column :description do |career|
@@ -24,10 +27,10 @@ ActiveAdmin.register Career do
   config.filters = false
 
   controller do
-     def create
-       create! do |format|
-          format.html { redirect_to admin_careers_url }
-       end
-     end
-   end
+    def create
+      create! do |format|
+        format.html { redirect_to admin_careers_url }
+      end
+    end
+  end
 end

@@ -1,6 +1,6 @@
 ActiveAdmin.register Race do
-  config.sort_order = "name_asc"
-
+  permit_params :agility, :brawn, :cunning, :description, :intellect, :name, :presence, :special_ability, :starting_experience, :strain_threshold, :willpower, :wound_threshold
+  
   config.sort_order = "name_asc"
 
   controller do

@@ -1,4 +1,6 @@
 ActiveAdmin.register User do
+  permit_params :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :enabled
+
   menu :label => "Frontend Users", :parent => "Users"
 
   index do
@@ -27,4 +29,5 @@ ActiveAdmin.register User do
     end
     f.actions
   end
+
 end

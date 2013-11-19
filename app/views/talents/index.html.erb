@@ -15,7 +15,6 @@
         trees.each do |tree|
           unless tree.career_id.nil?
             career = Career.find_by_id(tree.career_id)
-            logger.debug(career.inspect)
             unless career.nil?
               used_in_trees << link_to(tree.name, career_path(career.id, :anchor => tree.name))
             end

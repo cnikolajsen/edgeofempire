@@ -1,4 +1,6 @@
 ActiveAdmin.register Armor do
+  permit_params :name, :description, :defense, :soak, :price
+
   menu :label => "Armor", :parent => "Equipment"
 
   config.sort_order = "name_asc"

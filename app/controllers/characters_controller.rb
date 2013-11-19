@@ -306,8 +306,6 @@ class CharactersController < ApplicationController
       @character.aasm_state = 'creation'
     end
 
-    logger.debug(@character.inspect)
-
     if @character.character_armor.nil?
       @character_armor = CharacterArmor.new()
       @character_armor.character_id = @character.id
@@ -343,7 +341,8 @@ class CharactersController < ApplicationController
       end
 
       @talent_trees.each do |tree|
-        @character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
+        #@character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
+        @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
 
         if @character_talent_tree.id.nil?
           @character_talent_tree.character_id = @character.id
@@ -495,38 +494,41 @@ class CharactersController < ApplicationController
   end
 
   def character_params
-    #params.required(:character).permit(:age, :agility, :brawn, :career_id, :cunning, :gender, :intellect, :name, :presence, :race_id, :willpower, :experience, :credits, :bio, :height, :build, :hair, :eyes, :notable_features, :other, :specialization_1, :specialization_2, :specialization_3, :character_skills_attributes, :character_armor_attributes [:id, :armor_id], :character_weapons_attributes, :character_gears_attributes, :character_obligations_attributes)
-
-    params.require(:character).permit( 
-      :age,
-      :agility,
-      :brawn,
-      :career_id,
-      :cunning,
-      :gender,
-      :intellect,
-      :name,
-      :presence,
-      :race_id,
-      :willpower,
-      :experience,
-      :credits,
-      :bio,
-      :height,
-      :build,
-      :hair,
-      :eyes,
-      :notable_features,
-      :other,
-      :specialization_1,
-      :specialization_2,
-      :specialization_3,
-      character_gears_attributes: [ :id, :gear_id, :qty, :_destroy ],
-      character_weapons_attributes: [ :id, :weapon_id, :_destroy ],
-      character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
-      character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-      character_armor_attributes: [ :armor_id ]
-    )
+    # This is not quite right, but for some reason I don't have the character
+    # parameter when saving character talents...
+    unless params[:character].nil?
+      
+      params.require(:character).permit( 
+        :age,
+        :agility,
+        :brawn,
+        :career_id,
+        :cunning,
+        :gender,
+        :intellect,
+        :name,
+        :presence,
+        :race_id,
+        :willpower,
+        :experience,
+        :credits,
+        :bio,
+        :height,
+        :build,
+        :hair,
+        :eyes,
+        :notable_features,
+        :other,
+        :specialization_1,
+        :specialization_2,
+        :specialization_3,
+        character_gears_attributes: [ :id, :gear_id, :qty, :_destroy ],
+        character_weapons_attributes: [ :id, :weapon_id, :_destroy ],
+        character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
+        character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
+        character_armor_attributes: [ :armor_id ]
+      )
+    end
   end
 
 end

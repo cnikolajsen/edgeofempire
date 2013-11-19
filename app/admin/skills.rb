@@ -1,4 +1,6 @@
 ActiveAdmin.register Skill do
+  permit_params :description, :name, :characteristic
+
   menu :parent => "Careers"
 
   config.sort_order = "name_asc"

@@ -3,5 +3,8 @@ class Talent < ActiveRecord::Base
   
   #belongs_to :talent_trees
 
+  has_many :character_talents, :dependent => :destroy
+  has_many :characters, :through => :character_talents
+
   default_scope { order('name ASC') }
 end

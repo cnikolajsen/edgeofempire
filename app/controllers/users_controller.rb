@@ -32,4 +32,9 @@ class UsersController < ApplicationController
     @title = "User"
   end
   
+  private
+
+  def user_params
+     params.require(:user).permit( :email, :password, :password_confirmation, :remember_me )
+  end
 end

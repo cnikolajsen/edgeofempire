@@ -1,4 +1,6 @@
 ActiveAdmin.register TalentTreeCareerSkill do
+  permit_params :skill_id, :talent_tree_id
+  
   menu false #:parent => "Careers"
   
   index do
