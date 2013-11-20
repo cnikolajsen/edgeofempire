@@ -25,4 +25,9 @@ class ArmorController < ApplicationController
     @title = "Armor"
   end
   
+  private
+  
+  def armor_params
+    params.require(:armor).permit( :defense, :description, :name, :price, :soak )
+  end
 end

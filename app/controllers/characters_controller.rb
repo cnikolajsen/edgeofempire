@@ -259,7 +259,7 @@ class CharactersController < ApplicationController
   # POST /characters
   # POST /characters.json
   def create
-    @character = Character.new(params[:character])
+    @character = Character.new(character_params)
     @character.user_id = current_user.id
 
     unless @character.race.nil?
@@ -275,7 +275,7 @@ class CharactersController < ApplicationController
     respond_to do |format|
       if @character.save
 
-        Skill.find(:all).each do |skill|
+        Skill.where(true).each do |skill|
           @character_skill = CharacterSkill.new()
           @character_skill.character_id = @character.id
           @character_skill.ranks = 0
@@ -341,7 +341,8 @@ class CharactersController < ApplicationController
       end
 
       @talent_trees.each do |tree|
-        @character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
+        #@character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
+        @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
 
         if @character_talent_tree.id.nil?
           @character_talent_tree.character_id = @character.id
@@ -373,7 +374,7 @@ class CharactersController < ApplicationController
     @character.character_skills.each do |skill|
       existing_skills << skill.skill.id unless skill.skill.nil?
     end
-    Skill.find(:all).each do |skill|
+    Skill.where(true).each do |skill|
       if !existing_skills.include?(skill.id)
         @character_skill = CharacterSkill.new()
         @character_skill.character_id = @character.id
@@ -384,7 +385,7 @@ class CharactersController < ApplicationController
     end
 
     respond_to do |format|
-      if @character.update_attributes(params[:character])
+      if @character.update_attributes(character_params)
         if !params[:destination].nil?
           if params[:destination] == 'gear'
             message = 'Character equipment updated.'
@@ -490,6 +491,44 @@ class CharactersController < ApplicationController
     @page = 'characters'
     @character_page = 'basics'
     @title = "Characters"
+  end
+
+  def character_params
+    # This is not quite right, but for some reason I don't have the character
+    # parameter when saving character talents...
+    unless params[:character].nil?
+      
+      params.require(:character).permit( 
+        :age,
+        :agility,
+        :brawn,
+        :career_id,
+        :cunning,
+        :gender,
+        :intellect,
+        :name,
+        :presence,
+        :race_id,
+        :willpower,
+        :experience,
+        :credits,
+        :bio,
+        :height,
+        :build,
+        :hair,
+        :eyes,
+        :notable_features,
+        :other,
+        :specialization_1,
+        :specialization_2,
+        :specialization_3,
+        character_gears_attributes: [ :id, :gear_id, :qty, :_destroy ],
+        character_weapons_attributes: [ :id, :weapon_id, :_destroy ],
+        character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
+        character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
+        character_armor_attributes: [ :armor_id ]
+      )
+    end
   end
 
 end

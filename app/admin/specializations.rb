@@ -1,4 +1,6 @@
 ActiveAdmin.register Specialization do
+  permit_params :description, :name, :career_id
+
   menu false
 
   controller do

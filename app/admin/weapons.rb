@@ -1,4 +1,6 @@
 ActiveAdmin.register Weapon do
+  permit_params :crit, :damage, :description, :name, :price, :skill_id, :range
+  
   menu :label => "Weapons", :parent => "Equipment"
 
   config.sort_order = "name_asc"

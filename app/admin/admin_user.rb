@@ -1,4 +1,6 @@
 ActiveAdmin.register AdminUser do
+  permit_params :email, :password, :password_confirmation, :remember_me
+
   menu :parent => "Users"
 
   index do                            
@@ -18,5 +20,6 @@ ActiveAdmin.register AdminUser do
       f.input :password_confirmation  
     end                               
     f.actions                         
-  end                                 
+  end
+
 end                                   

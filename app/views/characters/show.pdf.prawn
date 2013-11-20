@@ -273,7 +273,6 @@ weapons = @character.weapons.map do |weapon|
     end
   end
   weapon_data = @wq.join(',')
-  logger.debug(@wq)
   
   [
     weapon.name,

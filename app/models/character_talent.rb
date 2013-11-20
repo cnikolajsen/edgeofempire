@@ -1,5 +1,5 @@
 class CharacterTalent < ActiveRecord::Base
-  attr_accessible :character_id, :talent_id, :talent_tree_id
+  #attr_accessible :character_id, :talent_id, :talent_tree_id
   
   serialize :talent_1_1_options, JSON
   serialize :talent_1_2_options, JSON
