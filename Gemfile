@@ -38,6 +38,7 @@ end
 group :production, :staging do
   gem "pg"
 end
+gem 'rails_12factor', group: :production
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 2.3.1'
