@@ -3,30 +3,59 @@
   <h1><%=t '.title', :default => @race.name %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
-  <dd><%= @race.description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:wound_threshold) %>:</strong></dt>
-  <dd><%= @race.wound_threshold %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:strain_threshold) %>:</strong></dt>
-  <dd><%= @race.strain_threshold %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:starting_experience) %>:</strong></dt>
-  <dd><%= @race.starting_experience %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:special_ability) %>:</strong></dt>
-  <dd><%= @race.special_ability %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:brawn) %>:</strong></dt>
-  <dd><%= @race.brawn %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:cunning) %>:</strong></dt>
-  <dd><%= @race.cunning %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:presence) %>:</strong></dt>
-  <dd><%= @race.presence %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:agility) %>:</strong></dt>
-  <dd><%= @race.agility %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:intellect) %>:</strong></dt>
-  <dd><%= @race.intellect %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:willpower) %>:</strong></dt>
-  <dd><%= @race.willpower %></dd>
-</dl>
+<p><%= @race.description.gsub("\n", "<br />").html_safe %></p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:brawn) %></th>
+      <th><%= model_class.human_attribute_name(:cunning) %></th>
+      <th><%= model_class.human_attribute_name(:presence) %></th>
+      <th><%= model_class.human_attribute_name(:agility) %></th>
+      <th><%= model_class.human_attribute_name(:intellect) %></th>
+      <th><%= model_class.human_attribute_name(:willpower) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @race.brawn %></td>
+      <td><%= @race.cunning %></td>
+      <td><%= @race.presence %></td>
+      <td><%= @race.agility %></td>
+      <td><%= @race.intellect %></td>
+      <td><%= @race.willpower %></td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:wound_threshold) %></th>
+      <th><%= model_class.human_attribute_name(:strain_threshold) %></th>
+      <th><%= model_class.human_attribute_name(:starting_experience) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @race.wound_threshold %></td>
+      <td><%= @race.strain_threshold %></td>
+      <td><%= @race.starting_experience %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4><%= model_class.human_attribute_name(:special_ability) %></h4>
+<% unless @race.skills.nil? %>
+  <% @race.race_skills.each do |race_skill| %>
+    <p>Add <%= pluralize(race_skill.ranks, 'rank') %> in <%= race_skill.skill.name %> skill.</p>
+  <% end %>
+<% end %>
+<% unless @race.talents.nil? %>
+  <% @race.race_talents.each do |race_talent| %>
+    <p>Add <%= pluralize(race_talent.ranks, 'talent') %> in <%= race_talent.talent.name %> talent.</p>
+  <% end %>
+<% end %>
+<p><%= text_replace_tokens(@race.special_ability.gsub("\n", "<br />")).html_safe %></p>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

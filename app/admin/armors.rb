@@ -6,10 +6,10 @@ ActiveAdmin.register Armor do
   config.sort_order = "name_asc"
 
   controller do
-     def create
-       create! do |format|
-          format.html { redirect_to admin_armors_url }
-       end
-     end
-   end
+    def create
+      create! do |format|
+        format.html { redirect_to admin_armors_url }
+      end
+    end
+  end
 end

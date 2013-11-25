@@ -9,114 +9,125 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130626110826) do
+ActiveRecord::Schema.define(version: 20131125120026) do
 
-  create_table "active_admin_comments", :force => true do |t|
-    t.string   "resource_id",   :null => false
-    t.string   "resource_type", :null => false
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_admin_comments", force: true do |t|
+    t.string   "resource_id",   null: false
+    t.string   "resource_type", null: false
     t.integer  "author_id"
     t.string   "author_type"
     t.text     "body"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "namespace"
   end
 
-  add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
-  add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
-  add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
+  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_admin_notes_on_resource_type_and_resource_id", using: :btree
 
-  create_table "admin_users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+  create_table "admin_users", force: true do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0
+    t.integer  "sign_in_count",          default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
-  add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
-  add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
+  add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+  add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "adventures", :force => true do |t|
+  create_table "adventures", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "campaign_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "armors", :force => true do |t|
+  create_table "armors", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "defense"
     t.integer  "soak"
     t.integer  "price"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "campaigns", :force => true do |t|
+  create_table "campaigns", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "career_skills", :force => true do |t|
+  create_table "career_skills", force: true do |t|
     t.integer  "career_id"
     t.integer  "skill_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "careers", :force => true do |t|
+  create_table "careers", force: true do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "character_armors", :force => true do |t|
+  create_table "character_armors", force: true do |t|
     t.integer  "character_id"
     t.integer  "armor_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  create_table "character_gears", :force => true do |t|
+  create_table "character_bonus_talents", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "talent_id"
+    t.string   "bonus_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "character_gears", force: true do |t|
     t.integer  "character_id"
     t.integer  "gear_id"
     t.integer  "qty"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  create_table "character_obligations", :force => true do |t|
+  create_table "character_obligations", force: true do |t|
     t.integer  "character_id"
     t.integer  "obligation_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
-  create_table "character_skills", :force => true do |t|
+  create_table "character_skills", force: true do |t|
     t.integer  "character_id"
     t.integer  "skill_id"
     t.integer  "ranks"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  create_table "character_talents", :force => true do |t|
+  create_table "character_talents", force: true do |t|
     t.integer  "character_id"
     t.integer  "talent_tree_id"
     t.integer  "talent_1_1"
@@ -135,8 +146,8 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.integer  "talent_4_2"
     t.integer  "talent_4_3"
     t.integer  "talent_4_4"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "talent_5_1"
     t.integer  "talent_5_2"
     t.integer  "talent_5_3"
@@ -163,14 +174,14 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.string   "talent_5_4_options"
   end
 
-  create_table "character_weapons", :force => true do |t|
+  create_table "character_weapons", force: true do |t|
     t.integer  "character_id"
     t.integer  "weapon_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  create_table "characters", :force => true do |t|
+  create_table "characters", force: true do |t|
     t.string   "name"
     t.string   "race_id"
     t.string   "gender"
@@ -181,8 +192,8 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.integer  "cunning"
     t.integer  "willpower"
     t.integer  "presence"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "user_id"
     t.text     "bio"
     t.integer  "credits"
@@ -200,23 +211,39 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.string   "aasm_state"
   end
 
-  create_table "gears", :force => true do |t|
+  create_table "gears", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "price"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "obligations", :force => true do |t|
+  create_table "obligations", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.string   "range"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "races", :force => true do |t|
+  create_table "race_skills", force: true do |t|
+    t.integer  "race_id"
+    t.integer  "skill_id"
+    t.integer  "ranks"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "race_talents", force: true do |t|
+    t.integer  "race_id"
+    t.integer  "talent_id"
+    t.integer  "ranks"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "races", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "wound_threshold"
@@ -229,34 +256,34 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.integer  "agility"
     t.integer  "intellect"
     t.integer  "willpower"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
-  create_table "skills", :force => true do |t|
+  create_table "skills", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.string   "characteristic"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  create_table "specializations", :force => true do |t|
+  create_table "specializations", force: true do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "career_id"
   end
 
-  create_table "talent_tree_career_skills", :force => true do |t|
+  create_table "talent_tree_career_skills", force: true do |t|
     t.integer  "talent_tree_id"
     t.integer  "skill_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  create_table "talent_trees", :force => true do |t|
+  create_table "talent_trees", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "talent_1_1"
@@ -273,8 +300,8 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.integer  "talent_4_1"
     t.integer  "talent_4_2"
     t.integer  "talent_4_3"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.integer  "talent_2_3"
     t.integer  "talent_2_4"
     t.integer  "career_id"
@@ -312,71 +339,71 @@ ActiveRecord::Schema.define(:version => 20130626110826) do
     t.integer  "talent_5_4_require_4_4"
   end
 
-  create_table "talents", :force => true do |t|
+  create_table "talents", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.string   "activation"
     t.integer  "specialization_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.boolean  "ranked"
   end
 
-  create_table "users", :force => true do |t|
-    t.string   "username",               :default => "",   :null => false
-    t.string   "email",                  :default => "",   :null => false
-    t.string   "password_hash",          :default => "",   :null => false
-    t.string   "password_salt",          :default => "",   :null => false
-    t.string   "first_name",             :default => "",   :null => false
-    t.string   "last_name",              :default => "",   :null => false
-    t.string   "city",                   :default => "",   :null => false
-    t.string   "state",                  :default => "",   :null => false
-    t.string   "postal_code",            :default => "",   :null => false
-    t.integer  "country_id",             :default => 0,    :null => false
-    t.boolean  "enabled",                :default => true, :null => false
+  create_table "users", force: true do |t|
+    t.string   "username",               default: "",   null: false
+    t.string   "email",                  default: "",   null: false
+    t.string   "password_hash",          default: "",   null: false
+    t.string   "password_salt",          default: "",   null: false
+    t.string   "first_name",             default: "",   null: false
+    t.string   "last_name",              default: "",   null: false
+    t.string   "city",                   default: "",   null: false
+    t.string   "state",                  default: "",   null: false
+    t.string   "postal_code",            default: "",   null: false
+    t.integer  "country_id",             default: 0,    null: false
+    t.boolean  "enabled",                default: true, null: false
     t.text     "notes"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
-    t.string   "encrypted_password",     :default => "",   :null => false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "encrypted_password",     default: "",   null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0
+    t.integer  "sign_in_count",          default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["enabled"], :name => "index_users_on_enabled"
-  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "weapon_qualities", :force => true do |t|
+  create_table "weapon_qualities", force: true do |t|
     t.string   "name"
     t.string   "trigger"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  create_table "weapon_quality_ranks", :force => true do |t|
+  create_table "weapon_quality_ranks", force: true do |t|
     t.integer  "weapon_id"
     t.integer  "weapon_quality_id"
     t.integer  "ranks"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
-  create_table "weapons", :force => true do |t|
+  create_table "weapons", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "skill_id"
     t.integer  "damage"
     t.integer  "crit"
     t.integer  "price"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "range"
   end
 

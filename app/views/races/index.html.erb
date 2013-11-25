@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
       <th><%= model_class.human_attribute_name(:wound_threshold) %></th>
       <th><%= model_class.human_attribute_name(:strain_threshold) %></th>
       <th><%= model_class.human_attribute_name(:starting_experience) %></th>
@@ -23,7 +22,6 @@
     <% @races.each do |race| %>
       <tr>
         <td><%= race.name %></td>
-        <td><%= race.description %></td>
         <td><%= race.wound_threshold %></td>
         <td><%= race.strain_threshold %></td>
         <td><%= race.starting_experience %></td>

@@ -40,6 +40,8 @@ class Character < ActiveRecord::Base
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents#, :order => "name"
 
+  has_many :character_bonus_talents, :dependent => :destroy
+
   belongs_to :race
   belongs_to :career
 

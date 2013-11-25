@@ -43,8 +43,9 @@ class CharactersController < ApplicationController
     unless @character.character_talents.empty?
       @character.character_talents.each do |talent_tree|
         talent_tree.attributes.each do |key, value|
+          
           if key.match(/talent_[\d]_[\d]$/) and !value.nil?
-            if @talents.has_key?(value)
+            if @talents.has_key?(value) && !talent_tree["#{key}_options"].nil?
               @talents[value]['count'] = @talents[value]['count'] + 1
               talent_tree["#{key}_options"].each do |opt|
                 opt_test = opt.to_i
@@ -72,6 +73,20 @@ class CharactersController < ApplicationController
               end
             end
           end
+        end
+      end
+    end
+    
+    character_bonus_talents = CharacterBonusTalent.where(:character_id => @character.id)
+    unless character_bonus_talents.empty?
+      character_bonus_talents.each do |bt|
+        talent_ranks = RaceTalent.where(:race_id => @character.race.id, :talent_id => bt.talent_id).first.ranks
+        if @talents.has_key?(bt.talent_id)
+          @talents[bt.talent_id]['count'] = @talents[bt.talent_id]['count'] + talent_ranks
+        else
+          @talents[bt.talent_id] = {}
+          @talents[bt.talent_id]['count'] = talent_ranks
+          @talents[bt.talent_id]['options'] = Array.new
         end
       end
     end
@@ -341,7 +356,6 @@ class CharactersController < ApplicationController
       end
 
       @talent_trees.each do |tree|
-        #@character_talent_tree = CharacterTalent.find_or_create_by_character_id_and_talent_tree_id(@character.id, tree.id)
         @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
 
         if @character_talent_tree.id.nil?
@@ -366,6 +380,27 @@ class CharactersController < ApplicationController
         end
 
         @character_talent_tree.save
+      end
+    end
+
+    # Save racial talents
+    if !params[:character_basics].nil?
+      @character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
+
+      unless @character_racial_talents.nil?
+        @character_racial_talents.each do |bt|
+          bt.destroy
+        end
+      end
+
+      unless @character.race.talents.nil?
+        @character.race.talents.each do |talent|
+          @character_bonus_talent = CharacterBonusTalent.new()
+          @character_bonus_talent.character_id = @character.id
+          @character_bonus_talent.talent_id = talent.id
+          @character_bonus_talent.bonus_type = 'racial'
+          @character_bonus_talent.save
+        end
       end
     end
 

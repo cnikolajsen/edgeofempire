@@ -5,4 +5,5 @@ class Skill < ActiveRecord::Base
   has_many :character_skills
   has_many :characters, :through => :character_skills
   has_many :weapons
+  has_many :races, :through => :race_talents
 end
