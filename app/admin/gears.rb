@@ -1,5 +1,5 @@
 ActiveAdmin.register Gear do
-  permit_params :description, :name, :price
+  permit_params :description, :name, :price, :encumbrance, :rarity
  
   menu :label => "Gear", :parent => "Equipment"
 

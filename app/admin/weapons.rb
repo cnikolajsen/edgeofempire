@@ -1,5 +1,6 @@
 ActiveAdmin.register Weapon do
-  permit_params :crit, :damage, :description, :name, :price, :skill_id, :range
+  permit_params :crit, :damage, :description, :name, :price, :skill_id, :range,
+    :encumbrance, :rarity, :hard_points
   
   menu :label => "Weapons", :parent => "Equipment"
 
@@ -18,6 +19,9 @@ ActiveAdmin.register Weapon do
     column :crit
     column :range
     column :price
+    column :encumbrance
+    column :hard_points
+    column :rarity
     column "Special" do |weapon|
       render "weapon_qualties", :qualities => weapon.weapon_quality_ranks
     end
@@ -33,6 +37,9 @@ ActiveAdmin.register Weapon do
       f.input :crit  
       f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Engaged']  
       f.input :price
+      f.input :encumbrance
+      f.input :hard_points
+      f.input :rarity
       f.has_many :weapon_quality_ranks do |wqr_form|
         wqr_form.input :weapon_quality_id, :as => :select, :collection => WeaponQuality.all
         wqr_form.input :ranks

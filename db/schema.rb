@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131125120026) do
+ActiveRecord::Schema.define(version: 20131126075234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,9 @@ ActiveRecord::Schema.define(version: 20131125120026) do
     t.integer  "price"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "encumbrance"
+    t.integer  "hard_points"
+    t.integer  "rarity"
   end
 
   create_table "campaigns", force: true do |t|
@@ -217,6 +220,8 @@ ActiveRecord::Schema.define(version: 20131125120026) do
     t.integer  "price"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "encumbrance"
+    t.integer  "rarity"
   end
 
   create_table "obligations", force: true do |t|
@@ -405,6 +410,9 @@ ActiveRecord::Schema.define(version: 20131125120026) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "range"
+    t.integer  "encumbrance"
+    t.integer  "hard_points"
+    t.integer  "rarity"
   end
 
 end

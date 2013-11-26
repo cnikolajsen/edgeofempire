@@ -1,5 +1,6 @@
 ActiveAdmin.register Armor do
-  permit_params :name, :description, :defense, :soak, :price
+  permit_params :name, :description, :defense, :soak, :price, :encumbrance,
+    :rarity, :hard_points
 
   menu :label => "Armor", :parent => "Equipment"
 
