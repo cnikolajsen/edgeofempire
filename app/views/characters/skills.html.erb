@@ -9,6 +9,7 @@
 <% end %>
 
 <%= render :partial => 'character_edit_menu' %>
+
 <%= form_for @character do |character_form| %>
 <table>
   <tr>
@@ -26,7 +27,12 @@
         <td>
           <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
         </td>
-        <td><%= skill_fields.select :ranks, (0..5) %></td>
+        <% race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first %>
+        <% if race_skill.nil? %>
+          <td><%= skill_fields.select :ranks, (0..5) %></td>
+        <% else %>
+          <td><%= skill_fields.select :ranks, (race_skill.ranks..5) %></td>
+        <% end %>
       </tr>
     <% end %>
   <% end %>
