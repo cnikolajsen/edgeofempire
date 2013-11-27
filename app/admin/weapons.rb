@@ -1,6 +1,7 @@
 ActiveAdmin.register Weapon do
   permit_params :crit, :damage, :description, :name, :price, :skill_id, :range,
-    :encumbrance, :rarity, :hard_points
+    :encumbrance, :rarity, :hard_points,
+    weapon_quality_ranks_attributes: [ :id, :ranks, :weapon_id, :weapon_quality_id ]
   
   menu :label => "Weapons", :parent => "Equipment"
 

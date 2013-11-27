@@ -22,13 +22,13 @@
       <div class="control-group">
         <%= f.label :race_id, 'Species', :class => 'control-label' %>
         <div class="controls">
-          <%= select('character', 'race_id', Race.find(:all).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
+          <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
         </div>
       </div>
       <div class="control-group">
         <%= f.label :career_id, :class => 'control-label' %>
         <div class="controls">
-          <%= select('character', 'career_id', Career.find(:all).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}, :class => 'input-block-level') %>
+          <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}, :class => 'input-block-level') %>
         </div>
       </div>
       <% end %>

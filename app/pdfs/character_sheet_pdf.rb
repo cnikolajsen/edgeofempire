@@ -482,6 +482,7 @@ class CharacterSheetPdf < Prawn::Document
       if @character.weapons.any?
         weapons = @character.weapons.map do |weapon|
           font "Helvetica", :size=> 8
+          logger.debug(weapon.inspect)
           character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
           ranks = character_skill_ranks.first.ranks
 

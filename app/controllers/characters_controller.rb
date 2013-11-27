@@ -80,13 +80,15 @@ class CharactersController < ApplicationController
     character_bonus_talents = CharacterBonusTalent.where(:character_id => @character.id)
     unless character_bonus_talents.empty?
       character_bonus_talents.each do |bt|
-        talent_ranks = RaceTalent.where(:race_id => @character.race.id, :talent_id => bt.talent_id).first.ranks
-        if @talents.has_key?(bt.talent_id)
-          @talents[bt.talent_id]['count'] = @talents[bt.talent_id]['count'] + talent_ranks
-        else
-          @talents[bt.talent_id] = {}
-          @talents[bt.talent_id]['count'] = talent_ranks
-          @talents[bt.talent_id]['options'] = Array.new
+        talent_ranks = RaceTalent.where(:race_id => @character.race.id, :talent_id => bt.talent_id).first#.ranks
+        unless talent_ranks.nil?
+          if @talents.has_key?(bt.talent_id)
+            @talents[bt.talent_id]['count'] = @talents[bt.talent_id]['count'] + talent_ranks.ranks
+          else
+            @talents[bt.talent_id] = {}
+            @talents[bt.talent_id]['count'] = talent_ranks.ranks
+            @talents[bt.talent_id]['options'] = Array.new
+          end
         end
       end
     end
@@ -157,11 +159,25 @@ class CharactersController < ApplicationController
     @soak = @character.brawn
     @defense = 0
     @equipment = Array.new
+    @attacks = Array.new
     @pdf_weapons_and_armor = Array.new
     @pdf_personal_gear = Array.new
 
     # Add weapons to equipment list
     if !@character.character_weapons.nil?
+      unarmed_weapon = Weapon.where(:name => 'Unarmed').first
+
+      @character.character_weapons.each do |cw|
+        unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
+          if params[:format] != 'pdf'
+            @equipment << "#{cw.weapon.name}"
+          else
+            @pdf_weapons_and_armor << cw.weapon.name
+          end
+        end
+      end
+
+      # Build attacks list.
       @character.character_weapons.each do |cw|
         unless cw.weapon.nil?
           @wq = Array.new
@@ -176,12 +192,22 @@ class CharactersController < ApplicationController
           character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, cw.weapon.skill.id)
           ranks = character_skill_ranks.first.ranks
 
+          if cw.weapon.name == 'Unarmed'
+            cw.weapon.damage = @character.brawn
+
+            # Trandoshans have claws.
+            if @character.race.name == 'Trandoshan'
+              cw.weapon.damage = @character.brawn + 1
+              cw.weapon.crit = 3
+            end
+          end
+
           if params[:format] != 'pdf'
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
-            @equipment << "#{cw.weapon.name} (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+            @attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
           else
-            @pdf_weapons_and_armor << cw.weapon.name
+            #@pdf_weapons_and_armor << cw.weapon.name
           end
         end
       end
@@ -285,6 +311,8 @@ class CharactersController < ApplicationController
       @character.willpower = @character.race.willpower
       @character.presence = @character.race.presence
       @character.experience = @character.race.starting_experience
+
+      save_character_racial_talents(@character)
     end
 
     respond_to do |format|
@@ -338,12 +366,18 @@ class CharactersController < ApplicationController
       end
     end
 
+    # Save a weapon entry for unarmed combat if not.
+    unarmed_weapon = Weapon.where(:name => 'Unarmed').first
+    @character_unarmed = CharacterWeapon.where(:character_id => @character.id, :weapon_id => unarmed_weapon.id).first_or_create
+    if @character_unarmed.character_id.nil?
+      @character_unarmed = CharacterWeapon.new()
+      @character_unarmed.character_id = @character.id
+      @character_unarmed.weapon_id = unarmed_weapon.id
+      @character_unarmed.save
+    end
+
     # Update talents.
     if !params[:update_talents].nil?
-      #@character.character_talents.each do |ct|
-      #  ct.destroy
-      #end
-
       @talent_trees = Array.new
       unless @character.specialization_1.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_1)
@@ -383,25 +417,9 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Save racial talents
+    # Save racial talents.
     if !params[:character_basics].nil?
-      @character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
-
-      unless @character_racial_talents.nil?
-        @character_racial_talents.each do |bt|
-          bt.destroy
-        end
-      end
-
-      unless @character.race.talents.nil?
-        @character.race.talents.each do |talent|
-          @character_bonus_talent = CharacterBonusTalent.new()
-          @character_bonus_talent.character_id = @character.id
-          @character_bonus_talent.talent_id = talent.id
-          @character_bonus_talent.bonus_type = 'racial'
-          @character_bonus_talent.save
-        end
-      end
+      save_character_racial_talents(@character)
     end
 
     # Update character skill entries for character to add in new skills created since the character was created.
@@ -421,7 +439,9 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.update_attributes(character_params)
-        if !params[:destination].nil?
+        if @character.race_id_changed? 
+          format.html { redirect_to @character, notice: 'Race was changed.' }
+        elsif !params[:destination].nil?
           if params[:destination] == 'gear'
             message = 'Character equipment updated.'
           elsif params[:destination] == 'weapons'
@@ -526,6 +546,26 @@ class CharactersController < ApplicationController
     @page = 'characters'
     @character_page = 'basics'
     @title = "Characters"
+  end
+
+  def save_character_racial_talents(character)
+    character_racial_talents = CharacterBonusTalent.where(:character_id => character.id, :bonus_type => 'racial')
+
+    unless character_racial_talents.nil?
+      character_racial_talents.each do |bt|
+        bt.destroy
+      end
+    end
+
+    unless character.race.talents.nil?
+      character.race.talents.each do |talent|
+        character_bonus_talent = CharacterBonusTalent.new()
+        character_bonus_talent.character_id = character.id
+        character_bonus_talent.talent_id = talent.id
+        character_bonus_talent.bonus_type = 'racial'
+        character_bonus_talent.save
+      end
+    end
   end
 
   def character_params

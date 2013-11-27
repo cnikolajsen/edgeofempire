@@ -44,8 +44,10 @@ module CharactersHelper
         character_talent.attributes.each do |key, value|
           if key.match(/talent_[\d]_[\d]$/) and !value.nil?
             if value == 80
-              character_talent["#{key}_options"].each do |skill_id|
-                career_skill_ids << skill_id.to_i
+              unless character_talent["#{key}_options"].nil?
+                character_talent["#{key}_options"].each do |skill_id|
+                  career_skill_ids << skill_id.to_i
+                end
               end
             end
             if value == 111

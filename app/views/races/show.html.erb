@@ -52,7 +52,7 @@
 <% end %>
 <% unless @race.talents.nil? %>
   <% @race.race_talents.each do |race_talent| %>
-    <p>Add <%= pluralize(race_talent.ranks, 'talent') %> in <%= race_talent.talent.name %> talent.</p>
+    <p>Add <%= pluralize(race_talent.ranks, 'rank') %> in <%= race_talent.talent.name %> talent.</p>
   <% end %>
 <% end %>
 <p><%= text_replace_tokens(@race.special_ability.gsub("\n", "<br />")).html_safe %></p>

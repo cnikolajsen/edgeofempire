@@ -85,6 +85,9 @@
       <tr>
         <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ').html_safe %></td>
       </tr>
+      <tr>
+        <td colspan="3"><strong>Attacks:</strong> <ul><li><%= @attacks.join('</li><li>').html_safe %></li></ul></td>
+      </tr>
   
     </tbody>
   </table>
