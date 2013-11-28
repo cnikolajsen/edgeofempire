@@ -1,21 +1,26 @@
-<li class="control-group nested-fields">
-  <% unless f.object.weapon_id.nil? %>
-    <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
-    <div class="well">
-      <h3><%= @weapon.name %> <small><%= @weapon.skill.name %></small></h3>
-      <span class="label">Damage <span class="label label-info"><%= @weapon.damage %></span></span>
-      <span class="label">Crit <span class="label label-info"><%= @weapon.crit %></span></span>
-      <span class="label">Price  <span class="label label-info"><%= @weapon.price %></span></span>
-      <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
-       <%= @weapon.description %>
-       <div class="controls">
-         <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
-       </div>
-    </div>
-  <% else %>
-    <div class="controls">
-      <%= f.select :weapon_id, Weapon.where(:true).collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
-    </div>
+<% unless f.object.weapon_id.nil? %>
+  <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
+  <% unless @weapon.name == 'Unarmed' %>
+    <li class="control-group nested-fields">
+      <div class="well">
+        <h3><%= @weapon.name %> <small><%= @weapon.skill.name %></small></h3>
+        <span class="label">Damage <span class="label label-info"><%= @weapon.damage %></span></span>
+        <span class="label">Crit <span class="label label-info"><%= @weapon.crit %></span></span>
+        <span class="label">Price  <span class="label label-info"><%= @weapon.price %></span></span>
+        <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
+        <%= @weapon.description %>
+        <div class="controls">
+          <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
+        </div>
+      </div>
+    </li>
   <% end %>
-  
-</li>
+<% else %>
+  <li class="control-group nested-fields">
+    <div class="well">
+      <div class="controls">
+        <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
+      </div>
+    </div>
+  </li>
+<% end %>
