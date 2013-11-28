@@ -9,6 +9,10 @@
         <span class="label">Price  <span class="label label-info"><%= @weapon.price %></span></span>
         <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
         <%= @weapon.description %>
+        <div class="control-group">
+          <%= f.text_area :description, :class => 'text_area input-block-level' %>
+          <span class="help-block">Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal.</span>
+        </div>
         <div class="controls">
           <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
         </div>
@@ -18,8 +22,12 @@
 <% else %>
   <li class="control-group nested-fields">
     <div class="well">
-      <div class="controls">
+      <div class="control-group">
         <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
+      </div>
+      <div class="control-group">
+        <%= f.text_area :description, :class => 'text_area input-block-level' %>
+        <span class="help-block">Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal.</span>
       </div>
     </div>
   </li>
