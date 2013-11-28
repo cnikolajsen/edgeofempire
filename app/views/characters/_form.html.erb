@@ -134,6 +134,11 @@
           <div class="controls">
             <%= f.number_field :experience, :min => 0, :class => 'number_field' %>
           </div>
+          <span class="help-block">
+            <small>
+              <strong>Starting experience:</strong> <%= @character.race.starting_experience %>
+            </small>
+          </span>
         </div>
         <div class="control-group" style="margin-bottom: 0px;">
           <%= f.label :credits, :class => 'control-label' %>
