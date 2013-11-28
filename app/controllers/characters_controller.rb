@@ -602,7 +602,7 @@ class CharactersController < ApplicationController
         character_weapons_attributes: [ :id, :weapon_id, :description, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :armor_id ]
+        character_armor_attributes: [ :id, :armor_id, :description, :_destroy ]
       )
     end
   end
