@@ -197,6 +197,7 @@ class CharactersController < ApplicationController
 
             # Trandoshans have claws.
             if @character.race.name == 'Trandoshan'
+              cw.weapon.name = 'Claws'
               cw.weapon.damage = @character.brawn + 1
               cw.weapon.crit = 3
             end
