@@ -230,7 +230,6 @@ class CharactersController < ApplicationController
       end
     end
 
-
     # Add general items to equipment list
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
@@ -293,6 +292,11 @@ class CharactersController < ApplicationController
   def edit
     @character = Character.find(params[:id])
     @character_state = character_state(@character)
+
+    @career_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
+      @career_free_rank << career_skill.skill_id
+    end
 
     @title = "#{@character.name} | #{@title}"
     @character_page = 'basics'
@@ -364,6 +368,13 @@ class CharactersController < ApplicationController
           @item = CharacterGear.find_by_id(cg.id)
           @item.destroy
         end
+      end
+    end
+
+    # Save career skills to add a free rank to.
+    unless params[:free_career_skill_rank].nil?
+      params[:free_career_skill_rank].each do |skill_id|
+        @career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'career').first_or_create
       end
     end
 

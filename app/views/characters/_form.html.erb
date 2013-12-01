@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <div class="row-fluid">
-    <div class="span6 well" style="height: 270px;">
+    <div class="span6 well" style="">
       <div class="control-group">
         <%= f.label :name, :class => 'control-label' %>
         <div class="controls">
@@ -19,18 +19,31 @@
         </div>
       </div>
       <% if @character.creation? %>
-      <div class="control-group">
-        <%= f.label :race_id, 'Species', :class => 'control-label' %>
-        <div class="controls">
-          <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
+        <div class="control-group">
+          <%= f.label :race_id, 'Species', :class => 'control-label' %>
+          <div class="controls">
+            <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
+          </div>
         </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :career_id, :class => 'control-label' %>
-        <div class="controls">
-          <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"}, :class => 'input-block-level') %>
+        <div class="control-group">
+          <%= f.label :career_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"},   :class => 'input-block-level') %>
+          </div>
         </div>
-      </div>
+        <% unless @character.new_record? %>
+          <div class="control-group">
+            <%= f.label :class_skills, "Select #{if @character.race.name == 'Droid' then 6 else 4 end} career skills to add a free rank to:", :class => :label %>
+            <% @character.career.skills.each do |class_skill| %>
+              <div class="controls">
+                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_career_skill_rank[]" type="checkbox" <%= if @career_free_rank.include? class_skill.id then "checked=checked" end %>>
+
+                <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
+                <br />
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
       <div class="control-group" style="margin-bottom: 0px;">
         <%= f.label :gender, :class => 'control-label' %>

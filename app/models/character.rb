@@ -41,6 +41,7 @@ class Character < ActiveRecord::Base
   has_many :talents, :through => :character_talents#, :order => "name"
 
   has_many :character_bonus_talents, :dependent => :destroy
+  has_many :character_starting_skill_ranks, :dependent => :destroy
 
   belongs_to :race
   belongs_to :career
@@ -51,6 +52,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_obligations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
+  accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
 
   default_scope { order('name ASC') }
 

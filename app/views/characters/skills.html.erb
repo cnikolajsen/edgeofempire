@@ -27,12 +27,20 @@
         <td>
           <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
         </td>
-        <% race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first %>
-        <% if race_skill.nil? %>
-          <td><%= skill_fields.select :ranks, (0..5) %></td>
-        <% else %>
-          <td><%= skill_fields.select :ranks, (race_skill.ranks..5) %></td>
-        <% end %>
+        <% 
+          race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first
+          career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id).first 
+          skill_minimum = 0
+          unless race_skill.nil?
+            skill_minimum += 1
+          end
+          unless career_free_rank.nil?
+            skill_minimum += 1
+          end
+
+          skill_maximun = if @character.creation? then 2 else 5 end
+        %>
+        <td><%= skill_fields.select :ranks, (skill_minimum..skill_maximun) %></td>
       </tr>
     <% end %>
   <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131128094917) do
+ActiveRecord::Schema.define(version: 20131201060923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(version: 20131128094917) do
     t.integer  "campaign_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "armor_attachments", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "hard_points"
+    t.integer  "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "armors", force: true do |t|
@@ -129,6 +138,14 @@ ActiveRecord::Schema.define(version: 20131128094917) do
     t.integer  "ranks"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "character_starting_skill_ranks", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "skill_id"
+    t.string   "granted_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "character_talents", force: true do |t|
