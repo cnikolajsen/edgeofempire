@@ -7,6 +7,17 @@ ActiveAdmin.register Race do
   
   config.sort_order = "name_asc"
 
+  index do |weapon|
+    column :name
+    column :brawn
+    column :agility
+    column :cunning
+    column :presence
+    column :intellect
+    column :willpower
+    default_actions
+  end
+
   form do |f|
     f.inputs "Species Details" do
       f.input :name
