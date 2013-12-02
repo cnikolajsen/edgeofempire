@@ -29,10 +29,16 @@ module CharactersHelper
       career_skill_ids << skill.skill_id
     end
 
+    character_specializations = Array.new
+    character_specializations << @character.specialization_1
+    character_specializations << @character.specialization_2
+    character_specializations << @character.specialization_3
     # Then add bonus career skills ids from specializations.
     @character.career.talent_trees.each do |tt|
-      tt.talent_tree_career_skills.each do |skill|
-        career_skill_ids << skill.skill_id
+      if character_specializations.include? tt.id
+        tt.talent_tree_career_skills.each do |skill|
+          career_skill_ids << skill.skill_id
+        end
       end
     end
 

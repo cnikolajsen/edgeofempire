@@ -126,6 +126,7 @@
   <div class="well well-small">
     <h5>Select Specializations</h5>
     <%= form_for @character do |specializations_form| %>
+      <%= hidden_field_tag 'update_specializations', 'true' %>
       <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}, :class => 'input-block-level') %>
       <% unless @character.specialization_1.nil? %>
         <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}, :class => 'input-block-level') %>

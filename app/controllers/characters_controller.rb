@@ -388,6 +388,22 @@ class CharactersController < ApplicationController
       @character_unarmed.save
     end
 
+    # Update specializations.
+    if !params[:update_specializations].nil?
+      active_specializations = Array.new
+      # Clean up character talents for specializations no longer selected.
+      unless params[:character][:specialization_1].blank?
+        active_specializations << params[:character][:specialization_1]
+      end
+      unless params[:character][:specialization_2].blank?
+        active_specializations << params[:character][:specialization_2]
+      end
+      unless params[:character][:specialization_3].blank?
+        active_specializations << params[:character][:specialization_3]
+      end
+      CharacterTalent.where(:character_id => @character.id).where.not(talent_tree_id: active_specializations).delete_all
+    end
+
     # Update talents.
     if !params[:update_talents].nil?
       @talent_trees = Array.new
