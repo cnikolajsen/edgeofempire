@@ -298,7 +298,7 @@ class CharactersController < ApplicationController
       @career_free_rank << career_skill.skill_id
     end
 
-    @title = "#{@character.name} | #{@title}"
+    @title = "#{@character.name} | Edit"
     @character_page = 'basics'
   end
 
@@ -508,6 +508,7 @@ class CharactersController < ApplicationController
   def skills
     @character_page = 'skills'
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | Skills"
     @character_state = character_state(@character)
   end
 
@@ -515,6 +516,7 @@ class CharactersController < ApplicationController
     @character_page = 'talents'
     @character = Character.find(params[:id])
     @character_state = character_state(@character)
+    @title = "#{@character.name} | Talents"
 
     @talent_trees = Array.new
     unless @character.specialization_1.nil?
@@ -531,6 +533,7 @@ class CharactersController < ApplicationController
   def armor
     @character_page = 'armor'
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | Armor"
 
     if !@character.character_armor.nil?
       @armor = Armor.find_by_id(@character.character_armor.armor_id)
@@ -540,11 +543,13 @@ class CharactersController < ApplicationController
   def weapons
     @character_page = 'weapons'
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | Weapons"
   end
 
   def equipment
     @character_page = 'gear'
     @character = Character.find(params[:id])
+    @title = "#{@character.name} | Equipment"
   end
 
   def set_activate
