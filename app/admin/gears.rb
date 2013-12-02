@@ -3,7 +3,15 @@ ActiveAdmin.register Gear do
  
   menu :label => "Gear", :parent => "Equipment"
 
-  config.sort_order = "name_asc"
+  config.per_page = 50
+
+  index do |armor|
+    column :name
+    column :encumbrance
+    column :rarity
+    column :price
+    default_actions
+  end
 
   controller do
      def create

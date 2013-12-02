@@ -5,6 +5,15 @@ ActiveAdmin.register Obligation do
 
   config.sort_order = "id_asc"
 
+  config.per_page = 50
+
+  index do |obligation|
+    column :range
+    column :name
+    column :description
+    default_actions
+  end
+
   controller do
      def create
        create! do |format|

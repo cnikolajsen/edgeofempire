@@ -6,7 +6,7 @@ ActiveAdmin.register Weapon do
   menu :label => "Weapons", :parent => "Equipment"
 
   config.sort_order = "name_asc"
-  config.per_page = 10
+  config.per_page = 50
 
   index do |weapon|
     column :name

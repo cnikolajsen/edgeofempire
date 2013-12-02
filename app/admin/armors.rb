@@ -5,6 +5,18 @@ ActiveAdmin.register Armor do
   menu :label => "Armor", :parent => "Equipment"
 
   config.sort_order = "name_asc"
+  config.per_page = 50
+
+  index do |armor|
+    column :name
+    column :defense
+    column :soak
+    column :encumbrance
+    column :hard_points
+    column :rarity
+    column :price
+    default_actions
+  end
 
   controller do
     def create
