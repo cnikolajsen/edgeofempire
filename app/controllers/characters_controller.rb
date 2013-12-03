@@ -374,7 +374,7 @@ class CharactersController < ApplicationController
     # Save career skills to add a free rank to.
     unless params[:free_career_skill_rank].nil?
       params[:free_career_skill_rank].each do |skill_id|
-        @career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'career').first_or_create
+        CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'career').first_or_create
       end
     end
 
@@ -394,6 +394,8 @@ class CharactersController < ApplicationController
       # Clean up character talents for specializations no longer selected.
       unless params[:character][:specialization_1].blank?
         active_specializations << params[:character][:specialization_1]
+      else
+        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
       end
       unless params[:character][:specialization_2].blank?
         active_specializations << params[:character][:specialization_2]
@@ -415,6 +417,13 @@ class CharactersController < ApplicationController
       end
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
+      end
+      logger.warn(params[:free_specialization_skill_rank])
+      # Save career skills to add a free rank to.
+      unless params[:free_specialization_skill_rank].nil?
+        params[:free_specialization_skill_rank].each do |skill_id|
+          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'specialization').first_or_create
+        end
       end
 
       @talent_trees.each do |tree|
@@ -521,6 +530,11 @@ class CharactersController < ApplicationController
     @talent_trees = Array.new
     unless @character.specialization_1.nil?
       @talent_trees << TalentTree.find_by_id(@character.specialization_1)
+
+      @specialization_free_rank = Array.new()
+      CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').each do |career_skill|
+        @specialization_free_rank << career_skill.skill_id
+      end
     end
     unless @character.specialization_2.nil?
       @talent_trees << TalentTree.find_by_id(@character.specialization_2)

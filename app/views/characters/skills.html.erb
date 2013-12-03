@@ -29,12 +29,16 @@
         </td>
         <% 
           race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first
-          career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id).first 
+          career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').first
+          specialization_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').first
           skill_minimum = 0
           unless race_skill.nil?
             skill_minimum += 1
           end
           unless career_free_rank.nil?
+            skill_minimum += 1
+          end
+          unless specialization_free_rank.nil?
             skill_minimum += 1
           end
 
