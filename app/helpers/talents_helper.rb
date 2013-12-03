@@ -34,6 +34,14 @@ module TalentsHelper
     @return
   end
 
+  def talent_parser_feralstrength(count)
+    @return = {}
+    @return[:melee_damage_bonus] = count
+    @return[:brawl_damage_bonus] = count
+
+    @return
+  end
+
   def talent_parser_forcerating(count)
     @return = {}
     @return[:force_rating] = count

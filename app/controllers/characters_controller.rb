@@ -192,14 +192,34 @@ class CharactersController < ApplicationController
           character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, cw.weapon.skill.id)
           ranks = character_skill_ranks.first.ranks
 
-          if cw.weapon.name == 'Unarmed'
+          if cw.weapon.skill.name == 'Brawl'
             cw.weapon.damage = @character.brawn
 
-            # Trandoshans have claws.
-            if @character.race.name == 'Trandoshan'
-              cw.weapon.name = 'Claws'
-              cw.weapon.damage = @character.brawn + 1
-              cw.weapon.crit = 3
+            if cw.weapon.name == 'Unarmed'
+              # Trandoshans have claws.
+              if @character.race.name == 'Trandoshan'
+                cw.weapon.name = 'Claws'
+                cw.weapon.damage += 1
+                cw.weapon.crit = 3
+              end
+            end
+
+            talent_alterations.each do |talent_id, stat|
+              stat.each do |type, value|
+                if type == :brawl_damage_bonus
+                  cw.weapon.damage += value['count']
+                end
+              end
+            end
+          end
+
+          if cw.weapon.skill.name == 'Melee'
+            talent_alterations.each do |talent_id, stat|
+              stat.each do |type, value|
+                if type == :melee_damage_bonus
+                  cw.weapon.damage += value['count']
+                end
+              end
             end
           end
 
@@ -225,7 +245,7 @@ class CharactersController < ApplicationController
     talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
         if type == :soak
-          @soak += value
+          @soak += value['count']
         end
       end
     end
@@ -446,6 +466,8 @@ class CharactersController < ApplicationController
                 end
               end
               @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
+            else
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
             end
           end
         end
