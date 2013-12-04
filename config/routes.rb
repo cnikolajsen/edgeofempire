@@ -61,6 +61,8 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
+  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 

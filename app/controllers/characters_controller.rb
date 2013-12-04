@@ -438,7 +438,7 @@ class CharactersController < ApplicationController
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
-      logger.warn(params[:free_specialization_skill_rank])
+
       # Save career skills to add a free rank to.
       unless params[:free_specialization_skill_rank].nil?
         params[:free_specialization_skill_rank].each do |skill_id|
@@ -564,6 +564,15 @@ class CharactersController < ApplicationController
     unless @character.specialization_3.nil?
       @talent_trees << TalentTree.find_by_id(@character.specialization_3)
     end
+  end
+
+  def untrain_specialization
+    @character = Character.find(params[:id])
+    specialization = TalentTree.find(params[:spec_id])
+    @character["specialization_#{params[:spec_num]}".to_sym] = nil
+    @character.save
+    CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
+    redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
 
   def armor
