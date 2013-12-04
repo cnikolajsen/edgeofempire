@@ -408,24 +408,6 @@ class CharactersController < ApplicationController
       @character_unarmed.save
     end
 
-    # Update specializations.
-    if !params[:update_specializations].nil?
-      active_specializations = Array.new
-      # Clean up character talents for specializations no longer selected.
-      unless params[:character][:specialization_1].blank?
-        active_specializations << params[:character][:specialization_1]
-      else
-        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
-      end
-      unless params[:character][:specialization_2].blank?
-        active_specializations << params[:character][:specialization_2]
-      end
-      unless params[:character][:specialization_3].blank?
-        active_specializations << params[:character][:specialization_3]
-      end
-      CharacterTalent.where(:character_id => @character.id).where.not(talent_tree_id: active_specializations).delete_all
-    end
-
     # Update talents.
     if !params[:update_talents].nil?
       @talent_trees = Array.new
@@ -439,7 +421,7 @@ class CharactersController < ApplicationController
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
       end
 
-      # Save career skills to add a free rank to.
+      # Save specialization skills to add a free rank to.
       unless params[:free_specialization_skill_rank].nil?
         params[:free_specialization_skill_rank].each do |skill_id|
           CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'specialization').first_or_create
@@ -572,6 +554,9 @@ class CharactersController < ApplicationController
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
     CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
+    if params[:spec_num] == 1
+      CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
+    end
     redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
 
