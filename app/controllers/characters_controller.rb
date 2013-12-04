@@ -43,7 +43,7 @@ class CharactersController < ApplicationController
     unless @character.character_talents.empty?
       @character.character_talents.each do |talent_tree|
         talent_tree.attributes.each do |key, value|
-          
+
           if key.match(/talent_[\d]_[\d]$/) and !value.nil?
             if @talents.has_key?(value) && !talent_tree["#{key}_options"].nil?
               @talents[value]['count'] = @talents[value]['count'] + 1
@@ -76,7 +76,7 @@ class CharactersController < ApplicationController
         end
       end
     end
-    
+
     character_bonus_talents = CharacterBonusTalent.where(:character_id => @character.id)
     unless character_bonus_talents.empty?
       character_bonus_talents.each do |bt|
@@ -344,10 +344,21 @@ class CharactersController < ApplicationController
       if @character.save
 
         Skill.where(true).each do |skill|
+          race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first
+
           @character_skill = CharacterSkill.new()
           @character_skill.character_id = @character.id
           @character_skill.ranks = 0
+          @character_skill.free_ranks_career = 0
+          @character_skill.free_ranks_specialization = 0
+          @character_skill.free_ranks_race = 0
           @character_skill.skill_id = skill.id
+
+          unless race_skill.nil?
+            @character_skill.free_ranks_race = race_skill.ranks
+            @character_skill.ranks = race_skill.ranks
+          end
+
           @character_skill.save
         end
 
@@ -393,8 +404,24 @@ class CharactersController < ApplicationController
 
     # Save career skills to add a free rank to.
     unless params[:free_career_skill_rank].nil?
-      params[:free_career_skill_rank].each do |skill_id|
-        CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'career').first_or_create
+      @character.career.skills.each do |skill|
+        if params[:free_career_skill_rank].include? skill.id.to_s
+          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').first_or_create
+          character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+          if character_skill.free_ranks_career == 0 or character_skill.free_ranks_career.blank?
+            character_skill.free_ranks_career = 1
+            character_skill.ranks += 1
+            character_skill.save
+          end
+        else
+          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').delete_all
+          character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+          unless character_skill.free_ranks_career.blank? or character_skill.free_ranks_career == 0
+            character_skill.free_ranks_career -= 1
+            character_skill.ranks -= 1
+            character_skill.save
+          end
+        end
       end
     end
 
@@ -423,8 +450,25 @@ class CharactersController < ApplicationController
 
       # Save specialization skills to add a free rank to.
       unless params[:free_specialization_skill_rank].nil?
-        params[:free_specialization_skill_rank].each do |skill_id|
-          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill_id, :granted_by => 'specialization').first_or_create
+        specialization_skills = TalentTree.find_by_id(@character.specialization_1).skills
+        specialization_skills.each do |skill|
+          if params[:free_specialization_skill_rank].include? skill.id.to_s
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').first_or_create
+            character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+            if character_skill.free_ranks_specialization == 0 or character_skill.free_ranks_specialization.blank?
+              character_skill.free_ranks_specialization = 1
+              character_skill.ranks += 1
+              character_skill.save
+            end
+          else
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').delete_all
+            character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+            unless character_skill.free_ranks_specialization.blank? or character_skill.free_ranks_specialization == 0
+              character_skill.free_ranks_specialization -= 1
+              character_skill.ranks -= 1
+              character_skill.save
+            end
+          end
         end
       end
 
@@ -480,7 +524,7 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.update_attributes(character_params)
-        if @character.race_id_changed? 
+        if @character.race_id_changed?
           format.html { redirect_to @character, notice: 'Race was changed.' }
         elsif !params[:destination].nil?
           if params[:destination] == 'gear'
@@ -635,8 +679,8 @@ class CharactersController < ApplicationController
     # This is not quite right, but for some reason I don't have the character
     # parameter when saving character talents...
     unless params[:character].nil?
-      
-      params.require(:character).permit( 
+
+      params.require(:character).permit(
         :age,
         :agility,
         :brawn,
