@@ -3,10 +3,7 @@
   <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human %></h1>
 </div>
 <div class="row-fluid">
-  <div class="span9">
+  <div class="span12">
     <%= render :partial => 'form' %>
-  </div>
-  <div class="span3 well">
-    Some information about character creation.
   </div>
 </div>
