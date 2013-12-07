@@ -1,5 +1,5 @@
 ActiveAdmin.register Career do
-  permit_params :name, :description,
+  permit_params :name, :description, :image_url,
     career_skills_attributes: [ :id, :career_id, :skill_id, :_destroy ]
 
   index do
@@ -9,16 +9,17 @@ ActiveAdmin.register Career do
     end
     default_actions
   end
-  
+
   form do |f|
     f.inputs "Career Details" do
       f.input :name
       f.input :description
-      
+      f.input :image_url
+
       f.has_many :career_skills do |skill_form|
         skill_form.input :skill_id, :as => :select, :collection => Skill.all
       end
-      
+
     end
     f.actions
   end

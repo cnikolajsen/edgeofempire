@@ -1,8 +1,8 @@
 ActiveAdmin.register Weapon do
   permit_params :crit, :damage, :description, :name, :price, :skill_id, :range,
-    :encumbrance, :rarity, :hard_points,
+    :encumbrance, :rarity, :hard_points, :image_url,
     weapon_quality_ranks_attributes: [ :id, :ranks, :weapon_id, :weapon_quality_id ]
-  
+
   menu :label => "Weapons", :parent => "Equipment"
 
   config.sort_order = "name_asc"
@@ -33,10 +33,11 @@ ActiveAdmin.register Weapon do
     f.inputs "Weapon Details" do
       f.input :name
       f.input :description
+      f.input :image_url
       f.input :skill_id, :as => :select, :collection => Skill.where("name IN ('Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)')")
       f.input :damage
-      f.input :crit  
-      f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Engaged']  
+      f.input :crit
+      f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Engaged']
       f.input :price
       f.input :encumbrance
       f.input :hard_points
@@ -45,11 +46,11 @@ ActiveAdmin.register Weapon do
         wqr_form.input :weapon_quality_id, :as => :select, :collection => WeaponQuality.all
         wqr_form.input :ranks
       end
-      
+
     end
     f.actions
   end
-  
+
   controller do
      def create
        create! do |format|

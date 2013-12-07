@@ -1,10 +1,10 @@
 ActiveAdmin.register Race do
   permit_params :agility, :brawn, :cunning, :description, :intellect, :name,
     :presence, :special_ability, :starting_experience, :strain_threshold,
-    :willpower, :wound_threshold,
-    race_skills_attributes: [ :id, :race_id, :skill_id, :ranks ], 
+    :willpower, :wound_threshold, :image_url,
+    race_skills_attributes: [ :id, :race_id, :skill_id, :ranks ],
     race_talents_attributes: [ :id, :race_id, :talent_id, :ranks ]
-  
+
   config.sort_order = "name_asc"
 
   index do |weapon|
@@ -22,8 +22,9 @@ ActiveAdmin.register Race do
     f.inputs "Species Details" do
       f.input :name
       f.input :description
+      f.input :image_url
       f.input :wound_threshold
-      f.input :strain_threshold  
+      f.input :strain_threshold
       f.input :starting_experience
       f.input :special_ability
       f.input :brawn

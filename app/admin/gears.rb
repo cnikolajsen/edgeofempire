@@ -1,6 +1,6 @@
 ActiveAdmin.register Gear do
-  permit_params :description, :name, :price, :encumbrance, :rarity
- 
+  permit_params :description, :name, :price, :encumbrance, :rarity, :image_url
+
   menu :label => "Gear", :parent => "Equipment"
 
   config.per_page = 50

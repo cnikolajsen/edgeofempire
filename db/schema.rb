@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131204200439) do
+ActiveRecord::Schema.define(version: 20131207070654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.integer  "encumbrance"
     t.integer  "hard_points"
     t.integer  "rarity"
+    t.string   "image_url"
   end
 
   create_table "campaigns", force: true do |t|
@@ -99,6 +100,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "image_url"
   end
 
   create_table "character_armors", force: true do |t|
@@ -234,6 +236,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.integer  "specialization_2"
     t.integer  "specialization_3"
     t.string   "aasm_state"
+    t.string   "image_url"
   end
 
   create_table "gears", force: true do |t|
@@ -244,6 +247,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.datetime "updated_at",  null: false
     t.integer  "encumbrance"
     t.integer  "rarity"
+    t.string   "image_url"
   end
 
   create_table "obligations", force: true do |t|
@@ -285,6 +289,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.integer  "willpower"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.string   "image_url"
   end
 
   create_table "skills", force: true do |t|
@@ -435,6 +440,7 @@ ActiveRecord::Schema.define(version: 20131204200439) do
     t.integer  "encumbrance"
     t.integer  "hard_points"
     t.integer  "rarity"
+    t.string   "image_url"
   end
 
 end
