@@ -36,7 +36,6 @@
         <% unless @character.new_record? %>
           <div class="control-group">
             <%= f.label :class_skills, "Select #{if @character.race.name == 'Droid' then 6 else 4 end} career skills to add a free rank to:", :class => :label %>
-            <%= @career_free_rank.inspect %>
             <% @character.career.skills.each do |class_skill| %>
               <div class="controls">
                 <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_career_skill_rank[]" type="checkbox" <%= if @career_free_rank.include? class_skill.id then "checked=checked" end %>>

@@ -382,7 +382,7 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
 
     # Handle resets due to career change.
-    if params[:character][:career_id] != params[:original_career_id]
+    if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
       CharacterSkill.where(:character_id => @character.id).each do |skill|
         skill.ranks -= skill.free_ranks_career
@@ -392,7 +392,7 @@ class CharactersController < ApplicationController
     end
 
     # Handle resets due to species change.
-    if params[:character][:race_id] != params[:original_race_id]
+    if !params[:original_race_id].nil? and params[:character][:race_id] != params[:original_race_id]
       # Delete all free skill ranks granted by the old species.
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'race').delete_all
       CharacterSkill.where(:character_id => @character.id).each do |skill|
@@ -578,9 +578,9 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.update_attributes(character_params)
-        if @character.race_id != params[:original_race_id]
+        if !params[:original_race_id].nil? and @character.race_id != params[:original_race_id]
           format.html { redirect_to edit_character_path(@character), notice: 'Race was changed. Adjust your characteristics.' }
-        elsif @character.career_id != params[:original_career_id]
+        elsif !params[:original_career_id].nil? and @character.career_id != params[:original_career_id]
           format.html { redirect_to edit_character_path(@character), notice: 'Career was changed. Adjust your free skill ranks.' }
         elsif !params[:destination].nil?
           if params[:destination] == 'gear'

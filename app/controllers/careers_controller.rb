@@ -22,7 +22,7 @@ class CareersController < ApplicationController
 
   def set_up
     @page = 'careers'
-    @title = "Carerrs"
+    @title = "Careers"
   end
-  
+
 end

@@ -7,18 +7,15 @@
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @careers.each do |career| %>
       <tr>
-        <td><%= career.name %></td>
-        <td><%= career.description %></td>
         <td>
-          <%= link_to t('.show', :default => t("helpers.links.show")),
-                      career_path(career), :class => 'btn btn-mini' %>
+          <%= link_to career.name, career_path(career), :class => '' %>
         </td>
+        <td><%= career.description.html_safe %></td>
       </tr>
     <% end %>
   </tbody>
