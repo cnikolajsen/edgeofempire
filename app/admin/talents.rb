@@ -14,7 +14,7 @@ ActiveAdmin.register Talent do
     column :ranked
     default_actions
   end
-  
+
   show do
     div do
       strong "Activation: #{talent.activation}"

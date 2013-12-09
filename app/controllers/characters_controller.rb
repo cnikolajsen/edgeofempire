@@ -381,6 +381,11 @@ class CharactersController < ApplicationController
   def update
     @character = Character.find(params[:id])
 
+    @career_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
+      @career_free_rank << career_skill.skill_id
+    end
+
     # Handle resets due to career change.
     if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
