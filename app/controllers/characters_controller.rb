@@ -265,6 +265,20 @@ class CharactersController < ApplicationController
       race_alterations = send("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
     end
 
+    # Show error messages if some combination of species and career/specialization free ranks go above 2 during character creation.
+    if @character.creation?
+      skill_check_error = ''
+      @character.character_skills.each do |character_skill|
+        if character_skill.ranks > 2
+          skill_check_error += "You have more than the allowed 2 ranks at character creation in the skill #{character_skill.skill.name}. Check your free bonus ranks from either species, career, or specialization. And do this before continuing to the skill selection page.<br />"
+        end
+      end
+
+      unless skill_check_error.blank?
+        flash.now[:error] = skill_check_error
+      end
+    end
+
     # Specific for the PDF.
     pdf_vars = Hash.new
     if params[:format] == 'pdf'
@@ -355,6 +369,7 @@ class CharactersController < ApplicationController
           @character_skill.skill_id = skill.id
 
           unless race_skill.nil?
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
             @character_skill.free_ranks_race = race_skill.ranks
             @character_skill.ranks = race_skill.ranks
           end
@@ -430,7 +445,7 @@ class CharactersController < ApplicationController
       # Save free skill ranks granted by the new species.
       new_race.skills.each do |skill|
         race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => new_race.id).first
-        CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'race').first_or_create
+        CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
         character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
         if character_skill.free_ranks_race == 0 or character_skill.free_ranks_race.blank?
           character_skill.free_ranks_race = race_skill.ranks
@@ -465,7 +480,7 @@ class CharactersController < ApplicationController
     unless params[:free_career_skill_rank].nil?
       @character.career.skills.each do |skill|
         if params[:free_career_skill_rank].include? skill.id.to_s
-          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').first_or_create
+          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career', :ranks => 1).first_or_create
           character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
           if character_skill.free_ranks_career == 0 or character_skill.free_ranks_career.blank?
             character_skill.free_ranks_career = 1
@@ -512,7 +527,7 @@ class CharactersController < ApplicationController
         specialization_skills = TalentTree.find_by_id(@character.specialization_1).skills
         specialization_skills.each do |skill|
           if params[:free_specialization_skill_rank].include? skill.id.to_s
-            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').first_or_create
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization', :ranks => 1).first_or_create
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
             if character_skill.free_ranks_specialization == 0 or character_skill.free_ranks_specialization.blank?
               character_skill.free_ranks_specialization = 1

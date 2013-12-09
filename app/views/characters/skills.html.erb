@@ -27,23 +27,10 @@
         <td>
           <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
         </td>
-        <% 
-          #race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => @character.race.id).first
-          #career_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').first
-          #specialization_free_rank = CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').first
+        <%
           skill_minimum = 0
-          logger.warn(skill_fields.object.inspect)
           skill_minimum = skill_fields.object.free_ranks_career + skill_fields.object.free_ranks_specialization + skill_fields.object.free_ranks_race
-          #unless race_skill.nil?
-          #  skill_minimum += 1
-          #end
-          #unless career_free_rank.nil?
-          #  skill_minimum += 1
-          #end
-          #unless specialization_free_rank.nil?
-          #  skill_minimum += 1
-          #end
-          #skill_maximum = if @character.creation? then 2 else 5 end
+
           if @character.creation?
             skill_maximum = 2
           else
@@ -51,11 +38,6 @@
           end
           if skill_minimum > skill_maximum
             skill_minimum = skill_maximum
-          end      
-
-          if skill_fields.object.skill_id == 25
-            logger.warn(skill_minimum)
-            logger.warn(skill_maximum)
           end
         %>
         <td><%= skill_fields.select :ranks, (skill_minimum..skill_maximum) %></td>
