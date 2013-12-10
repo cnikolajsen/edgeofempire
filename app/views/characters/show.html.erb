@@ -88,14 +88,26 @@
       <tr>
         <td colspan="3"><strong>Attacks:</strong> <ul><li><%= @attacks.join('</li><li>').html_safe %></li></ul></td>
       </tr>
-  
+
     </tbody>
   </table>
   </div>
-  <div class="well well-small span3">
+  <div class="well well-small span3 <% if @experience_cost[:total_cost] > @character.experience %>alert-error<% end %>">
     <h5>Experience Points</h5>
-    Earned: <%= @character.experience %><br />
-    Spent:
+    <table>
+      <tr>
+        <th>Earned:</th><th>Spent:</th>
+      </tr>
+      <tr>
+        <td><%= @character.experience %></td>
+        <td><%= @experience_cost[:total_cost] %></td>
+      </tr>
+    </table>
+    <% if @experience_cost[:total_cost] > @character.experience %>
+      <p style="font-weight: bold">You have spent more experience than you have available!</p>
+    <% elsif @experience_cost[:total_cost] < @character.experience %>
+      <p style="font-weight: bold">You still have <%= @character.experience - @experience_cost[:total_cost] %> experience to spend.</p>
+    <% end %>
   </div>
   <div class="well well-small span3">
     <h5>Credits</h5>
@@ -124,6 +136,6 @@
     <%= link_to "<i class='icon-wrench'></i> Creation".html_safe, creation_character_path(@character), :class => 'btn btn-warning' if @character.may_set_create? && !@character.creation? %>
     <%= link_to "<i class='icon-ok'></i> Activate".html_safe, activate_character_path(@character), :class => 'btn btn-success' if @character.may_activate? %>
     <%= link_to "<i class='icon-fire'></i> Retire".html_safe, retire_character_path(@character), :class => 'btn btn-inverse' if @character.may_retire? %>
-    
+
   </div>
 </div>

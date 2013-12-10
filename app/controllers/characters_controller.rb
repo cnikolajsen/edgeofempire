@@ -10,7 +10,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.find_all_by_user_id(current_user.id)
+    @characters = Character.where(:user_id => current_user.id).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -278,6 +278,8 @@ class CharactersController < ApplicationController
         flash.now[:error] = skill_check_error
       end
     end
+
+    @experience_cost = character_experience_cost(@character)
 
     # Specific for the PDF.
     pdf_vars = Hash.new
@@ -678,6 +680,63 @@ class CharactersController < ApplicationController
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
     end
     redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
+  end
+
+  def character_experience_cost(character)
+    exp_cost = Hash.new
+    exp_cost[:brawn] = 0
+    exp_cost[:agility] = 0
+    exp_cost[:cunning] = 0
+    exp_cost[:willpower] = 0
+    exp_cost[:intellect] = 0
+    exp_cost[:presence] = 0
+    #exp_cost[:total_cost] = 0
+
+    character.brawn.times do |time|
+      exp_cost[:brawn] += (10 * (time + 1)).to_i
+    end
+    @character.race.brawn.times do |time|
+      exp_cost[:brawn] -= (10 * (time + 1)).to_i
+    end
+
+    character.agility.times do |time|
+      exp_cost[:agility] += 10 * (time + 1)
+    end
+    @character.race.agility.times do |time|
+      exp_cost[:agility] -= 10 * (time + 1)
+    end
+#
+    character.cunning.times do |time|
+      exp_cost[:cunning] += 10 * (time + 1)
+    end
+    @character.race.cunning.times do |time|
+      exp_cost[:cunning] -= 10 * (time + 1)
+    end
+#
+    character.willpower.times do |time|
+      exp_cost[:willpower] += 10 * (time + 1)
+    end
+    @character.race.willpower.times do |time|
+      exp_cost[:willpower] -= 10 * (time + 1)
+    end
+#
+    character.intellect.times do |time|
+      exp_cost[:intellect] += 10 * (time + 1)
+    end
+    @character.race.intellect.times do |time|
+      exp_cost[:intellect] -= 10 * (time + 1)
+    end
+#
+    character.presence.times do |time|
+      exp_cost[:presence] += 10 * (time + 1)
+    end
+    @character.race.presence.times do |time|
+      exp_cost[:presence] -= 10 * (time + 1)
+    end
+
+    exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
+
+    exp_cost
   end
 
   def armor
