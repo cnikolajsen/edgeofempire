@@ -265,18 +265,34 @@ class CharactersController < ApplicationController
       race_alterations = send("special_ability_#{@character.race.name.gsub(' ', '').gsub("'", "").downcase}")
     end
 
+    error_messages = ''
     # Show error messages if some combination of species and career/specialization free ranks go above 2 during character creation.
     if @character.creation?
-      skill_check_error = ''
       @character.character_skills.each do |character_skill|
         if character_skill.ranks > 2
-          skill_check_error += "You have more than the allowed 2 ranks at character creation in the skill #{character_skill.skill.name}. Check your free bonus ranks from either species, career, or specialization. And do this before continuing to the skill selection page.<br />"
+          error_messages += "<i class='icon-thumbs-down'> You have more than the allowed <strong>2 ranks</strong> at character creation in the skill <strong>#{character_skill.skill.name}</strong>. Check your free bonus ranks from either species, career, or specialization.</i><br />"
         end
       end
+    end
 
-      unless skill_check_error.blank?
-        flash.now[:error] = skill_check_error
-      end
+    # Validate free ranks from career selection.
+    career_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
+      career_free_rank << career_skill.skill_id
+    end
+
+    if @character.career.name == 'Droid'
+      career_free_rank_max_count = 6
+    else
+      career_free_rank_max_count = 4
+    end
+
+    if career_free_rank.count > career_free_rank_max_count
+      error_messages += "<i class='icon-thumbs-down'> You have selected too many career skills to place a free rank in. The #{@character.race.name} species allows you to choose <strong>#{career_free_rank_max_count} skills</strong>, but you have chosen <strong>#{career_free_rank.count} skills</strong>.</i><br />"
+    end
+
+    unless error_messages.blank?
+      flash.now[:error] = error_messages
     end
 
     @experience_cost = character_experience_cost(@character)
