@@ -14,7 +14,7 @@ gem 'ransack',             github: 'ernie/ransack'
 gem 'activeadmin',         github: 'gregbell/active_admin'
 gem 'formtastic',          github: 'justinfrench/formtastic'
 
-# Use SCSS for stylesheets	
+# Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
 #gem "meta_search",    '>= 1.1.3'
@@ -30,14 +30,11 @@ gem "aasm", "~> 3.0.19"
 # Delete tis when migrated to strong parameters.
 #gem 'protected_attributes'
 
-group :development, :test do
-  #gem 'sqlite3'
-  gem 'quiet_assets', :group => :development
-end
+#gem 'sqlite3', group: [:development, :test]
+gem 'quiet_assets', group: [:development, :test]
+#gem "log_buddy", "~> 0.7.0", group: [:development, :test]
 
-group :production, :staging do
-  gem "pg"
-end
+gem "pg", group: [:production, :staging]
 gem 'rails_12factor', group: :production
 
 # Use Uglifier as compressor for JavaScript assets
@@ -73,4 +70,4 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]

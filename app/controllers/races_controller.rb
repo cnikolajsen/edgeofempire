@@ -2,7 +2,7 @@ class RacesController < ApplicationController
   before_filter :set_up
 
   def index
-    @races = Race.find(:all, :order => :name)
+    @races = Race.where(:true)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -23,5 +23,5 @@ class RacesController < ApplicationController
     @page = 'races'
     @title = "Races"
   end
-  
+
 end
