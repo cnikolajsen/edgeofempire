@@ -91,16 +91,18 @@
     </tbody>
   </table>
   </div>
-  <div class="well well-small span3 <% if @experience_cost[:total_cost] > @character.experience %>alert-error<% end %>">
+  <div class="well well-small span3 <% if @experience_cost[:total_cost] > @character.experience %>alert-error<% end %> experience-cost">
     <h4>Experience Points</h4>
-    <table>
-      <tr>
-        <th>Earned:</th><th>Spent:</th>
-      </tr>
-      <tr>
-        <td><%= @character.experience %> xp</td>
-        <td><%= @experience_cost[:total_cost] %> xp</td>
-      </tr>
+    <table class="table table-striped exp-table">
+      <tbody>
+        <tr>
+          <th>Earned:</th><th>Spent:</th>
+        </tr>
+        <tr>
+          <td><%= @character.experience %> xp</td>
+          <td><%= @experience_cost[:total_cost] %> xp</td>
+        </tr>
+      </tbody>
     </table>
     <% if @experience_cost[:total_cost] > @character.experience %>
       <p style="font-weight: bold"><i class='icon-thumbs-down'> You have spent more experience than you have available!</i></p>

@@ -7,7 +7,7 @@ class Character < ActiveRecord::Base
     state :retired
 
     event :activate do
-      transitions :from => :creation, :to => :active
+      transitions :from => :creation, :to => :active, :guard => :experience_exceeded?
     end
 
     event :retire do
@@ -19,6 +19,17 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def experience_exceeded?
+    cost = ApplicationController.helpers.character_experience_cost(id)
+
+    if cost[:total_cost] > experience
+      false
+    else
+      true
+    end
+
+  end
+
   validates_presence_of :name
   validates_presence_of :race_id
   validates_presence_of :career_id
@@ -26,19 +37,18 @@ class Character < ActiveRecord::Base
   belongs_to :user
 
   has_many :character_skills, :dependent => :destroy
-  has_many :skills, :through => :character_skills#, :order => "name"
+  has_many :skills, :through => :character_skills
   has_one :character_armor, :dependent => :destroy
   has_one :armors, :through => :character_armor
-  #has_one :armors, :through => :character_armor, conditions: { order: 'name' }
   has_many :character_weapons, :dependent => :destroy
-  has_many :weapons, :through => :character_weapons#, :order => "name"
+  has_many :weapons, :through => :character_weapons
   has_many :character_gears, :dependent => :destroy
-  has_many :gears, :through => :character_gears#, :order => "name"
+  has_many :gears, :through => :character_gears
   has_many :character_obligations, :dependent => :destroy
-  has_many :obligations, :through => :character_obligations#, :order => "name"
+  has_many :obligations, :through => :character_obligations
 
   has_many :character_talents, :dependent => :destroy
-  has_many :talents, :through => :character_talents#, :order => "name"
+  has_many :talents, :through => :character_talents
 
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
