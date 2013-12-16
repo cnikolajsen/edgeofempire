@@ -15,11 +15,12 @@ gem 'activeadmin',         github: 'gregbell/active_admin'
 gem 'formtastic',          github: 'justinfrench/formtastic'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+#gem 'sass-rails', '~> 4.0.0'
 
 #gem "meta_search",    '>= 1.1.3'
-gem "less-rails", "~> 2.4.2"
-gem 'twitter-bootstrap-rails', '2.2.8'
+#gem "less-rails", "~> 2.4.2"
+#gem 'twitter-bootstrap-rails', '2.2.8'
+gem 'foundation-rails'
 gem "therubyracer", "~> 0.12.0"
 gem "seed_dump", "~> 2.0.0"
 gem 'thin'

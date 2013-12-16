@@ -178,7 +178,7 @@ module CharactersHelper
 
             talent = Talent.find(value)
             specialization = TalentTree.find(talent_tree.talent_tree_id)
-            exp_cost["#{specialization.name}_#{talent.name}_#{talents[value]['count'].r_to_i}".to_sym] = talent_cost
+            exp_cost["#{specialization.name}_#{talent.name}_#{talents[value]['count']}".to_sym] = talent_cost
           end
         end
       end
