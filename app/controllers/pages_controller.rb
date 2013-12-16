@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_filter :authenticate_user!, :only => [:species, :careers]
-  
+
   require 'builder'
 
   def home
@@ -53,7 +53,7 @@ class PagesController < ApplicationController
       "Something about Bothan names."
     ]
     @step_one = "This is how we roll."
-    
+
     respond_to do |format|
       format.html {render :template => '/pages/naming_tables'}
     end
@@ -67,7 +67,7 @@ class PagesController < ApplicationController
     @description = Hash.new()
     @description = []
     @step_one = ""
-    
+
     respond_to do |format|
       format.html {render :template => '/pages/naming_tables'}
     end
@@ -119,7 +119,7 @@ class PagesController < ApplicationController
     @parent_page = "misc"
     @page = "rules_summary"
     @title = "Rules Summary"
-    
+
     @rules = Array.new
     @rules << {
       :id => "thecoremechanics",
@@ -127,9 +127,9 @@ class PagesController < ApplicationController
       :text => "<p>The core mechanic of the game revolves around the <strong>skill check</strong>. The skill check determines whether specific actions performed by characters <strong>succeed</strong> or <strong>fail</strong>, as well as any consequences that may accompany that success or failure.</p>
       <ol><li>The player rolls a <strong>pool of dice</strong> for the skill being tested, along with the dice corresponding to the <strong>difficulty</strong> of the task, plus any situational dice.</li>
       <li>Cancel out all the opposed symbols. If at least one net Success symbol [success] remains, the task succeeds.</li>
-      <li>Uncanceled Threat [threat] or Advantage [advantage] influence the overall success or failure with positve or negative consequences or side effects.</li></ol"
+      <li>Uncanceled Threat [threat] or Advantage [advantage] influence the overall success or failure with positve or negative consequences or side effects.</li></ol>"
     }
-    
+
     @rules << {
       :id => "thedice",
       :title => "The Dice",
@@ -139,105 +139,195 @@ class PagesController < ApplicationController
         <div class='dice-txt'>
           <h4>Ability Dice [ability]</h4>
           Ability dice form the basis of most dice pools rolled by the players. They represent the character's innate ability and characteristics when attempting a skill check.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Proficiency Dice [proficiency]</h4>
           Proficiency dice stand for the character's training and experience and represents how skillful he is at the task at hand.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Boost Dice [boost]</h4>
           Boost dice are added for positive situational conditions such as having allied assistance, ample time, or the rght equipment to complete a task.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Difficulty Dice [difficulty]</h4>
           Difficulty dice represent the inherent challenge or complexity of a particular task a character is attempting.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Challenge Dice [challenge]</h4>
           Challenge dice indicate particularly daunting challenges posed by trained, elite, or prepared opponents.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Setback Dice [setback]</h4>
           Setback dice are often used to represent relatively minor effects that impair or hinder a character, such as poor lighting, obstructive terrain, or insufficient resources.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Force Dice [force]</h4>
           Force dice represent the light and dark sides of the Force. In dice pools, ther are generally used only for characters with Force Sensitivity or under special circumstances such as the <a href='#sabacc'>sabacc rules</a>.
+        </div>
       </div>
       <div class='dicebox'>
         <div class='dice-img'></div>
         <div class='dice-txt'>
           <h4>Ten-sided Dice</h4>
           <strong>d100:</strong> Percentile rolls are used to generate numbers for finding results on tables, such as the severity of a Critical Injury effect.
+        </div>
       </div>
       "
     }
-    
+
     @rules << {
       :id => 'dicesymbols',
       :title => 'Dice Symbols & Results',
       :text => "<p>The dice used in <strong>Edge of the Empire</strong> feature a number of unique symbols used to determine success and failure as well as additional context and consequences during task resolution. These symbols allow the players to directly contribute to the story, generating memorable details and describing cinematic actions over the course of their adventures. Below are the definitions of the different symbols, with descriptions of how they may be used in play.</p>
       <h4>Advantage [advantage]</h4>
-      Advantage [advantage] indicates a positive consequence or side effect that occurs regardless of a task's success or failure, such as slicing a computer in far less time than anticipated or finding an opening during a firefight to duck back into cover. Players typically decide how they want to spend Advantage [advantage] they generate. <strong>Each Advantage [advantage] is cancelled by one Threat [threat].</strong>
+      <p>Advantage [advantage] indicates a positive consequence or side effect that occurs regardless of a task's success or failure, such as slicing a computer in far less time than anticipated or finding an opening during a firefight to duck back into cover. Players typically decide how they want to spend Advantage [advantage] they generate. <strong>Each Advantage [advantage] is cancelled by one Threat [threat].</strong></p>
       <h4>Success [success]</h4>
-      If at least one Success [success] remains after all cancellations have been made, the skill check succeeds. The more Success [success] symbols remains, the greater the magnitude of success. During a combat check, each extra success generates one extra damage. <strong>Each Success [success] is cancelled by one Failure [failure].</strong>
+      <p>If at least one Success [success] remains after all cancellations have been made, the skill check succeeds. The more Success [success] symbols remains, the greater the magnitude of success. During a combat check, each extra success generates one extra damage. <strong>Each Success [success] is cancelled by one Failure [failure].</strong></p>
       <h4>Triumph [triumph]</h4>
-      A Triumph [triumph] counts as one Sucesss [success] symbol. In addition, it indicates a spectacularly positive consquence or side effect that occurs regardless of the task's success or failure, such as a Critical Injury with a successful combat check.
+      <p>A Triumph [triumph] counts as one Sucesss [success] symbol. In addition, it indicates a spectacularly positive consquence or side effect that occurs regardless of the task's success or failure, such as a Critical Injury with a successful combat check.</p>
       <h4>Threat [threat]</h4>
-      Threat [threat] indicates negative consequences or side effects that occur regardless of a task's success or failure, e.g. taking longer to slice a computer terminal or leaving an opening in a firefight that allows an enemy to duck into cover. The GM decides how to spend Threat [threat] generated by the PCs. <strong>Each Threat [threat] cancelled by one Advantage [advantage].</strong>
+      <p>Threat [threat] indicates negative consequences or side effects that occur regardless of a task's success or failure, e.g. taking longer to slice a computer terminal or leaving an opening in a firefight that allows an enemy to duck into cover. The GM decides how to spend Threat [threat] generated by the PCs. <strong>Each Threat [threat] cancelled by one Advantage [advantage].</strong></p>
       <h4>Failure [failure]</h4>
-      <strong>Each Failure [failure] cancels one Success [success]. Multiple net Failure [failure] symbols do not influence the magnitude of the failure.</strong>
+      <p><strong>Each Failure [failure] cancels one Success [success].</strong> Multiple net Failure [failure] symbols do not influence the magnitude of the failure.</p>
       <h4>Despair [despair]</h4>
-      Despair [despair] counts as one Failure [failure] symbol, in addition to a spectacularly negative consequence that occurs regardless of the task's success or failure."
+      <p>Despair [despair] counts as one Failure [failure] symbol, in addition to a spectacularly negative consequence that occurs regardless of the task's success or failure.</p>"
     }
-    
+
     @rules << {
       :id => "upgradingdice",
       :title => "Upgrading Dice",
-      :text => "<p></p>"
+      :text => "<p>
+        Some game effects call for specific dice in a dice pool to be upgraded. When an Ability die [ability] is upgraded, it is replaced by a Proficiency die [proficiency]. When a Difficulty die [difficulty] is upgraded, it is
+        replaced by a Challenge die [challenge]. First, the player determines how many dice are to be upgraded; then he removes that number of Ability dice [ability] or Difficulty dice [difficulty] from the pool and replaces
+        them with an equal number of Proficiency dice [proficiency] or Challenge dice [challenge].
+      </p>
+      <p>
+        If there are more upgrades to be made than Ability dice [ability] or Difficulty die [difficulty] available in the dice pool, additional upgrades are applied in this order:
+        <ul>
+          <li>1. Another Ability die [ability] or Difficulty die [difficulty] is added to the dice pool. If there are still additional upgrades, proceed to Step 2.</li>
+          <li>2. That Ability die [ability] or Difficulty die [difficulty] is removed, then replaced with a Proficiency die [proficiency] or Challenge die [challenge], respectively. If there are still additional upgrades, repeat Step 1.</li>
+        </ul>
+      </p>"
     }
-    
+
     @rules << {
       :id => 'downgradingdice',
       :title => 'Downgrading Dice',
-      :text => "<p></p>"
+      :text => "<p>Other game effects decrease the difficulty of, or downgrade, a skill check. When a Proficiency die º is downgraded, it is replaced by an Ability die π. When a Challenge die º is downgraded, it becomes
+        a Difficulty die π. First, the player determines how many dice are to be downgraded, then he removes that number of Proficiency dice º or Challenge dice º from the pool and replaces them with an equal
+        number of Ability dice π or Difficulty dice π. Once all downgradeable dice are in their downgraded form, any excess downgrades are ignored.</p>"
     }
-    
+
     @rules << {
       :id => 'buildingdicepool',
       :title => 'Building the Dice Pool',
-      :text => "<p></p>"
+      :text => "<p>To determine a skill check’s dice pool, the player
+compares the character’s skill rank and characteristic
+rating. The higher of the two values determines
+how many Ability dice π are added to the
+skill check’s dice pool. Then the player upgrades
+a number of those Ability dice π into Proficiency
+dice º based on the lower of the two values.
+For instance, a character with Intellect 3 and
+Medicine 1 would have a dice pool of º π π. A
+character with Brawn 2 and Brawl 3 would have a
+dice pool of º º π. If a character has no ranks
+in a skill, he simply rolls a number of Ability dice
+π equal to the related characteristic (found in parentheses
+after each skill).</p>"
     }
-    
+
     @rules << {
       :id => "difficulty",
       :title => "Difficulty",
-      :text => "<p></p>"
+      :text => "<p>The player adds a number of Difficulty dice π to his dice
+pool according to the difficulty of the task he is attempting,
+at the discretion of the Game Master. In addition to
+the six different levels of complexity shown here, GMs
+should remember to add Boost dice ∫ and Setback dice
+∫ for additional bonuses and complications arising from
+the environment or circumstances. GMs can also upgrade
+Difficulty dice π into Challenge dice º to denote skilled
+opponents or when Despair μ should be a possibility.
+SIMPLE TASKS (-)
+Routine tasks for which the outcome is rarely in question.
+Usually not rolled unless the GM wishes to determine Initiative
+(see page 8), know the possible magnitude of
+success, or indicate the possibility of complications.
+EASY TASKS (π)
+Picking a primitive lock, tending to minor cuts and
+bruises, finding food and shelter on a lush planet, interacting
+with minions and other faceless NPCs, shooting
+a target at short range.
+AVERAGE TASKS (π π)
+Picking a typical lock, stitching up a small wound, finding
+food and shelter on a temperate planet, interacting
+with rivals and typical NPCs, shooting a target at medium
+range or trying to strike a target while engaged.
+HARD TASKS (π π π)
+Picking a complicated lock, setting broken bones or suturing
+large wounds, finding food and shelter on a rugged
+planet, interacting with charismatic or important
+NPCs, shooting a target at long range.
+DAUNTING TASKS (π π π π)
+Picking an exceptionally sophisticated lock, performing
+surgery or grafting implants, finding food and shelter on
+a barren desert planet, interacting with NPC movers and
+shakers or nemeses, shooting a target at extreme range.
+FORMIDABLE TASKS (π π π π π)
+Picking a lock with no comprehensible mechanism, cloning
+a new body, finding food and shelter on a planet without
+an atmosphere, interacting with heroes and faction leaders.</p>"
     }
-    
+
     @rules << {
       :id => "characteristics",
       :title => "Characteristics",
-      :text => "<p></p>"
-    }    
+      :text => "<p>In Edge of the Empire a character’s intrinsic abilities are
+defined by six characteristics.
+AGILITY
+The Agility characteristic measures a character’s manual
+dexterity, hand-eye coordination, and body control.
+BRAWN
+A character’s Brawn represents a blend of brute power,
+strength, and overall toughness.
+CUNNING
+Cunning reflects how crafty, devious, subtle, and creative
+a character can be.
+INTELLECT
+The Intellect characteristic measures a character’s intelligence,
+education, and ability to reason and rationalize.
+PRESENCE
+A character’s Presence characteristic is a measure of his
+moxie, charisma, confidence, and force of personality.
+WILLPOWER
+The Willpower characteristic reflects a character’s discipline,
+self-control, mental fortitude, and faith.</p>"
+    }
 
-    @rules << {
-      :id => "combat",
-      :title => "Combat",
-      :text => "<p></p>"
-    }    
-    
+    #@rules << {
+    #  :id => "combat",
+    #  :title => "Combat",
+    #  :text => "<p></p>"
+    #}
+
   end
 end
