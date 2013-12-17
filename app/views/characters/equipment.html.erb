@@ -11,7 +11,7 @@
 <%= form_for @character do |character_form| %>
    <div id="character-inventory" class="row">
     <div class="medium-12 columns">
-      <ul class="small-block-grid-5">
+      <ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-5" id="item-grid">
         <%= character_form.fields_for :character_gears do |item| %>
           <%= render 'character_gear_fields', :f => item %>
         <% end %>
@@ -20,7 +20,7 @@
   </div>
   <div class="row">
     <div class="medium-12 columns">
-      <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#character-inventory ul.small-block-grid-5", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'button success small' %>
+      <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#item-grid", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'button success small' %>
       <%= hidden_field_tag 'destination', 'gear' %>
       <%= character_form.submit 'Save equipment', :class => 'button small' %>
     </div>
