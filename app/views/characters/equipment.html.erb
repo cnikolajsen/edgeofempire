@@ -1,20 +1,28 @@
-<%- model_class = Character -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => "Edit Equipment for #{@character.name}" %></h1>
+<div class="row">
+  <div class="medium-12 columns">
+    <h1><%=t '.title', :default => "Manage equipment for #{@character.name}" %></h1>
+  </div>
 </div>
-<%= render :partial => 'character_edit_menu' %>
-
+<div class="row">
+  <div class="medium-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
 <%= form_for @character do |character_form| %>
-<fieldset id="character-inventory"> 
-    <ul> 
-      <%= character_form.fields_for :character_gears do |item| %> 
-        <%= render 'character_gear_fields', :f => item %> 
-      <% end %> 
-    </ul> 
-    <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#character-inventory ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'btn btn-warning' %> 
-  </fieldset>
-  <div class="form-actions">
-    <%= hidden_field_tag 'destination', 'gear' %>
-    <%= character_form.submit nil, :class => 'btn btn-primary' %>
+   <div id="character-inventory" class="row">
+    <div class="medium-12 columns">
+      <ul class="small-block-grid-5">
+        <%= character_form.fields_for :character_gears do |item| %>
+          <%= render 'character_gear_fields', :f => item %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="medium-12 columns">
+      <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#character-inventory ul.small-block-grid-5", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'button success small' %>
+      <%= hidden_field_tag 'destination', 'gear' %>
+      <%= character_form.submit 'Save equipment', :class => 'button small' %>
+    </div>
   </div>
 <% end %>
