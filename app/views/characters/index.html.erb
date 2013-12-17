@@ -23,11 +23,11 @@
             <td><%= link_to character.name, character_path(character) %></td>
             <td>
               <% if character.creation? %>
-                  <span class="label label-warning" title="Character creation mode"><i class='icon-wrench'></i></span>
+                  <span class="label" title="Character creation mode"><i class='icon-wrench'></i></span>
               <% elsif character.active? %>
-                  <span class="label label-success" title="Active character"><i class='icon-ok'></i></span>
+                  <span class="label success" title="Active character"><i class='icon-ok'></i></span>
               <% elsif character.retired? %>
-                  <span class="label label-inverse" title="Character retired"><i class='icon-fire'></i></span>
+                  <span class="label secondary" title="Character retired"><i class='icon-fire'></i></span>
               <% end %>
             </td>
             <td><%= character.race.name %></td>

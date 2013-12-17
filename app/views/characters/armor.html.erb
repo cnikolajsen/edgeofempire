@@ -1,34 +1,38 @@
 <%- model_class = CharacterArmor -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => "Edit equipped armor for #{@character.name}" %></h1>
-</div>
-<%= render :partial => 'character_edit_menu' %>
-
-<%= form_for @character do |character_form| %>
-  <%= character_form.fields_for :character_armor do |armor_fields| %>
-    <%#= character_form.label :armor_id, 'Select armor', :class => 'control-label' %>
-    <%= armor_fields.select :armor_id, Armor.where(:true).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
-    <%#= collection_select(:character_armor, :armor_id, Armor.all, :id, :name) %>
-    <div class="control-group">
-      <%= armor_fields.text_area :description, :class => 'text_area input-block-level' %>
-      <span class="help-block">Write your own description of your armor, such as make and model, color, or anything else that might make this armor personal.</span>
-    </div>
-  <% end %>
-
-  <% unless @armor.nil? %>
-    <div class="well">
-      <h3><%= @armor.name %></h3>
-      <span class="label">Defense <span class="label label-info"><%= @armor.defense %></span></span>
-      <span class="label">Soak <span class="label label-info"><%= @armor.soak %></span></span>
-      <span class="label">Price  <span class="label label-info"><%= @armor.price %></span></span><br />
-       <%= @armor.description %>
-    </div>
-  <% end %>
-  
-  <div class="form-actions">
-    <%= hidden_field_tag 'destination', 'armor' %>
-    <%= character_form.submit nil, :class => 'btn btn-primary' %>
+<div class="row">
+  <div class="medium-12 columns">
+    <h1><%=t '.title', :default => "Edit equipped armor for #{@character.name}" %></h1>
   </div>
-<% end %>
+</div>
+<div class="row">
+  <div class="medium-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row">
+  <div class="medium-6 columns">
+    <%= form_for @character do |character_form| %>
+      <%= character_form.fields_for :character_armor do |armor_fields| %>
+        <%= armor_fields.select :armor_id, Armor.where(:true).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
+        <%= armor_fields.text_area :description, :class => 'text_area input-block-level' %>
+        <p class="panel">Write your own description of your armor, such as make and model, color, or anything else that might make this armor personal.</p>
+      <% end %>
+      <%= hidden_field_tag 'destination', 'armor' %>
+      <%= character_form.submit 'Save armor', :class => 'button' %>
+    <% end %>
+  </div>
+  <div class="medium-6 columns">
+    <% unless @armor.nil? %>
+      <ul class="pricing-table">
+        <li class="title"><%= @armor.name %></li>
+        <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @armor.price %></li>
+        <li class="description"><%= @armor.description %></li>
+        <li class="description"><%= @character.character_armor.description %></li>
+        <li class="bullet-item">Soak: <%= @armor.soak %></li>
+        <li class="bullet-item">Defense: <%= @armor.defense %></li>
+        <li class="cta-button"><a class="button" href="#">Add attachment</a></li>
+      </ul>
+    <% end %>
 
-
+  </div>
+</div>

@@ -1,9 +1,9 @@
-// 
+//
 // FOUNDATION SETTINGS
 //
 
 // Uncomment to use rem-calc() in your settings
-// @import "foundation/functions";
+@import "foundation/functions";
 
 // $experimental: true;
 
@@ -19,7 +19,7 @@
 // $base-line-height: 150%;
 
 // This is the default html and body font-size for the base rem value.
-// $rem-base: 16px;
+$rem-base: 16px;
 
 // We use this to control whether or not CSS classes come through in the gem files.
 // $include-html-classes: true;
@@ -640,45 +640,45 @@
 
 // We use these to control the title styles
 // $price-title-bg: #333;
-// $price-title-padding: rem-calc(15 20);
+$price-title-padding: rem-calc(10 20);
 // $price-title-align: center;
 // $price-title-color: #eee;
 // $price-title-weight: normal;
-// $price-title-size: rem-calc(16);
+$price-title-size: rem-calc(14);
 // $price-title-font-family: $body-font-family;
 
 // We use these to control the price styles
 // $price-money-bg: #f6f6f6  ;
-// $price-money-padding: rem-calc(15 20);
+$price-money-padding: rem-calc(10 20);
 // $price-money-align: center;
 // $price-money-color: #333;
 // $price-money-weight: normal;
-// $price-money-size: rem-calc(32);
+$price-money-size: rem-calc(20);
 // $price-money-font-family: $body-font-family;
 
 
 // We use these to control the description styles
 // $price-bg: #fff;
 // $price-desc-color: #777;
-// $price-desc-padding: rem-calc(15);
-// $price-desc-align: center;
-// $price-desc-font-size: rem-calc(12);
+$price-desc-padding: rem-calc(5);
+$price-desc-align: left;
+$price-desc-font-size: rem-calc(12);
 // $price-desc-weight: normal;
 // $price-desc-line-height: 1.4;
 // $price-desc-bottom-border: dotted 1px #ddd;
 
 // We use these to control the list item styles
 // $price-item-color: #333;
-// $price-item-padding: rem-calc(15);
+$price-item-padding: rem-calc(5);
 // $price-item-align: center;
-// $price-item-font-size: rem-calc(14);
+$price-item-font-size: rem-calc(12);
 // $price-item-weight: normal;
 // $price-item-bottom-border: dotted 1px #ddd;
 
 // We use these to control the CTA area styles
 // $price-cta-bg: #fff;
 // $price-cta-align: center;
-// $price-cta-padding: rem-calc(20 20 0);
+$price-cta-padding: rem-calc(10 20 0);
 
 // Progress Meters
 
@@ -990,4 +990,33 @@
 // Sticky Class
 // $topbar-sticky-class: ".sticky";
 // $topbar-arrows: true; //Set false to remove the triangle icon from the menu item
+
+.credit-icon {
+  vertical-align: inherit;
+  width: 11px;
+}
+
+#character-weapons {
+  ul {
+    margin-left: 0;
+    margin-bottom: 0px;
+  }
+  li {
+    list-style: none;
+  }
+}
+
+.pricing-table {
+  textarea {
+    font-size: 12px;
+    margin-bottom: 0px;
+  }
+  .cta-button {
+    a {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+
 @import 'foundation';
