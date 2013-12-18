@@ -1018,5 +1018,43 @@ $price-cta-padding: rem-calc(10 20 0);
   }
 }
 
+.talent-tree {
+  .link-down {
+    height: 20px;
+  }
+  .link-down-active {
+    background: url(talent-link-vert.png) no-repeat center bottom;
+    height: 20px;
+    background-size: 30px 100%;
+  }
+
+  .link-right {
+    background: url(talent-link-hor.png) no-repeat right center;
+    background-size: 50% 30px;
+  }
+  .link-left {
+    background: url(talent-link-hor.png) no-repeat left center;
+    background-size: 50% 30px;
+  }
+  .link-right.link-left {
+    background-size: 100% 30px;
+  }
+
+  .panel, .panel.callout {
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 10px;
+    /*min-height: 200px;*/
+    height: 150px;
+    overflow: hidden;
+  }
+
+  li {
+    padding-bottom: 0 !important;
+  }
+}
+
+
 
 @import 'foundation';

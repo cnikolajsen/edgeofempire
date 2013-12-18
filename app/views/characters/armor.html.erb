@@ -1,16 +1,16 @@
 <%- model_class = CharacterArmor -%>
 <div class="row">
-  <div class="medium-12 columns">
+  <div class="small-12 columns">
     <h1><%=t '.title', :default => "Edit equipped armor for #{@character.name}" %></h1>
   </div>
 </div>
 <div class="row">
-  <div class="medium-12 columns">
+  <div class="small-12 columns">
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
 <div class="row">
-  <div class="medium-6 columns">
+  <div class="small-12 medium-6 columns">
     <%= form_for @character do |character_form| %>
       <%= character_form.fields_for :character_armor do |armor_fields| %>
         <%= armor_fields.select :armor_id, Armor.where(:true).collect  {|armor| [armor.name, armor.id]}, {:prompt => "Select Armor"} %>
@@ -21,7 +21,7 @@
       <%= character_form.submit 'Save armor', :class => 'button' %>
     <% end %>
   </div>
-  <div class="medium-6 columns">
+  <div class="small-12 medium-6 columns">
     <% unless @armor.nil? %>
       <ul class="pricing-table">
         <li class="title"><%= @armor.name %></li>

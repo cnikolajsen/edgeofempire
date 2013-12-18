@@ -1,16 +1,16 @@
 <div class="row">
-  <div class="medium-12 columns">
+  <div class="small-12 columns">
     <h1><%=t '.title', :default => "Manage equipped weapons for #{@character.name}" %></h1>
   </div>
 </div>
 <div class="row">
-  <div class="medium-12 columns">
+  <div class="small-12 columns">
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
 <%= form_for @character do |character_form| %>
    <div id="character-weapons" class="row">
-    <div class="medium-12 columns">
+    <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid">
         <%= character_form.fields_for :character_weapons do |weapon| %>
           <%= render 'character_weapon_fields', :f => weapon %>
@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="medium-12 columns">
+    <div class="small-12 columns">
       <%= link_to_add_association 'Add new weapon', character_form, :character_weapons, 'data-association-insertion-node' => "#item-grid", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|weapon| weapon.build_weapon; weapon }, :class => 'button success small' %>
       <%= hidden_field_tag 'destination', 'weapons' %>
       <%= character_form.submit 'Save weapons', :class => 'button small' %>
