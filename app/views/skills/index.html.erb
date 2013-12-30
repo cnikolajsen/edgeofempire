@@ -1,27 +1,14 @@
 <%- model_class = Skill -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  </div>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:characteristic) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @skills.each do |skill| %>
-      <tr>
-        <td><%= skill.name %></td>
-        <td><%= skill.characteristic %></td>
-        <td><%= skill.description %></td>
-        <td>
-          <%= link_to t('.show', :default => t("helpers.links.show")),
-                      skill_path(skill), :class => 'btn btn-mini' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% @skills.each do |skill| %>
+  <div class="row">
+    <div class="small-12 columns panel">
+      <h4><%= skill.name %> <small>[<%= skill.characteristic %>]</small></h4>
+      <p><%= skill.description.html_safe %></p>
+    </div>
+  </div>
+<% end -%>
