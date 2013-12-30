@@ -28,59 +28,7 @@
 
       <div class="panel" id="species-info">
         <% unless @character.race_id.blank? %>
-          <h4><%= @character.race.name %></h4>
-          <%= @character.race.description.gsub("\n", "<br />").html_safe %>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Brawn</th>
-                <th>Cunning</th>
-                <th>Presence</th>
-                <th>Agility</th>
-                <th>Intellect</th>
-                <th>Willpower</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><%= @character.race.brawn %></td>
-                <td><%= @character.race.cunning %></td>
-                <td><%= @character.race.presence %></td>
-                <td><%= @character.race.agility %></td>
-                <td><%= @character.race.intellect %></td>
-                <td><%= @character.race.willpower %></td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Wound Threshold</th>
-                <th>Strain Threshold</th>
-                <th>Starting Experience</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><%= @character.race.wound_threshold %></td>
-                <td><%= @character.race.strain_threshold %></td>
-                <td><%= @character.race.starting_experience %></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h4>Special Ability</h4>
-          <% unless @character.race.skills.nil? %>
-            <% @character.race.race_skills.each do |race_skill| %>
-              <p>Add <%= pluralize(race_skill.ranks, 'rank') %> in <%= race_skill.skill.name %> skill.</p>
-            <% end %>
-          <% end %>
-          <% unless @character.race.talents.nil? %>
-            <% @character.race.race_talents.each do |race_talent| %>
-              <p>Add <%= pluralize(race_talent.ranks, 'rank') %> in <%= race_talent.talent.name %> talent.</p>
-            <% end %>
-          <% end %>
-          <p><%= text_replace_tokens(@character.race.special_ability.gsub("\n", "<br />")).html_safe %></p>
+          <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
         <% end %>
       </div>
 

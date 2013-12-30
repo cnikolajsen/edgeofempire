@@ -15,5 +15,6 @@
 //= require foundation
 //= require turbolinks
 //= require cocoon
+//= require ./characters/species
 
 $(function(){ $(document).foundation(); });

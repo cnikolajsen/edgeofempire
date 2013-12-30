@@ -1,0 +1,55 @@
+<% if changed %><h5 style="color: red;">* Species changed, remember to save</h5><% end %>
+<h4><%= species.name %></h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Brawn</th>
+      <th>Cunning</th>
+      <th>Presence</th>
+      <th>Agility</th>
+      <th>Intellect</th>
+      <th>Willpower</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= species.brawn %></td>
+      <td><%= species.cunning %></td>
+      <td><%= species.presence %></td>
+      <td><%= species.agility %></td>
+      <td><%= species.intellect %></td>
+      <td><%= species.willpower %></td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Wound Threshold</th>
+      <th>Strain Threshold</th>
+      <th>Starting Experience</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= species.wound_threshold %></td>
+      <td><%= species.strain_threshold %></td>
+      <td><%= species.starting_experience %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Special Ability</h4>
+<% unless species.skills.nil? %>
+  <% species.race_skills.each do |race_skill| %>
+    <p>Add <%= pluralize(race_skill.ranks, 'rank') %> in <%= race_skill.skill.name %> skill.</p>
+  <% end %>
+<% end %>
+<% unless species.talents.nil? %>
+  <% species.race_talents.each do |race_talent| %>
+    <p>Add <%= pluralize(race_talent.ranks, 'rank') %> in <%= race_talent.talent.name %> talent.</p>
+  <% end %>
+<% end %>
+<p><%= text_replace_tokens(species.special_ability.gsub("\n", "<br />")).html_safe %></p>
+
+<p><%= species.description.gsub("\n", "<br />").html_safe %></p>

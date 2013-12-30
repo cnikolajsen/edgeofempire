@@ -769,6 +769,12 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def species_selection
+    @species = Race.find(params[:species_id])
+
+    render :partial => "species_info", :locals => { :species => @species, :changed => :true }
+  end
+
   def characteristics
     @character_menu = 'basics'
     @character_page = 'characteristics'
