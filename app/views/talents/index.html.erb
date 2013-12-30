@@ -5,10 +5,18 @@
   </div>
 </div>
 <div class="row">
+  <div class="small-3 columns">
+    <ul class="side-nav">
+      <% @talents.each do |talent| %>
+      <li><a href="#talent-<%= talent.id %>"><%= talent.name %></a></li>
+      <% end -%>
+    </ul>
+  </div>
   <div class="small-9 columns">
   <% @talents.each do |talent| %>
     <div class="row">
       <div class="small-12 columns panel">
+        <a name="talent-<%= talent.id %>"></a>
         <h4><%= talent.name %></h4>
         <strong>Activation:</strong> <%= talent.activation %><br  />
         <strong>Ranked:</strong> <%= talent.ranked? ? 'Yes' : 'No' %><br  />
@@ -29,12 +37,6 @@
       </div>
     </div>
   <% end -%>
-  <div class="small-3 columns">
-    <ul class="side-nav">
-      <li><a href="#">Link 1</a></li>
-      <li><a href="#">Link 2</a></li>
-      <li><a href="#">Link 3</a></li>
-      <li><a href="#">Link 4</a></li>
-    </ul>
   </div>
 </div>
+
