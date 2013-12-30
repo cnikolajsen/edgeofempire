@@ -1,0 +1,8 @@
+<li class="<% if talent_tree["talent_#{row}_#{column}_require_#{row}_#{column + 1}"] == 1 %>link-right<% end %> <% if talent_tree["talent_#{row}_#{column - 1}_require_#{row}_#{column}"] == 1 %>link-left<% end %>">
+  <% talent = Talent.find_by_id(talent_tree["talent_#{row}_#{column}"]) %>
+  <div class="panel radius talent-box <% if talent.activation.match(/^Active/) %>callout<% end %>">
+    <strong><%= talent.name %></strong><br />
+    <%= text_replace_tokens(talent.description) %>
+  </div>
+  <div class="link-down<% if talent_tree["talent_#{row + 1}_#{column}_require_#{row}_#{column}"] == 1 %>-active<% end %>"></div>
+</li>

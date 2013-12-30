@@ -1,53 +1,59 @@
-<%- model_class = CharacterSkill -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => "Edit skills for #{@character.name}" %></h1>
-</div>
-<% unless @character_state['state_message'].nil? %>
-  <div class="alert alert-<%= @character_state['state_alert_class'] %>">
-    <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "#{@character.name} - Skills" %></h1>
   </div>
-<% end %>
-
-<%= render :partial => 'character_edit_menu' %>
-
-<%= form_for @character do |character_form| %>
-<table>
-  <tr>
-    <th>Skills</th>
-    <th>Characteristic</th>
-    <th>Career?</th>
-    <th>Rank</th>
-  </tr>
-  <%= character_form.fields_for :character_skills do |skill_fields| %>
-    <% skill = Skill.find_by_id(skill_fields.object.skill_id) %>
-    <% unless skill.nil? %>
-      <tr>
-        <td><%= character_form.label :ranks, skill.name, :class => 'control-label' %></td>
-        <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
-        <td>
-          <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
-        </td>
-        <%
-          skill_minimum = 0
-          skill_minimum = skill_fields.object.free_ranks_career + skill_fields.object.free_ranks_specialization + skill_fields.object.free_ranks_race
-
-          if @character.creation?
-            skill_maximum = 2
-          else
-            skill_maximum = 5
-          end
-          if skill_minimum > skill_maximum
-            skill_minimum = skill_maximum
-          end
-        %>
-        <td><%= skill_fields.select :ranks, (skill_minimum..skill_maximum) %></td>
-      </tr>
-    <% end %>
-  <% end %>
-</table>
-<div class="form-actions">
-  <%= hidden_field_tag 'destination', 'skills' %>
-  <%= character_form.submit nil, :class => 'btn btn-primary' %>
 </div>
-<% end %>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= form_for @character do |character_form| %>
+      <table>
+        <tr>
+          <th>Skills</th>
+          <th>Characteristic</th>
+          <th>Career?</th>
+          <th>Rank</th>
+        </tr>
+        <%= character_form.fields_for :character_skills do |skill_fields| %>
+          <% skill = Skill.find_by_id(skill_fields.object.skill_id) %>
+          <% unless skill.nil? %>
+            <tr>
+              <td><%= character_form.label :ranks, skill.name, :class => 'control-label' %></td>
+              <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
+              <td>
+                <% unless @character.career.nil? -%>
+                  <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
+                <% end -%>
+              </td>
+              <%
+                skill_minimum = 0
+                unless @character.career.nil?
+                  skill_minimum = skill_fields.object.free_ranks_career + skill_fields.object.free_ranks_specialization +       skill_fields.object.free_ranks_race
+                end
 
+                if @character.creation?
+                  skill_maximum = 2
+                else
+                  skill_maximum = 5
+                end
+                if skill_minimum > skill_maximum
+                  skill_minimum = skill_maximum
+                end
+              %>
+              <td><%= skill_fields.select :ranks, (skill_minimum..skill_maximum) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+
+      <%= hidden_field_tag 'destination', 'skills' %>
+      <%= character_form.submit "Save skills", :class => 'button' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                characters_path, :class => 'button secondary' %>
+    <% end %>
+  </div>
+</div>

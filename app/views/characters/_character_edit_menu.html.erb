@@ -1,9 +1,62 @@
-  <ul class="nav nav-tabs">
-    <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", character_path(@character)  %></li>
-    <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Basics", edit_character_path(@character)  %></li>
-    <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", character_skills_url(:id => @character.id)   %></li>
-    <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Talents", character_talents_url(:id => @character.id)  %></li>
-    <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(:id => @character.id)   %></li>
-    <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(:id => @character.id)   %></li>
-    <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Equipment", character_gear_url(:id => @character.id)   %></li>
+<% unless @character_state.nil? or @character_state['state_message'].nil? %>
+  <div data-alert class="alert-box <%= @character_state['state_alert_class'] %> radius">
+    <%= @character_state['state_message'] %>
+  </div>
+<% end %>
+
+<nav class="top-bar" data-topbar data-options="is_hover: false">
+  <ul class="title-area">
+    <li class="name"><!-- Leave this empty --></li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
   </ul>
+  <section class="top-bar-section">
+    <!-- Left Nav Section -->
+    <ul class="left">
+      <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", character_path(@character) %></li>
+      <li class="<% if @character_menu == 'basics' %>active<% end %> has-dropdown">
+        <a href="#">Basics</a>
+        <ul class="dropdown">
+          <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></li>
+          <li<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></li>
+          <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></li>
+          <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></li>
+          <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></li>
+          <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></li>
+        </ul>
+      </li>
+      <li<% if @character_page == 'career' %> class="active"<% end %>><%= link_to "Career", character_career_url(@character) %></li>
+      <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", character_talents_url(@character) %></li>
+      <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", character_skills_url(@character) %></li>
+      <li class="has-dropdown">
+        <a href="#">Equipment</a>
+        <ul class="dropdown">
+          <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></li>
+          <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></li>
+          <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></li>
+        </ul>
+      </li>
+      <li><a href="#">Vehicles</a></li>
+    </ul>
+  </section>
+</nav>
+<% if @character_menu == 'basics' %>
+  <dl class="sub-nav">
+    <dt>Basics:</dt>
+    <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></dd>
+    <dd<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></dd>
+    <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></dd>
+    <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></dd>
+    <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></dd>
+    <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></dd>
+  </dl>
+<% elsif @character_menu == 'equipment' %>
+  <dl class="sub-nav">
+    <dt>Equipment:</dt>
+    <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></dd>
+    <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></dd>
+    <dd<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></dd>
+  </dl>
+<% else %>
+<br />
+<% end -%>
+<%= render :partial => 'layouts/flash' %>

@@ -1,29 +1,16 @@
 <%- model_class = Character -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => "Edit #{@character.name}" %></h1>
-
-  <% unless @character_state.nil? or @character_state['state_message'].nil? %>
-    <div class="alert alert-<%= @character_state['state_alert_class'] %>">
-      <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
-    </div>
-  <% end %>
+<div class="row">
+  <div class="medium-12 columns">
+    <h1>Edit <%= @character.name %></h1>
+  </div>
 </div>
-
-<div class="row-fluid">
-  <div class="span12">
+<div class="row">
+  <div class="medium-12 columns">
     <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row">
+  <div class="medium-12 columns">
     <%= render :partial => 'form' %>
   </div>
-  <!--
-  <div class="span3 well">
-    <% if @character.active? %>
-      Some information about spending experience points on active character.
-    <% elsif @character.creation? %>
-      <h5>Characteristics</h5>
-      You may spend starting experience to increase characteristics. This is the only time you can increase characteristics with experience points.<br /> You may not purchase characteristics above 5 during character creation.
-    <% elsif @character.retired? %>
-      This character has been retired and can not be modified.
-    <% end %>
-  </div>
--->
 </div>

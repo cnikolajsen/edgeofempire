@@ -1,176 +1,117 @@
-<%- model_class = CharacterTalent -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => "Edit talents for #{@character.name}" %></h1>
-</div>
-<% unless @character_state['state_message'].nil? %>
-  <div class="alert alert-<%= @character_state['state_alert_class'] %>">
-    <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "Edit talents for #{@character.name}" %></h1>
   </div>
-<% end %>
-
-<%= render :partial => 'character_edit_menu' %>
-<div class="row-fluid">
-<div class="span9">
-<%= form_for @character do |character_form| %>
-  <%= hidden_field_tag 'update_talents', 'true' %>
-
-  <% @talent_trees.each_with_index do |tree, i| %>
-    <% @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id) %>
-    <div class="well">
-      <strong><%= tree.name %></strong><br />
-      <% if i == 0 %>
-      <div class="control-group">
-        <%= character_form.label :class_skills, "Select #{if @character.race.name == 'Droid' then 3 else 2 end} career skills to add a free rank to:", :class => :label %>
-        <% tree.skills.each do |class_skill| %>
-          <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_specialization_skill_rank[]" type="checkbox" <%= if @specialization_free_rank.include? class_skill.id then "checked=checked" end %>>
-          <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
-        <% end %>
-      </div>
-      <% end %>
-      <%= tree.description.html_safe %>
-      <table class="table table-striped talent-tree">
-        <colgroup>
-          <col width="22%" />
-          <col width="4%" />
-          <col width="22%" />
-          <col width="4%" />
-          <col width="22%" />
-          <col width="4%" />
-          <col width="22%" />
-        </colgroup>
-        <tr>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 1} unless tree.talent_1_1.nil?  %>
-          <td></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 2} unless tree.talent_1_2.nil?  %>
-          <td></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 3} unless tree.talent_1_3.nil?  %>
-          <td></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 4} unless tree.talent_1_4.nil?  %>
-        </tr>
-        <tr>
-          <td class='vertical-link link-<%= tree.talent_2_1_require_1_1.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_2_2_require_1_2.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_2_3_require_1_3.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_2_4_require_1_4.to_s %>'></td>
-        </tr>
-        <tr>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 1} unless tree.talent_2_1.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_2_1_require_2_2.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 2} unless tree.talent_2_2.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_2_2_require_2_3.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 3} unless tree.talent_2_3.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_2_3_require_2_4.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 4} unless tree.talent_2_4.nil?  %>
-        </tr>
-        <tr>
-          <td class='vertical-link link-<%= tree.talent_3_1_require_2_1.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_3_2_require_2_2.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_3_3_require_2_3.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_3_4_require_2_4.to_s %>'></td>
-        </tr>
-        <tr>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 1} unless tree.talent_3_1.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_3_1_require_3_2.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 2} unless tree.talent_3_2.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_3_2_require_3_3.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 3} unless tree.talent_3_3.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_3_3_require_3_4.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 4} unless tree.talent_3_4.nil?  %>
-        </tr>
-        <tr>
-          <td class='vertical-link link-<%= tree.talent_4_1_require_3_1.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_4_2_require_3_2.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_4_3_require_3_3.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_4_4_require_3_4.to_s %>'></td>
-        </tr>
-        <tr>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 1} unless tree.talent_4_1.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_4_1_require_4_2.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 2} unless tree.talent_4_2.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_4_2_require_4_3.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 3} unless tree.talent_4_3.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_4_3_require_4_4.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 4} unless tree.talent_4_4.nil?  %>
-        </tr>
-        <tr>
-          <td class='vertical-link link-<%= tree.talent_5_1_require_4_1.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_5_2_require_4_2.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_5_3_require_4_3.to_s %>'></td>
-          <td></td>
-          <td class='vertical-link link-<%= tree.talent_5_4_require_4_4.to_s %>'></td>
-        </tr>
-        <tr>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 1} unless tree.talent_5_1.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_5_1_require_5_2.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 2 } unless tree.talent_5_2.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_5_2_require_5_3.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 3 } unless tree.talent_5_3.nil?  %>
-          <td class='horizontal-link link-<%= tree.talent_5_3_require_5_4.to_s %>'></td>
-          <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 4 } unless tree.talent_5_4.nil?  %>
-        </tr>
-      </table>
-    </div>
- <% end %>
-
-  <% unless @character.specialization_1.nil? %>
-    <div class="form-actions">
-      <%= hidden_field_tag 'destination', 'talents' %>
-      <%= character_form.submit nil, :class => 'btn btn-primary' %>
-    </div>
-  <% end %>
-<% end %>
 </div>
-<div class="span3">
-  <div class="well well-small">
-    <h5>Select Specializations</h5>
-    <ul>
-      <% unless @character.specialization_1.nil? %>
-        <% hide_spec_1_selctor = true %>
-        <li><%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? %></li>
-      <% end %>
-      <% unless @character.specialization_2.nil? %>
-        <% hide_spec_2_selctor = true %>
-        <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li>
-      <% end %>
-      <% unless @character.specialization_3.nil? %>
-        <% hide_spec_3_selctor = true %>
-        <li><%= TalentTree.where(:id => @character.specialization_3).first.name %> <%= link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain" %></li>
-      <% end %>
-    </ul>
-    <%= form_for @character do |specializations_form| %>
-      <%= hidden_field_tag 'update_specializations', 'true' %>
-      <% if hide_spec_1_selctor.nil? %>
-        <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select first specialization", :include_blank => true}, :class => 'input-block-level') %>
-      <% end %>
-      <% if hide_spec_2_selctor.nil? %>
-        <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select second specialization", :include_blank => true}, :class => 'input-block-level') %>
-      <% end %>
-      <% if hide_spec_3_selctor.nil? %>
-        <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Select third specialization", :include_blank => true}, :class => 'input-block-level') %>
-      <% end %>
-      <div class="form-actions">
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+
+<div class="row">
+<div class="small-12 medium-6 columns">
+    <div class="panel">
+      <h5>Select Specializations</h5>
+      <ul>
+        <% unless @character.specialization_1.nil? %>
+          <% hide_spec_1_selctor = true %>
+          <li><%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? %></li  >
+        <% end %>
+        <% unless @character.specialization_2.nil? %>
+          <% hide_spec_2_selctor = true %>
+          <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li  >
+        <% end %>
+        <% unless @character.specialization_3.nil? %>
+          <% hide_spec_3_selctor = true %>
+          <li><%= TalentTree.where(:id => @character.specialization_3).first.name %> <%= link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain" %></li>
+        <% end %>
+      </ul>
+      <%= form_for @character do |specializations_form| %>
+        <%= hidden_field_tag 'update_specializations', 'true' %>
+        <% if hide_spec_1_selctor.nil? %>
+          <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% end %>
+        <% if hide_spec_2_selctor.nil? %>
+          <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [tree.name, tree.id]}, {:prompt => "Second specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% end %>
+        <% if hide_spec_3_selctor.nil? %>
+          <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Third  specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% end %>
         <%= hidden_field_tag 'destination', 'talents' %>
-        <%= specializations_form.submit 'Save specializations', :class => 'btn btn-primary' %>
+        <%= specializations_form.submit 'Save specializations', :class => 'button small' %>
+      <% end %>
+    </div>
+  </div>
+  <div class="small-12 medium-6 columns">
+    <div class="panel">
+      <p style="font-size: 11px;">Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.</p>
+      <p style="font-size: 11px;">The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.</p>
+      <p style="font-size: 11px;">Purchasing an additional specialization within a character’s career costs ten times the total number of specializations he would possess with this new specialization. So a character with one specialization  could purchase a second career specialization for 20 experience. If he wished to purchase a third career specialization, it would cost 30 experience.</p>
+      <p style="font-size: 11px;">Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new  specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third   specialization that was also a non-career specialization would cost 40 experience.</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 medium-12 columns">
+    <%= form_for @character do |character_form| %>
+      <%= hidden_field_tag 'update_talents', 'true' %>
+      <% @talent_trees.each_with_index do |tree, i| %>
+        <% @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id) %>
+        <div class="row">
+          <div class="small-12 columns">
+            <strong><%= tree.name %></strong><br />
+            <% if i == 0 %>
+              <%= character_form.label :class_skills, "Select #{if @character.race.name == 'Droid' then 3 else 2 end} career skills to add a free rank to:", :class => :label %>
+              <% tree.skills.each do |class_skill| %>
+                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_specialization_skill_rank[]" type="checkbox" <%= if @specialization_free_rank.include? class_skill.id then "checked=checked" end %>>
+                <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 columns">
+            <%= tree.description.html_safe %>
+            <ul class="small-block-grid-4 talent-tree">
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 1} unless tree.talent_1_1.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 2} unless tree.talent_1_2.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 3} unless tree.talent_1_3.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 4} unless tree.talent_1_4.nil?  %>
+
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 1} unless tree.talent_2_1.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 2} unless tree.talent_2_2.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 3} unless tree.talent_2_3.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 4} unless tree.talent_2_4.nil?  %>
+
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 1} unless tree.talent_3_1.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 2} unless tree.talent_3_2.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 3} unless tree.talent_3_3.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 4} unless tree.talent_3_4.nil?  %>
+
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 1} unless tree.talent_4_1.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 2} unless tree.talent_4_2.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 3} unless tree.talent_4_3.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 4} unless tree.talent_4_4.nil?  %>
+
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 1} unless tree.talent_5_1.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 2} unless tree.talent_5_2.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 3} unless tree.talent_5_3.nil?  %>
+              <%= render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 4} unless tree.talent_5_4.nil?  %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+      <div class="row">
+        <div class="small-12 columns">
+          <% unless @character.specialization_1.nil? %>
+            <%= hidden_field_tag 'destination', 'talents' %>
+            <%= character_form.submit "Save talents", :class => 'button' %>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </div>
-  <div class="well well-small">
-    <h5>Selecting Specializations</h5>
-    <p>Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.</p>
-    <p>The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.</p>
-    <p>Purchasing an additional specialization within a character’s career costs ten times the total number of specializations he would possess with this new specialization. So a character with one specialization could purchase a second career specialization for 20 experience. If he wished to purchase a third career specialization, it would cost 30 experience.</p>
-    <p>Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third specialization that was also a non-career specialization would cost 40 experience.</p>
-  </div>
-</div>
 </div>

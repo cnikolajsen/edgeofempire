@@ -5,7 +5,7 @@ module CharactersHelper
     if character.creation?
       @return['state_short'] = "Creation"
       @return['state_message'] = "This character is in it creation phase. Special rules may apply."
-      @return['state_label_class'] = "warning"
+      @return['state_label_class'] = "alert"
       @return['state_alert_class'] = "warning"
     elsif character.active?
       @return['state_short'] = "Active"
@@ -15,7 +15,7 @@ module CharactersHelper
     elsif character.retired?
       @return['state_short'] = "Retired"
       @return['state_message'] = "Character taken off duty and is read only."
-      @return['state_label_class'] = "inverse"
+      @return['state_label_class'] = "secondary"
       @return['state_alert_class'] = "info"
     end
 
@@ -80,41 +80,43 @@ module CharactersHelper
     exp_cost[:willpower] = 0
     exp_cost[:intellect] = 0
     exp_cost[:presence] = 0
-    character.brawn.times do |time|
-      exp_cost[:brawn] += (10 * (time + 1)).to_i
-    end
-    character.race.brawn.times do |time|
-      exp_cost[:brawn] -= (10 * (time + 1)).to_i
-    end
-    character.agility.times do |time|
-      exp_cost[:agility] += 10 * (time + 1)
-    end
-    character.race.agility.times do |time|
-      exp_cost[:agility] -= 10 * (time + 1)
-    end
-    character.cunning.times do |time|
-      exp_cost[:cunning] += 10 * (time + 1)
-    end
-    character.race.cunning.times do |time|
-      exp_cost[:cunning] -= 10 * (time + 1)
-    end
-    character.willpower.times do |time|
-      exp_cost[:willpower] += 10 * (time + 1)
-    end
-    character.race.willpower.times do |time|
-      exp_cost[:willpower] -= 10 * (time + 1)
-    end
-    character.intellect.times do |time|
-      exp_cost[:intellect] += 10 * (time + 1)
-    end
-    character.race.intellect.times do |time|
-      exp_cost[:intellect] -= 10 * (time + 1)
-    end
-    character.presence.times do |time|
-      exp_cost[:presence] += 10 * (time + 1)
-    end
-    character.race.presence.times do |time|
-      exp_cost[:presence] -= 10 * (time + 1)
+    unless character.race.nil?
+      character.brawn.times do |time|
+        exp_cost[:brawn] += (10 * (time + 1)).to_i
+      end
+      character.race.brawn.times do |time|
+        exp_cost[:brawn] -= (10 * (time + 1)).to_i
+      end
+      character.agility.times do |time|
+        exp_cost[:agility] += 10 * (time + 1)
+      end
+      character.race.agility.times do |time|
+        exp_cost[:agility] -= 10 * (time + 1)
+      end
+      character.cunning.times do |time|
+        exp_cost[:cunning] += 10 * (time + 1)
+      end
+      character.race.cunning.times do |time|
+        exp_cost[:cunning] -= 10 * (time + 1)
+      end
+      character.willpower.times do |time|
+        exp_cost[:willpower] += 10 * (time + 1)
+      end
+      character.race.willpower.times do |time|
+        exp_cost[:willpower] -= 10 * (time + 1)
+      end
+      character.intellect.times do |time|
+        exp_cost[:intellect] += 10 * (time + 1)
+      end
+      character.race.intellect.times do |time|
+        exp_cost[:intellect] -= 10 * (time + 1)
+      end
+      character.presence.times do |time|
+        exp_cost[:presence] += 10 * (time + 1)
+      end
+      character.race.presence.times do |time|
+        exp_cost[:presence] -= 10 * (time + 1)
+      end
     end
     # @end Characteristics.
 
@@ -178,7 +180,7 @@ module CharactersHelper
 
             talent = Talent.find(value)
             specialization = TalentTree.find(talent_tree.talent_tree_id)
-            exp_cost["#{specialization.name}_#{talent.name}_#{talents[value]['count'].r_to_i}".to_sym] = talent_cost
+            exp_cost["#{specialization.name}_#{talent.name}_#{talents[value]['count']}".to_sym] = talent_cost
           end
         end
       end
@@ -208,7 +210,6 @@ module CharactersHelper
 
     # Sum up the total.
     exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
-
     exp_cost
   end
 

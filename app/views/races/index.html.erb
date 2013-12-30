@@ -1,41 +1,29 @@
-  <%- model_class = Race -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => 'Species' %></h1>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => 'Species' %></h1>
+  </div>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:wound_threshold) %></th>
-      <th><%= model_class.human_attribute_name(:strain_threshold) %></th>
-      <th><%= model_class.human_attribute_name(:starting_experience) %></th>
-      <th><%= model_class.human_attribute_name(:brawn) %></th>
-      <th><%= model_class.human_attribute_name(:cunning) %></th>
-      <th><%= model_class.human_attribute_name(:presence) %></th>
-      <th><%= model_class.human_attribute_name(:agility) %></th>
-      <th><%= model_class.human_attribute_name(:intellect) %></th>
-      <th><%= model_class.human_attribute_name(:willpower) %></th>
-      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @races.each do |race| %>
-      <tr>
-        <td><%= race.name %></td>
-        <td><%= race.wound_threshold %></td>
-        <td><%= race.strain_threshold %></td>
-        <td><%= race.starting_experience %></td>
-        <td><%= race.brawn %></td>
-        <td><%= race.cunning %></td>
-        <td><%= race.presence %></td>
-        <td><%= race.agility %></td>
-        <td><%= race.intellect %></td>
-        <td><%= race.willpower %></td>
-        <td>
-          <%= link_to t('.show', :default => t("helpers.links.show")),
-                      race_path(race), :class => 'btn btn-mini' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="small-12 columns">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Wound</th>
+          <th>Strain</th>
+          <th>Br/Cu/Pr/Ag/In/Wi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @races.each do |race| %>
+          <tr>
+            <td><%= link_to race.name, race_path(race) %></td>
+            <td><%= race.wound_threshold %></td>
+            <td><%= race.strain_threshold %></td>
+            <td><%= race.brawn %> / <%= race.cunning %> / <%= race.presence %> / <%= race.agility %> / <%= race.intellect %> / <%= race.willpower %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

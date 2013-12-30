@@ -1,20 +1,23 @@
 <%- model_class = Armor -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => @armor.name %></h1>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%= @armor.name %></h1>
+  </div>
 </div>
+<div class="row">
+  <div class="small-12 columns">
+    <p><%= @armor.description %></p>
 
-<p><%= @armor.description %></p>
+    <dl class="dl-horizontal">
+      <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
+      <dd><%= @armor.defense %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:soak) %>:</strong></dt>
+      <dd><%= @armor.soak %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+      <dd><%= @armor.price %></dd>
+    </dl>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
-  <dd><%= @armor.defense %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:soak) %>:</strong></dt>
-  <dd><%= @armor.soak %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
-  <dd><%= @armor.price %></dd>
-</dl>
-
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              "/armor", :class => 'btn'  %>
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+                  "/armor", :class => 'button'  %>
+  </div>
 </div>

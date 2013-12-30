@@ -1,29 +1,30 @@
 <%- model_class = Armor -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+<div class="row">
+  <div class="small-12 columns">
+    <h1>Armor</h1>
+  </div>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:defense) %></th>
-      <th><%= model_class.human_attribute_name(:soak) %></th>
-      <th><%= model_class.human_attribute_name(:price) %></th>
-      <th><%#=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @armor.each do |armor| %>
-      <tr>
-        <td><%= armor.name %></td>
-        <td><%= armor.defense %></td>
-        <td><%= armor.soak %></td>
-        <td><%= armor.price %></td>
-        <td>
-          <%= link_to t('.show', :default => t("helpers.links.show")),
-                      armor_path(armor), :class => 'btn btn-mini' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="small-12 columns">
+    <table>
+      <thead>
+        <tr>
+          <th><%= model_class.human_attribute_name(:name) %></th>
+          <th><%= model_class.human_attribute_name(:defense) %></th>
+          <th><%= model_class.human_attribute_name(:soak) %></th>
+          <th><%= model_class.human_attribute_name(:price) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @armor.each do |armor| %>
+          <tr>
+            <td><%= link_to armor.name, armor_path(armor) %></td>
+            <td><%= armor.defense %></td>
+            <td><%= armor.soak %></td>
+            <td><%= armor.price %></td>
+          </tr>
+        <% end %>
+    </tbody>
+    </table>
+  </div>
+</div>

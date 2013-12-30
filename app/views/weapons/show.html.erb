@@ -1,10 +1,12 @@
 <%- model_class = Weapon -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => @weapon.name %> <small><%= @weapon.skill.name unless @weapon.skill.nil? %></small></h1>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => @weapon.name %> <small><%= @weapon.skill.name unless @weapon.skill.nil? %></small></h1>
+  </div>
 </div>
-<div class="row-fluid">
-  <div class="span9">
-    <table class="table table-striped">
+<div class="row">
+  <div class="small-9 columns">
+    <table>
       <thead>
         <tr>
           <th><%= model_class.human_attribute_name(:skill_id) %></th>
@@ -27,18 +29,16 @@
     <p><%= @weapon.description %></p>
   </div>
 
-  <div class="well span3">
+  <div class="small-3 columns panel">
     <% unless @weapon.image_url.blank? %>
       <img src="<%= @weapon.image_url %>" />
     <% end %>
   </div>
 </div>
 
-<div class="row-fluid">
-  <div class="span12">
-    <div class="form-actions">
-      <%= link_to t('.back', :default => t("helpers.links.back")),
-              weapons_path, :class => 'btn'  %>
-    </div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+              weapons_path, :class => 'button'  %>
   </div>
 </div>

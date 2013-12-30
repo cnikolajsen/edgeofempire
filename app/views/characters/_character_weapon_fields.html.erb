@@ -1,34 +1,28 @@
 <% unless f.object.weapon_id.nil? %>
   <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
   <% unless @weapon.name == 'Unarmed' %>
-    <li class="control-group nested-fields">
-      <div class="well">
-        <h3><%= @weapon.name %> <small><%= @weapon.skill.name %></small></h3>
-        <span class="label">Damage <span class="label label-info"><%= @weapon.damage %></span></span>
-        <span class="label">Crit <span class="label label-info"><%= @weapon.crit %></span></span>
-        <span class="label">Price  <span class="label label-info"><%= @weapon.price %></span></span>
-        <span class="label"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></span><br />
-        <%= @weapon.description %>
-        <div class="control-group">
-          <%= f.text_area :description, :class => 'text_area input-block-level' %>
-          <span class="help-block">Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal.</span>
-        </div>
-        <div class="controls">
-          <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
-        </div>
-      </div>
+    <li class="nested-fields">
+      <ul class="pricing-table">
+        <li class="title"><%= @weapon.name %></li>
+        <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @weapon.price %></li>
+        <li class="description"><%= text_replace_tokens(@weapon.description).html_safe %></li>
+        <li class="description"><%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %></li>
+        <li class="bullet-item"><%= @weapon.skill.name %></li>
+        <li class="bullet-item">Range: <%= @weapon.range %></li>
+        <li class="bullet-item">Damage: <%= @weapon.damage %></li>
+        <li class="bullet-item">Crit rating: <%= @weapon.crit %></li>
+        <li class="bullet-item">Enc: <%= @weapon.encumbrance %></li>
+        <li class="bullet-item">Rarity: <%= @weapon.rarity %></li>
+        <li class="bullet-item"><%= render "weapons/weapon_qualities", :qualities => @weapon.weapon_quality_ranks %></li>
+        <li class="cta-button"><a class="button tiny" href="#">Add attachment</a></li>
+        <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
+      </ul>
     </li>
   <% end %>
 <% else %>
-  <li class="control-group nested-fields">
-    <div class="well">
-      <div class="control-group">
-        <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| [weapon.name, weapon.id]}, {:prompt => "Select Weapon"} %>
-      </div>
-      <div class="control-group">
-        <%= f.text_area :description, :class => 'text_area input-block-level' %>
-        <span class="help-block">Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal.</span>
-      </div>
-    </div>
+  <li>
+    <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}, {:prompt => "Select Weapon"} %>
+    <%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
   </li>
 <% end %>
+

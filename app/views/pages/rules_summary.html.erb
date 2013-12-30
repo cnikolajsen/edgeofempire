@@ -1,21 +1,19 @@
-<div class="row-fluid">
-  <div class="span9" data-spy="scroll" data-target="#rules-menu">
+<div data-magellan-expedition="fixed">
+  <dl class="sub-nav">
     <% @rules.each do |r| %>
-      <section id="<%= r[:id] %>">
-        <div class="page-header">
-          <h1><%= r[:title] %></h1>
-        </div>
+      <dd data-magellan-arrival="<%= r[:id] %>"><a href="#<%= r[:id] %>"><%= r[:title] %></a></dd>
+    <% end %>
+  </dl>
+</div>
+<div class="row">
+  <div class="medium-12 columns">
+    <% @rules.each do |r| %>
+      <a name="<%= r[:id] %>"></a>
+      <div class="panel">
+        <h3 data-magellan-destination="<%= r[:id] %>"><%= r[:title] %></h3>
         <%= text_replace_tokens(r[:text]).html_safe %>
-      </section>
+      </div>
     <% end %>
   </div>
-  <div class="span3">
-    <div class="rules-nav"  id="rules-menu">
-      <ul class="nav nav-list bs-docs-sidenav affix">
-        <% @rules.each do |r| %>
-          <li><a href="#<%= r[:id] %>"><i class="icon-chevron-left"></i><%= r[:title] %></a></li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
 </div>
+

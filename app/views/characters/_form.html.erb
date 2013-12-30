@@ -1,10 +1,8 @@
 <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
   <%= hidden_field_tag 'character_basics', 'true' %>
-  <%= hidden_field_tag 'original_race_id', @character.race_id %>
-  <%= hidden_field_tag 'original_career_id', @character.career_id %>
   <% if @character.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</h2>
+    <div data-alert class="alert-box warning radius">
+      <p><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</p>
       <ul>
         <% @character.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -12,205 +10,82 @@
       </ul>
     </div>
   <% end %>
-  <div class="row-fluid">
-    <div class="span6 well" style="">
-      <div class="control-group">
-        <%= f.label :name, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :name, :class => 'text_field span6' %>
-        </div>
-      </div>
-      <% if @character.creation? %>
-        <div class="control-group">
-          <%= f.label :race_id, 'Species', :class => 'control-label' %>
-          <div class="controls">
-            <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
-          </div>
-        </div>
-        <div class="control-group">
-          <%= f.label :career_id, :class => 'control-label' %>
-          <div class="controls">
-            <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"},   :class => 'input-block-level') %>
-          </div>
-        </div>
-        <% unless @character.new_record? %>
-          <div class="control-group">
-            <%= f.label :class_skills, "Select #{if @character.race.name == 'Droid' then 6 else 4 end} career skills to add a free rank to:", :class => :label %>
-            <% @character.career.skills.each do |class_skill| %>
-              <div class="controls">
-                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_career_skill_rank[]" type="checkbox" <%= if @career_free_rank.include? class_skill.id then "checked=checked" end %>>
 
-                <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
-                <br />
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-      <div class="control-group" style="margin-bottom: 0px;">
-        <%= f.label :gender, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.radio_button :gender, 'Male', :class => 'text_field' %> Male
-          <%= f.radio_button :gender, 'Female', :class => 'text_field' %> Female
-        </div>
-      </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name, :placeholder => 'Name your character' %>
     </div>
-    <div class="span6 well">
-      <div class="control-group">
-        <%= f.label :age, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :age, :class => 'text_field' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :height, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :height, :class => 'text_field' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :build, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :build, :class => 'text_field' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :hair, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :hair, :class => 'text_field' %>
-        </div>
-      </div>
-      <div class="control-group" style="margin-bottom: 0px;">
-        <%= f.label :eyes, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :eyes, :class => 'text_field' %>
-        </div>
-      </div>
+  </div>
+  <div class="panel">
+  <div class="row">
+    <div class="small-4 columns">
+      <%= f.label :gender %>
+      <%= f.radio_button :gender, 'Male' %><label for="character_gender_male">Male</label>
+      <%= f.radio_button :gender, 'Female' %><label for="character_gender_female">Female</label>
     </div>
+    <div class="small-4 columns">
+      <%= f.label :age %>
+      <%= f.text_field :age %>
+    </div>
+    <div class="small-4 columns">
+      <%= f.label :height %>
+      <%= f.text_field :height %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-4 columns">
+      <%= f.label :build %>
+      <%= f.text_field :build %>
+    </div>
+    <div class="small-4 columns">
+      <%= f.label :hair %>
+      <%= f.text_field :hair %>
+    </div>
+    <div class="small-4 columns">
+      <%= f.label :eyes %>
+      <%= f.text_field :eyes %>
+    </div>
+  </div>
   </div>
 
   <% unless @character.new_record? or !@character.creation? %>
-    <div class="row-fluid">
-      <div class="span6 well">
-        <h4>Characteristics</h4>
-        <% if @character.active? %>
-          Some information about spending
-        <% else %>
-          <div class="control-group">
-            <%= f.label :brawn, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :brawn, :in => @character.race.brawn...6, :class => 'number_field' %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :agility, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :agility, :in => @character.race.agility...6, :class => 'number_field' %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :intellect, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :intellect, :in => @character.race.intellect...6, :class => 'number_field' %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :cunning, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :cunning, :in => @character.race.cunning...6, :class => 'number_field' %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :willpower, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :willpower, :in => @character.race.willpower...6, :class => 'number_field' %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :presence, :class => 'control-label' %>
-            <div class="controls">
-              <%= f.number_field :presence, :in => @character.race.presence...6, :class => 'number_field' %>
-            </div>
-          </div>
-        <% end %>
-        <span class="help-block"><small>
-          <% if @character.active? %>
-            Some information about spending experience points on active character.
-          <% elsif @character.creation? %>
-            You may spend starting experience to increase characteristics. This is the only time you can increase characteristics with experience points.<br />
-            <strong>Creation limit:</strong> You may not purchase characteristics above 5 during character creation.<br />
-            <strong>Cost:</strong>  Ten times the purchased rating in experience. Each rating must be purchased sequentially.
-          <% end %></small>
-        </span>
-      </div>
-      <div class="span6 well" style="height:220px;">
-        <div class="control-group">
-          <%= f.label :experience, :class => 'control-label' %>
-          <div class="controls">
-            <%= f.number_field :experience, :min => 0, :class => 'number_field' %>
-          </div>
+      <div class="row">
+        <div class="small-6 columns">
+          <%= f.label :experience %>
+          <%= f.number_field :experience, :min => 0 %>
+          <!--
           <span class="help-block">
             <small>
-              <strong>Starting experience:</strong> <%= @character.race.starting_experience %>
+              <strong>Starting experience:</strong> <%#= @character.race.starting_experience %>
             </small>
           </span>
+        -->
         </div>
-        <div class="control-group" style="margin-bottom: 0px;">
-          <%= f.label :credits, :class => 'control-label' %>
-          <div class="controls">
-            <%= f.number_field :credits, :min => 0, :class => 'number_field' %>
-          </div>
+        <div class="small-6 columns">
+          <%= f.label :credits %>
+          <%= f.number_field :credits, :min => 0 %>
         </div>
       </div>
-    </div>
 
-    <div class="row-fluid">
-      <div class="span6 well">
-        <h4>Obligations</h4>
-        <fieldset id="character-obligations">
-            <ul>
-              <%= f.fields_for :character_obligations do |obligation| %>
-                <%= render 'character_obligation_fields', :f => obligation %>
-              <% end %>
-            </ul>
-            <%= link_to_add_association 'Add obligation', f, :character_obligations, 'data-association-insertion-node' => "#character-obligations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|obligation| obligation.build_obligation; obligation }, :class => 'btn btn-warning' %>
-          </fieldset>
-      </div>
-      <div class="span6 well">
-        <h4>Motivations</h4>
-        <fieldset id="character-motivations">
-            <ul>
-              <%#= f.fields_for :character_motivations do |motivation| %>
-                <%#= render 'character_motivation_fields', :f => motivation %>
-              <%# end %>
-            </ul>
-            <%#= link_to_add_association 'Add motivation', f, :character_motivations, 'data-association-insertion-node' => "#character-motivations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|motivation| motivation.build_motivation; motivation }, :class => 'btn btn-warning' %>
-          </fieldset>
-      </div>
-    </div>
   <% end %>
+  <!--
   <div class="row-fluid">
     <div class="span6 well">
-      <div class="control-group" style="margin-bottom: 0px;">
-        <%= f.text_area :bio, :class => 'text_area input-block-level', :style => "height: 350px" %>
-        <span class="help-block"><strong>Character biography</strong></span>
-      </div>
-    </div>
-    <div class="span6 well">
       <div class="control-group">
-        <%= f.text_area :notable_features, :class => 'text_area input-block-level', :style => "height: 150px" %>
+        <%#= f.text_area :notable_features, :class => 'text_area input-block-level', :style => "height: 150px" %>
         <span class="help-block"><strong>Notable features</strong></span>
       </div>
       <div class="control-group" style="margin-bottom: 0px;">
-        <%= f.text_area :other, :class => 'text_area input-block-level', :style => "height: 150px" %>
+        <%#= f.text_area :other, :class => 'text_area input-block-level', :style => "height: 150px" %>
         <span class="help-block"><strong>Other information</strong></span>
       </div>
     </div>
   </div>
-
+-->
   <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= f.submit nil, :class => 'button' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'btn' %>
+                characters_path, :class => 'button secondary' %>
   </div>
 <% end %>
