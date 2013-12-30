@@ -1,16 +1,11 @@
 <%- model_class = Character -%>
 <% content_for :title do %>
-  <%= @character.name %> - <%= @character.race.name %> <%= @character.career.name %>
+  <%= @character.name %> - <%= @character.race.name unless @character.race.nil? %> <%= @character.career.name unless @character.career.nil? %>
 <% end %>
 
 <div class="row">
   <div class="medium-12 columns">
-    <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name %> <%= @character.career.name %></small></h1>
-    <% unless @character_state.nil? or @character_state['state_message'].nil? %>
-      <div data-alert class="alert-box <%= @character_state['state_alert_class'] %> radius">
-        <%= @character_state['state_message'] %>
-      </div>
-    <% end %>
+    <h1><%=t '.title', :default => @character.name %> <small><%= @character.race.name unless @character.race.nil? %> <%= @character.career.name unless @character.career.nil? %></small></h1>
   </div>
 </div>
 <div class="row">
@@ -18,7 +13,7 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
-<% unless @character.bio.empty? %>
+<% unless @character.bio.blank? %>
   <div class="row">
     <div class="medium-12 columns">
       <%= simple_format(@character.bio) %>
@@ -113,7 +108,7 @@
             <% if @character.may_set_create? && !@character.creation? %>
               <li><%= link_to "<i class='icon-wrench'></i> Creation".html_safe, creation_character_path(@character), :class => '  buttons warning' %></li>
             <% end %>
-            <% if @character.may_activate? %>
+            <% if !@character.race.nil? and !@character.career.nil? and @character.may_activate? %>
               <li><%= link_to "<i class='icon-ok'></i> Activate".html_safe, activate_character_path(@character), :class => 'button  success' %></li>
             <% end %>
             <% if @character.may_retire? %>

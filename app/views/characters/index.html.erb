@@ -30,8 +30,8 @@
                   <span class="label secondary" title="Character retired"><i class='icon-fire'></i></span>
               <% end %>
             </td>
-            <td><%= character.race.name %></td>
-            <td><%= character.career.name %></td>
+            <td><%= character.race.name unless character.race.nil? %></td>
+            <td><%= character.career.name unless character.career.nil? %></td>
             <td><%=l character.created_at, :format => :short %></td>
             <td>
               <div class="button-bar">

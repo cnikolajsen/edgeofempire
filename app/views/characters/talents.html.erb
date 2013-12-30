@@ -5,11 +5,6 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <% unless @character_state['state_message'].nil? %>
-      <div class="alert alert-<%= @character_state['state_alert_class'] %>">
-        <span class="label label-<%= @character_state['state_label_class'] %>"><%= @character_state['state_short'] %></span> <%= @character_state['state_message'] %>
-      </div>
-    <% end %>
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>

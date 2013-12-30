@@ -2,11 +2,6 @@
 <div class="row">
   <div class="medium-12 columns">
     <h1>Edit <%= @character.name %></h1>
-    <% unless @character_state.nil? or @character_state['state_message'].nil? %>
-      <div data-alert class="alert-box <%= @character_state['state_alert_class'] %> radius">
-        <%= @character_state['state_message'] %>
-      </div>
-    <% end %>
   </div>
 </div>
 <div class="row">

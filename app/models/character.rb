@@ -31,8 +31,8 @@ class Character < ActiveRecord::Base
   end
 
   validates_presence_of :name
-  validates_presence_of :race_id
-  validates_presence_of :career_id
+  validates :race_id, presence: true, if: ":character_species.nil?"
+  validates :career_id, presence: true, if: ":character_career.nil?"
 
   belongs_to :user
 

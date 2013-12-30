@@ -1,0 +1,101 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "#{@character.name} - Characteristics" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
+      <%= hidden_field_tag 'character_characteristics', 'true' %>
+      <% if @character.errors.any? %>
+        <div data-alert class="alert-box warning radius">
+          <p><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</p>
+          <ul>
+            <% @character.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="small-4 columns">
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :brawn %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :brawn, :in => @character.race.brawn...6 %>
+            </div>
+          </div>
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :intellect %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :intellect, :in => @character.race.intellect...6 %>
+            </div>
+          </div>
+        </div>
+        <div class="small-4 columns">
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :agility %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :agility, :in => @character.race.agility...6 %>
+            </div>
+          </div>
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :willpower %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :willpower, :in => @character.race.willpower...6 %>
+            </div>
+          </div>
+        </div>
+        <div class="small-4 columns">
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :cunning %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :cunning, :in => @character.race.cunning...6 %>
+            </div>
+          </div>
+          <div class="row collapse">
+            <div class="small-6 columns">
+              <span class="prefix radius"><%= f.label :presence %></span>
+            </div>
+            <div class="small-6 columns">
+              <%= f.number_field :presence, :in => @character.race.presence...6 %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <div class="panel">
+            You may spend starting experience to increase characteristics. This is the only time you can increase     characteristics with experience points.<br />
+            <strong>Creation limit:</strong> You may not purchase characteristics above 5 during character creation.<br />
+            <strong>Cost:</strong>  Ten times the purchased rating in experience. Each rating must be purchased sequentially.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= hidden_field_tag 'destination', 'characteristics' %>
+        <%= f.submit "Save characteristics", :class => 'button' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                characters_path, :class => 'button secondary' %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

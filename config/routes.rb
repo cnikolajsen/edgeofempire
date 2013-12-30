@@ -52,6 +52,15 @@ EdgeOfEmpire::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
+  get 'characters/:id/description' => 'characters#edit', :as => :character_description
+
+  get 'characters/:id/career' => 'characters#career', :as => :character_career
+  get 'characters/:id/species' => 'characters#species', :as => :character_species
+  get 'characters/:id/characteristics' => 'characters#characteristics', :as => :character_characteristics
+  get 'characters/:id/background' => 'characters#background', :as => :character_background
+  get 'characters/:id/obligation' => 'characters#obligation', :as => :character_obligation
+  get 'characters/:id/motivation' => 'characters#motivation', :as => :character_motivation
+
   get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
   get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
   get 'characters/:id/armor' => 'characters#armor', :as => :character_armor

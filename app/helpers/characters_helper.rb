@@ -80,41 +80,43 @@ module CharactersHelper
     exp_cost[:willpower] = 0
     exp_cost[:intellect] = 0
     exp_cost[:presence] = 0
-    character.brawn.times do |time|
-      exp_cost[:brawn] += (10 * (time + 1)).to_i
-    end
-    character.race.brawn.times do |time|
-      exp_cost[:brawn] -= (10 * (time + 1)).to_i
-    end
-    character.agility.times do |time|
-      exp_cost[:agility] += 10 * (time + 1)
-    end
-    character.race.agility.times do |time|
-      exp_cost[:agility] -= 10 * (time + 1)
-    end
-    character.cunning.times do |time|
-      exp_cost[:cunning] += 10 * (time + 1)
-    end
-    character.race.cunning.times do |time|
-      exp_cost[:cunning] -= 10 * (time + 1)
-    end
-    character.willpower.times do |time|
-      exp_cost[:willpower] += 10 * (time + 1)
-    end
-    character.race.willpower.times do |time|
-      exp_cost[:willpower] -= 10 * (time + 1)
-    end
-    character.intellect.times do |time|
-      exp_cost[:intellect] += 10 * (time + 1)
-    end
-    character.race.intellect.times do |time|
-      exp_cost[:intellect] -= 10 * (time + 1)
-    end
-    character.presence.times do |time|
-      exp_cost[:presence] += 10 * (time + 1)
-    end
-    character.race.presence.times do |time|
-      exp_cost[:presence] -= 10 * (time + 1)
+    unless character.race.nil?
+      character.brawn.times do |time|
+        exp_cost[:brawn] += (10 * (time + 1)).to_i
+      end
+      character.race.brawn.times do |time|
+        exp_cost[:brawn] -= (10 * (time + 1)).to_i
+      end
+      character.agility.times do |time|
+        exp_cost[:agility] += 10 * (time + 1)
+      end
+      character.race.agility.times do |time|
+        exp_cost[:agility] -= 10 * (time + 1)
+      end
+      character.cunning.times do |time|
+        exp_cost[:cunning] += 10 * (time + 1)
+      end
+      character.race.cunning.times do |time|
+        exp_cost[:cunning] -= 10 * (time + 1)
+      end
+      character.willpower.times do |time|
+        exp_cost[:willpower] += 10 * (time + 1)
+      end
+      character.race.willpower.times do |time|
+        exp_cost[:willpower] -= 10 * (time + 1)
+      end
+      character.intellect.times do |time|
+        exp_cost[:intellect] += 10 * (time + 1)
+      end
+      character.race.intellect.times do |time|
+        exp_cost[:intellect] -= 10 * (time + 1)
+      end
+      character.presence.times do |time|
+        exp_cost[:presence] += 10 * (time + 1)
+      end
+      character.race.presence.times do |time|
+        exp_cost[:presence] -= 10 * (time + 1)
+      end
     end
     # @end Characteristics.
 
@@ -208,7 +210,6 @@ module CharactersHelper
 
     # Sum up the total.
     exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
-
     exp_cost
   end
 
