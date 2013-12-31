@@ -8,6 +8,13 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
+<div class="row">
+  <div class="small-12 columns">
+    <div class="panel">
+      Check the Carried checkbox to mark an item as placed on the character's person and account for in calculating encumbrance. Leave unchecked if it's an item owned by the character but located somewhere such as on the group's ship.
+    </div>
+  </div>
+</div>
 <%= form_for @character do |character_form| %>
    <div id="character-inventory" class="row">
     <div class="medium-12 columns">

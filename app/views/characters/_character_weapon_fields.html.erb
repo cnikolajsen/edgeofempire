@@ -6,7 +6,13 @@
         <li class="title"><%= @weapon.name %></li>
         <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @weapon.price %></li>
         <li class="description"><%= text_replace_tokens(@weapon.description).html_safe %></li>
-        <li class="description"><%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %></li>
+        <li class="description">
+          <%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
+          <%= f.check_box :equipped %>
+          <%= f.label :equipped %>
+          <%= f.check_box :carried %>
+          <%= f.label :carried %>
+        </li>
         <li class="bullet-item"><%= @weapon.skill.name %></li>
         <li class="bullet-item">Range: <%= @weapon.range %></li>
         <li class="bullet-item">Damage: <%= @weapon.damage %></li>

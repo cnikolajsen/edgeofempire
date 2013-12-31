@@ -4,7 +4,11 @@
       <ul class="pricing-table">
         <li class="title"><%= @item.name %></li>
         <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @item.price %></li>
-        <li class="description"><%= text_replace_tokens(@item.description).html_safe %></li>
+        <li class="description">
+          <%= text_replace_tokens(@item.description).html_safe %>
+          <%= f.check_box :carried %>
+          <%= f.label :carried %>
+        </li>
         <li class="bullet-item">Enc: <%= @item.encumbrance %></li>
         <li class="bullet-item">Rarity: <%= @item.rarity %></li>
         <li class="bullet-item"><label>Quantity</label><%= f.number_field :qty, :min => 0 %></li>

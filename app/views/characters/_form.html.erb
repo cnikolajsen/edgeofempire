@@ -17,7 +17,6 @@
       <%= f.text_field :name, :placeholder => 'Name your character' %>
     </div>
   </div>
-  <div class="panel">
   <div class="row">
     <div class="small-4 columns">
       <%= f.label :gender %>
@@ -47,42 +46,31 @@
       <%= f.text_field :eyes %>
     </div>
   </div>
-  </div>
 
   <% unless @character.new_record? or !@character.creation? %>
       <div class="row">
         <div class="small-6 columns">
-          <%= f.label :experience %>
+          <%= f.label :experience, 'Earned experience' %>
           <%= f.number_field :experience, :min => 0 %>
-          <!--
-          <span class="help-block">
-            <small>
-              <strong>Starting experience:</strong> <%#= @character.race.starting_experience %>
-            </small>
-          </span>
-        -->
         </div>
         <div class="small-6 columns">
           <%= f.label :credits %>
           <%= f.number_field :credits, :min => 0 %>
         </div>
       </div>
-
   <% end %>
-  <!--
-  <div class="row-fluid">
-    <div class="span6 well">
-      <div class="control-group">
-        <%#= f.text_area :notable_features, :class => 'text_area input-block-level', :style => "height: 150px" %>
-        <span class="help-block"><strong>Notable features</strong></span>
-      </div>
-      <div class="control-group" style="margin-bottom: 0px;">
-        <%#= f.text_area :other, :class => 'text_area input-block-level', :style => "height: 150px" %>
-        <span class="help-block"><strong>Other information</strong></span>
-      </div>
+
+  <div class="row">
+    <div class="small-6 columns">
+      <%= f.label :notable_features %>
+      <%= f.text_area :notable_features, :class => 'text_area input-block-level', :style => "height: 150px" %>
+    </div>
+    <div class="small-6 columns">
+      <%= f.label :other %>
+      <%= f.text_area :other, :class => 'text_area input-block-level', :style => "height: 150px" %>
     </div>
   </div>
--->
+
   <div class="form-actions">
     <%= f.submit nil, :class => 'button' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

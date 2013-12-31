@@ -292,7 +292,7 @@ class CharactersController < ApplicationController
       career_free_rank << career_skill.skill_id
     end
 
-    if !@character.career.nil? and @character.career.name == 'Droid'
+    if !@character.career.nil? and !@character.race.nil? and @character.race.name == 'Droid'
       career_free_rank_max_count = 6
     else
       career_free_rank_max_count = 4
@@ -376,7 +376,7 @@ class CharactersController < ApplicationController
     @character.cunning = 1
     @character.willpower = 1
     @character.presence = 1
-    @character.experience = 100
+    @character.experience = 0
 
     respond_to do |format|
       if @character.save
@@ -392,10 +392,10 @@ class CharactersController < ApplicationController
           @character_skill.save
         end
 
-        @character_armor = CharacterArmor.new()
-        @character_armor.character_id = @character.id
-        @character_armor.armor_id = nil
-        @character_armor.save
+        #@character_armor = CharacterArmor.new()
+        #@character_armor.character_id = @character.id
+        #@character_armor.armor_id = nil
+        #@character_armor.save
 
         format.html { redirect_to character_species_url(@character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
@@ -415,12 +415,12 @@ class CharactersController < ApplicationController
       @character.aasm_state = 'creation'
     end
 
-    if @character.character_armor.nil?
-      @character_armor = CharacterArmor.new()
-      @character_armor.character_id = @character.id
-      @character_armor.armor_id = nil
-      @character_armor.save
-    end
+    #if @character.character_armor.nil?
+    #  @character_armor = CharacterArmor.new()
+    #  @character_armor.character_id = @character.id
+    #  @character_armor.armor_id = nil
+    #  @character_armor.save
+    #end
 
     # Remove equipment with 0 quantity.
     if !@character.character_gears.nil?
@@ -513,6 +513,8 @@ class CharactersController < ApplicationController
     if !params[:character_career].nil? and !@character.career.nil?
       # Handle resets due to career change.
       if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
+        logger.warn('career change')
+        logger.warn(CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').inspect)
         CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
         CharacterSkill.where(:character_id => @character.id).each do |skill|
           skill.ranks -= skill.free_ranks_career
@@ -568,7 +570,7 @@ class CharactersController < ApplicationController
       @character.update_attribute(:cunning, species.cunning)
       @character.update_attribute(:willpower, species.willpower)
       @character.update_attribute(:presence, species.presence)
-      @character.update_attribute(:experience, species.starting_experience)
+      #@character.update_attribute(:experience, species.starting_experience)
 
       # Save racial talents.
       character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
@@ -634,7 +636,7 @@ class CharactersController < ApplicationController
         if @character.intellect < new_race.intellect
           @character.update_attribute(:intellect, new_race.intellect)
         end
-        @character.update_attribute(:experience, new_race.starting_experience)
+        #@character.update_attribute(:experience, new_race.starting_experience)
 
         # Save free skill ranks granted by the new species.
         new_race.skills.each do |skill|
@@ -819,9 +821,9 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | Armor"
 
-    if !@character.character_armor.nil?
-      @armor = Armor.find_by_id(@character.character_armor.armor_id)
-    end
+    #if !@character.character_armor.nil?
+    #  @armor = Armor.find_by_id(@character.character_armor.armor_id)
+    #end
   end
 
   def weapons
@@ -896,11 +898,11 @@ class CharactersController < ApplicationController
         :specialization_1,
         :specialization_2,
         :specialization_3,
-        character_gears_attributes: [ :id, :gear_id, :qty, :_destroy ],
-        character_weapons_attributes: [ :id, :weapon_id, :description, :_destroy ],
+        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :_destroy ],
+        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :_destroy ]
+        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ]
       )
     end
   end

@@ -38,8 +38,8 @@ class Character < ActiveRecord::Base
 
   has_many :character_skills, :dependent => :destroy
   has_many :skills, :through => :character_skills
-  has_one :character_armor, :dependent => :destroy
-  has_one :armors, :through => :character_armor
+  has_many :character_armor, :dependent => :destroy
+  has_many :armors, :through => :character_armor
   has_many :character_weapons, :dependent => :destroy
   has_many :weapons, :through => :character_weapons
   has_many :character_gears, :dependent => :destroy

@@ -210,6 +210,9 @@ module CharactersHelper
 
     # Sum up the total.
     exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
+    exp_cost[:starting_experience] = character.race.starting_experience
+    exp_cost[:earned_experience] = character.experience
+    exp_cost[:available_experience] = exp_cost[:starting_experience] + exp_cost[:earned_experience]
     exp_cost
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131209072216) do
+ActiveRecord::Schema.define(version: 20131231124851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,8 @@ ActiveRecord::Schema.define(version: 20131209072216) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.text     "description"
+    t.boolean  "equipped"
+    t.boolean  "carried"
   end
 
   create_table "character_bonus_talents", force: true do |t|
@@ -125,6 +127,7 @@ ActiveRecord::Schema.define(version: 20131209072216) do
     t.integer  "qty"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.boolean  "carried"
   end
 
   create_table "character_obligations", force: true do |t|
@@ -207,6 +210,8 @@ ActiveRecord::Schema.define(version: 20131209072216) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.text     "description"
+    t.boolean  "equipped"
+    t.boolean  "carried"
   end
 
   create_table "characters", force: true do |t|

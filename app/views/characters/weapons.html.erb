@@ -8,6 +8,14 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
+<div class="row">
+  <div class="small-12 columns">
+    <div class="panel">
+      Check the Equipped check box to mark a weapon as worn by the character, ready to be drawn in combat. Equipped weapons will be shown with combat details on the character sheet.<br/>
+      Check the Carried checkbox to mark an item as placed on the character's person and account for in calculating encumbrance. Leave unchecked if it's an item owned by the character but located somewhere such as on the group's ship. Equipped also counts as carried.
+    </div>
+  </div>
+</div>
 <%= form_for @character do |character_form| %>
    <div id="character-weapons" class="row">
     <div class="small-12 columns">

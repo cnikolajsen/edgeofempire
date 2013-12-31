@@ -25,18 +25,17 @@
       <% end %>
 
       <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
-
-      <div class="panel" id="species-info">
-        <% unless @character.race_id.blank? %>
-          <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
-        <% end %>
-      </div>
-
       <div class="form-actions">
         <%= hidden_field_tag 'destination', 'species' %>
         <%= f.submit "Save species", :class => 'button' %>
         <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 characters_path, :class => 'button secondary' %>
+      </div>
+
+      <div class="panel" id="species-info">
+        <% unless @character.race_id.blank? %>
+          <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
+        <% end %>
       </div>
     <% end %>
   </div>

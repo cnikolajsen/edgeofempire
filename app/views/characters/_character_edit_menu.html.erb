@@ -4,7 +4,7 @@
   </div>
 <% end %>
 
-<nav class="top-bar" data-topbar data-options="is_hover: false">
+<nav class="top-bar" data-topbar data-options="is_hover: false" data-no-turbolink>
   <ul class="title-area">
     <li class="name"><!-- Leave this empty --></li>
     <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -40,7 +40,7 @@
   </section>
 </nav>
 <% if @character_menu == 'basics' %>
-  <dl class="sub-nav">
+  <dl class="sub-nav" data-no-turbolink>
     <dt>Basics:</dt>
     <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></dd>
     <dd<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></dd>
@@ -50,7 +50,7 @@
     <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></dd>
   </dl>
 <% elsif @character_menu == 'equipment' %>
-  <dl class="sub-nav">
+  <dl class="sub-nav" data-no-turbolink>
     <dt>Equipment:</dt>
     <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></dd>
     <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></dd>

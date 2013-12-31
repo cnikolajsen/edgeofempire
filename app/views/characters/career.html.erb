@@ -40,17 +40,16 @@
         </div>
       <% end %>
 
-      <div class="panel" id="career-info">
-        <% unless @character.career_id.blank? %>
-         <%= render :partial => 'career_info', :locals => { :career => @character.career, :changed => false } %>
-        <% end %>
-      </div>
-
       <div class="form-actions">
         <%= hidden_field_tag 'destination', 'career' %>
         <%= f.submit "Save career", :class => 'button' %>
         <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 characters_path, :class => 'button secondary' %>
+      </div>
+      <div class="panel" id="career-info">
+        <% unless @character.career_id.blank? %>
+         <%= render :partial => 'career_info', :locals => { :career => @character.career, :changed => false } %>
+        <% end %>
       </div>
     <% end %>
   </div>
