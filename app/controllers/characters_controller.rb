@@ -761,6 +761,12 @@ class CharactersController < ApplicationController
     end
   end
 
+  def career_selection
+    @career = Career.find(params[:career_id])
+
+    render :partial => "career_info", :locals => { :career => @career, :changed => :true }
+  end
+
   def species
     @character_menu = 'basics'
     @character_page = 'species'

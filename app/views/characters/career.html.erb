@@ -42,8 +42,7 @@
 
       <div class="panel" id="career-info">
         <% unless @character.career_id.blank? %>
-          <h4><%= @character.career.name %></h4>
-          <%= @character.career.description.html_safe %>
+         <%= render :partial => 'career_info', :locals => { :career => @character.career, :changed => false } %>
         <% end %>
       </div>
 

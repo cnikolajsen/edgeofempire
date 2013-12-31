@@ -73,6 +73,7 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
 
   get 'character/find/species_selection' => 'characters#species_selection'
+  get 'character/find/career_selection' => 'characters#career_selection'
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 

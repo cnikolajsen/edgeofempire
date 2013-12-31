@@ -16,5 +16,6 @@
 //= require turbolinks
 //= require cocoon
 //= require ./characters/species
+//= require ./characters/career
 
 $(function(){ $(document).foundation(); });
