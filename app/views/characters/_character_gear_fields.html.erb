@@ -21,6 +21,10 @@
       <li class="title">New item</li>
       <li class="bullet-item"><%= f.select :gear_id, Gear.where(:true).collect  {|gear| [gear.name, gear.id]}, {:prompt => "Select Item"} %></li>
       <li class="bullet-item"><label>Quantity</label><%= f.number_field :qty, :min => 0, :value => 1 %></li>
+      <li class="bullet-item">
+        <%= f.check_box :carried, :checked => 'checked' %>
+        <%= f.label :carried %>
+      </li>
     </ul>
   </li>
 <% end %>

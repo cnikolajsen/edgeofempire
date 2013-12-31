@@ -29,6 +29,10 @@
   <li>
     <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}, {:prompt => "Select Weapon"} %>
     <%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
+    <%= f.check_box :equipped %>
+    <%= f.label :equipped %>
+    <%= f.check_box :carried, :checked => 'checked' %>
+    <%= f.label :carried %>
   </li>
 <% end %>
 
