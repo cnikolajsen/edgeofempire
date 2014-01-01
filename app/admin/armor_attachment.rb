@@ -1,5 +1,7 @@
 ActiveAdmin.register ArmorAttachment do
-  permit_params :name, :description, :price, :hard_points, armor_quality_ranks_attributes: [ :id, :ranks, :armor_attachment_id, :armor_quality_id ]
+  permit_params :name, :description, :price, :hard_points,
+  armor_quality_ranks_attributes: [ :id, :ranks, :armor_attachment_id, :armor_quality_id ],
+  armor_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id ]
 
   menu :label => "Armor Attachments", :parent => "Equipment"
 
@@ -22,6 +24,12 @@ ActiveAdmin.register ArmorAttachment do
       f.has_many :armor_quality_ranks do |wqr_form|
         wqr_form.input :armor_quality_id, :as => :select, :collection => ArmorQuality.all
         wqr_form.input :ranks
+      end
+      f.has_many :armor_attachment_modification_options do |amo_form|
+        amo_form.input :skill_id, :as => :select, :collection => Skill.all
+        amo_form.input :talent_id, :as => :select, :collection => Talent.all
+        #wqr_form.input :armor_quality_id, :as => :select, :collection => ArmorQuality.all
+        #wqr_form.input :ranks
       end
 
     end
