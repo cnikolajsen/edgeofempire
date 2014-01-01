@@ -244,11 +244,21 @@ class CharactersController < ApplicationController
     end
 
     # Add armor values to soak and defense and armor to equipment list.
-    if !@character.character_armor.nil? and !@character.character_armor.armor_id.nil?
-      @soak += @character.character_armor.armor.soak
-      @defense += @character.character_armor.armor.defense
-      @equipment << "#{@character.character_armor.armor.name} (+#{@character.character_armor.armor.soak} soak, +#{@character.character_armor.armor.defense} defense)"
-      @pdf_weapons_and_armor << @character.character_armor.armor.name
+    armor_applied = :false
+    if !@character.character_armor.nil?
+      @character.character_armor.each do |ca|
+        if ca.equipped?
+          if armor_applied == :false
+            @soak += ca.armor.soak
+            @defense += ca.armor.defense
+            armor_applied = :true
+            @equipment << "#{ca.armor.name} (+#{ca.armor.soak} soak, +#{ca.armor.defense} defense)"
+            @pdf_weapons_and_armor << ca.armor.name
+          end
+        else
+          @equipment << "#{ca.armor.name}"
+        end
+      end
     end
 
     talent_alterations.each do |talent_id, stat|
