@@ -836,6 +836,31 @@ class CharactersController < ApplicationController
     #end
   end
 
+  def armor_attachment
+    @character = Character.find(params[:id])
+    @character_armor = CharacterArmor.find(params[:character_armor_id])
+    @armor = Armor.find(@character_armor.armor_id)
+    @title = "#{@character.name} | Armor Attachment"
+    #logger.warn(@character_armor.inspect)
+    #logger.warn(@armor.inspect)
+  end
+
+  def armor_attachment_selection
+    unless params[:attachment_id].blank?
+      @attachment = ArmorAttachment.find(params[:attachment_id])
+
+      render :partial => "attachment_info", :locals => { :attachment => @attachment }
+    else
+      render :partial => "attachment_info", :locals => { :attachment => nil }
+    end
+  end
+
+  def add_armor_attachment
+    logger.warn(params[:character_armor_attachment].inspect)
+
+    redirect_to 'armor/#{params[:character_armor_id]}/attachments', notice: 'Attachment added'
+  end
+
   def weapons
     @character_menu = 'equipment'
     @character_page = 'weapons'

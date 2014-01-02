@@ -71,9 +71,13 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
   get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
+  get 'characters/:id/armor/:character_armor_id/attachments' => 'characters#armor_attachment'
+  post 'characters/:id/armor/:character_armor_id/attachments' => 'characters#add_armor_attachment'
 
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
+  get 'character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
+  get 'character/find/weapon_attachment_selection' => 'characters#weapon_attachment_selection'
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 

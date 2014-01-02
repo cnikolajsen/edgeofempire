@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "Modifying #{@armor.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%#= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row">
+  <% if @armor.hard_points.blank? %>
+    <div class="small-12 columns">
+      <div data-alert class="alert-box warning round">
+        This piece of armor does not have any hard points and can not be modified.
+      </div>
+    </div>
+  <% else %>
+    <div class="small-3 columns">
+      <%= form_for :character_armor_attachment do |f| %>
+        <%= f.select :armor_attachment_id, ArmorAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <%= f.submit 'Add attachment', :class => 'button small' %>
+      <% end -%>
+    </div>
+    <div class="small-5 columns">
+    </div>
+    <div class="small-4 columns" id="attachment-info">
+    </div>
+  <% end -%>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
+  </div>
+</div>

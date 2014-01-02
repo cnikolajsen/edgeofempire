@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  character_armor_id: 1
+  armor_attachment_id: 1
+  armor_attachment_modification_option_id: 1
+
+two:
+  character_armor_id: 1
+  armor_attachment_id: 1
+  armor_attachment_modification_option_id: 1

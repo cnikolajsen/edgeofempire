@@ -15,13 +15,11 @@
         <li class="bullet-item">Enc: <%= @armor.encumbrance %></li>
         <li class="bullet-item">Rarity: <%= @armor.rarity %></li>
         <li class="bullet-item">Soak/Defense: <%= @armor.soak %>/<%= @armor.defense %></li>
-        <li class="cta-button"><a class="button tiny" href="#">Add attachment</a></li>
+        <% unless @armor.hard_points.blank? %>
+        <li class="cta-button"><%= link_to "Add attachment", "armor/#{f.object.id}/attachments", :class => "button tiny" %></li>
+        <% end -%>
         <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
       </ul>
-      <%= f.fields_for :armor_attachment do |attachment| %>
-        <%= render 'armor_attachment_fields', :f => attachment %>
-      <% end %>
-
     </li>
 <% else %>
   <li>
