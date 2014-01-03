@@ -12,6 +12,9 @@
           <%= f.check_box :carried %>
           <%= f.label :carried %>
         </li>
+        <% unless @armor.armor_models.blank? %>
+          <li class="bullet-item"><%= f.select :armor_model_id, @armor.armor_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %></li>
+        <% end -%>
         <li class="bullet-item">Enc: <%= @armor.encumbrance %></li>
         <li class="bullet-item">Rarity: <%= @armor.rarity %></li>
         <li class="bullet-item">Soak/Defense: <%= @armor.soak %>/<%= @armor.defense %></li>

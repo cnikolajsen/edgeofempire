@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140101151322) do
+ActiveRecord::Schema.define(version: 20140103124247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,13 @@ ActiveRecord::Schema.define(version: 20140101151322) do
     t.text     "description"
     t.integer  "hard_points"
     t.integer  "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "armor_models", force: true do |t|
+    t.integer  "armor_id"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -138,11 +145,12 @@ ActiveRecord::Schema.define(version: 20140101151322) do
   create_table "character_armors", force: true do |t|
     t.integer  "character_id"
     t.integer  "armor_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.text     "description"
     t.boolean  "equipped"
     t.boolean  "carried"
+    t.integer  "armor_model_id"
   end
 
   create_table "character_bonus_talents", force: true do |t|
@@ -157,9 +165,10 @@ ActiveRecord::Schema.define(version: 20140101151322) do
     t.integer  "character_id"
     t.integer  "gear_id"
     t.integer  "qty"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.boolean  "carried"
+    t.integer  "gear_model_id"
   end
 
   create_table "character_obligations", force: true do |t|
@@ -239,11 +248,12 @@ ActiveRecord::Schema.define(version: 20140101151322) do
   create_table "character_weapons", force: true do |t|
     t.integer  "character_id"
     t.integer  "weapon_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.text     "description"
     t.boolean  "equipped"
     t.boolean  "carried"
+    t.integer  "weapon_model_id"
   end
 
   create_table "characters", force: true do |t|
@@ -275,6 +285,13 @@ ActiveRecord::Schema.define(version: 20140101151322) do
     t.integer  "specialization_3"
     t.string   "aasm_state"
     t.string   "image_url"
+  end
+
+  create_table "gear_models", force: true do |t|
+    t.integer  "gear_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "gears", force: true do |t|
@@ -448,6 +465,13 @@ ActiveRecord::Schema.define(version: 20140101151322) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "weapon_models", force: true do |t|
+    t.integer  "weapon_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "weapon_qualities", force: true do |t|
     t.string   "name"

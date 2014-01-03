@@ -173,11 +173,17 @@ class CharactersController < ApplicationController
       unarmed_weapon = Weapon.where(:name => 'Unarmed').first
 
       @character.character_weapons.each do |cw|
+        if cw.weapon_model_id.nil?
+          weapon_name = cw.weapon.name
+        else
+          weapon_name = WeaponModel.find(cw.weapon_model_id).name
+        end
+
         unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
           if params[:format] != 'pdf'
-            @equipment << "#{cw.weapon.name}"
+            @equipment << "#{weapon_name}"
           else
-            @pdf_weapons_and_armor << cw.weapon.name
+            @pdf_weapons_and_armor << weapon_name
           end
         end
       end
@@ -232,6 +238,10 @@ class CharactersController < ApplicationController
             end
           end
 
+          unless cw.weapon_model_id.nil?
+            cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
+          end
+
           if params[:format] != 'pdf'
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
@@ -247,6 +257,10 @@ class CharactersController < ApplicationController
     armor_applied = :false
     if !@character.character_armor.nil?
       @character.character_armor.each do |ca|
+        unless ca.armor_model_id.nil?
+          ca.armor.name = ArmorModel.find(ca.armor_model_id).name
+        end
+
         if ca.equipped?
           if armor_applied == :false
             @soak += ca.armor.soak
@@ -272,6 +286,11 @@ class CharactersController < ApplicationController
     # Add general items to equipment list
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
+        unless cg.gear_model_id.nil?
+          cg.gear.name = GearModel.find(cg.gear_model_id).name
+        end
+
+
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
         @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
@@ -933,11 +952,11 @@ class CharactersController < ApplicationController
         :specialization_1,
         :specialization_2,
         :specialization_3,
-        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :_destroy ],
-        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :_destroy ],
+        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
+        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ]
+        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ]
       )
     end
   end

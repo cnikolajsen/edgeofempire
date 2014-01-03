@@ -9,6 +9,9 @@
           <%= f.check_box :carried %>
           <%= f.label :carried %>
         </li>
+        <% unless @item.gear_models.blank? %>
+          <li class="bullet-item"><%= f.select :gear_model_id, @item.gear_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %></li>
+        <% end -%>
         <li class="bullet-item">Enc: <%= @item.encumbrance %></li>
         <li class="bullet-item">Rarity: <%= @item.rarity %></li>
         <li class="bullet-item"><label>Quantity</label><%= f.number_field :qty, :min => 0 %></li>
