@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 20140103124247) do
   create_table "character_armor_attachments", force: true do |t|
     t.integer  "character_armor_id"
     t.integer  "armor_attachment_id"
-    t.integer  "armor_attachment_modification_option_id"
+    t.string   "armor_attachment_modification_options"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

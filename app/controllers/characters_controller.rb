@@ -542,8 +542,6 @@ class CharactersController < ApplicationController
     if !params[:character_career].nil? and !@character.career.nil?
       # Handle resets due to career change.
       if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
-        logger.warn('career change')
-        logger.warn(CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').inspect)
         CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
         CharacterSkill.where(:character_id => @character.id).each do |skill|
           skill.ranks -= skill.free_ranks_career
@@ -860,24 +858,62 @@ class CharactersController < ApplicationController
     @character_armor = CharacterArmor.find(params[:character_armor_id])
     @armor = Armor.find(@character_armor.armor_id)
     @title = "#{@character.name} | Armor Attachment"
-    #logger.warn(@character_armor.inspect)
-    #logger.warn(@armor.inspect)
+
+    @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id]).order(:id)
+
+    @hard_points_used = 0
+    @armor_attachments.each do |attachment|
+      @hard_points_used += ArmorAttachment.where(:id => attachment.armor_attachment_id).first.hard_points
+    end
+
+    @hard_point_meter = ((@hard_points_used.to_f / @armor.hard_points.to_f) * 100)
+    @hard_point_meter_class = ''
+    if @hard_point_meter > 100
+      @hard_point_meter_class = 'alert'
+    end
+    if @hard_point_meter == 100
+      @hard_point_meter_class = 'success'
+    end
   end
 
   def armor_attachment_selection
     unless params[:attachment_id].blank?
       @attachment = ArmorAttachment.find(params[:attachment_id])
 
-      render :partial => "attachment_info", :locals => { :attachment => @attachment }
+      render :partial => "attachment_info", :locals => { :attachment => @attachment , :active => nil, :armor_attachment_options => nil}
     else
-      render :partial => "attachment_info", :locals => { :attachment => nil }
+      render :partial => "attachment_info", :locals => { :attachment => nil, :active => nil, :armor_attachment_options => nil}
     end
   end
 
   def add_armor_attachment
-    logger.warn(params[:character_armor_attachment].inspect)
+    @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
+    redirect_to :back
+  end
 
-    redirect_to 'armor/#{params[:character_armor_id]}/attachments', notice: 'Attachment added'
+  def remove_armor_attachment
+    CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).delete_all
+    redirect_to :back
+  end
+
+  def add_armor_attachment_option
+    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+
+    if armor_attachment.armor_attachment_modification_options.nil?
+      armor_attachment.armor_attachment_modification_options = Array.new
+    end
+    armor_attachment.armor_attachment_modification_options << params[:option_id]
+    armor_attachment.save
+
+    redirect_to :back
+  end
+
+  def remove_armor_attachment_option
+    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+    armor_attachment.armor_attachment_modification_options.delete_at armor_attachment.armor_attachment_modification_options.index(params[:option_id].to_s)
+    armor_attachment.save
+
+    redirect_to :back
   end
 
   def weapons

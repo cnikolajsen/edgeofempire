@@ -12,12 +12,35 @@
   <% attachment.armor_attachment_modification_options.each do |aamo| %>
     <% unless aamo.talent_id.nil? %>
       <% talent = Talent.find(aamo.talent_id) %>
-      <li class="bullet-item"><strong>Innate talent:</strong> <%= talent.name %></li>
+      <li class="bullet-item">
+        <strong>Innate talent:</strong>
+        <%= talent.name %>
+        <% unless active.nil? %>
+          <% if !armor_attachment_options.armor_attachment_modification_options.nil? and armor_attachment_options.armor_attachment_modification_options.include?(aamo.id.to_s) %>
+            <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/remove" %>
+          <% else %>
+            <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/add" %>
+          <% end %>
+        <% end %>
+      </li>
     <% end -%>
     <% unless aamo.skill_id.nil? %>
       <% skill = Skill.find(aamo.skill_id) %>
-      <li class="bullet-item"><strong>Skill:</strong> <%= skill.name %> +1</li>
+      <li class="bullet-item">
+        <strong>Skill:</strong>
+        <%= skill.name %> +1
+        <% unless active.nil? %>
+          <% if !armor_attachment_options.armor_attachment_modification_options.nil? and armor_attachment_options.armor_attachment_modification_options.include?(aamo.id.to_s) %>
+            <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/remove" %>
+          <% else %>
+            <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/add" %>
+          <% end %>
+        <% end %>
+      </li>
     <% end -%>
+  <% end -%>
+  <% unless active.nil? %>
+    <li class="cta-button"><%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/remove", :class => 'button tiny alert' %></li>
   <% end -%>
 </ul>
 <% end -%>
