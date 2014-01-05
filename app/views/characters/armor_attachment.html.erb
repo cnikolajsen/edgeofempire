@@ -39,9 +39,18 @@
           Used: <%= @hard_points_used %>
         </div>
       </div>
-      <div id="attachment-info"></div>
+      <br />
+      <div class="row">
+        <div id="attachment-info" class="small-12 columns"></div>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
+        </div>
+      </div>
     </div>
     <div class="small-9 columns" data-no-turbolink>
+      <%= render :partial => 'layouts/flash' %>
       <h4>Attachments on item</h4>
       <% unless @armor_attachments.blank? %>
         <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2" id="item-grid" data-no-turbolink>
@@ -53,9 +62,4 @@
       <% end -%>
     </div>
   <% end -%>
-</div>
-<div class="row">
-  <div class="small-12 columns">
-    <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
-  </div>
 </div>

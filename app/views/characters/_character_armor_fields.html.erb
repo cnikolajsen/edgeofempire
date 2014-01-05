@@ -18,8 +18,30 @@
         <li class="bullet-item">Enc: <%= @armor.encumbrance %></li>
         <li class="bullet-item">Rarity: <%= @armor.rarity %></li>
         <li class="bullet-item">Soak/Defense: <%= @armor.soak %>/<%= @armor.defense %></li>
+        <% unless f.object.character_armor_attachments.blank? %>
+          <li class="title">Attachments</li>
+          <% f.object.character_armor_attachments.each do |caa| %>
+            <% attachment = ArmorAttachment.find(caa.armor_attachment_id) %>
+            <li class="bullet-item">
+              <%= attachment.name %>
+              <% unless caa.armor_attachment_modification_options.blank? %>
+              <ul style="font-size: 10px;">
+                <% caa.armor_attachment_modification_options.each do |option| %>
+                  <% modification_option = ArmorAttachmentModificationOption.find(option) %>
+                  <% unless modification_option.talent_id.nil? %>
+                    <li>Innate talent: <%= Talent.find(modification_option.talent_id).name %></li>
+                  <% end -%>
+                  <% unless modification_option.skill_id.nil? %>
+                    <li>Skill bonus: <%= Skill.find(modification_option.skill_id).name %></li>
+                  <% end -%>
+                <% end -%>
+              </ul>
+              <% end -%>
+            </li>
+          <% end %>
+        <% end %>
         <% unless @armor.hard_points.blank? %>
-        <li class="cta-button"><%= link_to "Add attachment", "armor/#{f.object.id}/attachments", :class => "button tiny" %></li>
+        <li class="cta-button"><%= link_to "Manage attachment", "armor/#{f.object.id}/attachments", :class => "button tiny" %></li>
         <% end -%>
         <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
       </ul>

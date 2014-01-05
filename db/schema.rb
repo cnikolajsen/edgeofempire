@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140103124247) do
+ActiveRecord::Schema.define(version: 20140105163324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20140103124247) do
     t.integer  "free_ranks_career"
     t.integer  "free_ranks_specialization"
     t.integer  "free_ranks_race"
+    t.integer  "free_ranks_equipment"
   end
 
   create_table "character_starting_skill_ranks", force: true do |t|
