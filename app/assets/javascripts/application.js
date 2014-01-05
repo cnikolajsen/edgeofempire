@@ -9,13 +9,14 @@
 //
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
+// _require turbolinks
 //
 //= require jquery
 //= require jquery_ujs
 //= require foundation
-//= require turbolinks
 //= require cocoon
 //= require ./characters/species
 //= require ./characters/career
+//= require ./characters/armor_attachment
 
 $(function(){ $(document).foundation(); });

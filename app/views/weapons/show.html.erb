@@ -27,6 +27,14 @@
       </tbody>
     </table>
     <p><%= @weapon.description %></p>
+    <% unless @weapon.weapon_models.blank? %>
+      <h5>Models include</h5>
+      <ul>
+        <% @weapon.weapon_models.each do |model| %>
+          <li><%= model.name %></li>
+        <% end -%>
+      </ul>
+    <% end -%>
   </div>
 
   <div class="small-3 columns panel">

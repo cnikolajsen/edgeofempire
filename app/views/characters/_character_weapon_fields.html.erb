@@ -13,6 +13,9 @@
           <%= f.check_box :carried %>
           <%= f.label :carried %>
         </li>
+        <% unless @weapon.weapon_models.blank? %>
+          <li class="bullet-item"><%= f.select :weapon_model_id, @weapon.weapon_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %></li>
+        <% end -%>
         <li class="bullet-item"><%= @weapon.skill.name %></li>
         <li class="bullet-item">Range: <%= @weapon.range %></li>
         <li class="bullet-item">Damage: <%= @weapon.damage %></li>

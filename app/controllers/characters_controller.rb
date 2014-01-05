@@ -40,6 +40,25 @@ class CharactersController < ApplicationController
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
+    # Find equipped armor.
+    equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
+    @character_armor_modification_bonuses = {}
+    @character_armor_modification_bonuses['skills'] = Array.new
+    @character_armor_modification_bonuses['talents'] = Array.new
+    unless equipped_armor.character_armor_attachments.blank?
+      equipped_armor.character_armor_attachments.each do |caa|
+        caa.armor_attachment_modification_options.each do |option|
+          modification_option = ArmorAttachmentModificationOption.find(option)
+          unless modification_option.talent_id.nil?
+            @character_armor_modification_bonuses['talents'] << modification_option.talent_id
+          end
+          unless modification_option.skill_id.nil?
+            @character_armor_modification_bonuses['skills'] << modification_option.skill_id
+          end
+        end
+      end
+    end
+
     # Build character talent selection.
     @talents = {}
     unless @character.character_talents.empty?
@@ -90,6 +109,19 @@ class CharactersController < ApplicationController
             @talents[bt.talent_id]['count'] = talent_ranks.ranks
             @talents[bt.talent_id]['options'] = Array.new
           end
+        end
+      end
+    end
+
+    # Include talent alterations from equipped armor.
+    unless @character_armor_modification_bonuses['talents'].blank?
+      @character_armor_modification_bonuses['talents'].each do |armor_talents|
+        if @talents.has_key?(armor_talents)
+          @talents[armor_talents]['count'] = @talents[armor_talents]['count'] + 1
+        else
+          @talents[armor_talents] = {}
+          @talents[armor_talents]['count'] = 1
+          @talents[armor_talents]['options'] = Array.new
         end
       end
     end
@@ -173,11 +205,17 @@ class CharactersController < ApplicationController
       unarmed_weapon = Weapon.where(:name => 'Unarmed').first
 
       @character.character_weapons.each do |cw|
+        if cw.weapon_model_id.nil?
+          weapon_name = cw.weapon.name
+        else
+          weapon_name = WeaponModel.find(cw.weapon_model_id).name
+        end
+
         unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
           if params[:format] != 'pdf'
-            @equipment << "#{cw.weapon.name}"
+            @equipment << "#{weapon_name}"
           else
-            @pdf_weapons_and_armor << cw.weapon.name
+            @pdf_weapons_and_armor << weapon_name
           end
         end
       end
@@ -232,6 +270,10 @@ class CharactersController < ApplicationController
             end
           end
 
+          unless cw.weapon_model_id.nil?
+            cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
+          end
+
           if params[:format] != 'pdf'
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
@@ -243,10 +285,17 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Add armor values to soak and defense and armor to equipment list.
     armor_applied = :false
     if !@character.character_armor.nil?
       @character.character_armor.each do |ca|
+        unless ca.armor_model_id.nil?
+          ca.armor.name = ArmorModel.find(ca.armor_model_id).name
+        end
+
+        unless ca.character_armor_attachments.blank?
+          ca.armor.name = "Modified " + ca.armor.name
+        end
+
         if ca.equipped?
           if armor_applied == :false
             @soak += ca.armor.soak
@@ -272,6 +321,10 @@ class CharactersController < ApplicationController
     # Add general items to equipment list
     if !@character.character_gears.nil?
       @character.character_gears.each do |cg|
+        unless cg.gear_model_id.nil?
+          cg.gear.name = GearModel.find(cg.gear_model_id).name
+        end
+
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
         @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
@@ -397,6 +450,7 @@ class CharactersController < ApplicationController
           @character_skill.free_ranks_career = 0
           @character_skill.free_ranks_specialization = 0
           @character_skill.free_ranks_race = 0
+          @character_skill.free_ranks_equipment = 0
           @character_skill.skill_id = skill.id
 
           @character_skill.save
@@ -523,8 +577,6 @@ class CharactersController < ApplicationController
     if !params[:character_career].nil? and !@character.career.nil?
       # Handle resets due to career change.
       if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
-        logger.warn('career change')
-        logger.warn(CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').inspect)
         CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
         CharacterSkill.where(:character_id => @character.id).each do |skill|
           skill.ranks -= skill.free_ranks_career
@@ -836,6 +888,89 @@ class CharactersController < ApplicationController
     #end
   end
 
+  def armor_attachment
+    @character = Character.find(params[:id])
+    @character_armor = CharacterArmor.find(params[:character_armor_id])
+    @armor = Armor.find(@character_armor.armor_id)
+    @title = "#{@character.name} | Armor Attachment"
+
+    @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id]).order(:id)
+
+    @hard_points_used = 0
+    @armor_attachments.each do |attachment|
+      @hard_points_used += ArmorAttachment.where(:id => attachment.armor_attachment_id).first.hard_points
+    end
+
+    @hard_point_meter = ((@hard_points_used.to_f / @armor.hard_points.to_f) * 100)
+    @hard_point_meter_class = ''
+    if @hard_point_meter > 100
+      @hard_point_meter_class = 'alert'
+    end
+    if @hard_point_meter == 100
+      @hard_point_meter_class = 'success'
+    end
+  end
+
+  def armor_attachment_selection
+    unless params[:attachment_id].blank?
+      @attachment = ArmorAttachment.find(params[:attachment_id])
+
+      render :partial => "attachment_info", :locals => { :attachment => @attachment , :active => nil, :armor_attachment_options => nil}
+    else
+      render :partial => "attachment_info", :locals => { :attachment => nil, :active => nil, :armor_attachment_options => nil}
+    end
+  end
+
+  def add_armor_attachment
+    @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
+    redirect_to :back, :notice => "Attachment added"
+  end
+
+  def remove_armor_attachment
+    CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).delete_all
+    redirect_to :back, :notice => "Attachment removed"
+  end
+
+  def add_armor_attachment_option
+    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+
+    attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
+    unless attachment_option.skill_id.nil?
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      if character_skill.free_ranks_equipment.nil?
+        character_skill.free_ranks_equipment = 1
+      else
+        character_skill.free_ranks_equipment += 1
+      end
+      character_skill.ranks += 1
+      character_skill.save
+    end
+
+    if armor_attachment.armor_attachment_modification_options.nil?
+      armor_attachment.armor_attachment_modification_options = Array.new
+    end
+    armor_attachment.armor_attachment_modification_options << params[:option_id]
+    armor_attachment.save
+
+    redirect_to :back, :notice => "Modification option added."
+  end
+
+  def remove_armor_attachment_option
+    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+    armor_attachment.armor_attachment_modification_options.delete_at armor_attachment.armor_attachment_modification_options.index(params[:option_id].to_s)
+    armor_attachment.save
+
+    attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
+    unless attachment_option.skill_id.nil?
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill.free_ranks_equipment -= 1
+      character_skill.ranks -= 1
+      character_skill.save
+    end
+
+    redirect_to :back, :notice => "Modification option removed."
+  end
+
   def weapons
     @character_menu = 'equipment'
     @character_page = 'weapons'
@@ -908,11 +1043,11 @@ class CharactersController < ApplicationController
         :specialization_1,
         :specialization_2,
         :specialization_3,
-        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :_destroy ],
-        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :_destroy ],
+        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
+        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ]
+        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ]
       )
     end
   end

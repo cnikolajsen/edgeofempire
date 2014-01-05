@@ -1,6 +1,7 @@
 ActiveAdmin.register Armor do
   permit_params :name, :description, :defense, :soak, :price, :encumbrance,
-    :rarity, :hard_points, :image_url
+    :rarity, :hard_points, :image_url,
+    armor_models_attributes: [ :id, :armor_id, :name ]
 
   menu :label => "Armor", :parent => "Equipment"
 
@@ -11,11 +12,31 @@ ActiveAdmin.register Armor do
     column :name
     column :defense
     column :soak
+    column :price
     column :encumbrance
     column :hard_points
     column :rarity
-    column :price
+
     default_actions
+  end
+
+  form do |f|
+    f.inputs "Armor Details" do
+      f.input :name
+      f.input :description
+      f.input :image_url
+      f.input :defense
+      f.input :soak
+      f.input :price
+      f.input :encumbrance
+      f.input :hard_points
+      f.input :rarity
+      f.has_many :armor_models do |wm_form|
+        wm_form.input :name
+      end
+
+    end
+    f.actions
   end
 
   controller do
