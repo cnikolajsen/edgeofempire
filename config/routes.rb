@@ -71,11 +71,18 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
   get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
+
   get 'characters/:id/armor/:character_armor_id/attachments' => 'characters#armor_attachment'
   post 'characters/:id/armor/:character_armor_id/attachments' => 'characters#add_armor_attachment'
   get 'characters/:id/armor/attachment/:attachment_id/remove' => 'characters#remove_armor_attachment'
   get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'characters#add_armor_attachment_option'
   get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'characters#remove_armor_attachment_option'
+
+  get 'characters/:id/weapon/:character_weapon_id/attachments' => 'characters#weapon_attachment'
+  post 'characters/:id/weapon/:character_weapon_id/attachments' => 'characters#add_weapon_attachment'
+  get 'characters/:id/weapon/attachment/:attachment_id/remove' => 'characters#remove_weapon_attachment'
+  get 'characters/:id/weapon/attachment/:attachment_id/option/:option_id/add' => 'characters#add_weapon_attachment_option'
+  get 'characters/:id/weapon/attachment/:attachment_id/option/:option_id/remove' => 'characters#remove_weapon_attachment_option'
 
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'

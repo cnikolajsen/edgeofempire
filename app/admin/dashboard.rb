@@ -16,17 +16,17 @@ ActiveAdmin.register_page "Dashboard" do
       column do
         panel "Recent Characters" do
           ul do
-            Character.find(:all, :order => "id desc", :limit => 5).map do |character|
+            Character.where(:true).order("id desc").limit(5).map do |character|
               unless character.user.nil?
-                li do 
-                  link_to(character.name, character_path(character)) + ' by ' +  character.user.email 
+                li do
+                  link_to(character.name, character_path(character)) + ' by ' +  character.user.email
                 end
               end
             end
           end
         end
       end
-    
+
       #column do
       #  panel "Info" do
       #    para "Welcome to ActiveAdmin."

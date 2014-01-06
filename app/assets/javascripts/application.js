@@ -18,5 +18,6 @@
 //= require ./characters/species
 //= require ./characters/career
 //= require ./characters/armor_attachment
+//= require ./characters/weapon_attachment
 
 $(function(){ $(document).foundation(); });

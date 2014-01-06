@@ -28,8 +28,6 @@ ActiveAdmin.register ArmorAttachment do
       f.has_many :armor_attachment_modification_options do |amo_form|
         amo_form.input :skill_id, :as => :select, :collection => Skill.all
         amo_form.input :talent_id, :as => :select, :collection => Talent.all
-        #wqr_form.input :armor_quality_id, :as => :select, :collection => ArmorQuality.all
-        #wqr_form.input :ranks
       end
 
     end

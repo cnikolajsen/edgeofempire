@@ -59,6 +59,25 @@ class CharactersController < ApplicationController
       end
     end
 
+    # Find equipped weapons.
+    equipped_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true).first
+    @character_weapon_modification_bonuses = {}
+    @character_weapon_modification_bonuses['skills'] = Array.new
+    @character_weapon_modification_bonuses['talents'] = Array.new
+    unless equipped_weapons.character_weapon_attachments.blank?
+      equipped_weapons.character_weapon_attachments.each do |caa|
+        caa.weapon_attachment_modification_options.each do |option|
+          modification_option = WeaponAttachmentModificationOption.find(option)
+          unless modification_option.talent_id.nil?
+            @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
+          end
+          unless modification_option.skill_id.nil?
+            @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
+          end
+        end
+      end
+    end
+
     # Build character talent selection.
     @talents = {}
     unless @character.character_talents.empty?
@@ -122,6 +141,18 @@ class CharactersController < ApplicationController
           @talents[armor_talents] = {}
           @talents[armor_talents]['count'] = 1
           @talents[armor_talents]['options'] = Array.new
+        end
+      end
+    end
+    # Include talent alterations from equipped weapons.
+    unless @character_weapon_modification_bonuses['talents'].blank?
+      @character_weapon_modification_bonuses['talents'].each do |weapon_talents|
+        if @talents.has_key?(weapon_talents)
+          @talents[weapon_talents]['count'] = @talents[weapon_talents]['count'] + 1
+        else
+          @talents[weapon_talents] = {}
+          @talents[weapon_talents]['count'] = 1
+          @talents[weapon_talents]['options'] = Array.new
         end
       end
     end
@@ -915,9 +946,9 @@ class CharactersController < ApplicationController
     unless params[:attachment_id].blank?
       @attachment = ArmorAttachment.find(params[:attachment_id])
 
-      render :partial => "attachment_info", :locals => { :attachment => @attachment , :active => nil, :armor_attachment_options => nil}
+      render :partial => "armor_attachment_info", :locals => { :attachment => @attachment , :active => nil, :armor_attachment_options => nil}
     else
-      render :partial => "attachment_info", :locals => { :attachment => nil, :active => nil, :armor_attachment_options => nil}
+      render :partial => "armor_attachment_info", :locals => { :attachment => nil, :active => nil, :armor_attachment_options => nil}
     end
   end
 
@@ -933,6 +964,7 @@ class CharactersController < ApplicationController
 
   def add_armor_attachment_option
     armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+    logger.warn(armor_attachment.inspect)
 
     attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
@@ -976,6 +1008,89 @@ class CharactersController < ApplicationController
     @character_page = 'weapons'
     @character = Character.find(params[:id])
     @title = "#{@character.name} | Weapons"
+  end
+
+  def weapon_attachment
+    @character = Character.find(params[:id])
+    @character_weapon = CharacterWeapon.find(params[:character_weapon_id])
+    @weapon = Weapon.find(@character_weapon.weapon_id)
+    @title = "#{@character.name} | Weapon Attachment"
+
+    @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id]).order(:id)
+
+    @hard_points_used = 0
+    @weapon_attachments.each do |attachment|
+      @hard_points_used += WeaponAttachment.where(:id => attachment.weapon_attachment_id).first.hard_points
+    end
+
+    @hard_point_meter = ((@hard_points_used.to_f / @weapon.hard_points.to_f) * 100)
+    @hard_point_meter_class = ''
+    if @hard_point_meter > 100
+      @hard_point_meter_class = 'alert'
+    end
+    if @hard_point_meter == 100
+      @hard_point_meter_class = 'success'
+    end
+  end
+
+  def weapon_attachment_selection
+    unless params[:attachment_id].blank?
+      @attachment = WeaponAttachment.find(params[:attachment_id])
+
+      render :partial => "weapon_attachment_info", :locals => { :attachment => @attachment , :active => nil, :weapon_attachment_options => nil}
+    else
+      render :partial => "weapon_attachment_info", :locals => { :attachment => nil, :active => nil, :weapon_attachment_options => nil}
+    end
+  end
+
+  def add_weapon_attachment
+    @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
+    redirect_to :back, :notice => "Attachment added"
+  end
+
+  def remove_weapon_attachment
+    CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).delete_all
+    redirect_to :back, :notice => "Attachment removed"
+  end
+
+  def add_weapon_attachment_option
+    weapon_attachment = CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).first
+
+    attachment_option = WeaponAttachmentModificationOption.find(params[:option_id])
+    unless attachment_option.skill_id.nil?
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      if character_skill.free_ranks_equipment.nil?
+        character_skill.free_ranks_equipment = 1
+      else
+        character_skill.free_ranks_equipment += 1
+      end
+      character_skill.ranks += 1
+      character_skill.save
+    end
+
+    if weapon_attachment.weapon_attachment_modification_options.nil?
+      weapon_attachment.weapon_attachment_modification_options = Array.new
+    end
+    weapon_attachment.weapon_attachment_modification_options << params[:option_id]
+    weapon_attachment.save
+
+    redirect_to :back, :notice => "Modification option added."
+  end
+
+  def remove_weapon_attachment_option
+    weapon_attachment = CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).first
+    weapon_attachment.weapon_attachment_modification_options.delete_at weapon_attachment.weapon_attachment_modification_options.index(params[:option_id].to_s)
+    weapon_attachment.save
+
+    attachment_option = WeaponAttachmentModificationOption.find(params[:option_id])
+    unless attachment_option.skill_id.nil?
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill.free_ranks_equipment -= 1
+      character_skill.ranks -= 1
+      character_skill.save
+    end
+
+    redirect_to :back, :notice => "Modification option removed."
   end
 
   def equipment

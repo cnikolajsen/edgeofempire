@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140105163324) do
+ActiveRecord::Schema.define(version: 20140105201416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +246,14 @@ ActiveRecord::Schema.define(version: 20140105163324) do
     t.string   "talent_5_4_options"
   end
 
+  create_table "character_weapon_attachments", force: true do |t|
+    t.integer  "character_weapon_id"
+    t.integer  "weapon_attachment_id"
+    t.string   "weapon_attachment_modification_options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "character_weapons", force: true do |t|
     t.integer  "character_id"
     t.integer  "weapon_id"
@@ -466,6 +474,31 @@ ActiveRecord::Schema.define(version: 20140105163324) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "weapon_attachment_modification_options", force: true do |t|
+    t.integer  "weapon_attachment_id"
+    t.integer  "talent_id"
+    t.integer  "skill_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "weapon_attachment_quality_ranks", force: true do |t|
+    t.integer  "weapon_attachment_id"
+    t.integer  "weapon_quality_id"
+    t.integer  "ranks"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "weapon_attachments", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "hard_points"
+    t.integer  "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "weapon_models", force: true do |t|
     t.integer  "weapon_id"
