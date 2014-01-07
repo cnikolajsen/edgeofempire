@@ -2,71 +2,58 @@ class CharacterSheetPdf < Prawn::Document
   include CharactersHelper
 
   def initialize(character, view, pdf_vars)
+    super( :left_margin => 30, :right_margin => 30, :top_margin => 0, :bottom_margin => 0, :page_size => 'A4')
     if pdf_vars['pdf_background'] == 'on'
-      #image("#{Rails.root}/public/character_sheet_bg_pg1.jpg", :at => [0, y - 0])
-      img = "#{Rails.root}/public/character_sheet_bg_pg1.jpg"
+      image "#{Rails.root}/public/BKSheet1_opt.png",
+        :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+        :fit => [595.28, 841.89]
     end
-    super( :left_margin => 25, :right_margin => 25, :top_margin => 0, :page_size => 'A4', :background => img )
+
     @character = character
     @view = view
-    
-    image "#{Rails.root}/public/eote_logo_white.png", :at => [454,800], :width => 110
-    # rounded_rectangle(point,width,height,radius)
-    
-    #fill_color "c8c8c8" #pdf_vars['pdf_border_color']
+
+    fill_color "000000"
+    #rounded_rectangle(point,width,height,radius)
+    rectangle [(bounds.right - 115), bounds.top], 111, 60 # logo box
+    fill
+    image "#{Rails.root}/public/eote_logo_white.png", :at => [(bounds.right - 105), (bounds.top - 5)], :width => 90
+
+    fill_color "C0C0C0" #pdf_vars['pdf_border_color']
     #
-    #rounded_rectangle [25, 690], 550, 103, 3 # Vitals box
-    #fill
+    rounded_rectangle [0, 690], bounds.width, 83, 10 # Vitals box
+    fill
 
     #===== Character details =====
-    bounding_box([bounds.left, bounds.top], :width => 400, :height => 100) do
+    bounding_box([bounds.left, bounds.top], :width => 415, :height => 72) do
       fill_color "c8c8c8"
       rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 3 # Character box
       fill
-      fill_color "6d7b68"
-      draw_text "CHARACTER", :size => 7, :style => :bold, :at => [10, 85]
+      #fill_color "6d7b68"
+      #draw_text "Character", :size => 7, :style => :bold, :at => [10, 85]
       fill_color "505b4d"
-      draw_text "CHARACTER NAME", :size => 11, :style => :bold, :at => [10, 70]
-      draw_text "SPECIES", :size => 7, :at => [10, 50]
-      draw_text "CAREER", :size => 7, :at => [10, 30]
-      draw_text "SPECIALIZATION TREES", :size => 7, :at => [10, 10]
+      draw_text "CHARACTER NAME", :size => 10, :style => :bold, :at => [15, (bounds.top - 20)]
+      draw_text "SPECIES", :size => 8, :at => [15, (bounds.top - 35)]
+      draw_text "CAREER", :size => 8, :at => [15, (bounds.top - 50)]
+      draw_text "SPECIALIZATION TREES", :size => 8, :at => [15, (bounds.top - 65)]
       fill_color "3e463b"
-      draw_text "#{@character.name}", :size => 14, :at => [140, 70]
-      draw_text "#{@character.race.name}", :size => 10, :at => [140, 50]
-      draw_text "#{@character.career.name}", :size => 10, :at => [140, 30]
-      draw_text pdf_vars['specializations'].join(' / '), :size => 10, :at => [140, 10]
+      draw_text "#{@character.name}", :size => 12, :at => [140, (bounds.top - 20)]
+      draw_text "#{@character.race.name}", :size => 8, :at => [140, (bounds.top - 35)]
+      draw_text "#{@character.career.name}", :size => 8, :at => [140, (bounds.top - 50)]
+      draw_text pdf_vars['specializations'].join(' / '), :size => 8, :at => [140, (bounds.top - 65)]
       #text_box "#{@character.user.email}", :size => 8, :at => [458, y - 90]
       #stroke_bounds
     end
     #===== /Character details =====
 
     #===== Vitals =====
-    bounding_box([bounds.left, 700], :width => bounds.width, :height => 55) do
-      bounding_box([bounds.left, bounds.top], :width => (bounds.width / 4), :height => bounds.height) do
+    bounding_box([bounds.left, (bounds.top - 79)], :width => bounds.width, :height => 55) do
+      bounding_box([bounds.left, bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
         # Outer Box.
         stroke do
           self.line_width = 2
           fill_color "ffffff"
           stroke_color "474D46"
-          polygon [bounds.left,(bounds.top - 33)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 33)], [(bounds.right - 14),(bounds.top - 43)], [(bounds.left + 14),(bounds.top - 43)]
-          fill_and_stroke
-        end
-        # Label box.
-        fill_color "354555"
-        polygon [(bounds.left + 2),(bounds.top - 9)], [(bounds.left + 14),(bounds.top - 2)], [(bounds.right - 14),(bounds.top - 2)], [(bounds.right - 2),(bounds.top - 9)], [(bounds.right - 14),(bounds.top - 16)], [(bounds.left + 14),(bounds.top - 16)]
-        fill
-        fill_color "ffffff"
-        text_box "SOAK VALUE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
-        fill_color "000000"
-        text_box "#{pdf_vars['soak']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-      end
-      bounding_box([(bounds.left + ((bounds.width / 4) * 1)), bounds.top], :width => (bounds.width / 4), :height => bounds.height) do
-        # Outer Box.
-        stroke do
-          self.line_width = 2
-          fill_color "ffffff"
-          stroke_color "474D46"
-          polygon [bounds.left,(bounds.top - 33)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 33)], [(bounds.right - 14),(bounds.top - 43)], [(bounds.left + 14),(bounds.top - 43)]
+          polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
           fill_and_stroke
         end
         # Label box.
@@ -76,19 +63,20 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "WOUNDS", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 44)]
+        #text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
         fill
-        text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
-        text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       end
-      bounding_box([(bounds.left + ((bounds.width / 4) * 2)), bounds.top], :width => (bounds.width / 4), :height => bounds.height) do
+      bounding_box([(bounds.left + ((bounds.width / 5) * 1)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
         # Outer Box.
         stroke do
           self.line_width = 2
           fill_color "ffffff"
           stroke_color "474D46"
-          polygon [bounds.left,(bounds.top - 33)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 33)], [(bounds.right - 14),(bounds.top - 43)], [(bounds.left + 14),(bounds.top - 43)]
+          polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
           fill_and_stroke
         end
         # Label box.
@@ -98,19 +86,37 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "STRAIN", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['strain_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 44)]
+        text_box "#{pdf_vars['strain_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
         fill
-        text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
-        text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       end
-      bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => (bounds.width / 4), :height => bounds.height) do
+      bounding_box([(bounds.left + ((bounds.width / 5) * 2)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
         # Outer Box.
         stroke do
           self.line_width = 2
           fill_color "ffffff"
           stroke_color "474D46"
-          polygon [bounds.left,(bounds.top - 33)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 33)], [(bounds.right - 14),(bounds.top - 43)], [(bounds.left + 14),(bounds.top - 43)]
+          polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
+          fill_and_stroke
+        end
+        # Label box.
+        fill_color "354555"
+        polygon [(bounds.left + 2),(bounds.top - 9)], [(bounds.left + 14),(bounds.top - 2)], [(bounds.right - 14),(bounds.top - 2)], [(bounds.right - 2),(bounds.top - 9)], [(bounds.right - 14),(bounds.top - 16)], [(bounds.left + 14),(bounds.top - 16)]
+        fill
+        fill_color "ffffff"
+        text_box "SOAK VALUE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
+        fill_color "000000"
+        text_box "#{pdf_vars['soak']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+      end
+      bounding_box([(bounds.left + ((bounds.width / 5) * 3)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
+        # Outer Box.
+        stroke do
+          self.line_width = 2
+          fill_color "ffffff"
+          stroke_color "474D46"
+          polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
           fill_and_stroke
         end
         # Label box.
@@ -120,24 +126,46 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "DEFENSE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 44)]
+        text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
         fill
-        text_box "RANGED", :at => [bounds.left, (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
-        text_box "MELEE", :at => [(bounds.width / 2), (bounds.top - 43)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "RANGED", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "MELEE", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+      end
+      bounding_box([(bounds.left + ((bounds.width / 5) * 4)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
+        # Outer Box.
+        stroke do
+          self.line_width = 2
+          fill_color "ffffff"
+          stroke_color "474D46"
+          polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
+          fill_and_stroke
+        end
+        # Label box.
+        fill_color "354555"
+        polygon [(bounds.left + 2),(bounds.top - 9)], [(bounds.left + 14),(bounds.top - 2)], [(bounds.right - 14),(bounds.top - 2)], [(bounds.right - 2),(bounds.top - 9)], [(bounds.right - 14),(bounds.top - 16)], [(bounds.left + 14),(bounds.top - 16)]
+        fill
+        fill_color "ffffff"
+        text_box "ENCUMBRANCE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
+        fill_color "000000"
+        #text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
+        fill
+        text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+        text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       end
     end
     #===== /Vitals =====
 
     #===== Characteristics =====
-    bounding_box([bounds.left, 645], :width => bounds.width, :height => 85) do
+    bounding_box([bounds.left, (bounds.top - 145)], :width => bounds.width, :height => 85) do
       fill_color "354555"
       polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
       fill
       fill_color "ffffff"
       text_box "CHARACTERISTICS", :width => bounds.width, :height => 14, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       fill_color "000000"
-      
+
       # Brawn.
       bounding_box([bounds.left, bounds.top], :width => (bounds.width / 6), :height => bounds.height) do
         fill_color "ffffff"
@@ -262,16 +290,10 @@ class CharacterSheetPdf < Prawn::Document
     #===== /Characteristics =====
 
     #===== Skills =====
-    bounding_box([bounds.left, 555], :width => bounds.width, :height => 365) do
-      fill_color "D3D4CE"
-      rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5 # Character box
+    bounding_box([bounds.left, (bounds.top - 230)], :width => ((bounds.width - 20) / 2), :height => 398) do
+      fill_color "C0C0C0"
+      rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5 # Left skills box
       fill
-
-      fill_color "354555"
-      polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
-      fill
-      fill_color "ffffff"
-      text_box "SKILLS", :width => bounds.width, :height => 14, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       fill_color "000000"
 
       @combat_skills = ['Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)']
@@ -310,38 +332,13 @@ class CharacterSheetPdf < Prawn::Document
           if is_career_skill(skill.skill.id)
             'Yes'
           end,
-          {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
-          {:image => dice_proficiency, :fit => [58, 13], :position => :left, :vposition => :center}
-        ]
-      end
-
-      knowledge_skills = knowledge.map do |skill|
-        font "Helvetica", :size=> 8
-        dice_ability = "#{Rails.root}/public/dice/blank.png"
-        dice_proficiency = "#{Rails.root}/public/dice/blank.png"
-        if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
-        elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-          dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
-        else
-          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
-          if skill.ranks > 0
-            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
-          end
-        end
-        [
-          "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-          if is_career_skill(skill.skill.id)
-            'Yes'
-          end,
-          {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
-          {:image => dice_proficiency, :fit => [58, 13], :position => :left, :vposition => :center}
+          {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},
+          {:image => dice_proficiency, :fit => [58, 12], :position => :left, :vposition => :center}
         ]
       end
 
       general_skills = other.map do |skill|
-        font "Helvetica", :size=> 8
+        font "Helvetica", :size=> 7
         dice_ability = "#{Rails.root}/public/dice/blank.png"
         dice_proficiency = "#{Rails.root}/public/dice/blank.png"
         if @character.send(skill.skill.characteristic.downcase) == skill.ranks
@@ -360,36 +357,13 @@ class CharacterSheetPdf < Prawn::Document
           if is_career_skill(skill.skill.id)
             'Yes'
           end,
-          {:image => dice_ability, :fit => [58, 13], :position => :right, :vposition => :center},
-          {:image => dice_proficiency, :fit => [58, 13], :position => :left, :vposition => :center}
+          {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},
+          {:image => dice_proficiency, :fit => [58, 12], :position => :left, :vposition => :center}
         ]
       end
 
-      bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
-        table [
-         ['General skills', 'Career?', 'Dice pool']
-        ],
-        :cell_style => {
-          :height => 10,
-          :padding => 1,
-          :size => 6,
-          :align => :center,
-          :background_color => "FFFFFF"
-        },
-        :width => 242,
-        :column_widths => [100, 22, 120]
-
-        table general_skills,
-          :cell_style => {
-            :height => 15,
-            :padding => 1,
-            :background_color => "FFFFFF"
-          },
-          :width => 242,
-          :column_widths => [100, 22, 60, 60]
-      end
-
-      bounding_box([((bounds.width / 2) + 20), (bounds.top - 20)], :width => (bounds.width / 2 - 20)) do
+      bounding_box([(bounds.left + 10), (bounds.top - 12)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
+      #bounding_box([((bounds.width / 2) + 20), (bounds.top - 20)], :width => (bounds.width / 2 - 20)) do
         table [
           ['Combat skills', 'Career?', 'Dice pool']
         ],
@@ -398,44 +372,51 @@ class CharacterSheetPdf < Prawn::Document
           :padding => 1,
           :size => 5,
           :align => :center,
-          :background_color => "FFFFFF"
+          :border_width => 0,
+          #:background_color => "FFFFFF"
         },
         :width => 242,
         :column_widths => [100, 22, 120]
 
         table combat_skills,
           :cell_style => {
-            :height => 15,
+            :height => 13,
             :padding => 1,
-            :background_color => "FFFFFF",
+            :border_width => 0,
+            #:background_color => "FFFFFF",
           },
           :width => 242,
-          :column_widths => [100, 22, 60, 60]
+          :column_widths => [100, 22, 60, 60],
+          :row_colors => ['C0C0C0', 'FFFFFF']
       end
 
-      bounding_box([((bounds.width / 2) + 20), (bounds.top - 110)], :width => (bounds.width / 2 - 20)) do
+      bounding_box([(bounds.left + 10), (bounds.top - 103)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
         table [
-         ['Knowledge skills', 'Career?', 'Dice pool']
+         ['General skills', 'Career?', 'Dice pool']
         ],
         :cell_style => {
           :height => 10,
           :padding => 1,
           :size => 5,
           :align => :center,
-          :background_color => "FFFFFF"
+          :border_width => 0,
+          #:background_color => "FFFFFF"
         },
         :width => 242,
         :column_widths => [100, 22, 120]
 
-        table knowledge_skills,
+        table general_skills,
           :cell_style => {
-            :height => 15,
+            :height => 13,
             :padding => 1,
-            :background_color => "FFFFFF"
+            :border_width => 0,
+            #:background_color => "FFFFFF"
           },
           :width => 242,
-          :column_widths => [100, 22, 60, 60]
+          :column_widths => [100, 22, 60, 60],
+          :row_colors => ['C0C0C0', 'FFFFFF']
       end
+
 
       #bounding_box([320, 280], :width => 242, :height => 335) do
       #  table [
@@ -459,52 +440,130 @@ class CharacterSheetPdf < Prawn::Document
        #     :width => 242,
        #     :column_widths => [100, 22, 60, 60]
       #end
-      
-      bounding_box([((bounds.width / 2) + 20), (bounds.top - 225)], :width => (bounds.width / 2 - 30), :height => 100) do
-        stroke_bounds
-      end
+
+      #bounding_box([((bounds.width / 2) + 20), (bounds.top - 225)], :width => (bounds.width / 2 - 30), :height => 100) do
+      #  stroke_bounds
+      #end
     end
+
+    bounding_box([(bounds.right - ((bounds.width - 20) / 2)), (bounds.top - 320)], :width => ((bounds.width - 20) / 2), :height => 308) do
+      fill_color "C0C0C0"
+      rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+      fill
+      fill_color "000000"
+
+      knowledge = Array.new
+      @character.character_skills.each do |skill|
+        if /^Knowledge.*?$/.match(skill.skill.name)
+          knowledge << skill
+        end
+      end
+      dice_ability = "#{Rails.root}/public/dice/blank.png"
+
+      knowledge_skills = knowledge.map do |skill|
+        font "Helvetica", :size=> 7
+        dice_ability = "#{Rails.root}/public/dice/blank.png"
+        dice_proficiency = "#{Rails.root}/public/dice/blank.png"
+        if @character.send(skill.skill.characteristic.downcase) == skill.ranks
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+        elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
+          dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
+        else
+          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
+          if skill.ranks > 0
+            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+          end
+        end
+        [
+          "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
+          if is_career_skill(skill.skill.id)
+            'Yes'
+          end,
+          {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},
+          {:image => dice_proficiency, :fit => [58, 12], :position => :left, :vposition => :center}
+        ]
+      end
+
+      bounding_box([(bounds.left + 10), (bounds.top - 13)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
+        table [
+         ['Knowledge skills', 'Career?', 'Dice pool']
+        ],
+        :cell_style => {
+          :height => 10,
+          :padding => 1,
+          :size => 5,
+          :align => :center,
+          :border_width => 0,
+          #:background_color => "FFFFFF"
+        },
+        :width => 242,
+        :column_widths => [100, 22, 120]
+
+        table knowledge_skills,
+          :cell_style => {
+            :height => 13,
+            :padding => 1,
+            :border_width => 0,
+            #:background_color => "FFFFFF"
+          },
+          :width => 242,
+          :column_widths => [100, 22, 60, 60],
+          :row_colors => ['C0C0C0', 'FFFFFF']
+      end
+
+    end
+    fill_color "354555"
+    skill_label_top_bound = bounds.top - 320
+    polygon [(bounds.left + 200),(skill_label_top_bound - 7)], [(bounds.left + 210), (skill_label_top_bound - 2)], [(bounds.right - 210), (skill_label_top_bound - 2)], [(bounds.right - 200), (skill_label_top_bound - 7)], [(bounds.right - 210), (skill_label_top_bound - 12)], [(bounds.left + 210), (skill_label_top_bound - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "SKILLS", :width => bounds.width, :height => 14, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center, :at => [bounds.left, skill_label_top_bound]
     #===== /Skills =====
 
     #===== WEAPONS =====
-    bounding_box([bounds.left, 175], :width => bounds.width, :height => 85) do
-      fill_color "D3D4CE"
+    bounding_box([bounds.left, (bounds.top - 635)], :width => bounds.width, :height => 150) do
+      fill_color "C0C0C0"
       rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
       fill
-      
+
       fill_color "354555"
       polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
       fill
       fill_color "ffffff"
-      text_box "WEAPONS", :width => bounds.width, :height => 14, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+      text_box "WEAPONS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       fill_color "000000"
-      
+
       if @character.weapons.any?
         weapons = @character.weapons.map do |weapon|
-          font "Helvetica", :size=> 8
-          character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
-          ranks = character_skill_ranks.first.ranks
-
           unless weapon.nil?
-            @wq = Array.new
-            weapon.weapon_quality_ranks.each do |q|
-              ranks = ''
-              if q.ranks > 0
-                ranks = " #{q.ranks}"
-              end
-              @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
+            font "Helvetica", :size=> 8
+            unless weapon.skill.nil?
+              character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
+              ranks = character_skill_ranks.first.ranks
+            else
+              ranks = 0
             end
-          end
-          weapon_data = @wq.join(',')
 
-          [
-            weapon.name,
-            "#{weapon.skill.name}",
-            weapon.damage,
-            weapon.range,
-            weapon.crit,
-            weapon_data
-          ]
+              @wq = Array.new
+              weapon.weapon_quality_ranks.each do |q|
+                ranks = ''
+                if q.ranks > 0
+                  ranks = " #{q.ranks}"
+                end
+                @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
+              end
+            weapon_data = @wq.join(',')
+
+            [
+              weapon.name,
+              "#{weapon.skill.name}",
+              weapon.damage,
+              weapon.range,
+              weapon.crit,
+              weapon_data
+            ]
+          end
         end
 
         bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
@@ -515,28 +574,31 @@ class CharacterSheetPdf < Prawn::Document
             :height => 10,
             :padding => 1,
             :size => 5,
-            :align => :center,
-            :background_color => "FFFFFF",
+            :align => :left,
+            :border_width => 0,
+            #:background_color => "FFFFFF",
           },
           :width => bounds.width,
           :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
 
           table weapons,
             :cell_style => {
-              :background_color => "FFFFFF",
+              #:background_color => "FFFFFF",
               :height => 12,
               :padding => [2, 3],
-              :size => 6
+              :size => 6,
+              :border_width => 0,
             },
             :width => bounds.width,
-            :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
+            :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42},
+            :row_colors => ['C0C0C0', 'FFFFFF']
         end
       end
     end
     #===== /WEAPONS =====
 
     fill_color "ffffff"
-    draw_text "TOTAL XP", :size => 7, :style => :bold, :at => [95, 2]
+    draw_text "TOTAL XP", :size => 7, :style => :bold, :at => [95, 0]
     draw_text "AVAILABLE XP", :size => 7, :style => :bold, :at => [491, 2]
     fill_color "000000"
     text_box "#{@character.experience}",:at => [70, 40], :width => 80, :height => 40, :overflow => :shrink_to_fit, :size => 20, :style => :bold, :align => :center, :valign => :center
@@ -545,7 +607,9 @@ class CharacterSheetPdf < Prawn::Document
     start_new_page
     # Background image.
     if pdf_vars['pdf_background'] == 'on'
-      image "#{Rails.root}/public/character_sheet_bg_pg2.jpg", :at => [0, y - 0]
+      image "#{Rails.root}/public/BKSheet2_opt.png",
+        :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+        :fit => [595.28, 841.89]
     end
 
     # Page graphics.
@@ -697,14 +761,29 @@ class CharacterSheetPdf < Prawn::Document
     end
   end
   #===== /TALENTS =====
-  
-  
-  text "top: #{bounds.top}"
-  text "bottom: #{bounds.bottom}"
-  text "left: #{bounds.left}"
-  text "right: #{bounds.right}"
 
-  
+  start_new_page
+  # Background image.
+  if pdf_vars['pdf_background'] == 'on'
+    image "#{Rails.root}/public/BKSheet3_opt.png",
+      :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+      :fit => [595.28, 841.89]
+  end
+
+  start_new_page
+  # Background image.
+  if pdf_vars['pdf_background'] == 'on'
+    image "#{Rails.root}/public/BKSheet4_opt.png",
+      :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+      :fit => [595.28, 841.89]
+  end
+
+  #text "top: #{bounds.top}"
+  #text "bottom: #{bounds.bottom}"
+  #text "left: #{bounds.left}"
+  #text "right: #{bounds.right}"
+
+
   end
 
 end
