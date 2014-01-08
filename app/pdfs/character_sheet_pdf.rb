@@ -3,11 +3,11 @@ class CharacterSheetPdf < Prawn::Document
 
   def initialize(character, view, pdf_vars)
     super( :left_margin => 30, :right_margin => 30, :top_margin => 0, :bottom_margin => 0, :page_size => 'A4')
-    if pdf_vars['pdf_background'] == 'on'
-      image "#{Rails.root}/public/BKSheet1_opt.png",
-        :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-        :fit => [595.28, 841.89]
-    end
+    #if pdf_vars['pdf_background'] == 'on'
+    #  image "#{Rails.root}/public/BKSheet1_opt.png",
+    #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+    #    :fit => [595.28, 841.89]
+    #end
 
     @character = character
     @view = view
@@ -65,7 +65,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "000000"
         #text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
         text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
         text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -87,7 +87,7 @@ class CharacterSheetPdf < Prawn::Document
         text_box "STRAIN", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
         text_box "#{pdf_vars['strain_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
         text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -127,7 +127,7 @@ class CharacterSheetPdf < Prawn::Document
         text_box "DEFENSE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
         text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "RANGED", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
         text_box "MELEE", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -149,7 +149,7 @@ class CharacterSheetPdf < Prawn::Document
         text_box "ENCUMBRANCE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
         #text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 56)]
+        line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
         text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -289,6 +289,102 @@ class CharacterSheetPdf < Prawn::Document
     end
     #===== /Characteristics =====
 
+    #===== Status Effects and Force =====
+    bounding_box([(bounds.right - ((bounds.width - 20) / 2) - 15), (bounds.top - 237)], :width => (((bounds.width - 20) / 2) + 15), :height => 83) do
+    #bounding_box([(bounds.left + ((bounds.width - 20) / 2)), (bounds.top - 230)], :width => (bounds.width - 200), :height => 45) do
+      #fill_color "C0C0C0"
+      #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      #fill
+      stroke_color "000000"
+      bounding_box([bounds.left, bounds.top], :width => 65, :height => bounds.height) do
+        fill_color "354555"
+        skill_label_top_bound = bounds.top
+        polygon [bounds.left, (skill_label_top_bound - 7)], [(bounds.left + 5), (skill_label_top_bound - 2)], [(bounds.right - 5), (skill_label_top_bound - 2)], [(bounds.right), (skill_label_top_bound - 7)], [(bounds.right - 5), (skill_label_top_bound - 12)], [(bounds.left + 5), (skill_label_top_bound - 12)]
+        fill
+        fill_color "ffffff"
+        text_box "STAUS EFFECTS", :width => bounds.width, :height => 14, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :center, :valign => :center, :at => [bounds.left, skill_label_top_bound]
+
+        fill_color "751010"
+        rectangle [bounds.left, (bounds.top - 20)], bounds.width, 10
+        fill
+        fill_color "ffffff"
+        rectangle [(bounds.right - 13), (bounds.top - 20)], 10, 10
+        fill_and_stroke
+        fill_color "000000"
+        text_box "STAGGERED", :width => bounds.width, :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :left, :valign => :center, :at => [(bounds.left + 3), (bounds.top - 20)]
+
+        fill_color "751010"
+        rectangle [bounds.left, (bounds.top - 36)], bounds.width, 10
+        fill
+        fill_color "ffffff"
+        rectangle [(bounds.right - 13), (bounds.top - 36)], 10, 10
+        fill_and_stroke
+        fill_color "000000"
+        text_box "IMMOBILIZED", :width => bounds.width, :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :left, :valign => :center, :at => [(bounds.left + 3), (bounds.top - 36)]
+
+        fill_color "751010"
+        rectangle [bounds.left, (bounds.top - 52)], bounds.width, 10
+        fill
+        fill_color "ffffff"
+        rectangle [(bounds.right - 13), (bounds.top - 52)], 10, 10
+        fill_and_stroke
+        fill_color "000000"
+        text_box "DISORIENTED", :width => bounds.width, :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :left, :valign => :center, :at => [(bounds.left + 3), (bounds.top - 52)]
+
+        fill_color "751010"
+        rectangle [bounds.left, (bounds.top - 68)], bounds.width, 10
+        fill
+        fill_color "ffffff"
+        rectangle [(bounds.right - 13), (bounds.top - 68)], 10, 10
+        fill_and_stroke
+      end
+
+      bounding_box([(bounds.left + 70), bounds.top], :width => (bounds.width - 70), :height => bounds.height) do
+        fill_color "C0C0C0"
+        rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+        fill
+
+        bounding_box([(bounds.left + 5), (bounds.top - 5)], :width => 80, :height => bounds.height) do
+          # Outer Box.
+          stroke do
+            self.line_width = 2
+            fill_color "ffffff"
+            stroke_color "474D46"
+            polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
+            fill_and_stroke
+          end
+          # Label box.
+          fill_color "354555"
+          polygon [(bounds.left + 2),(bounds.top - 9)], [(bounds.left + 14),(bounds.top - 2)], [(bounds.right - 14),(bounds.top - 2)], [(bounds.right - 2),(bounds.top - 9)], [(bounds.right - 14),(bounds.top - 16)], [(bounds.left + 14),(bounds.top - 16)]
+          fill
+          fill_color "ffffff"
+          text_box "FORCE POOL", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :bottom
+          fill_color "000000"
+          text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+          line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
+          fill
+          text_box "COMMITTED", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :center, :valign => :center
+          text_box "AVAILABLE", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :center, :valign => :center
+        end
+
+        fill_color "000000"
+        rectangle [(bounds.left + 118), (bounds.top - 8)], 57, 57
+        fill
+        circle [(bounds.left + 146),((bounds.height / 2) + 5)], 32
+        fill
+        text_box "FORCE RANK", :at => [(bounds.left + 95), (bounds.top - 70)], :width => 104, :height => 10, :overflow => :shrink_to_fit, :size => 8, :style => :bold, :align => :center, :valign => :center
+
+        fill_color "ffffff"
+        #self.line_width = 2
+        rectangle [(bounds.left + 120), (bounds.top - 10)], 52, 52
+        fill
+        circle [(bounds.left + 146),((bounds.height / 2) + 5)], 30
+        fill
+        #fill_color "751010"
+      end
+    end
+    #===== /Status Effects and Force =====
+
     #===== Skills =====
     bounding_box([bounds.left, (bounds.top - 230)], :width => ((bounds.width - 20) / 2), :height => 398) do
       fill_color "C0C0C0"
@@ -363,7 +459,6 @@ class CharacterSheetPdf < Prawn::Document
       end
 
       bounding_box([(bounds.left + 10), (bounds.top - 12)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
-      #bounding_box([((bounds.width / 2) + 20), (bounds.top - 20)], :width => (bounds.width / 2 - 20)) do
         table [
           ['Combat skills', 'Career?', 'Dice pool']
         ],
@@ -387,7 +482,7 @@ class CharacterSheetPdf < Prawn::Document
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60],
-          :row_colors => ['C0C0C0', 'FFFFFF']
+          :row_colors => ['FFFFFF', 'C0C0C0']
       end
 
       bounding_box([(bounds.left + 10), (bounds.top - 103)], :width => (bounds.width / 2 - 20), :height => bounds.height) do
@@ -414,7 +509,7 @@ class CharacterSheetPdf < Prawn::Document
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60],
-          :row_colors => ['C0C0C0', 'FFFFFF']
+          :row_colors => ['FFFFFF', 'C0C0C0']
       end
 
 
@@ -509,7 +604,7 @@ class CharacterSheetPdf < Prawn::Document
           },
           :width => 242,
           :column_widths => [100, 22, 60, 60],
-          :row_colors => ['C0C0C0', 'FFFFFF']
+          :row_colors => ['FFFFFF', 'C0C0C0']
       end
 
     end
@@ -597,12 +692,60 @@ class CharacterSheetPdf < Prawn::Document
     end
     #===== /WEAPONS =====
 
-    fill_color "ffffff"
-    draw_text "TOTAL XP", :size => 7, :style => :bold, :at => [95, 0]
-    draw_text "AVAILABLE XP", :size => 7, :style => :bold, :at => [491, 2]
-    fill_color "000000"
-    text_box "#{@character.experience}",:at => [70, 40], :width => 80, :height => 40, :overflow => :shrink_to_fit, :size => 20, :style => :bold, :align => :center, :valign => :center
-    text_box "#{@character.experience}",:at => [475, 40], :width => 80, :height => 40, :overflow => :shrink_to_fit, :size => 20, :style => :bold, :align => :center, :valign => :center
+    bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
+      #fill_color "C0C0C0"
+      #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      #fill
+
+      bounding_box([bounds.left, bounds.top], :width => 90, :height => bounds.height) do
+        # Outer Box.
+        stroke do
+          self.line_width = 2
+          fill_color "ffffff"
+          stroke_color "474D46"
+          polygon [bounds.left, (bounds.bottom + 13)], [bounds.left, (bounds.top - 13)], [(bounds.left + 15),bounds.top], [(bounds.right - 15),bounds.top], [bounds.right,(bounds.top - 13)], [bounds.right,(bounds.bottom + 13)], [(bounds.right - 15), (bounds.bottom + 2)], [(bounds.left + 15), (bounds.bottom + 2)]
+          fill_and_stroke
+        end
+        # Label box.
+        fill_color "354555"
+        #polygon [(bounds.left + 11),(bounds.top - 7)], [(bounds.left + 17),(bounds.top - 2)], [(bounds.right - 17),(bounds.top - 2)], [(bounds.right - 11),(bounds.top - 7)], [(bounds.right - 17),(bounds.top - 11)], [(bounds.left + 17),(bounds.top - 11)]
+        polygon [(bounds.left + 11),(bounds.bottom + 9)], [(bounds.left + 17),(bounds.bottom + 4)], [(bounds.right - 17),(bounds.bottom + 4)], [(bounds.right - 11),(bounds.bottom + 9)], [(bounds.right - 17),(bounds.bottom + 13)], [(bounds.left + 17),(bounds.bottom + 13)]
+        fill
+        fill_color "ffffff"
+        text_box "TOTAL XP", :at => [bounds.left, (bounds.bottom + 12)], :width => bounds.width, :height => 8, :overflow => :shrink_to_fit, :size => 6, :style => :bold, :align => :center, :valign => :bottom
+        fill_color "000000"
+        text_box "#{pdf_vars['total_xp']}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+      end
+
+      bounding_box([(bounds.left + 100), (bounds.bottom + 45)], :width => (bounds.width - 200), :height => 45) do
+        fill_color "751010"
+        rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+        fill
+
+        fill_color "ffffff"
+        text_box "CHARACTER SHEET", :at => [bounds.left, bounds.top], :width => bounds.width, :height => bounds.height, :size => 15, :style => :bold, :align => :center, :valign => :center
+      end
+
+      bounding_box([(bounds.right - 90), bounds.top], :width => 90, :height => bounds.height) do
+        # Outer Box.
+        stroke do
+          self.line_width = 2
+          fill_color "ffffff"
+          stroke_color "474D46"
+          polygon [bounds.left, (bounds.bottom + 13)], [bounds.left, (bounds.top - 13)], [(bounds.left + 15),bounds.top], [(bounds.right - 15),bounds.top], [bounds.right,(bounds.top - 13)], [bounds.right,(bounds.bottom + 13)], [(bounds.right - 15), (bounds.bottom + 2)], [(bounds.left + 15), (bounds.bottom + 2)]
+          fill_and_stroke
+        end
+        # Label box.
+        fill_color "354555"
+        polygon [(bounds.left + 11),(bounds.bottom + 9)], [(bounds.left + 17),(bounds.bottom + 4)], [(bounds.right - 17),(bounds.bottom + 4)], [(bounds.right - 11),(bounds.bottom + 9)], [(bounds.right - 17),(bounds.bottom + 13)], [(bounds.left + 17),(bounds.bottom + 13)]
+        fill
+        fill_color "ffffff"
+        text_box "AVAILABLE XP", :at => [bounds.left, (bounds.bottom + 12)], :width => bounds.width, :height => 8, :overflow => :shrink_to_fit, :size => 6, :style => :bold, :align => :center, :valign => :bottom
+        fill_color "000000"
+        text_box "#{pdf_vars['available_xp']}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+      end
+
+    end
 
     start_new_page
     # Background image.

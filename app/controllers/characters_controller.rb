@@ -419,6 +419,8 @@ class CharactersController < ApplicationController
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
+    pdf_vars['available_xp'] = @experience_cost[:available_experience]
+    pdf_vars['total_xp'] = @experience_cost[:starting_experience] + @experience_cost[:earned_experience]
 
     respond_to do |format|
       format.html # show.html.erb
