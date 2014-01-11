@@ -507,7 +507,6 @@ class CharactersController < ApplicationController
   # PUT /characters/1.json
   def update
     @character = Character.find(params[:id])
-
     if @character.aasm_state.nil?
       @character.aasm_state = 'creation'
     end
@@ -900,6 +899,42 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | Obligation"
     @character_state = character_state(@character)
+
+    @obligations = CharacterObligation.where(:character_id => @character.id).order('id ASC')
+  end
+
+  def obligation_selection
+    unless params[:obligation_id].blank?
+      @obligation = Obligation.find(params[:obligation_id])
+
+      render :partial => "obligation_info", :locals => { :obligation => @obligation, :active => nil }
+    else
+      render :partial => "obligation_info", :locals => { :obligation => nil, :active => nil }
+    end
+  end
+
+   def add_obligation
+    unless params[:character_obligation][:obligation_id].nil?
+      @obligation = CharacterObligation.where(:character_id => params[:id], :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
+    end
+    redirect_to :back, :notice => "Obligation added"
+  end
+
+  def update_obligation
+    unless params[:character_obligation][:character_obligation_id].nil?
+      @obligation = CharacterObligation.where(:id => params[:character_obligation][:character_obligation_id]).first
+      unless @obligation.nil?
+        @obligation.description = params[:character_obligation][:description]
+        @obligation.magnitude = params[:character_obligation][:magnitude]
+        @obligation.save
+      end
+    end
+    redirect_to :back, :notice => "Obligation updated"
+  end
+
+  def remove_obligation
+    CharacterObligation.find(params[:obligation_id]).destroy
+    redirect_to :back, :notice => "Obligation removed"
   end
 
   def motivation
@@ -966,7 +1001,6 @@ class CharactersController < ApplicationController
 
   def add_armor_attachment_option
     armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
-    logger.warn(armor_attachment.inspect)
 
     attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
@@ -1162,7 +1196,7 @@ class CharactersController < ApplicationController
         :specialization_3,
         character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
         character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
-        character_obligations_attributes: [ :id, :character_id, :obligation_id, :_destroy ],
+        character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
         character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ]
       )

@@ -692,6 +692,7 @@ class CharacterSheetPdf < Prawn::Document
     end
     #===== /WEAPONS =====
 
+    #===== FOOTER =====
     bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
       #fill_color "C0C0C0"
       #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
@@ -744,8 +745,8 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "000000"
         text_box "#{pdf_vars['available_xp']}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
       end
-
     end
+    #===== /FOOTER =====
 
     start_new_page
     # Background image.
@@ -756,154 +757,258 @@ class CharacterSheetPdf < Prawn::Document
     end
 
     # Page graphics.
-    stroke do
-      #stroke_color pdf_vars['pdf_border_color']
-      #self.line_width = 2
-      fill_color "c8c8c8"
-      rounded_rectangle [67, 791], 327, 165, 5
-      rounded_rectangle [67, 615], 327, 195, 5
-      rounded_rectangle [405, 791], 153, 371, 5
-      rounded_rectangle [67, 410], 491, 112, 5
-      rounded_rectangle [67, 289], 491, 289, 5
-      fill
-    end
-    stroke do
-      fill_color "ffffff"
-      # Motivations.
-      fill_and_stroke_rectangle [76, 739], 309, 103
-      # Obligations.
-      fill_and_stroke_rectangle [76, 585], 309, 153
-      # Character description.
-      fill_and_stroke_rectangle [413, 739], 138, 310
-      # Credits
-      fill_and_stroke_rectangle [76, 403], 155, 18
-      # Weapons
-      fill_and_stroke_rectangle [76, 379], 155, 72
-      # Gear
-      fill_and_stroke_rectangle [236, 379], 155, 72
-      # Resources
-      fill_and_stroke_rectangle [395, 379], 155, 72
-
-    end
-    stroke do
-      stroke_color pdf_vars['pdf_border_color']
-      self.line_width = 1
-      # Motivations inner.
-      vertical_line	739, 636, :at => 230
-      horizontal_line 76, 190, :at => 708
-      horizontal_line 230, 343, :at => 708
-
-      # Obligations inner.
-      vertical_line	585, 432, :at => 230
-      horizontal_line 76, 190, :at => 555
-      horizontal_line 76, 190, :at => 512
-      horizontal_line 76, 190, :at => 472
-      horizontal_line 230, 343, :at => 555
-      horizontal_line 230, 343, :at => 512
-      horizontal_line 230, 343, :at => 472
-
-      # Character description inner.
-      horizontal_line 413, 530, :at => 708
-      horizontal_line 413, 530, :at => 688
-      horizontal_line 413, 530, :at => 667
-      horizontal_line 413, 530, :at => 646
-      horizontal_line 413, 530, :at => 628
-      horizontal_line 413, 530, :at => 606
-      horizontal_line 413, 530, :at => 523
-
-      #Equipment log inner
-      horizontal_line 76, 190, :at => 359
-      horizontal_line 236, 347, :at => 359
-      horizontal_line 395, 505, :at => 359
-
-    end
-
-    fill_color "787878"
-    draw_text "TYPE", :size => 7, :style => :bold, :at => [85, 712]
-    draw_text "TYPE", :size => 7, :style => :bold, :at => [239, 712]
-    draw_text "TYPE", :size => 7, :style => :bold, :at => [85, 558]
-    draw_text "TYPE", :size => 7, :style => :bold, :at => [239, 558]
-    draw_text "MAGNITUDE", :size => 7, :style => :bold, :at => [85, 517]
-    draw_text "MAGNITUDE", :size => 7, :style => :bold, :at => [239, 517]
-    draw_text "COMPLICATIONS", :size => 7, :style => :bold, :at => [85, 476]
-    draw_text "COMPLICATIONS", :size => 7, :style => :bold, :at => [239, 476]
-    draw_text "GENDER", :size => 7, :style => :bold, :at => [425, 712]
-    draw_text "AGE", :size => 7, :style => :bold, :at => [425, 692]
-    draw_text "HEIGHT", :size => 7, :style => :bold, :at => [425, 671]
-    draw_text "BUILD", :size => 7, :style => :bold, :at => [425, 650]
-    draw_text "HAIR", :size => 7, :style => :bold, :at => [425, 632]
-    draw_text "EYES", :size => 7, :style => :bold, :at => [425, 610]
-    draw_text "NOTABLE FEATURES", :size => 7, :style => :bold, :at => [425, 589]
-    draw_text "OTHER", :size => 7, :style => :bold, :at => [425, 507]
-    draw_text "CREDITS", :size => 7, :style => :bold, :at => [85, 392]
-    draw_text "WEAPONS & ARMOR", :size => 7, :style => :bold, :at => [85, 365]
-    draw_text "PERSONAL GEAR", :size => 7, :style => :bold, :at => [245, 365]
-    draw_text "ASSETS & RESOURCES", :size => 7, :style => :bold, :at => [406, 365]
-
-    fill_color "6d7b68"
-    draw_text "MOTIVATIONS", :size => 7, :style => :bold, :at => [335, 754]
-    draw_text "CHARACTER DESCRIPTION", :size => 7, :style => :bold, :at => [455, 754]
-    draw_text "OBLIGATIONS", :size => 7, :style => :bold, :at => [335, 600]
-    draw_text "EQUIPMENT LOG", :size => 7, :style => :bold, :at => [492, 395]
-    draw_text "TALENT AND SPECIAL ABILITES", :size => 7, :style => :bold, :at => [437, 272]
-
-    fill_color "000000"
-    # Box contents - Character Description.
-    draw_text @character.gender, :size => 7, :style => :normal, :at => [460, 712]
-    draw_text @character.age, :size => 7, :style => :normal, :at => [460, 692]
-    draw_text @character.height, :size => 7, :style => :normal, :at => [460, 671]
-    draw_text @character.build, :size => 7, :style => :normal, :at => [460, 650]
-    draw_text @character.hair, :size => 7, :style => :normal, :at => [460, 632]
-    draw_text @character.eyes, :size => 7, :style => :normal, :at => [460, 610]
-    text_box @character.notable_features, :at => [425, 585], :width => 110, :height => 60, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
-    text_box @character.other, :at => [425, 503], :width => 110, :height => 65, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
-    # Box contents - Credits.
-    text_box @character.credits.to_s, :at => [130, 398], :width => 90, :height => 18, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :right, :valign => :top
+    #stroke do
+    #  #stroke_color pdf_vars['pdf_border_color']
+    #  #self.line_width = 2
+    #  fill_color "c8c8c8"
+    #  rounded_rectangle [67, 791], 327, 165, 5
+    #  rounded_rectangle [67, 615], 327, 195, 5
+    #  rounded_rectangle [405, 791], 153, 371, 5
+    #  rounded_rectangle [67, 410], 491, 112, 5
+    #  rounded_rectangle [67, 289], 491, 289, 5
+    #  fill
+    #end
+    #stroke do
+    #  fill_color "ffffff"
+    #  # Motivations.
+    #  fill_and_stroke_rectangle [76, 739], 309, 103
+    #  # Obligations.
+    #  fill_and_stroke_rectangle [76, 585], 309, 153
+    #  # Character description.
+    #  fill_and_stroke_rectangle [413, 739], 138, 310
+    #  # Credits
+    #  fill_and_stroke_rectangle [76, 403], 155, 18
+    #  # Weapons
+    #  fill_and_stroke_rectangle [76, 379], 155, 72
+    #  # Gear
+    #  fill_and_stroke_rectangle [236, 379], 155, 72
+    #  # Resources
+    #  fill_and_stroke_rectangle [395, 379], 155, 72
+#
+    #end
+    #stroke do
+    #  stroke_color pdf_vars['pdf_border_color']
+    #  self.line_width = 1
+    #  # Motivations inner.
+    #  vertical_line	739, 636, :at => 230
+    #  horizontal_line 76, 190, :at => 708
+    #  horizontal_line 230, 343, :at => 708
+#
+    #  # Obligations inner.
+    #  vertical_line	585, 432, :at => 230
+    #  horizontal_line 76, 190, :at => 555
+    #  horizontal_line 76, 190, :at => 512
+    #  horizontal_line 76, 190, :at => 472
+    #  horizontal_line 230, 343, :at => 555
+    #  horizontal_line 230, 343, :at => 512
+    #  horizontal_line 230, 343, :at => 472
+#
+    #  # Character description inner.
+    #  horizontal_line 413, 530, :at => 708
+    #  horizontal_line 413, 530, :at => 688
+    #  horizontal_line 413, 530, :at => 667
+    #  horizontal_line 413, 530, :at => 646
+    #  horizontal_line 413, 530, :at => 628
+    #  horizontal_line 413, 530, :at => 606
+    #  horizontal_line 413, 530, :at => 523
+#
+    #  #Equipment log inner
+    #  horizontal_line 76, 190, :at => 359
+    #  horizontal_line 236, 347, :at => 359
+    #  horizontal_line 395, 505, :at => 359
+#
+    #end
+#
+    #fill_color "787878"
+    #draw_text "TYPE", :size => 7, :style => :bold, :at => [85, 712]
+    #draw_text "TYPE", :size => 7, :style => :bold, :at => [239, 712]
+    #draw_text "TYPE", :size => 7, :style => :bold, :at => [85, 558]
+    #draw_text "TYPE", :size => 7, :style => :bold, :at => [239, 558]
+    #draw_text "MAGNITUDE", :size => 7, :style => :bold, :at => [85, 517]
+    #draw_text "MAGNITUDE", :size => 7, :style => :bold, :at => [239, 517]
+    #draw_text "COMPLICATIONS", :size => 7, :style => :bold, :at => [85, 476]
+    #draw_text "COMPLICATIONS", :size => 7, :style => :bold, :at => [239, 476]
+    #draw_text "GENDER", :size => 7, :style => :bold, :at => [425, 712]
+    #draw_text "AGE", :size => 7, :style => :bold, :at => [425, 692]
+    #draw_text "HEIGHT", :size => 7, :style => :bold, :at => [425, 671]
+    #draw_text "BUILD", :size => 7, :style => :bold, :at => [425, 650]
+    #draw_text "HAIR", :size => 7, :style => :bold, :at => [425, 632]
+    #draw_text "EYES", :size => 7, :style => :bold, :at => [425, 610]
+    #draw_text "NOTABLE FEATURES", :size => 7, :style => :bold, :at => [425, 589]
+    #draw_text "OTHER", :size => 7, :style => :bold, :at => [425, 507]
+    #draw_text "CREDITS", :size => 7, :style => :bold, :at => [85, 392]
+    #draw_text "WEAPONS & ARMOR", :size => 7, :style => :bold, :at => [85, 365]
+    #draw_text "PERSONAL GEAR", :size => 7, :style => :bold, :at => [245, 365]
+    #draw_text "ASSETS & RESOURCES", :size => 7, :style => :bold, :at => [406, 365]
+#
+    #fill_color "6d7b68"
+    #draw_text "MOTIVATIONS", :size => 7, :style => :bold, :at => [335, 754]
+    #draw_text "CHARACTER DESCRIPTION", :size => 7, :style => :bold, :at => [455, 754]
+    #draw_text "OBLIGATIONS", :size => 7, :style => :bold, :at => [335, 600]
+    #draw_text "EQUIPMENT LOG", :size => 7, :style => :bold, :at => [492, 395]
+    #draw_text "TALENT AND SPECIAL ABILITES", :size => 7, :style => :bold, :at => [437, 272]
+#
+    #fill_color "000000"
+    ## Box contents - Character Description.
+    #draw_text @character.gender, :size => 7, :style => :normal, :at => [460, 712]
+    #draw_text @character.age, :size => 7, :style => :normal, :at => [460, 692]
+    #draw_text @character.height, :size => 7, :style => :normal, :at => [460, 671]
+    #draw_text @character.build, :size => 7, :style => :normal, :at => [460, 650]
+    #draw_text @character.hair, :size => 7, :style => :normal, :at => [460, 632]
+    #draw_text @character.eyes, :size => 7, :style => :normal, :at => [460, 610]
+    #text_box @character.notable_features, :at => [425, 585], :width => 110, :height => 60, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    #text_box @character.other, :at => [425, 503], :width => 110, :height => 65, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    ## Box contents - Credits.
+    #text_box @character.credits.to_s, :at => [130, 398], :width => 90, :height => 18, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :right, :valign => :top
     # Box contents - Weapons & Armor.
-    text_box pdf_vars['weapons_armor'].join("\n"), :at => [80, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    #text_box pdf_vars['weapons_armor'].join("\n"), :at => [80, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
     # Box contents - Personal Gear.
-    text_box pdf_vars['personal_gear'].join(', '), :at => [240, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
+    #text_box pdf_vars['personal_gear'].join(', '), :at => [240, 355], :width => 150, :height => 48, :overflow => :shrink_to_fit, :size => 10, :style => :normal, :align => :left, :valign => :top
 
   #===== TALENTS =====
-  #fill_color "a99f8f"
-  #draw_text "WEAPONS", :size => 6, :style => :bold, :at => [298, 164]
-  fill_color "000000"
-  if !pdf_vars['talents'].empty?
-    talents = pdf_vars['talents'].map do |talent_id, index|
-      talent = Talent.find_by_id(talent_id)
-      font "Helvetica", :size=> 8
-      [
-        talent.name,
-        talent.activation,
-        talent.description,
-      ]
-    end
+  bounding_box([bounds.left, (bounds.top - 5)], :width => bounds.width, :height => 240) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill_and_stroke
 
-    bounding_box([68, 155], :width => 242, :height => 335) do
-      table [
-       ['NAME', 'ACTIVATION', 'ABILITY SUMMARY']
-      ],
-      :cell_style => {
-        :height => 10,
-        :padding => 1,
-        :size => 5,
-        :align => :center
-      },
-      :width => 491,
-      :column_widths => [100, 100, 291]
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "TALENTS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
 
-      table talents,
+    fill_color "000000"
+    if !pdf_vars['talents'].empty?
+      talents = pdf_vars['talents'].map do |talent_id, index|
+        talent = Talent.find_by_id(talent_id)
+        font "Helvetica", :size=> 8
+        [
+          talent.name,
+          talent.activation,
+          talent.description,
+        ]
+      end
+
+      bounding_box([bounds.left, (bounds.top - 20)], :width => bounds.width, :height => bounds.height) do
+        table [
+         ['NAME', 'ACTIVATION', 'ABILITY SUMMARY']
+        ],
         :cell_style => {
-          #:background_color => "FFFFFF",
-          :height => 12,
-          :padding => [2, 3],
-          :size => 6
+          :height => 10,
+          :padding => 1,
+          :size => 5,
+          :align => :center,
+          :border_width => 0,
         },
         :width => 491,
         :column_widths => [100, 100, 291]
+
+        table talents,
+          :cell_style => {
+            #:background_color => "FFFFFF",
+            :height => 12,
+            :padding => [2, 3],
+            :size => 6,
+            :border_width => 0,
+          },
+          :width => 491,
+          :column_widths => [100, 100, 291],
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
     end
   end
   #===== /TALENTS =====
+
+  #===== CHARACTER DESCRIPTION =====
+  bounding_box([bounds.left, (bounds.top - 260)], :width => bounds.width, :height => 63) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill_and_stroke
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "CHARACTER DESCRIPTUON", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+  end
+  #===== /CHARACTER DESCRIPTION =====
+
+  #===== CHARACTER MOTIVATION =====
+  bounding_box([bounds.left, (bounds.top - 335)], :width => bounds.width, :height => 100) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill_and_stroke
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "CHARACTER MOTIVATION", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+  end
+  #===== /CHARACTER MOTIVATION =====
+
+  #===== CHARACTER OBLIGATION =====
+  bounding_box([bounds.left, (bounds.top - 450)], :width => bounds.width, :height => 100) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill_and_stroke
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "CHARACTER OBLIGATIONS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+  end
+  #===== /CHARACTER OBLIGATION =====
+
+  #===== OTHER CHARACTER NOTES =====
+  bounding_box([bounds.left, (bounds.bottom + 240)], :width => bounds.width, :height => 180) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill_and_stroke
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "OTHER CHARACTER NOTES", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+    bounding_box([(bounds.left + 5), (bounds.top - 15)], :width => (bounds.width - 10), :height => (bounds.height - 20)) do
+      fill_color "FFFFFF"
+      rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      fill
+      fill_color "000000"
+      text_box "#{@character.bio}", :width => bounds.width, :height => bounds.width, :overflow => :shrink_to_fit, :size => 7, :style => :normal, :align => :left, :valign => :top
+    end
+
+  end
+  #===== /OTHERCHARACTER NOTES =====
+
+  #===== FOOTER =====
+  bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
+    #fill_color "C0C0C0"
+    #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+    #fill
+
+    bounding_box([(bounds.left + 100), (bounds.bottom + 45)], :width => (bounds.width - 200), :height => 45) do
+      fill_color "751010"
+      rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      fill
+
+      fill_color "ffffff"
+      text_box "CHARACTER DESCRIPTION SHEET", :at => [bounds.left, bounds.top], :width => bounds.width, :height => bounds.height, :size => 15, :style => :bold, :align => :center, :valign => :center
+    end
+
+  end
+  #===== /FOOTER =====
 
   start_new_page
   # Background image.
@@ -912,6 +1017,24 @@ class CharacterSheetPdf < Prawn::Document
       :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
       :fit => [595.28, 841.89]
   end
+
+  #===== FOOTER =====
+  bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
+    #fill_color "C0C0C0"
+    #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+    #fill
+
+    bounding_box([(bounds.left + 100), (bounds.bottom + 45)], :width => (bounds.width - 200), :height => 45) do
+      fill_color "751010"
+      rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      fill
+
+      fill_color "ffffff"
+      text_box "ARMOR / WEAPONS / CYBERNETICS SHEET", :at => [bounds.left, bounds.top], :width => bounds.width, :height => bounds.height, :size => 15, :style => :bold, :align => :center, :valign => :center
+    end
+
+  end
+  #===== /FOOTER =====
 
   start_new_page
   # Background image.
@@ -926,6 +1049,23 @@ class CharacterSheetPdf < Prawn::Document
   #text "left: #{bounds.left}"
   #text "right: #{bounds.right}"
 
+  #===== FOOTER =====
+  bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
+    #fill_color "C0C0C0"
+    #rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+    #fill
+
+    bounding_box([(bounds.left + 100), (bounds.bottom + 45)], :width => (bounds.width - 200), :height => 45) do
+      fill_color "751010"
+      rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+      fill
+
+      fill_color "ffffff"
+      text_box "PERSONAL ACQUISITIONS SHEET", :at => [bounds.left, bounds.top], :width => bounds.width, :height => bounds.height, :size => 15, :style => :bold, :align => :center, :valign => :center
+    end
+
+  end
+  #===== /FOOTER =====
 
   end
 

@@ -8,36 +8,30 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
-<div class="row">
-  <div class="small-12 columns">
-    <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
-      <%= hidden_field_tag 'character_obligation', 'true' %>
-      <% if @character.errors.any? %>
-        <div data-alert class="alert-box warning radius">
-          <p><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</p>
-          <ul>
-            <% @character.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <fieldset id="character-obligations">
-        <ul>
-          <%= f.fields_for :character_obligations do |obligation| %>
-            <%= render 'character_obligation_fields', :f => obligation %>
-          <% end %>
-        </ul>
-        <%= link_to_add_association 'Add obligation', f, :character_obligations, 'data-association-insertion-node' => "#character-obligations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|obligation| obligation.build_obligation; obligation }, :class => 'btn btn-warning' %>
-      </fieldset>
-
-      <div class="form-actions">
-        <%= hidden_field_tag 'destination', 'obligation' %>
-        <%= f.submit "Save obligation", :class => 'button' %>
-        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
+<div class="row" data-no-turbolink>
+  <div class="small-3 columns" data-no-turbolink>
+    <%= form_for :character_obligation, :url => url_for(:action => 'add_obligation') do |form| %>
+      <%= form.select :obligation_id, Obligation.where(:true).collect  {|obligation| ["#{obligation.range} | #{obligation.name}", obligation.id]}, {:prompt => "Select Obligation"} %>
+      <%= form.submit 'Add obligation', :class => 'button tiny' %>
+    <% end -%>
+    <br />
+    <div class="row">
+      <div id="obligation-info" class="small-12 columns"></div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
       </div>
-    <% end %>
+    </div>
+  </div>
+  <div class="small-9 columns" data-no-turbolink>
+    <% unless @obligations.blank? %>
+      <% @obligations.each do |o| %>
+        <% unless o.obligation_id.nil? %>
+          <% obligaton = Obligation.find(o.obligation_id) %>
+          <%= render :partial => "obligation_info", :locals => { :obligation => obligaton, :character_obligation => o, :active => true } %>
+        <% end -%>
+      <% end -%>
+    <% end -%>
   </div>
 </div>

@@ -7,5 +7,4 @@
   <% else %>
       <%= f.select :obligation_id, Obligation.where(:true).collect  {|obligation| ["#{obligation.range} | #{obligation.name}", obligation.id]}, {:prompt => "Select Obligation"} %>
   <% end %>
-  
 </li>

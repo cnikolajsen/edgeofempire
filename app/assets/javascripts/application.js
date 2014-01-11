@@ -15,9 +15,6 @@
 //= require jquery_ujs
 //= require foundation
 //= require cocoon
-//= require ./characters/species
-//= require ./characters/career
-//= require ./characters/armor_attachment
-//= require ./characters/weapon_attachment
+//= require character
 
 $(function(){ $(document).foundation(); });
