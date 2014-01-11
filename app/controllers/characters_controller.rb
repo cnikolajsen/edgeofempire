@@ -899,17 +899,15 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | Obligation"
     @character_state = character_state(@character)
-
-    @obligations = CharacterObligation.where(:character_id => @character.id).order('id ASC')
   end
 
   def obligation_selection
     unless params[:obligation_id].blank?
       @obligation = Obligation.find(params[:obligation_id])
 
-      render :partial => "obligation_info", :locals => { :obligation => @obligation, :active => nil }
+      render :partial => "obligation_info", :locals => { :obligation => @obligation, :character_obligation => nil, :active => nil }
     else
-      render :partial => "obligation_info", :locals => { :obligation => nil, :active => nil }
+      render :partial => "obligation_info", :locals => { :obligation => nil, :character_obligation => nil, :active => nil }
     end
   end
 

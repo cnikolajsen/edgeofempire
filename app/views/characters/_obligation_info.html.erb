@@ -1,5 +1,5 @@
-<% unless obligation.nil? %>
-  <h4><%= obligation.name %></h4>
+<% unless character_obligation.obligation.nil? %>
+  <h4><%= character_obligation.obligation.name %></h4>
   <% if active %>
     <%= form_for :character_obligation, :url => { :action => 'update_obligation'} do |form| %>
       <%= form.hidden_field :character_obligation_id, :value => character_obligation.id %>
@@ -8,6 +8,7 @@
       <%= form.submit 'Update obligation', :class => 'button tiny' %>
       <%= link_to "Remove", "/characters/#{@character.id}/obligation/#{character_obligation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete obligation?' } %>
     <% end -%>
+    <hr />
   <% else %>
     <p><%= obligation.description %></p>
   <% end -%>

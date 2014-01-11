@@ -25,11 +25,10 @@
     </div>
   </div>
   <div class="small-9 columns" data-no-turbolink>
-    <% unless @obligations.blank? %>
-      <% @obligations.each do |o| %>
+    <% unless @character.character_obligations.blank? %>
+      <% @character.character_obligations.each do |o| %>
         <% unless o.obligation_id.nil? %>
-          <% obligaton = Obligation.find(o.obligation_id) %>
-          <%= render :partial => "obligation_info", :locals => { :obligation => obligaton, :character_obligation => o, :active => true } %>
+          <%= render :partial => "obligation_info", :locals => { :obligation => nil, :character_obligation => o, :active => true } %>
         <% end -%>
       <% end -%>
     <% end -%>
