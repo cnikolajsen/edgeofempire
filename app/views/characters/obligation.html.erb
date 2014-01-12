@@ -9,7 +9,7 @@
   </div>
 </div>
 <div class="row" data-no-turbolink>
-  <div class="small-3 columns" data-no-turbolink>
+  <div class="small-4 columns" data-no-turbolink>
     <%= form_for :character_obligation, :url => url_for(:action => 'add_obligation') do |form| %>
       <%= form.select :obligation_id, Obligation.where(:true).collect  {|obligation| ["#{obligation.range} | #{obligation.name}", obligation.id]}, {:prompt => "Select Obligation"} %>
       <%= form.submit 'Add obligation', :class => 'button tiny' %>
@@ -24,7 +24,7 @@
       </div>
     </div>
   </div>
-  <div class="small-9 columns" data-no-turbolink>
+  <div class="small-8 columns" data-no-turbolink>
     <% unless @character.character_obligations.blank? %>
       <% @character.character_obligations.each do |o| %>
         <% unless o.obligation_id.nil? %>

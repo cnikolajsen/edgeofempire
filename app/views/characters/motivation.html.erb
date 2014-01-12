@@ -8,37 +8,29 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
-<div class="row">
-  <div class="small-12 columns">
-    <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
-      <%= hidden_field_tag 'character_motivation', 'true' %>
-      <% if @character.errors.any? %>
-        <div data-alert class="alert-box warning radius">
-          <p><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</p>
-          <ul>
-            <% @character.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <fieldset id="character-motivations">
-        <ul>
-          <%#= f.fields_for :character_motivations do |motivation| %>
-            <%#= render 'character_motivation_fields', :f => motivation %>
-          <%# end %>
-        </ul>
-        <%#= link_to_add_association 'Add motivation', f, :character_motivations, 'data-association-insertion-node' => "#character-motivations ul", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|motivation| motivation.build_motivation; motivation }, :class => 'btn btn-warning' %>
-      </fieldset>
-
-      <div class="form-actions">
-        <%= hidden_field_tag 'destination', 'motivation' %>
-        <%= f.submit "Save motivation", :class => 'button' %>
-        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
+<div class="row" data-no-turbolink>
+  <div class="small-4 columns" data-no-turbolink>
+    <%= form_for :character_motivation, :url => url_for(:action => 'add_motivation') do |form| %>
+      <%= form.select :motivation_id, Motivation.where(:true).order(:category => :asc).collect  {|motivation| ["#{motivation.category} | #{motivation.name}", motivation.id]}, {:prompt => "Select Motivation"} %>
+      <%= form.submit 'Add Motivation', :class => 'button tiny' %>
+    <% end -%>
+    <br />
+    <div class="row">
+      <div id="motivation-info" class="small-12 columns"></div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
       </div>
-    <% end %>
-
+    </div>
+  </div>
+  <div class="small-8 columns" data-no-turbolink>
+    <% unless @character.character_motivations.blank? %>
+      <% @character.character_motivations.each do |o| %>
+        <% unless o.motivation_id.nil? %>
+          <%= render :partial => "motivation_info", :locals => { :motivation => nil, :character_motivation => o, :active => true } %>
+        <% end -%>
+      <% end -%>
+    <% end -%>
   </div>
 </div>

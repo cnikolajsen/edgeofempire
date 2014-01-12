@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  character_id: 1
+  motivation_id: 1
+  description: MyText
+
+two:
+  character_id: 1
+  motivation_id: 1
+  description: MyText

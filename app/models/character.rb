@@ -46,6 +46,8 @@ class Character < ActiveRecord::Base
   has_many :gears, :through => :character_gears
   has_many :character_obligations, :dependent => :destroy
   has_many :obligations, :through => :character_obligations
+  has_many :character_motivations, :dependent => :destroy
+  has_many :motivations, :through => :character_motivations
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents
@@ -61,6 +63,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_weapons, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_obligations, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
 

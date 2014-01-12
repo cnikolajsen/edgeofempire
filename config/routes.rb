@@ -58,6 +58,7 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/species' => 'characters#species', :as => :character_species
   get 'characters/:id/characteristics' => 'characters#characteristics', :as => :character_characteristics
   get 'characters/:id/background' => 'characters#background', :as => :character_background
+
   get 'characters/:id/obligation' => 'characters#obligation', :as => :character_obligation
   get 'character/find/obligation_selection' => 'characters#obligation_selection'
   post 'characters/:id/obligation' => 'characters#add_obligation'
@@ -65,6 +66,10 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/obligation/:obligation_id/remove' => 'characters#remove_obligation'
 
   get 'characters/:id/motivation' => 'characters#motivation', :as => :character_motivation
+  get 'character/find/motivation_selection' => 'characters#motivation_selection'
+  post 'characters/:id/motivation' => 'characters#add_motivation'
+  post 'characters/:id/motivation/update' => 'characters#update_motivation'
+  get 'characters/:id/motivation/:motivation_id/remove' => 'characters#remove_motivation'
 
   get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
   get 'characters/:id/skills' => 'characters#skills', :as => :character_skills

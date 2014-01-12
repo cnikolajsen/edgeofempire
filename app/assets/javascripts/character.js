@@ -57,7 +57,7 @@ $('#character_motivation_motivation_id').change(function(){
   $.ajax({
     url: "/character/find/motivation_selection",
     type: "GET",
-    data: "obligation_id="+$('#character_motivation_motivation_id').val(),
+    data: "motivation_id="+$('#character_motivation_motivation_id').val(),
     success: function(data) {
       jQuery("#motivation-info").html(data);
     }

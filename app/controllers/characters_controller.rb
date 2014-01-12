@@ -911,7 +911,7 @@ class CharactersController < ApplicationController
     end
   end
 
-   def add_obligation
+  def add_obligation
     unless params[:character_obligation][:obligation_id].nil?
       @obligation = CharacterObligation.where(:character_id => params[:id], :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
     end
@@ -941,6 +941,39 @@ class CharactersController < ApplicationController
     @character = Character.find(params[:id])
     @title = "#{@character.name} | Motivation"
     @character_state = character_state(@character)
+  end
+
+  def motivation_selection
+    unless params[:motivation_id].blank?
+      @motivation = Motivation.find(params[:motivation_id])
+
+      render :partial => "motivation_info", :locals => { :motivation => @motivation, :character_motivation => nil, :active => nil }
+    else
+      render :partial => "motivation_info", :locals => { :motivation => nil, :character_motivation => nil, :active => nil }
+    end
+  end
+
+  def add_motivation
+    unless params[:character_motivation][:motivation_id].nil?
+      @motivation = CharacterMotivation.where(:character_id => params[:id], :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
+    end
+    redirect_to :back, :notice => "Motivation added"
+  end
+
+  def update_motivation
+    unless params[:character_motivation][:character_motivation_id].nil?
+      @motivation = CharacterMotivation.where(:id => params[:character_motivation][:character_motivation_id]).first
+      unless @motivation.nil?
+        @motivation.description = params[:character_motivation][:description]
+        @motivation.save
+      end
+    end
+    redirect_to :back, :notice => "Motivation updated"
+  end
+
+  def remove_motivation
+    CharacterMotivation.find(params[:motivation_id]).destroy
+    redirect_to :back, :notice => "Motivation removed"
   end
 
   def armor

@@ -1,0 +1,15 @@
+<% if active %>
+  <% unless character_motivation.motivation.nil? %>
+    <h4><%= character_motivation.motivation.name %> <small><%= character_motivation.motivation.category %></small></h4>
+    <%= form_for :character_motivation, :url => { :action => 'update_motivation'} do |form| %>
+      <%= form.hidden_field :character_motivation_id, :value => character_motivation.id %>
+      <%= form.text_area :description, :value => character_motivation.description %>
+      <%= form.submit 'Update motivation', :class => 'button tiny' %>
+      <%= link_to "Remove", "/characters/#{@character.id}/motivation/#{character_motivation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete motivation?' } %>
+    <% end -%>
+    <hr />
+  <% end -%>
+<% else %>
+  <h4><%= motivation.name %></h4>
+  <p><%= text_replace_tokens(motivation.description) %></p>
+<% end -%>

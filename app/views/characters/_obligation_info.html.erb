@@ -1,6 +1,6 @@
-<% unless character_obligation.obligation.nil? %>
-  <h4><%= character_obligation.obligation.name %></h4>
-  <% if active %>
+<% if active %>
+  <% unless character_obligation.obligation.nil? %>
+    <h4><%= character_obligation.obligation.name %></h4>
     <%= form_for :character_obligation, :url => { :action => 'update_obligation'} do |form| %>
       <%= form.hidden_field :character_obligation_id, :value => character_obligation.id %>
       <%= form.text_area :description, :value => character_obligation.description %>
@@ -9,7 +9,8 @@
       <%= link_to "Remove", "/characters/#{@character.id}/obligation/#{character_obligation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete obligation?' } %>
     <% end -%>
     <hr />
-  <% else %>
-    <p><%= obligation.description %></p>
   <% end -%>
+<% else %>
+  <h4><%= obligation.name %></h4>
+  <p><%= text_replace_tokens(obligation.description) %></p>
 <% end -%>
