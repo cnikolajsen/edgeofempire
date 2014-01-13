@@ -1114,9 +1114,9 @@ class CharactersController < ApplicationController
     unless params[:attachment_id].blank?
       @attachment = WeaponAttachment.find(params[:attachment_id])
 
-      render :partial => "weapon_attachment_info", :locals => { :attachment => @attachment , :active => nil, :weapon_attachment_options => nil}
+      render :partial => "weapon_attachment_info", :locals => { :attachment => @attachment, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
     else
-      render :partial => "weapon_attachment_info", :locals => { :attachment => nil, :active => nil, :weapon_attachment_options => nil}
+      render :partial => "weapon_attachment_info", :locals => { :attachment => nil, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
     end
   end
 
@@ -1126,12 +1126,12 @@ class CharactersController < ApplicationController
   end
 
   def remove_weapon_attachment
-    CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).delete_all
+    CharacterWeaponAttachment.where(:id => params[:attachment_id]).delete_all
     redirect_to :back, :notice => "Attachment removed"
   end
 
   def add_weapon_attachment_option
-    weapon_attachment = CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).first
+    weapon_attachment = CharacterWeaponAttachment.where(:id => params[:attachment_id]).first
 
     attachment_option = WeaponAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
@@ -1155,7 +1155,7 @@ class CharactersController < ApplicationController
   end
 
   def remove_weapon_attachment_option
-    weapon_attachment = CharacterWeaponAttachment.where(:weapon_attachment_id => params[:attachment_id]).first
+    weapon_attachment = CharacterWeaponAttachment.where(:id => params[:attachment_id]).first
     weapon_attachment.weapon_attachment_modification_options.delete_at weapon_attachment.weapon_attachment_modification_options.index(params[:option_id].to_s)
     weapon_attachment.save
 

@@ -1,10 +1,15 @@
 <% unless f.object.weapon_id.nil? %>
   <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
   <% unless @weapon.name == 'Unarmed' %>
+    <% weapon_price = @weapon.price %>
+    <% f.object.character_weapon_attachments.each do |caa| %>
+      <% weapon_price +=  caa.weapon_attachment.price %>
+    <% end -%>
+
     <li class="nested-fields">
       <ul class="pricing-table">
         <li class="title"><%= @weapon.name %></li>
-        <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @weapon.price %></li>
+        <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%=weapon_price %></li>
         <li class="description"><%= text_replace_tokens(@weapon.description).html_safe %></li>
         <li class="description">
           <%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
@@ -26,9 +31,8 @@
         <% unless f.object.character_weapon_attachments.blank? %>
           <li class="title">Attachments</li>
           <% f.object.character_weapon_attachments.each do |caa| %>
-            <% attachment = WeaponAttachment.find(caa.weapon_attachment_id) %>
             <li class="bullet-item">
-              <%= attachment.name %>
+              <%= caa.weapon_attachment.name %>
               <% unless caa.weapon_attachment_modification_options.blank? %>
               <ul style="font-size: 10px;">
                 <% caa.weapon_attachment_modification_options.each do |option| %>

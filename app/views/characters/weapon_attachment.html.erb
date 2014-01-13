@@ -55,7 +55,7 @@
         <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2" id="item-grid" data-no-turbolink>
           <% @weapon_attachments.each do |aa| %>
             <% attachment = WeaponAttachment.find(aa.weapon_attachment_id) %>
-            <li><%= render :partial => "weapon_attachment_info", :locals => { :attachment => attachment, :active => :true, :weapon_attachment_options => aa } %></li>
+            <li><%= render :partial => "weapon_attachment_info", :locals => { :attachment => attachment, :character_attachment_id => aa.id, :active => :true, :weapon_attachment_options => aa } %></li>
           <% end -%>
         </ul>
       <% end -%>
