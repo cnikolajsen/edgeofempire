@@ -360,7 +360,7 @@ class CharacterSheetPdf < Prawn::Document
           fill_color "ffffff"
           text_box "FORCE POOL", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :bottom
           fill_color "000000"
-          text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+          text_box "", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
           line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
           fill
           text_box "COMMITTED", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :center, :valign => :center
@@ -373,14 +373,14 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.left + 146),((bounds.height / 2) + 5)], 32
         fill
         text_box "FORCE RANK", :at => [(bounds.left + 95), (bounds.top - 70)], :width => 104, :height => 10, :overflow => :shrink_to_fit, :size => 8, :style => :bold, :align => :center, :valign => :center
-
         fill_color "ffffff"
         #self.line_width = 2
         rectangle [(bounds.left + 120), (bounds.top - 10)], 52, 52
         fill
         circle [(bounds.left + 146),((bounds.height / 2) + 5)], 30
         fill
-        #fill_color "751010"
+        fill_color "000000"
+        text_box "#{pdf_vars['force_rank']}", :at => [(bounds.left + 121), (bounds.top - 15)], :width => 52, :height => 52, :overflow => :shrink_to_fit, :size => 40, :style => :bold, :align => :center, :valign => :center
       end
     end
     #===== /Status Effects and Force =====
@@ -750,11 +750,11 @@ class CharacterSheetPdf < Prawn::Document
 
     start_new_page
     # Background image.
-    if pdf_vars['pdf_background'] == 'on'
-      image "#{Rails.root}/public/BKSheet2_opt.png",
-        :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-        :fit => [595.28, 841.89]
-    end
+    #if pdf_vars['pdf_background'] == 'on'
+    #  image "#{Rails.root}/public/BKSheet2_opt.png",
+    #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+    #    :fit => [595.28, 841.89]
+    #end
 
     # Page graphics.
     #stroke do
@@ -890,7 +890,7 @@ class CharacterSheetPdf < Prawn::Document
         ]
       end
 
-      bounding_box([bounds.left, (bounds.top - 20)], :width => bounds.width, :height => bounds.height) do
+      bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
         table [
          ['NAME', 'ACTIVATION', 'ABILITY SUMMARY']
         ],
@@ -898,11 +898,11 @@ class CharacterSheetPdf < Prawn::Document
           :height => 10,
           :padding => 1,
           :size => 5,
-          :align => :center,
+          :align => :left,
           :border_width => 0,
         },
-        :width => 491,
-        :column_widths => [100, 100, 291]
+        :width => bounds.width,
+        :column_widths => {0 => 100, 1 => 100}
 
         table talents,
           :cell_style => {
@@ -912,8 +912,8 @@ class CharacterSheetPdf < Prawn::Document
             :size => 6,
             :border_width => 0,
           },
-          :width => 491,
-          :column_widths => [100, 100, 291],
+          :width => bounds.width,
+          :column_widths => {0 => 100, 1 => 100},
           :row_colors => ['FFFFFF', 'C0C0C0']
       end
     end
@@ -932,6 +932,48 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "ffffff"
     text_box "CHARACTER DESCRIPTUON", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     fill_color "000000"
+
+    #talents = pdf_vars['talents'].map do |talent_id, index|
+    #    talent = Talent.find_by_id(talent_id)
+    #    font "Helvetica", :size=> 8
+    #    [
+    #      talent.name,
+    #      talent.activation,
+    #      talent.description,
+    #    ]
+    #  end
+
+      bounding_box([(bounds.left + 10), (bounds.top - 12)], :width => (bounds.width - 20), :height => bounds.height) do
+        table [
+         ['GENDER', 'AGE', 'HEIGHT', 'BUILD', 'HAIR', 'EYES']
+        ],
+        :cell_style => {
+          :height => 10,
+          :padding => 1,
+          :size => 5,
+          :align => :center,
+          :border_width => 0,
+        },
+        :width => bounds.width
+        #:column_widths => {0 => 100, 1 => 100}
+        #:width => 491,
+        #:column_widths => [100, 100, 291]
+
+        table [
+         ["#{@character.gender}", "#{@character.age}", "#{@character.height}", "#{@character.build}", "#{@character.hair}", "#{@character.eyes}"]
+        ],
+        :cell_style => {
+          :background_color => "FFFFFF",
+          :height => 12,
+          :padding => [2, 3],
+          :size => 6,
+          :align => :center,
+          :border_width => 1,
+        },
+        :width => bounds.width
+        #  :column_widths => {0 => 100, 1 => 100},
+        #  :row_colors => ['FFFFFF', 'C0C0C0']
+      end
 
   end
   #===== /CHARACTER DESCRIPTION =====
@@ -1012,11 +1054,11 @@ class CharacterSheetPdf < Prawn::Document
 
   start_new_page
   # Background image.
-  if pdf_vars['pdf_background'] == 'on'
-    image "#{Rails.root}/public/BKSheet3_opt.png",
-      :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-      :fit => [595.28, 841.89]
-  end
+  #if pdf_vars['pdf_background'] == 'on'
+  #  image "#{Rails.root}/public/BKSheet3_opt.png",
+  #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+  #    :fit => [595.28, 841.89]
+  #end
 
   #===== FOOTER =====
   bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do
@@ -1038,11 +1080,11 @@ class CharacterSheetPdf < Prawn::Document
 
   start_new_page
   # Background image.
-  if pdf_vars['pdf_background'] == 'on'
-    image "#{Rails.root}/public/BKSheet4_opt.png",
-      :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-      :fit => [595.28, 841.89]
-  end
+  #if pdf_vars['pdf_background'] == 'on'
+  #  image "#{Rails.root}/public/BKSheet4_opt.png",
+  #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
+  #    :fit => [595.28, 841.89]
+  #end
 
   #text "top: #{bounds.top}"
   #text "bottom: #{bounds.bottom}"
