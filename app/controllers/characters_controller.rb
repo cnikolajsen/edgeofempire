@@ -66,13 +66,15 @@ class CharactersController < ApplicationController
     @character_weapon_modification_bonuses['talents'] = Array.new
     unless equipped_weapons.character_weapon_attachments.blank?
       equipped_weapons.character_weapon_attachments.each do |caa|
-        caa.weapon_attachment_modification_options.each do |option|
-          modification_option = WeaponAttachmentModificationOption.find(option)
-          unless modification_option.talent_id.nil?
-            @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
-          end
-          unless modification_option.skill_id.nil?
-            @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
+        unless caa.weapon_attachment_modification_options.nil?
+          caa.weapon_attachment_modification_options.each do |option|
+            modification_option = WeaponAttachmentModificationOption.find(option)
+            unless modification_option.talent_id.nil?
+              @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
+            end
+            unless modification_option.skill_id.nil?
+              @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
+            end
           end
         end
       end
@@ -242,6 +244,10 @@ class CharactersController < ApplicationController
           weapon_name = WeaponModel.find(cw.weapon_model_id).name
         end
 
+        unless cw.character_weapon_attachments.blank?
+          weapon_name = "Modified " + weapon_name
+        end
+
         unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
           if params[:format] != 'pdf'
             @equipment << "#{weapon_name}"
@@ -303,6 +309,10 @@ class CharactersController < ApplicationController
 
           unless cw.weapon_model_id.nil?
             cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
+          end
+
+          unless cw.character_weapon_attachments.blank?
+            cw.weapon.name = "Modified " + cw.weapon.name
           end
 
           if params[:format] != 'pdf'
