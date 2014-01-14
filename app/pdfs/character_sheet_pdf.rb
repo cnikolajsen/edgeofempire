@@ -1,5 +1,6 @@
 class CharacterSheetPdf < Prawn::Document
   include CharactersHelper
+  include ApplicationHelper
 
   def initialize(character, view, pdf_vars)
     super( :left_margin => 30, :right_margin => 30, :top_margin => 0, :bottom_margin => 0, :page_size => 'A4')
@@ -886,7 +887,7 @@ class CharacterSheetPdf < Prawn::Document
         [
           talent.name,
           talent.activation,
-          talent.description,
+          talent.description
         ]
       end
 
@@ -930,7 +931,7 @@ class CharacterSheetPdf < Prawn::Document
     polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
     fill
     fill_color "ffffff"
-    text_box "CHARACTER DESCRIPTUON", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    text_box "CHARACTER DESCRIPTION", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     fill_color "000000"
 
     #talents = pdf_vars['talents'].map do |talent_id, index|

@@ -69,7 +69,7 @@ module CharactersHelper
   end
 
   def character_experience_cost(cid)
-    character = Character.find(cid)
+    @character = Character.find(cid)
     exp_cost = Hash.new
 
     exp_cost[:header_characteristics] = 0
@@ -80,41 +80,41 @@ module CharactersHelper
     exp_cost[:willpower] = 0
     exp_cost[:intellect] = 0
     exp_cost[:presence] = 0
-    unless character.race.nil?
-      character.brawn.times do |time|
+    unless @character.race.nil?
+      @character.brawn.times do |time|
         exp_cost[:brawn] += (10 * (time + 1)).to_i
       end
-      character.race.brawn.times do |time|
+      @character.race.brawn.times do |time|
         exp_cost[:brawn] -= (10 * (time + 1)).to_i
       end
-      character.agility.times do |time|
+      @character.agility.times do |time|
         exp_cost[:agility] += 10 * (time + 1)
       end
-      character.race.agility.times do |time|
+      @character.race.agility.times do |time|
         exp_cost[:agility] -= 10 * (time + 1)
       end
-      character.cunning.times do |time|
+      @character.cunning.times do |time|
         exp_cost[:cunning] += 10 * (time + 1)
       end
-      character.race.cunning.times do |time|
+      @character.race.cunning.times do |time|
         exp_cost[:cunning] -= 10 * (time + 1)
       end
-      character.willpower.times do |time|
+      @character.willpower.times do |time|
         exp_cost[:willpower] += 10 * (time + 1)
       end
-      character.race.willpower.times do |time|
+      @character.race.willpower.times do |time|
         exp_cost[:willpower] -= 10 * (time + 1)
       end
-      character.intellect.times do |time|
+      @character.intellect.times do |time|
         exp_cost[:intellect] += 10 * (time + 1)
       end
-      character.race.intellect.times do |time|
+      @character.race.intellect.times do |time|
         exp_cost[:intellect] -= 10 * (time + 1)
       end
-      character.presence.times do |time|
+      @character.presence.times do |time|
         exp_cost[:presence] += 10 * (time + 1)
       end
-      character.race.presence.times do |time|
+      @character.race.presence.times do |time|
         exp_cost[:presence] -= 10 * (time + 1)
       end
     end
@@ -122,25 +122,25 @@ module CharactersHelper
 
     exp_cost[:header_specializations] = 0
     # @start Calculate experience spent buying specializations.
-    unless character.specialization_1.blank?
-      specialization = TalentTree.find(character.specialization_1)
+    unless @character.specialization_1.blank?
+      specialization = TalentTree.find(@character.specialization_1)
       exp_cost["#{specialization.name}".to_sym] = 0
     end
-    unless character.specialization_2.blank?
-      specialization = TalentTree.find(character.specialization_2)
+    unless @character.specialization_2.blank?
+      specialization = TalentTree.find(@character.specialization_2)
       non_career_specialization_penalty = 10
-      character.career.talent_trees.each do |tree|
-        if tree.id == character.specialization_2
+      @character.career.talent_trees.each do |tree|
+        if tree.id == @character.specialization_2
           non_career_specialization_penalty = 0
         end
       end
       exp_cost["#{specialization.name}".to_sym] = 20 + non_career_specialization_penalty
     end
-    unless character.specialization_3.blank?
-      specialization = TalentTree.find(character.specialization_3)
+    unless @character.specialization_3.blank?
+      specialization = TalentTree.find(@character.specialization_3)
       non_career_specialization_penalty = 10
-      character.career.talent_trees.each do |tree|
-        if tree.id == character.specialization_3
+      @character.career.talent_trees.each do |tree|
+        if tree.id == @character.specialization_3
           non_career_specialization_penalty = 0
         end
       end
@@ -150,9 +150,9 @@ module CharactersHelper
 
     # @start Calculate experience spent buying talents.
     talents = {}
-    unless character.character_talents.empty?
+    unless @character.character_talents.empty?
       exp_cost[:header_talents] = 0
-      character.character_talents.each do |talent_tree|
+      @character.character_talents.each do |talent_tree|
         talent_tree.attributes.each do |key, value|
           if key.match(/talent_[\d]_[\d]$/) and !value.nil?
             if talents.has_key?(value) && !talent_tree["#{key}_options"].nil?
@@ -188,17 +188,23 @@ module CharactersHelper
     # @end Talents.
 
     # @start Calculate experience spent buying skills.
-    unless character.character_skills.empty?
+    unless @character.character_skills.empty?
       exp_cost[:header_skills] = 0
-      character.character_skills.each do |cs|
+      @character.character_skills.each do |cs|
         skill = Skill.find(cs.skill_id)
         free_ranks = cs.free_ranks_career + cs.free_ranks_specialization + cs.free_ranks_race
         skill_cost = 0
+
+        cross_career_penalty = 0
+        unless (is_career_skill(cs.skill_id))
+          cross_career_penalty = 5
+        end
+
         cs.ranks.times do |rank|
-          skill_cost += (5 * (rank + 1)).to_i
+          skill_cost += (5 * (rank + 1)).to_i + cross_career_penalty
         end
         free_ranks.times do |rank|
-          skill_cost -= (5 * (rank + 1)).to_i
+          skill_cost -= (5 * (rank + 1)).to_i + cross_career_penalty
         end
 
         unless skill_cost == 0
@@ -210,8 +216,8 @@ module CharactersHelper
 
     # Sum up the total.
     exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
-    exp_cost[:starting_experience] = character.race.starting_experience
-    exp_cost[:earned_experience] = character.experience
+    exp_cost[:starting_experience] = @character.race.starting_experience
+    exp_cost[:earned_experience] = @character.experience
     exp_cost[:available_experience] = exp_cost[:starting_experience] + exp_cost[:earned_experience]
     exp_cost
   end
