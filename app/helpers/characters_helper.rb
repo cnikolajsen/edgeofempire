@@ -25,19 +25,21 @@ module CharactersHelper
   def is_career_skill(skill_id, talent_select = false)
     # Build an array of career skill ids granted by character's career.
     career_skill_ids = Array.new
-    @character.career.career_skills.each do |skill|
-      career_skill_ids << skill.skill_id
-    end
+    unless @character.career.nil?
+      @character.career.career_skills.each do |skill|
+        career_skill_ids << skill.skill_id
+      end
 
-    character_specializations = Array.new
-    character_specializations << @character.specialization_1
-    character_specializations << @character.specialization_2
-    character_specializations << @character.specialization_3
-    # Then add bonus career skills ids from specializations.
-    @character.career.talent_trees.each do |tt|
-      if character_specializations.include? tt.id
-        tt.talent_tree_career_skills.each do |skill|
-          career_skill_ids << skill.skill_id
+      character_specializations = Array.new
+      character_specializations << @character.specialization_1
+      character_specializations << @character.specialization_2
+      character_specializations << @character.specialization_3
+      # Then add bonus career skills ids from specializations.
+      @character.career.talent_trees.each do |tt|
+        if character_specializations.include? tt.id
+          tt.talent_tree_career_skills.each do |skill|
+            career_skill_ids << skill.skill_id
+          end
         end
       end
     end
@@ -192,7 +194,6 @@ module CharactersHelper
       exp_cost[:header_skills] = 0
       @character.character_skills.each do |cs|
         skill = Skill.find(cs.skill_id)
-        free_ranks = cs.free_ranks_career + cs.free_ranks_specialization + cs.free_ranks_race
         skill_cost = 0
 
         cross_career_penalty = 0
@@ -203,12 +204,9 @@ module CharactersHelper
         cs.ranks.times do |rank|
           skill_cost += (5 * (rank + 1)).to_i + cross_career_penalty
         end
-        free_ranks.times do |rank|
-          skill_cost -= (5 * (rank + 1)).to_i + cross_career_penalty
-        end
 
         unless skill_cost == 0
-          exp_cost["#{cs.ranks - free_ranks}_#{'rank'.pluralize(cs.ranks)}_in_#{skill.name}".to_sym] = skill_cost
+          exp_cost["#{cs.ranks}_#{'rank'.pluralize(cs.ranks)}_in_#{skill.name}".to_sym] = skill_cost
         end
       end
     end
@@ -216,10 +214,14 @@ module CharactersHelper
 
     # Sum up the total.
     exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
-    exp_cost[:starting_experience] = @character.race.starting_experience
+    exp_cost[:starting_experience] = if !@character.race.nil? then @character.race.starting_experience else 0 end
     exp_cost[:earned_experience] = @character.experience
     exp_cost[:available_experience] = exp_cost[:starting_experience] + exp_cost[:earned_experience]
     exp_cost
+  end
+
+  def skill_total_ranks(character_skill)
+    character_skill.ranks + character_skill.free_ranks_race + character_skill.free_ranks_specialization + character_skill.free_ranks_career + character_skill.free_ranks_equipment
   end
 
 end

@@ -10,48 +10,48 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <%= form_for @character do |character_form| %>
+    <%= form_for :character_skills, :url => url_for(:action => 'save_character_skills') do |form| %>
       <table>
         <tr>
-          <th>Skills</th>
+          <th>Skill</th>
           <th>Characteristic</th>
           <th>Career?</th>
-          <th>Rank</th>
+          <th>Ranks</th>
+          <th>Race</th>
+          <th>Class</th>
+          <th>Specialization</th>
+          <th>Equipment</th>
+          <th>Total</th>
         </tr>
-        <%= character_form.fields_for :character_skills do |skill_fields| %>
-          <% skill = Skill.find_by_id(skill_fields.object.skill_id) %>
-          <% unless skill.nil? %>
-            <tr>
-              <td><%= character_form.label :ranks, skill.name, :class => 'control-label' %></td>
-              <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
-              <td>
-                <% unless @character.career.nil? -%>
-                  <% if( is_career_skill(skill_fields.object.skill_id)) %>YES<% end %>
-                <% end -%>
-              </td>
-              <%
-                skill_minimum = 0
-                unless @character.career.nil?
-                  skill_minimum = skill_fields.object.free_ranks_career + skill_fields.object.free_ranks_specialization +       skill_fields.object.free_ranks_race
-                end
-
-                if @character.creation?
-                  skill_maximum = 2
-                else
-                  skill_maximum = 5
-                end
-                if skill_minimum > skill_maximum
-                  skill_minimum = skill_maximum
-                end
-              %>
-              <td><%= skill_fields.select :ranks, (skill_minimum..skill_maximum) %></td>
-            </tr>
-          <% end %>
+        <% @character.skills.each do |skill| %>
+          <% character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first %>
+          <tr>
+            <td><%= skill.name %></td>
+            <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
+            <td>
+              <% unless @character.career.nil? -%>
+                <% if( is_career_skill(skill.id)) %>YES<% end %>
+              <% end -%>
+            </td>
+            <%
+              if @character.creation?
+                skill_maximum = 2
+              else
+                skill_maximum = 5
+              end
+            %>
+            <td style="text-align: center;"><%= form.select "#{skill.id}".to_sym, (0..skill_maximum), :selected => character_skill.ranks %></td>
+            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_race}" unless character_skill.free_ranks_race == 0 %></td>
+            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_career}" unless character_skill.free_ranks_career == 0 %></td>
+            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_specialization}" unless character_skill.free_ranks_specialization == 0 %></td>
+            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_equipment}" unless character_skill.free_ranks_equipment == 0 %></td>
+            <td style="text-align: center;"><%= character_skill.ranks + character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment %> </td>
+          </tr>
         <% end %>
       </table>
 
       <%= hidden_field_tag 'destination', 'skills' %>
-      <%= character_form.submit "Save skills", :class => 'button' %>
+      <%= form.submit "Save skills", :class => 'button' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 characters_path, :class => 'button secondary' %>
     <% end %>

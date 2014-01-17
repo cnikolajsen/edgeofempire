@@ -73,6 +73,7 @@ EdgeOfEmpire::Application.routes.draw do
 
   get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
   get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
+  post 'characters/:id/skills' => 'characters#save_character_skills'
   get 'characters/:id/armor' => 'characters#armor', :as => :character_armor
   get 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
   get 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear

@@ -37,8 +37,8 @@
         <tr>
           <td colspan="3"><span class="label">Skills:</span>
             <% @character.character_skills.each do |character_skill| %>
-              <% unless character_skill.skill.nil? or character_skill.ranks < 1 %>
-                <span style="display: inline; white-space:nowrap;"><%= character_skill.skill.name %> <%= character_skill.ranks  unless character_skill.ranks < 1  %> <%= render :partial => "dice_pool", :locals => {:score => @character.send(  character_skill.skill.characteristic.downcase), :ranks => character_skill.ranks} %><% if @character.  character_skills.last != character_skill %>,<% end %></span>
+              <% unless character_skill.skill.nil? or skill_total_ranks(character_skill) < 1 %>
+                <span style="display: inline; white-space:nowrap;"><%= character_skill.skill.name %> <%= skill_total_ranks(character_skill) unless skill_total_ranks(character_skill) < 1  %> <%= render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => skill_total_ranks(character_skill)} %><% if @character.  character_skills.last != character_skill %>,<% end %></span>
               <% end %>
             <% end %>
           </td>

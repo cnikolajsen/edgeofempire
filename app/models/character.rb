@@ -37,7 +37,7 @@ class Character < ActiveRecord::Base
   belongs_to :user
 
   has_many :character_skills, :dependent => :destroy
-  has_many :skills, :through => :character_skills
+  has_many :skills, -> { order 'skills.name' }, :through => :character_skills
   has_many :character_armor, :dependent => :destroy
   has_many :armors, :through => :character_armor
   has_many :character_weapons, :dependent => :destroy
