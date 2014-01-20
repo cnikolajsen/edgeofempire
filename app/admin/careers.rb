@@ -28,6 +28,10 @@ ActiveAdmin.register Career do
   config.filters = false
 
   controller do
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
+
     def create
       create! do |format|
         format.html { redirect_to admin_careers_url }

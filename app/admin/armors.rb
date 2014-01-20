@@ -40,6 +40,10 @@ ActiveAdmin.register Armor do
   end
 
   controller do
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
+
     def create
       create! do |format|
         format.html { redirect_to admin_armors_url }

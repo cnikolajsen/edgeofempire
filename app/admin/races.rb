@@ -46,10 +46,14 @@ ActiveAdmin.register Race do
   end
 
   controller do
-     def create
-       create! do |format|
-          format.html { redirect_to admin_races_url }
-       end
-     end
-   end
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
+
+    def create
+      create! do |format|
+        format.html { redirect_to admin_races_url }
+      end
+    end
+  end
 end

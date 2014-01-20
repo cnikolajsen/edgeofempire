@@ -27,27 +27,31 @@ ActiveAdmin.register Skill do
   end
 
   controller do
-     def create
-       create! do |format|
-          format.html { redirect_to admin_skills_url }
-       end
-     end
+    def find_resource
+      scoped_collection.friendly.find(params[:id])
+    end
 
-     def destroy
-       @skill = Skill.find(params[:id])
+    def create
+      create! do |format|
+        format.html { redirect_to admin_skills_url }
+      end
+    end
 
-       # Delete the skill from all characters.
-       CharacterSkill.where('skill_id = ?', @skill.id).each do |character_skill|
-         character_skill.destroy
-       end
+    def destroy
+      @skill = Skill.find(params[:id])
 
-       # Delete the skill itself.
-       @skill.destroy
+      # Delete the skill from all characters.
+      CharacterSkill.where('skill_id = ?', @skill.id).each do |character_skill|
+        character_skill.destroy
+      end
 
-       respond_to do |format|
-         format.html { redirect_to admin_skills_url, notice: 'Skill was successfully deleted.'  }
-         format.json { head :no_content }
-       end
-     end
-   end
+      # Delete the skill itself.
+      @skill.destroy
+
+      respond_to do |format|
+        format.html { redirect_to admin_skills_url, notice: 'Skill was successfully deleted.'  }
+        format.json { head :no_content }
+      end
+    end
+  end
 end
