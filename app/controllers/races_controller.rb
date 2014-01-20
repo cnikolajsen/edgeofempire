@@ -11,7 +11,7 @@ class RacesController < ApplicationController
   end
 
   def show
-    @race = Race.find(params[:id])
+    @race = Race.friendly.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

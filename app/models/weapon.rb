@@ -1,4 +1,7 @@
 class Weapon < ActiveRecord::Base
+  include FriendlyId
+  friendly_id :name, :use => :slugged
+
   belongs_to :skill
   has_many :weapon_qualities, :through => :weapon_quality_ranks
   has_many :weapon_quality_ranks

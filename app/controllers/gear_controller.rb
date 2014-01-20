@@ -11,7 +11,7 @@ class GearController < ApplicationController
   end
 
   def show
-    @gear = Gear.find(params[:id])
+    @gear = Gear.friendly.find(params[:id])
     @title = "#{@gear.name} | #{@title}"
 
     respond_to do |format|
@@ -24,5 +24,5 @@ class GearController < ApplicationController
     @page = 'gear'
     @title = "Gear"
   end
-  
+
 end

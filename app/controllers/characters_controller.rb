@@ -23,7 +23,7 @@ class CharactersController < ApplicationController
   def show
     @character_page = 'view'
 
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | #{@title}"
     @character_state = character_state(@character)
 
@@ -458,7 +458,7 @@ class CharactersController < ApplicationController
 
   # GET /characters/1/edit
   def edit
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character_state = character_state(@character)
 
     @title = "#{@character.name} | Edit"
@@ -507,7 +507,7 @@ class CharactersController < ApplicationController
   # PUT /characters/1
   # PUT /characters/1.json
   def update
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     if @character.aasm_state.nil?
       @character.aasm_state = 'creation'
     end
@@ -773,7 +773,7 @@ class CharactersController < ApplicationController
   # DELETE /characters/1
   # DELETE /characters/1.json
   def destroy
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character.destroy
 
     respond_to do |format|
@@ -784,7 +784,7 @@ class CharactersController < ApplicationController
 
   def skills
     @character_page = 'skills'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Skills"
     @character_state = character_state(@character)
   end
@@ -800,7 +800,7 @@ class CharactersController < ApplicationController
 
   def talents
     @character_page = 'talents'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character_state = character_state(@character)
     @title = "#{@character.name} | Talents"
 
@@ -822,7 +822,7 @@ class CharactersController < ApplicationController
   end
 
   def untrain_specialization
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     specialization = TalentTree.find(params[:spec_id])
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
@@ -836,7 +836,7 @@ class CharactersController < ApplicationController
   def career
     @character_menu = 'career'
     @character_page = 'career'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Career"
     @character_state = character_state(@character)
 
@@ -855,7 +855,7 @@ class CharactersController < ApplicationController
   def species
     @character_menu = 'basics'
     @character_page = 'species'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Species"
     @character_state = character_state(@character)
   end
@@ -869,7 +869,7 @@ class CharactersController < ApplicationController
   def characteristics
     @character_menu = 'basics'
     @character_page = 'characteristics'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Characteristics"
     @character_state = character_state(@character)
   end
@@ -877,7 +877,7 @@ class CharactersController < ApplicationController
   def background
     @character_menu = 'basics'
     @character_page = 'background'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Background"
     @character_state = character_state(@character)
   end
@@ -885,7 +885,7 @@ class CharactersController < ApplicationController
   def obligation
     @character_menu = 'basics'
     @character_page = 'obligation'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Obligation"
     @character_state = character_state(@character)
   end
@@ -927,7 +927,7 @@ class CharactersController < ApplicationController
   def motivation
     @character_menu = 'basics'
     @character_page = 'motivation'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Motivation"
     @character_state = character_state(@character)
   end
@@ -968,12 +968,12 @@ class CharactersController < ApplicationController
   def armor
     @character_menu = 'equipment'
     @character_page = 'armor'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Armor"
   end
 
   def armor_attachment
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character_armor = CharacterArmor.find(params[:character_armor_id])
     @armor = Armor.find(@character_armor.armor_id)
     @title = "#{@character.name} | Armor Attachment"
@@ -1056,12 +1056,12 @@ class CharactersController < ApplicationController
   def weapons
     @character_menu = 'equipment'
     @character_page = 'weapons'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Weapons"
   end
 
   def weapon_attachment
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character_weapon = CharacterWeapon.find(params[:character_weapon_id])
     @weapon = Weapon.find(@character_weapon.weapon_id)
     @title = "#{@character.name} | Weapon Attachment"
@@ -1144,26 +1144,26 @@ class CharactersController < ApplicationController
   def equipment
     @character_menu = 'equipment'
     @character_page = 'gear'
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Equipment"
   end
 
   def set_activate
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character.activate
     @character.save
     redirect_to @character, notice: 'Character activated. Character creation rules no longer apply.'
   end
 
   def set_retired
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character.retire
     @character.save
     redirect_to @character, notice: 'Character taken off duty. Character is now read only.'
   end
 
   def set_creation
-    @character = Character.find(params[:id])
+    @character = Character.friendly.find(params[:id])
     @character.set_create
     @character.save
     redirect_to @character, notice: 'Character put into creation mode. Special rules apply.'

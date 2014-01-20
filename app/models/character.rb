@@ -1,5 +1,14 @@
 class Character < ActiveRecord::Base
   include AASM
+  include FriendlyId
+  friendly_id :slug_candidates, :use => :slugged
+
+  def slug_candidates
+    [
+      :name,
+      [:name, :race_id],
+    ]
+  end
 
   aasm do
     state :creation, :initial => true

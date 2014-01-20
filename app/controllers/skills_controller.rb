@@ -2,7 +2,7 @@ class SkillsController < ApplicationController
   before_filter :set_up
 
   def index
-    @skills = Skill.find(:all, :order => :name)
+    @skills = Skill.where(:true).order(:name)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -11,7 +11,7 @@ class SkillsController < ApplicationController
   end
 
   def show
-    @skill = Skill.find(params[:id])
+    @skill = Skill.friendly.find(params[:id])
     @title = "#{@skill.name} | #{@title}"
 
     respond_to do |format|
@@ -24,5 +24,5 @@ class SkillsController < ApplicationController
     @page = 'skills'
     @title = "Skills"
   end
-  
+
 end

@@ -27,6 +27,7 @@ gem 'thin'
 gem 'cocoon', "1.2.3"
 gem "prawn", "1.0.0.rc2"
 gem "aasm", "~> 3.0.19"
+gem "friendly_id", "~> 5.0.2"
 
 # Delete tis when migrated to strong parameters.
 #gem 'protected_attributes'

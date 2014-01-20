@@ -2,7 +2,7 @@ class CareersController < ApplicationController
   before_filter :set_up
 
   def index
-    @careers = Career.find(:all, :order => :name)
+    @careers = Career.where(:true).order(:name)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -11,7 +11,7 @@ class CareersController < ApplicationController
   end
 
   def show
-    @career = Career.find(params[:id])
+    @career = Career.friendly.find(params[:id])
     @title = "#{@career.name} | #{@title}"
 
     respond_to do |format|

@@ -11,7 +11,7 @@ class WeaponsController < ApplicationController
   end
 
   def show
-    @weapon = Weapon.find(params[:id])
+    @weapon = Weapon.friendly.find(params[:id])
     @title = "#{@weapon.name} | #{@title}"
 
     respond_to do |format|
@@ -24,5 +24,5 @@ class WeaponsController < ApplicationController
     @page = 'weapons'
     @title = "Weapons"
   end
-  
+
 end

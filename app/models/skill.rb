@@ -1,4 +1,7 @@
 class Skill < ActiveRecord::Base
+  include FriendlyId
+  friendly_id :name, :use => :slugged
+
   default_scope { order('name ASC') }
 
   belongs_to :career

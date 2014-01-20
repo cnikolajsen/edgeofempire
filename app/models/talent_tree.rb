@@ -1,5 +1,7 @@
 class TalentTree < ActiveRecord::Base
-  
+  include FriendlyId
+  friendly_id :name, :use => :slugged
+
   belongs_to :career
   has_many :talent_tree_career_skills
   has_many :skills, :through => :talent_tree_career_skills

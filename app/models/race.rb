@@ -1,4 +1,7 @@
 class Race < ActiveRecord::Base
+  include FriendlyId
+  friendly_id :name, :use => :slugged
+
   default_scope { order('name ASC') }
 
   has_many :race_skills, :dependent => :destroy
@@ -7,5 +10,5 @@ class Race < ActiveRecord::Base
   has_many :race_talents, :dependent => :destroy
   has_many :talents, :through => :race_talents
   accepts_nested_attributes_for :race_talents, :reject_if => :all_blank, :allow_destroy => true
-  
+
 end

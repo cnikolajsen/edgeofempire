@@ -11,7 +11,7 @@ class ArmorController < ApplicationController
   end
 
   def show
-    @armor = Armor.find(params[:id])
+    @armor = Armor.friendly.find(params[:id])
     @title = "#{@armor.name} | #{@title}"
 
     respond_to do |format|
@@ -24,9 +24,9 @@ class ArmorController < ApplicationController
     @page = 'armor'
     @title = "Armor"
   end
-  
+
   private
-  
+
   def armor_params
     params.require(:armor).permit( :defense, :description, :name, :price, :soak )
   end

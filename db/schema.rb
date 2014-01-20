@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140112125820) do
+ActiveRecord::Schema.define(version: 20140120095836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,7 +109,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.integer  "hard_points"
     t.integer  "rarity"
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "armors", ["slug"], name: "index_armors_on_slug", unique: true, using: :btree
 
   create_table "campaigns", force: true do |t|
     t.string   "name"
@@ -132,7 +135,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "careers", ["slug"], name: "index_careers_on_slug", unique: true, using: :btree
 
   create_table "character_armor_attachments", force: true do |t|
     t.integer  "character_armor_id"
@@ -304,7 +310,23 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.integer  "specialization_3"
     t.string   "aasm_state"
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "characters", ["slug"], name: "index_characters_on_slug", unique: true, using: :btree
+
+  create_table "friendly_id_slugs", force: true do |t|
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
+    t.string   "sluggable_type", limit: 50
+    t.string   "scope"
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "gear_models", force: true do |t|
     t.integer  "gear_id"
@@ -322,7 +344,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.integer  "encumbrance"
     t.integer  "rarity"
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "gears", ["slug"], name: "index_gears_on_slug", unique: true, using: :btree
 
   create_table "motivations", force: true do |t|
     t.string   "name"
@@ -372,7 +397,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "races", ["slug"], name: "index_races_on_slug", unique: true, using: :btree
 
   create_table "skills", force: true do |t|
     t.string   "name"
@@ -380,7 +408,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.string   "characteristic"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "slug"
   end
+
+  add_index "skills", ["slug"], name: "index_skills_on_slug", unique: true, using: :btree
 
   create_table "specializations", force: true do |t|
     t.string   "name"
@@ -451,7 +482,10 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.integer  "talent_5_3_require_5_4"
     t.integer  "talent_5_4"
     t.integer  "talent_5_4_require_4_4"
+    t.string   "slug"
   end
+
+  add_index "talent_trees", ["slug"], name: "index_talent_trees_on_slug", unique: true, using: :btree
 
   create_table "talents", force: true do |t|
     t.string   "name"
@@ -487,11 +521,13 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "slug"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
 
   create_table "weapon_attachment_modification_options", force: true do |t|
     t.integer  "weapon_attachment_id"
@@ -555,6 +591,9 @@ ActiveRecord::Schema.define(version: 20140112125820) do
     t.integer  "hard_points"
     t.integer  "rarity"
     t.string   "image_url"
+    t.string   "slug"
   end
+
+  add_index "weapons", ["slug"], name: "index_weapons_on_slug", unique: true, using: :btree
 
 end
