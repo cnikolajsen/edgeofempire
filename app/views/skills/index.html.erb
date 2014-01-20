@@ -8,7 +8,7 @@
   <div class="row">
     <div class="small-12 columns panel">
       <h4><%= skill.name %> <small>[<%= skill.characteristic %>]</small></h4>
-      <p><%= skill.description.html_safe %></p>
+      <p><%= text_replace_tokens(skill.description).html_safe %></p>
     </div>
   </div>
 <% end -%>
