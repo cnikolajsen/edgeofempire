@@ -38,6 +38,44 @@
         <% end %>
       </li>
     <% end -%>
+    <% unless aamo.weapon_quality_id.nil? %>
+      <% weapon_quality = WeaponQuality.find(aamo.weapon_quality_id) %>
+      <li class="bullet-item">
+        <strong>Weapon Quality:</strong>
+        <%= weapon_quality.name %> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
+        <% unless active.nil? %>
+          <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
+            <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+          <% else %>
+            <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end -%>
+    <% unless aamo.damage_bonus.nil? %>
+      <li class="bullet-item">
+        <strong>Damage Bonus:</strong> +<%= aamo.damage_bonus %>
+        <% unless active.nil? %>
+          <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
+            <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+          <% else %>
+            <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end -%>
+    <% unless aamo.custom.blank? %>
+      <li class="bullet-item">
+        <strong><%= aamo.custom %></strong>
+        <% unless active.nil? %>
+          <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
+            <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+          <% else %>
+            <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end -%>
   <% end -%>
   <% unless active.nil? %>
     <li class="cta-button"><%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/remove", :class => 'button tiny alert' %></li>

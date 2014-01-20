@@ -43,6 +43,15 @@
                   <% unless modification_option.skill_id.nil? %>
                     <li>Skill bonus: <%= Skill.find(modification_option.skill_id).name %></li>
                   <% end -%>
+                  <% unless modification_option.weapon_quality_id.nil? %>
+                    <li>Weapon Quality: <%= WeaponQuality.find(modification_option.weapon_quality_id).name %><% if modification_option.weapon_quality_rank > 0 %> +<%= modification_option.weapon_quality_rank %><% end %><% if modification_option.weapon_quality_rank < 0 %> <%= modification_option.weapon_quality_rank %><% end %></li>
+                  <% end -%>
+                  <% unless modification_option.damage_bonus.nil? %>
+                    <li>Damage bonus: +<%= modification_option.damage_bonus %></li>
+                  <% end -%>
+                  <% unless modification_option.custom.blank? %>
+                    <li><%= modification_option.custom %></li>
+                  <% end -%>
                 <% end -%>
               </ul>
               <% end -%>

@@ -315,10 +315,38 @@ class CharactersController < ApplicationController
             cw.weapon.name = "Modified " + cw.weapon.name
           end
 
+          weapon_attachment = Array.new
+          cw.character_weapon_attachments.each do |cwa|
+            weapon_attachment << WeaponAttachment.find(cwa.weapon_attachment_id).name
+            unless cwa.weapon_attachment_modification_options.nil?
+              cwa.weapon_attachment_modification_options.each do |option|
+                modification_option = WeaponAttachmentModificationOption.find(option)
+                unless modification_option.weapon_quality_id.nil?
+                  wq_ranks = ''
+                  if modification_option.weapon_quality_rank > 0
+                    wq_ranks = " #{modification_option.weapon_quality_rank}"
+                  end
+                  @wq << "#{WeaponQuality.find_by_id(modification_option.weapon_quality_id).name}#{wq_ranks}"
+                end
+                unless modification_option.damage_bonus.nil?
+                  cw.weapon.damage += modification_option.damage_bonus
+                end
+                unless modification_option.custom.blank?
+                  weapon_attachment << "#{modification_option.custom}"
+                end
+              end
+            end
+          end
+
+          attachment_text = nil
+          unless weapon_attachment.blank?
+            attachment_text = "; [<strong>Attachments:</strong> #{weapon_attachment.join(', ')}]"
+          end
+
           if params[:format] != 'pdf'
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
-            @attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')})"
+            @attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')}#{attachment_text})"
           else
             #@pdf_weapons_and_armor << cw.weapon.name
           end
