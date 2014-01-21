@@ -2,7 +2,7 @@ class WeaponsController < ApplicationController
   before_filter :set_up
 
   def index
-    @weapons = Weapon.find(:all, :order => :name)
+    @weapons = Weapon.where(:true).order(:name)
 
     respond_to do |format|
       format.html # index.html.erb

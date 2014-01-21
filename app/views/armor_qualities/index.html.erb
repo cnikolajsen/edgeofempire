@@ -1,0 +1,26 @@
+<%- model_class = WeaponQuality -%>
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+    <dl class="sub-nav">
+      <dd<% if current_page('armor') %> class="active"<% end %>><%= link_to "Armor", "/armor" %></dd>
+      <dd<% if current_page('armor_qualities') %> class="active"<% end %>><%= link_to "Qualities", armor_qualities_path %></dd>
+      <dd<% if current_page('armor_attachments') %> class="active"<% end %>><%= link_to "Attachments", armor_attachments_path %></dd>
+    </dl>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid">
+      <% @qualities.each do |quality| %>
+        <li>
+          <ul class="pricing-table">
+            <li class="title"><%= quality.name %></li>
+            <li class="description"><%= text_replace_tokens(quality.description).html_safe %></li>
+            <li class="bullet-item"><strong>Trigger:</strong> <%= quality.trigger %></li>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

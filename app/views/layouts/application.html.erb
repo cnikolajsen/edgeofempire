@@ -64,11 +64,11 @@
           <li<% if current_page('careers') %> class="active"<% end %>><%= link_to "Careers", careers_path  %></li>
           <li<% if current_page('skills') %> class="active"<% end %>><%= link_to "Skills", skills_path  %></li>
           <li<% if current_page('talents') %> class="active"<% end %>><%= link_to "Talents", talents_path  %></li>
-          <li class="has-dropdown <% if current_page('weapons') or current_page('armor') or current_page('gear') %>active<% end %>">
+          <li class="has-dropdown <% if ['weapons', 'weapon_qualities', 'weapon_attachments', 'armor', 'armor_qualities', 'armor_attachments', 'gear'].include?(@page) %>active<% end %>">
             <a href="#">Equipment</a>
             <ul class="dropdown">
-              <li<% if current_page('weapons') %> class="active"<% end %>><%= link_to "Weapons", weapons_path %></li>
-              <li<% if current_page('armor') %> class="active"<% end %>><%= link_to "Armor", "/armor" %></li>
+              <li<% if ['weapons', 'weapon_qualities', 'weapon_attachments'].include?(@page) %> class="active"<% end %>><%= link_to "Weapons", weapons_path %></li>
+              <li<% if ['armor', 'armor_qualities', 'armor_attachments'].include?(@page) %> class="active"<% end %>><%= link_to "Armor", "/armor" %></li>
               <li<% if current_page('gear') %> class="active"<% end %>><%= link_to "Gear", "/gear"  %></li>
             </ul>
           </li>

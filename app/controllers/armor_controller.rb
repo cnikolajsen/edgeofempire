@@ -2,7 +2,7 @@ class ArmorController < ApplicationController
   before_filter :set_up
 
   def index
-    @armor = Armor.find(:all, :order => :name)
+    @armor = Armor.where(:true).order(:name)
 
     respond_to do |format|
       format.html # index.html.erb

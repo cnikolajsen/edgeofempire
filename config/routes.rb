@@ -22,7 +22,11 @@ EdgeOfEmpire::Application.routes.draw do
   resources :adventures
   resources :campaigns
   resources :weapons
+  resources :weapon_qualities
+  resources :weapon_attachments
   resources :armor
+  resources :armor_qualities
+  resources :armor_attachments
   resources :gear
   resources :talents
   resources :obligations

@@ -2,6 +2,11 @@
 <div class="row">
   <div class="small-12 columns">
     <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+    <dl class="sub-nav">
+        <dd<% if current_page('weapons') %> class="active"<% end %>><%= link_to "Weapons", weapons_path %></dd>
+        <dd<% if current_page('weapon_qualities') %> class="active"<% end %>><%= link_to "Qualities", weapon_qualities_path %></dd>
+        <dd<% if current_page('weapon_attachments') %> class="active"<% end %>><%= link_to "Attachments", weapon_attachments_path %></dd>
+      </dl>
   </div>
 </div>
 <div class="row">
