@@ -1,5 +1,5 @@
 ActiveAdmin.register WeaponAttachment do
-  permit_params :name, :description, :price, :hard_points,
+  permit_params :name, :description, :price, :hard_points, :damage_bonus,
   weapon_attachment_quality_ranks_attributes: [ :id, :ranks, :weapon_attachment_id, :weapon_quality_id ],
   weapon_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id, :damage_bonus, :weapon_quality_id, :weapon_quality_rank, :custom ]
 
@@ -25,6 +25,7 @@ ActiveAdmin.register WeaponAttachment do
         wqr_form.input :weapon_quality_id, :as => :select, :collection => WeaponQuality.all
         wqr_form.input :ranks
       end
+      f.input :damage_bonus
       f.has_many :weapon_attachment_modification_options do |amo_form|
         if (amo_form.object.skill_id.nil? and amo_form.object.created_at.nil?) or !amo_form.object.skill_id.nil?
           amo_form.input :skill_id, :as => :select, :collection => Skill.all

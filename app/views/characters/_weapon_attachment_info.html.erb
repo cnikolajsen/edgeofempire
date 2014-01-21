@@ -4,7 +4,7 @@
   <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= attachment.price %></li>
   <li class="description"><%= text_replace_tokens(attachment.description).html_safe %></li>
   <li class="bullet-item"><strong>Hard Point cost:</strong> <%= attachment.hard_points %></li>
-  <% attachment.weapon_attachment_quality_ranks.blank? %>
+  <% unless attachment.weapon_attachment_quality_ranks.blank? %>
     <li class="title">Base modification</li>
     <% attachment.weapon_attachment_quality_ranks.each do |qual| %>
       <li class="bullet-item"><strong><%= qual.weapon_quality.name %></strong><br /><%= qual.weapon_quality.description %></li>

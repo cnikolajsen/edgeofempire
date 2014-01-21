@@ -333,6 +333,10 @@ class CharactersController < ApplicationController
           weapon_attachment = Array.new
           cw.character_weapon_attachments.each do |cwa|
             weapon_attachment << WeaponAttachment.find(cwa.weapon_attachment_id).name
+            weapon_attachment_damage_bonus = WeaponAttachment.find(cwa.weapon_attachment_id).damage_bonus
+            unless weapon_attachment_damage_bonus.nil?
+              cw.weapon.damage += weapon_attachment_damage_bonus
+            end
             unless cwa.weapon_attachment_modification_options.nil?
               cwa.weapon_attachment_modification_options.each do |option|
                 modification_option = WeaponAttachmentModificationOption.find(option)
