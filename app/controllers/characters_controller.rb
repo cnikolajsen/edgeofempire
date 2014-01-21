@@ -45,15 +45,22 @@ class CharactersController < ApplicationController
     @character_armor_modification_bonuses = {}
     @character_armor_modification_bonuses['skills'] = Array.new
     @character_armor_modification_bonuses['talents'] = Array.new
+    @character_armor_modification_bonuses['characteristics'] = Array.new
     unless equipped_armor.nil? or equipped_armor.character_armor_attachments.blank?
       equipped_armor.character_armor_attachments.each do |caa|
-        caa.armor_attachment_modification_options.each do |option|
-          modification_option = ArmorAttachmentModificationOption.find(option)
-          unless modification_option.talent_id.nil?
-            @character_armor_modification_bonuses['talents'] << modification_option.talent_id
-          end
-          unless modification_option.skill_id.nil?
-            @character_armor_modification_bonuses['skills'] << modification_option.skill_id
+        armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
+        unless armor_attachment.stat_bonus.nil?
+          @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
+        end
+        unless caa.armor_attachment_modification_options.nil?
+          caa.armor_attachment_modification_options.each do |option|
+            modification_option = ArmorAttachmentModificationOption.find(option)
+            unless modification_option.talent_id.nil?
+              @character_armor_modification_bonuses['talents'] << modification_option.talent_id
+            end
+            unless modification_option.skill_id.nil?
+              @character_armor_modification_bonuses['skills'] << modification_option.skill_id
+            end
           end
         end
       end
@@ -232,6 +239,14 @@ class CharactersController < ApplicationController
     @attacks = Array.new
     @pdf_weapons_and_armor = Array.new
     @pdf_personal_gear = Array.new
+
+    # Increase characteristics that don't affect derived stats.
+    # I.e armor attachments increasing brawn.
+    unless @character_armor_modification_bonuses['characteristics'].blank?
+      @character_armor_modification_bonuses['characteristics'].each do |stat|
+        @character[stat] += 1
+      end
+    end
 
     # Add weapons to equipment list
     if !@character.character_weapons.nil?

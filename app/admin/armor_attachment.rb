@@ -1,5 +1,5 @@
 ActiveAdmin.register ArmorAttachment do
-  permit_params :name, :description, :price, :hard_points,
+  permit_params :name, :description, :price, :hard_points, :stat_bonus,
   armor_quality_ranks_attributes: [ :id, :ranks, :armor_attachment_id, :armor_quality_id ],
   armor_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id ]
 
@@ -25,9 +25,14 @@ ActiveAdmin.register ArmorAttachment do
         wqr_form.input :armor_quality_id, :as => :select, :collection => ArmorQuality.all
         wqr_form.input :ranks
       end
+      f.input :stat_bonus, :as => :select, :collection => [['Brawn', 'brawn'], ['Agility', 'agility'], ['Intellect', 'intellect'], ['Cunning', 'cunning'], ['Willpower', 'willpower'], ['Presence', 'presence']]
       f.has_many :armor_attachment_modification_options do |amo_form|
-        amo_form.input :skill_id, :as => :select, :collection => Skill.all
-        amo_form.input :talent_id, :as => :select, :collection => Talent.all
+        if (amo_form.object.skill_id.nil? and amo_form.object.created_at.nil?) or !amo_form.object.skill_id.nil?
+          amo_form.input :skill_id, :as => :select, :collection => Skill.all
+        end
+        if (amo_form.object.talent_id.nil? and amo_form.object.created_at.nil?) or !amo_form.object.talent_id.nil?
+          amo_form.input :talent_id, :as => :select, :collection => Talent.all
+        end
       end
 
     end
