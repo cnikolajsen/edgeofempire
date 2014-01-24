@@ -68,9 +68,9 @@ class Character < ActiveRecord::Base
   belongs_to :career
 
   accepts_nested_attributes_for :character_skills, :allow_destroy => true
-  accepts_nested_attributes_for :character_armor, :reject_if => :all_blank, :allow_destroy => true
-  accepts_nested_attributes_for :character_weapons, :reject_if => :all_blank, :allow_destroy => true
-  accepts_nested_attributes_for :character_gears, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :character_armor, :reject_if => proc { |a| a['armor_id'].blank? }, :allow_destroy => true
+  accepts_nested_attributes_for :character_weapons, :reject_if => proc { |a| a['weapon_id'].blank? }, :allow_destroy => true
+  accepts_nested_attributes_for :character_gears, :reject_if => proc { |a| a['gear_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :character_obligations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
