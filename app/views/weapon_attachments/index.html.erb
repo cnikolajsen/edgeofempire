@@ -21,9 +21,13 @@
             <% unless attachment.weapon_attachment_quality_ranks.blank? %>
               <li class="title">Base modification</li>
               <% attachment.weapon_attachment_quality_ranks.each do |qual| %>
-                <li class="bullet-item"><strong><%= qual.weapon_quality.name %></strong><br /><%= qual.weapon_quality.description %></li>
-              <% end -%>
-            <% end -%>
+                <li class="bullet-item">
+                  <span data-tooltip class="has-tip" title="<%= text_replace_tokens(qual.weapon_quality.description).html_safe %>">
+                    <%= qual.weapon_quality.name %> <% if qual.ranks > 0 %>+<%= qual.ranks %><% end %><% if qual.ranks < 0 %><%= qual.ranks %><% end %>
+                  </span>
+                </li>
+              <% end %>
+            <% end %>
             <% unless attachment.weapon_attachment_modification_options.blank? %>
               <li class="title">Modification options</li>
               <% attachment.weapon_attachment_modification_options.each do |aamo| %>
@@ -45,7 +49,7 @@
                   <% weapon_quality = WeaponQuality.find(aamo.weapon_quality_id) %>
                   <li class="bullet-item">
                     <strong>Weapon Quality:</strong>
-                    <%= weapon_quality.name %> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
+                    <span data-tooltip class="has-tip" title="<%= text_replace_tokens(weapon_quality.description).html_safe %>"><%= weapon_quality.name %></span> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
                   </li>
                 <% end -%>
                 <% unless aamo.damage_bonus.nil? %>

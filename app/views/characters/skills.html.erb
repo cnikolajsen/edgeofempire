@@ -51,6 +51,7 @@
       </table>
 
       <%= hidden_field_tag 'destination', 'skills' %>
+      <%= hidden_field_tag 'character_id', @character.id %>
       <%= form.submit "Save skills", :class => 'button' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 characters_path, :class => 'button secondary' %>

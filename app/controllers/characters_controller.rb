@@ -838,7 +838,7 @@ class CharactersController < ApplicationController
 
   def save_character_skills
     params[:character_skills].each do |skill_rank|
-      character_skill = CharacterSkill.where(:character_id => params[:id], :skill_id => skill_rank[0]).first
+      character_skill = CharacterSkill.where(:character_id => params[:character_id], :skill_id => skill_rank[0]).first
       character_skill.ranks = skill_rank[1]
       character_skill.save
     end
@@ -948,8 +948,9 @@ class CharactersController < ApplicationController
   end
 
   def add_obligation
+    @character = Character.friendly.find(params[:id])
     unless params[:character_obligation][:obligation_id].nil?
-      @obligation = CharacterObligation.where(:character_id => params[:id], :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
+      @obligation = CharacterObligation.where(:character_id => @character.id, :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
     end
     redirect_to :back, :notice => "Obligation added"
   end
@@ -990,8 +991,9 @@ class CharactersController < ApplicationController
   end
 
   def add_motivation
+    @character = Character.friendly.find(params[:id])
     unless params[:character_motivation][:motivation_id].nil?
-      @motivation = CharacterMotivation.where(:character_id => params[:id], :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
+      @motivation = CharacterMotivation.where(:character_id => @character.id, :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
     end
     redirect_to :back, :notice => "Motivation added"
   end
@@ -1046,9 +1048,9 @@ class CharactersController < ApplicationController
     unless params[:attachment_id].blank?
       @attachment = ArmorAttachment.find(params[:attachment_id])
 
-      render :partial => "armor_attachment_info", :locals => { :attachment => @attachment , :active => nil, :armor_attachment_options => nil}
+      render :partial => "armor_attachment_info", :locals => { :attachment => @attachment, :character_attachment_id => nil, :active => nil, :armor_attachment_options => nil}
     else
-      render :partial => "armor_attachment_info", :locals => { :attachment => nil, :active => nil, :armor_attachment_options => nil}
+      render :partial => "armor_attachment_info", :locals => { :attachment => nil, :character_attachment_id => nil, :active => nil, :armor_attachment_options => nil}
     end
   end
 
@@ -1063,11 +1065,12 @@ class CharactersController < ApplicationController
   end
 
   def add_armor_attachment_option
-    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+    @character = Character.friendly.find(params[:id])
+    armor_attachment = CharacterArmorAttachment.where(:id => params[:attachment_id]).first
 
     attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
-      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => @character.id).first
       if character_skill.free_ranks_equipment.nil?
         character_skill.free_ranks_equipment = 1
       else
@@ -1080,19 +1083,21 @@ class CharactersController < ApplicationController
       armor_attachment.armor_attachment_modification_options = Array.new
     end
     armor_attachment.armor_attachment_modification_options << params[:option_id]
+    armor_attachment.armor_attachment_modification_options = armor_attachment.armor_attachment_modification_options.uniq
     armor_attachment.save
 
     redirect_to :back, :notice => "Modification option added."
   end
 
   def remove_armor_attachment_option
-    armor_attachment = CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).first
+    @character = Character.friendly.find(params[:id])
+    armor_attachment = CharacterArmorAttachment.where(:id => params[:attachment_id]).first
     armor_attachment.armor_attachment_modification_options.delete_at armor_attachment.armor_attachment_modification_options.index(params[:option_id].to_s)
     armor_attachment.save
 
     attachment_option = ArmorAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
-      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => @character.id).first
       character_skill.free_ranks_equipment -= 1
       character_skill.save
     end
@@ -1151,11 +1156,12 @@ class CharactersController < ApplicationController
   end
 
   def add_weapon_attachment_option
+    @character = Character.friendly.find(params[:id])
     weapon_attachment = CharacterWeaponAttachment.where(:id => params[:attachment_id]).first
 
     attachment_option = WeaponAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
-      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => @character.id).first
       if character_skill.free_ranks_equipment.nil?
         character_skill.free_ranks_equipment = 1
       else
@@ -1174,13 +1180,14 @@ class CharactersController < ApplicationController
   end
 
   def remove_weapon_attachment_option
+    @character = Character.friendly.find(params[:id])
     weapon_attachment = CharacterWeaponAttachment.where(:id => params[:attachment_id]).first
     weapon_attachment.weapon_attachment_modification_options.delete_at weapon_attachment.weapon_attachment_modification_options.index(params[:option_id].to_s)
     weapon_attachment.save
 
     attachment_option = WeaponAttachmentModificationOption.find(params[:option_id])
     unless attachment_option.skill_id.nil?
-      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => params[:id]).first
+      character_skill = CharacterSkill.where(:skill_id => attachment_option.skill_id, :character_id => @character.id).first
       character_skill.free_ranks_equipment -= 1
       character_skill.save
     end

@@ -20,9 +20,9 @@
           <%= talent.name %>
           <% unless active.nil? %>
             <% if !armor_attachment_options.armor_attachment_modification_options.nil? and armor_attachment_options.armor_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -34,9 +34,9 @@
           <%= skill.name %> +1
           <% unless active.nil? %>
             <% if !armor_attachment_options.armor_attachment_modification_options.nil? and armor_attachment_options.armor_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "/characters/#{@character.id}/armor/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -44,7 +44,7 @@
     <% end -%>
   <% end -%>
   <% unless active.nil? %>
-    <li class="cta-button"><%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{attachment.id}/remove", :class => 'button tiny alert' %></li>
+    <li class="cta-button"><%= link_to "Remove", "/characters/#{@character.id}/armor/attachment/#{character_attachment_id}/remove", :class => 'button tiny alert' %></li>
   <% end -%>
 </ul>
 <% end -%>
