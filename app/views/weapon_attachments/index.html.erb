@@ -10,7 +10,7 @@
 </div>&nbsp;
 <div class="row">
   <div class="small-12 columns">
-    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid">
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-4" id="item-grid">
       <% @attachments.each do |attachment| %>
         <li>
           <ul class="pricing-table">
@@ -22,9 +22,12 @@
               <li class="title">Base modification</li>
               <% attachment.weapon_attachment_quality_ranks.each do |qual| %>
                 <li class="bullet-item">
-                  <span data-tooltip class="has-tip" title="<%= text_replace_tokens(qual.weapon_quality.description).html_safe %>">
-                    <%= qual.weapon_quality.name %> <% if qual.ranks > 0 %>+<%= qual.ranks %><% end %><% if qual.ranks < 0 %><%= qual.ranks %><% end %>
-                  </span>
+                  <a href="#" data-reveal-id="baseModQual-<%= qual.id %>"><%= qual.weapon_quality.name %></a> <% if qual.ranks > 0 %>+<%= qual.ranks %><% end %><% if qual.ranks < 0 %><%= qual.ranks %><% end %>
+                  <div id="baseModQual-<%= qual.id %>" class="reveal-modal small" data-reveal>
+                    <h2><%= qual.weapon_quality.name %></h2>
+                    <p><%= text_replace_tokens(qual.weapon_quality.description).html_safe %></p>
+                    <a class="close-reveal-modal">&#215;</a>
+                  </div>
                 </li>
               <% end %>
             <% end %>
@@ -35,21 +38,36 @@
                   <% talent = Talent.find(aamo.talent_id) %>
                   <li class="bullet-item">
                     <strong>Innate talent:</strong>
-                    <%= talent.name %>
+                    <a href="#" data-reveal-id="modOptTalent-<%= aamo.id %>"><%= talent.name %></a>
+                    <div id="modOptTalent-<%= aamo.id %>" class="reveal-modal small" data-reveal>
+                      <h2><%= talent.name %></h2>
+                      <p><%= text_replace_tokens(talent.description).html_safe %></p>
+                      <a class="close-reveal-modal">&#215;</a>
+                    </div>
                   </li>
                 <% end -%>
                 <% unless aamo.skill_id.nil? %>
                   <% skill = Skill.find(aamo.skill_id) %>
                   <li class="bullet-item">
                     <strong>Skill:</strong>
-                    <%= skill.name %> +1
+                    <a href="#" data-reveal-id="modOptSkill-<%= aamo.id %>"><%= skill.name %></a> +1
+                    <div id="modOptSkill-<%= aamo.id %>" class="reveal-modal small" data-reveal>
+                      <h2><%= skill.name %></h2>
+                      <p><%= text_replace_tokens(skill.description).html_safe %></p>
+                      <a class="close-reveal-modal">&#215;</a>
+                    </div>
                   </li>
                 <% end -%>
                 <% unless aamo.weapon_quality_id.nil? %>
                   <% weapon_quality = WeaponQuality.find(aamo.weapon_quality_id) %>
                   <li class="bullet-item">
                     <strong>Weapon Quality:</strong>
-                    <span data-tooltip class="has-tip" title="<%= text_replace_tokens(weapon_quality.description).html_safe %>"><%= weapon_quality.name %></span> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
+                    <a href="#" data-reveal-id="modOptQual-<%= aamo.id %>"><%= weapon_quality.name %></a> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
+                    <div id="modOptQual-<%= aamo.id %>" class="reveal-modal small" data-reveal>
+                      <h2><%= weapon_quality.name %></h2>
+                      <p><%= text_replace_tokens(weapon_quality.description).html_safe %></p>
+                      <a class="close-reveal-modal">&#215;</a>
+                    </div>
                   </li>
                 <% end -%>
                 <% unless aamo.damage_bonus.nil? %>
