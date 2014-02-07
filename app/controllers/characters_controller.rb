@@ -40,6 +40,9 @@ class CharactersController < ApplicationController
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
+    @pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
+    @pdf_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
+
     # Find equipped armor.
     equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
     @character_armor_modification_bonuses = {}
@@ -237,7 +240,6 @@ class CharactersController < ApplicationController
     @defense = 0
     @equipment = Array.new
     @attacks = Array.new
-    @pdf_weapons_and_armor = Array.new
     @pdf_personal_gear = Array.new
 
     # Increase characteristics that don't affect derived stats.
@@ -266,8 +268,6 @@ class CharactersController < ApplicationController
         unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
           if params[:format] != 'pdf'
             @equipment << "#{weapon_name}"
-          else
-            @pdf_weapons_and_armor << weapon_name
           end
         end
       end
@@ -366,8 +366,6 @@ class CharactersController < ApplicationController
             dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
 
             @attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')}#{attachment_text})"
-          else
-            #@pdf_weapons_and_armor << cw.weapon.name
           end
         end
       end
@@ -390,7 +388,6 @@ class CharactersController < ApplicationController
             @defense += ca.armor.defense
             armor_applied = :true
             @equipment << "#{ca.armor.name} (+#{ca.armor.soak} soak, +#{ca.armor.defense} defense)"
-            @pdf_weapons_and_armor << ca.armor.name
           end
         else
           @equipment << "#{ca.armor.name}"
@@ -472,14 +469,14 @@ class CharactersController < ApplicationController
     pdf_vars['wound_th'] = @wound_th
     pdf_vars['strain_th'] = @strain_th
     pdf_vars['defense'] = @defense
-    pdf_vars['weapons_armor'] = @pdf_weapons_and_armor
+    pdf_vars['weapons'] = @pdf_weapons
+    pdf_vars['armor'] = @pdf_armor
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
     pdf_vars['available_xp'] = @experience_cost[:available_experience]
     pdf_vars['total_xp'] = @experience_cost[:starting_experience] + @experience_cost[:earned_experience]
     pdf_vars['force_rank'] = 0
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
