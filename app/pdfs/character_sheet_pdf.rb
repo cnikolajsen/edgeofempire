@@ -902,17 +902,19 @@ class CharacterSheetPdf < Prawn::Document
         :width => bounds.width,
         :column_widths => {0 => 100, 1 => 100}
 
-        table talents,
-          :cell_style => {
-            #:background_color => "FFFFFF",
-            :height => 12,
-            :padding => [2, 3],
-            :size => 6,
-            :border_width => 0,
-          },
-          :width => bounds.width,
-          :column_widths => {0 => 100, 1 => 100},
-          :row_colors => ['FFFFFF', 'C0C0C0']
+        unless talents.blank?
+          table talents,
+            :cell_style => {
+              #:background_color => "FFFFFF",
+              :height => 12,
+              :padding => [2, 3],
+              :size => 6,
+              :border_width => 0,
+            },
+            :width => bounds.width,
+            :column_widths => {0 => 100, 1 => 100},
+            :row_colors => ['FFFFFF', 'C0C0C0']
+        end
       end
     end
   end
@@ -1004,15 +1006,17 @@ class CharacterSheetPdf < Prawn::Document
       :width => bounds.width,
       :column_widths => {0 => 100}
 
-      table motivations,
-      :cell_style => {
-        :padding => [2, 3],
-        :size => 6,
-        :border_width => 0,
-      },
-      :width => bounds.width,
-      :column_widths => {0 => 100},
-      :row_colors => ['FFFFFF', 'C0C0C0']
+      unless motivations.blank?
+        table motivations,
+        :cell_style => {
+          :padding => [2, 3],
+          :size => 6,
+          :border_width => 0,
+        },
+        :width => bounds.width,
+        :column_widths => {0 => 100},
+        :row_colors => ['FFFFFF', 'C0C0C0']
+      end
     end
   end
   #===== /CHARACTER MOTIVATION =====
@@ -1052,15 +1056,17 @@ class CharacterSheetPdf < Prawn::Document
       :width => bounds.width,
       :column_widths => {0 => 100, 0 => 50}
 
-      table obligations,
-      :cell_style => {
-        :padding => [2, 3],
-        :size => 6,
-        :border_width => 0,
-      },
-      :width => bounds.width,
-      :column_widths => {0 => 100, 0 => 50},
-      :row_colors => ['FFFFFF', 'C0C0C0']
+      unless obligations.blank?
+        table obligations,
+        :cell_style => {
+          :padding => [2, 3],
+          :size => 6,
+          :border_width => 0,
+        },
+        :width => bounds.width,
+        :column_widths => {0 => 100, 0 => 50},
+        :row_colors => ['FFFFFF', 'C0C0C0']
+      end
     end
   end
   #===== /CHARACTER OBLIGATION =====
