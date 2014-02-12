@@ -41,10 +41,10 @@ class CharactersController < ApplicationController
     end
 
     @pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
-    @pdf_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
 
     # Find equipped armor.
     equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
+    @pdf_armor = equipped_armor
     @character_armor_modification_bonuses = {}
     @character_armor_modification_bonuses['skills'] = Array.new
     @character_armor_modification_bonuses['talents'] = Array.new

@@ -1,5 +1,6 @@
 <% unless f.object.armor_id.nil? %>
   <% @armor = Armor.find_by_id(f.object.armor_id) %>
+    <%= f.hidden_field :armor_id %>
     <li class="nested-fields">
       <ul class="pricing-table">
         <li class="title"><%= @armor.name %></li>

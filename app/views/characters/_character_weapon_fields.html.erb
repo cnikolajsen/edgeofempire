@@ -1,5 +1,6 @@
 <% unless f.object.weapon_id.nil? %>
   <% @weapon = Weapon.find_by_id(f.object.weapon_id) %>
+  <%= f.hidden_field :weapon_id %>
   <% unless @weapon.name == 'Unarmed' %>
     <% weapon_price = @weapon.price %>
     <% f.object.character_weapon_attachments.each do |caa| %>
