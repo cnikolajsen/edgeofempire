@@ -246,7 +246,9 @@ class CharactersController < ApplicationController
     # I.e armor attachments increasing brawn.
     unless @character_armor_modification_bonuses['characteristics'].blank?
       @character_armor_modification_bonuses['characteristics'].each do |stat|
-        @character[stat] += 1
+        unless stat.blank?
+          @character[stat] += 1
+        end
       end
     end
 
