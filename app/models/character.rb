@@ -29,9 +29,12 @@ class Character < ActiveRecord::Base
   end
 
   def experience_exceeded?
+    @character = Character.find(id)
     cost = ApplicationController.helpers.character_experience_cost(id)
 
-    if cost[:total_cost] > experience
+    if @character.race.nil? or @character.career.nil?
+      false
+    elsif cost[:total_cost] > cost[:available_experience]
       false
     else
       true

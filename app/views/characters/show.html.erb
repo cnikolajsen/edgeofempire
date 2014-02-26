@@ -106,13 +106,13 @@
                     :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                     :class => 'button alert' %></li>
             <% if @character.may_set_create? && !@character.creation? %>
-              <li><%= link_to "<i class='icon-wrench'></i> Creation".html_safe, creation_character_path(@character), :class => '  buttons warning' %></li>
+              <li><%= link_to "<i class='icon-wrench'></i> Creation".html_safe, creation_character_path(@character), :class => 'button info' %></li>
             <% end %>
-            <% if !@character.race.nil? and !@character.career.nil? and @character.may_activate? %>
+            <% if @character.may_activate? %>
               <li><%= link_to "<i class='icon-ok'></i> Activate".html_safe, activate_character_path(@character), :class => 'button  success' %></li>
             <% end %>
             <% if @character.may_retire? %>
-              <li><%= link_to "<i class='icon-fire'></i> Retire".html_safe, retire_character_path(@character), :class => 'button' %>  </li>
+              <li><%= link_to "<i class='icon-fire'></i> Retire".html_safe, retire_character_path(@character), :class => 'button alert' %>  </li>
             <% end %>
           </ul>
         </div>
