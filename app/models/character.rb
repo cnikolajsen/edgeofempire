@@ -30,15 +30,15 @@ class Character < ActiveRecord::Base
 
   def experience_exceeded?
     @character = Character.find(id)
-    cost = ApplicationController.helpers.character_experience_cost(id)
+    #cost = ApplicationController.helpers.character_experience_cost(id)
 
-    if @character.race.nil? or @character.career.nil?
-      false
-    elsif cost[:total_cost] > cost[:available_experience]
-      false
-    else
+    #if @character.race.nil? or @character.career.nil?
+    #  false
+    #elsif cost[:total_cost] > cost[:available_experience]
+    #  false
+    #else
       true
-    end
+    #end
 
   end
 
@@ -66,6 +66,8 @@ class Character < ActiveRecord::Base
 
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
+
+  has_many :character_experience_costs
 
   belongs_to :race
   belongs_to :career

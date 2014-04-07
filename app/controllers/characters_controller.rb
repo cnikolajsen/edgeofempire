@@ -10,7 +10,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.where(:user_id => current_user.id).all
+    @characters = Character.where(:user_id => current_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -39,6 +39,8 @@ class CharactersController < ApplicationController
     unless @character.specialization_3.nil?
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
+
+    #@character_experience_cost = CharacterExperienceCost.where(:character_id => @character.id)
 
     @pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
 
@@ -476,8 +478,8 @@ class CharactersController < ApplicationController
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
-    pdf_vars['available_xp'] = @experience_cost[:available_experience]
-    pdf_vars['total_xp'] = @experience_cost[:starting_experience] + @experience_cost[:earned_experience]
+    pdf_vars['available_xp'] = 0 #@experience_cost[:available_experience]
+    pdf_vars['total_xp'] = 0 #@experience_cost[:starting_experience] + @experience_cost[:earned_experience]
     pdf_vars['force_rank'] = 0
     respond_to do |format|
       format.html # show.html.erb
@@ -648,9 +650,27 @@ class CharactersController < ApplicationController
       # Handle resets due to career change.
       if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
         CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
+        CharacterExperienceCost.where(:character_id => @character.id, :granted_by => 'career').delete_all
+
         CharacterSkill.where(:character_id => @character.id).each do |skill|
           skill.free_ranks_career = 0
           skill.save
+        end
+
+        # Selecting a new career also means resetting specializations and
+        # thereby also resetting talents from specializations.
+        unless @character.specialization_1.nil?
+          CharacterTalent.where(:character_id => @character.id, :talent_tree_id => @character.specialization_1).delete_all
+          CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
+          @character.update_attribute(:specialization_1, nil)
+        end
+        unless @character.specialization_2.nil?
+          CharacterTalent.where(:character_id => @character.id, :talent_tree_id => @character.specialization_2).delete_all
+          @character.update_attribute(:specialization_2, nil)
+        end
+        unless @character.specialization_3.nil?
+          CharacterTalent.where(:character_id => @character.id, :talent_tree_id => @character.specialization_3).delete_all
+          @character.update_attribute(:specialization_3, nil)
         end
       end
       # Save career skills to add a free rank to.
@@ -663,6 +683,9 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career = 1
               character_skill.save
             end
+
+            # Save experience entry.
+            experience_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :resource_id => skill.id, :cost => 0, :granted_by => 'career').first_or_create
           else
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').delete_all
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
@@ -670,6 +693,9 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career -= 1
               character_skill.save
             end
+
+            # Delete experience entry.
+            CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :resource_id => skill.id, :granted_by => 'career').delete_all
           end
         end
       end
@@ -700,45 +726,39 @@ class CharactersController < ApplicationController
       @character.update_attribute(:willpower, species.willpower)
       @character.update_attribute(:presence, species.presence)
 
-      # Save racial talents.
-      character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
-      unless character_racial_talents.nil?
-        character_racial_talents.each do |bt|
-          bt.destroy
-        end
-      end
-
-      unless species.talents.nil?
-        species.talents.each do |talent|
-          character_bonus_talent = CharacterBonusTalent.new()
-          character_bonus_talent.character_id = @character.id
-          character_bonus_talent.talent_id = talent.id
-          character_bonus_talent.bonus_type = 'racial'
-          character_bonus_talent.save
-        end
-      end
-
-      # Save racial skill ranks, but only on initial save.
+      # Create racial skill rank and talent entries on initial save.
       if params[:original_race_id].blank?
+        # Save skill entries.
         RaceSkill.where(:race_id => species.id).each do |race_skill|
           @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => race_skill.skill_id).first
           unless @character_skill.nil?
             @character_skill.free_ranks_race = race_skill.ranks
             @character_skill.save
-          end
 
+            # Save experience entry.
+            experience_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :resource_id => race_skill.skill_id, :cost => 0, :granted_by => 'race').first_or_create
+          end
           CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+        end
+
+        # Save talent entries.
+        unless species.talents.nil?
+          species.talents.each do |talent|
+            character_bonus_talent = CharacterBonusTalent.new()
+            character_bonus_talent.character_id = @character.id
+            character_bonus_talent.talent_id = talent.id
+            character_bonus_talent.bonus_type = 'racial'
+            character_bonus_talent.save
+            # Save experience entry.
+            experience_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'talent', :resource_id => talent.id, :cost => 0, :granted_by => 'race').first_or_create
+          end
         end
       end
 
       # Handle resets due to species change.
       if !params[:original_race_id].blank? and params[:character][:race_id] != params[:original_race_id]
-        # Delete all free skill ranks granted by the old species.
-        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'race').delete_all
-        CharacterSkill.where(:character_id => @character.id).each do |skill|
-          skill.free_ranks_race = 0
-          skill.save
-        end
+        # Delete experience entries from old species.
+        CharacterExperienceCost.where(:character_id => @character.id, :granted_by => 'race').delete_all
 
         # Adjust characteristic minimums.
         new_race = Race.find(params[:character][:race_id])
@@ -761,6 +781,12 @@ class CharactersController < ApplicationController
           @character.update_attribute(:intellect, new_race.intellect)
         end
 
+        # Delete all free skill ranks granted by the old species.
+        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'race').delete_all
+        CharacterSkill.where(:character_id => @character.id).each do |skill|
+          skill.free_ranks_race = 0
+          skill.save
+        end
         # Save free skill ranks granted by the new species.
         new_race.skills.each do |skill|
           race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => new_race.id).first
@@ -769,6 +795,28 @@ class CharactersController < ApplicationController
           if character_skill.free_ranks_race == 0 or character_skill.free_ranks_race.blank?
             character_skill.free_ranks_race = race_skill.ranks
             character_skill.save
+          end
+
+          # Save experience entry.
+          experience_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :resource_id => race_skill.skill_id, :cost => 0, :granted_by => 'race').first_or_create
+        end
+
+        # Delete free talent ranks granted by old species and save new racial talents.
+        character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
+        unless character_racial_talents.nil?
+          character_racial_talents.each do |bt|
+            bt.destroy
+          end
+        end
+        unless species.talents.nil?
+          species.talents.each do |talent|
+            character_bonus_talent = CharacterBonusTalent.new()
+            character_bonus_talent.character_id = @character.id
+            character_bonus_talent.talent_id = talent.id
+            character_bonus_talent.bonus_type = 'racial'
+            character_bonus_talent.save
+            # Save experience entry.
+            experience_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'talent', :resource_id => talent.id, :cost => 0, :granted_by => 'race').first_or_create
           end
         end
       end

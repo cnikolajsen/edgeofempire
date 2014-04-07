@@ -72,6 +72,46 @@ module CharactersHelper
 
   def character_experience_cost(cid)
     @character = Character.find(cid)
+    character_experience = CharacterExperienceCost.where(:character_id => @character.id)
+    logger.warn(character_experience.inspect);
+
+    exp_cost = Hash.new
+    character_experience.each do |exp|
+      exp_cost[:header_skills] = 0
+      logger.warn(exp.inspect)
+      if exp.resource_type == 'skill'
+        skill = Skill.find(exp.resource_id)
+        skill_cost = 0
+
+        cs = CharacterSkill.where(:character_id => @character.id, :skill_id => exp.resource_id).first
+        #cross_career_penalty = 0
+        #unless (is_career_skill(cs.skill_id))
+        #  cross_career_penalty = 5
+        #end
+
+        #cs.ranks.times do |rank|
+        #  skill_cost += (5 * (rank + 1)).to_i + cross_career_penalty
+        #end
+
+        #unless skill_cost == 0
+          exp_cost["#{cs.ranks}_#{'rank'.pluralize(cs.ranks)}_in_#{skill.name}".to_sym] = skill_cost
+        #end
+      end
+    end
+    #exp_cost[:header_characteristics] = 0
+
+    # Sum up the total.
+    #exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
+    #exp_cost[:starting_experience] = if !@character.race.nil? then @character.race.starting_experience else 0 end
+    #exp_cost[:earned_experience] = @character.experience
+    #exp_cost[:available_experience] = exp_cost[:starting_experience] + exp_cost[:earned_experience]
+    #logger.warn(exp_cost.inspect)
+    exp_cost
+
+  end
+
+  def old_character_experience_cost(cid)
+    @character = Character.find(cid)
     exp_cost = Hash.new
 
     exp_cost[:header_characteristics] = 0
