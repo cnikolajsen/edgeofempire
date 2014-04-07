@@ -71,6 +71,27 @@
     </div>
   </div>
 
+  <% if @character.new_record? %>
+    <div class="row">
+      <div class="medium-6 columns">
+        <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
+        <div class="panel" id="species-info">
+          <% unless @character.race_id.blank? %>
+            <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
+          <% end %>
+        </div>
+      </div>
+      <div class="medium-6 columns">
+        <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"},   :class => 'input-block-level') %>
+        <div class="panel" id="career-info">
+          <% unless @character.career_id.blank? %>
+            <%= render :partial => 'career_info', :locals => { :career => @character.career, :changed => false } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <div class="form-actions">
     <%= f.submit nil, :class => 'button' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

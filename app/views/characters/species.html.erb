@@ -10,33 +10,10 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
-      <%= hidden_field_tag 'character_species', 'true' %>
-      <%= hidden_field_tag 'original_race_id', @character.race_id %>
-      <% if @character.errors.any? %>
-        <div data-alert class="alert-box warning radius">
-          <p><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</p>
-          <ul>
-            <% @character.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
+    <div class="panel" id="species-info">
+      <% unless @character.race_id.blank? %>
+        <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
       <% end %>
-
-      <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
-      <div class="form-actions">
-        <%= hidden_field_tag 'destination', 'species' %>
-        <%= f.submit "Save species", :class => 'button' %>
-        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
-      </div>
-
-      <div class="panel" id="species-info">
-        <% unless @character.race_id.blank? %>
-          <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
-        <% end %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

@@ -24,15 +24,13 @@
         </div>
       <% end %>
 
-      <%= select('character', 'career_id', Career.where(:true).collect  {|career| [career.name, career.id]}, {:prompt => "Select career"},   :class => 'input-block-level') %>
-
       <% if @character.creation? %>
         <div class="row">
           <div class="small-12 columns">
             <% unless @character.career.nil? %>
-              <%= f.label :class_skills, "Select #{if @character.race.name == 'Droid' then 6 else 4 end} career skills to add a     free rank to:" %>
+              <%= f.label :class_skills, "Select #{if @character.race.name == 'Droid' then 6 else 4 end} career skills to add a free rank to:" %>
               <% @character.career.skills.each do |class_skill| %>
-                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_career_skill_rank[]"     type="checkbox" <%= if @career_free_rank.include? class_skill.id then  "checked=checked" end %>>
+                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_career_skill_rank[]" type="checkbox" <%= if @career_free_rank.include? class_skill.id then  "checked=checked" end %>>
                 <label for="free_skill_rank_<%= class_skill.id %>"><small><%= class_skill.name %></small></label>
               <% end %>
             <% end %>
@@ -42,7 +40,7 @@
 
       <div class="form-actions">
         <%= hidden_field_tag 'destination', 'career' %>
-        <%= f.submit "Save career", :class => 'button' %>
+        <%= f.submit "Save free skill ranks", :class => 'button' %>
         <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 characters_path, :class => 'button secondary' %>
       </div>

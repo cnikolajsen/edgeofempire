@@ -1,4 +1,8 @@
 class Character < ActiveRecord::Base
+  validates :name, presence: true
+  validates :race_id, presence: true
+  validates :career_id, presence: true
+
   include AASM
   include FriendlyId
   friendly_id :slug_candidates, :use => :slugged
@@ -41,10 +45,6 @@ class Character < ActiveRecord::Base
     end
 
   end
-
-  validates_presence_of :name
-  validates :race_id, presence: true, if: ":character_species.nil?"
-  validates :career_id, presence: true, if: ":character_career.nil?"
 
   belongs_to :user
 
