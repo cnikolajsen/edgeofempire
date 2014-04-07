@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
-ruby '2.0.0'
+ruby '2.1.0'
 
-gem 'rails', '4.0.1'
+gem 'rails', '4.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -15,7 +15,8 @@ gem 'activeadmin',         github: 'gregbell/active_admin'
 gem 'formtastic',          github: 'justinfrench/formtastic'
 
 # Use SCSS for stylesheets
-#gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails', '~> 4.0.0'
+gem 'sprockets', '2.11.0'
 
 #gem "meta_search",    '>= 1.1.3'
 #gem "less-rails", "~> 2.4.2"
@@ -36,7 +37,7 @@ gem "friendly_id", "~> 5.0.2"
 gem 'quiet_assets', group: [:development, :test]
 #gem "log_buddy", "~> 0.7.0", group: [:development, :test]
 
-gem "pg", group: [:production, :staging]
+gem "pg", "~> 0.17.1", group: [:production, :staging]
 gem 'rails_12factor', group: :production
 
 # Use Uglifier as compressor for JavaScript assets
@@ -72,4 +73,4 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
+gem "debugger", "~> 1.6.6", group: [:development, :test]
