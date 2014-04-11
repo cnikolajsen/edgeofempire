@@ -121,45 +121,7 @@
   </div>
   <div class="medium-3 columns">
     <div class="row">
-      <div class="medium-12 columns panel <% if @experience_cost[:total_cost] > @experience_cost[:available_experience] %>callout<% end %> experience-cost">
-        <h4>Experience Points</h4>
-          <table class="exp-table">
-            <tbody>
-              <tr>
-                <th>Experience:</th><th>Spent:</th>
-              </tr>
-              <tr>
-                <td><%= @experience_cost[:available_experience] %> xp</td>
-                <td><%= @experience_cost[:total_cost] %> xp</td>
-              </tr>
-            </tbody>
-          </table>
-          <% if @experience_cost[:total_cost] > @experience_cost[:available_experience] %>
-            <p style="font-weight: bold"><i class='icon-thumbs-down'> You have spent more experience than you have available!</i></p>
-          <% elsif @experience_cost[:total_cost] < @experience_cost[:available_experience] %>
-            <p style="font-weight: bold"><i class='icon-thumbs-up'> You still have <%= @experience_cost[:available_experience] - @experience_cost[:total_cost] %> experience to spend.</i></p>
-          <% end %>
-
-          <% if @experience_cost[:total_cost] > 0 %>
-            <h4>Where did it go?</h4>
-            <% @experience_cost.each do |key, cost| %>
-              <% case key %>
-              <% when /^header_/ %>
-                <% header = key.to_s
-                   header["header_"] = "" %>
-                <h5 class="experience-cost-header"><%= header.capitalize %></h5>
-              <% when :total_cost %>
-              <% when :starting_experience %>
-              <% when :earned_experience %>
-              <% when :available_experience %>
-              <% else %>
-              <%# unless key == :total_cost %>
-                <%= "<strong>#{key.to_s.humanize.camelize}:</strong> #{cost.inspect}".html_safe %> xp<br />
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
+      <%= render :partial => 'character_experience_usage' %>
       <div class="row">
         <div class="medium-12 columns panel">
           <h5>Credits</h5>

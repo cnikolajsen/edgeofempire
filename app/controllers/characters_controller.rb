@@ -27,8 +27,6 @@ class CharactersController < ApplicationController
     @title = "#{@character.name} | #{@title}"
     @character_state = character_state(@character)
 
-    @experience_cost = character_experience_cost(@character.id)
-
     @specializations = Array.new
     unless @character.specialization_1.nil?
       @specializations << TalentTree.find_by_id(@character.specialization_1).name
@@ -476,8 +474,8 @@ class CharactersController < ApplicationController
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
-    pdf_vars['available_xp'] = @experience_cost[:available_experience]
-    pdf_vars['total_xp'] = @experience_cost[:starting_experience] + @experience_cost[:earned_experience]
+    pdf_vars['available_xp'] = character_available_experience
+    pdf_vars['total_xp'] = character_experience_cost
     pdf_vars['force_rank'] = 0
     respond_to do |format|
       format.html # show.html.erb
@@ -538,12 +536,11 @@ class CharactersController < ApplicationController
         species = Race.find(@character.race_id)
 
         # Save species characteristics.
-        @character.update_attribute(:brawn, species.brawn)
-        @character.update_attribute(:agility, species.agility)
-        @character.update_attribute(:intellect, species.intellect)
-        @character.update_attribute(:cunning, species.cunning)
-        @character.update_attribute(:willpower, species.willpower)
-        @character.update_attribute(:presence, species.presence)
+        ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
+          @character.update_attribute(stat.to_sym, species[stat])
+          # Save experience entries for species characteristics.
+          set_experience_cost(stat, 0, species[stat], 'up', 'race')
+        end
 
         # Save species talents.
         unless species.talents.nil?
@@ -553,6 +550,9 @@ class CharactersController < ApplicationController
             character_bonus_talent.talent_id = talent.id
             character_bonus_talent.bonus_type = 'racial'
             character_bonus_talent.save
+
+            # Save experience entry.
+            set_experience_cost('talent', talent.id, 1, 'up', 'race')
           end
         end
 
@@ -562,9 +562,13 @@ class CharactersController < ApplicationController
           unless @character_skill.nil?
             @character_skill.free_ranks_race = race_skill.ranks
             @character_skill.save
-          end
 
-          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+            # Save experience entry.
+            race_skill.ranks.times do |rank|
+              set_experience_cost('skill', race_skill.skill_id, rank + 1, 'up', 'race')
+            end
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+          end
         end
 
         format.html { redirect_to character_url(@character), notice: 'Character was successfully created.' }
@@ -628,6 +632,17 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_specialization = 1
               character_skill.save
             end
+
+            # Check if this skill already has an entry from specialization.
+            if get_experience_cost('skill', skill.id, 'specialization').blank?
+              # Save experience entry.
+              experience_cost = get_experience_cost('skill', skill.id)
+              if experience_cost.nil? or experience_cost.blank?
+                set_experience_cost('skill', skill.id, 1, 'up', 'specialization')
+              else
+                set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'specialization')
+              end
+            end
           else
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').delete_all
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
@@ -635,13 +650,15 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_specialization -= 1
               character_skill.save
             end
+
+            # Delete experience entry.
+            get_experience_cost('skill', skill.id, 'specialization').delete_all
           end
         end
       end
 
       @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
-
         if @character_talent_tree.id.nil?
           @character_talent_tree.character_id = @character.id
           @character_talent_tree.talent_tree_id = tree.id
@@ -659,8 +676,12 @@ class CharactersController < ApplicationController
                 end
               end
               @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
+              # Save experience entry.
+              set_experience_cost('talent', params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"], r_key + 1, 'up', nil)
             else
               @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
+              # Save experience entry.
+              set_experience_cost('talent', tree["talent_#{r_key + 1}_#{c_key + 1}"], r_key + 1, 'down', nil)
             end
           end
         end
@@ -681,6 +702,17 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career = 1
               character_skill.save
             end
+
+            # Check if this skill already has an entry from specialization.
+            if get_experience_cost('skill', skill.id, 'career').blank?
+              # Save experience entry.
+              experience_cost = get_experience_cost('skill', skill.id)
+              if experience_cost.nil? or experience_cost.blank?
+                set_experience_cost('skill', skill.id, 1, 'up', 'career')
+              else
+                set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'career')
+              end
+            end
           else
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').delete_all
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
@@ -688,6 +720,9 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career -= 1
               character_skill.save
             end
+
+            # Delete experience entry.
+            get_experience_cost('skill', skill.id, 'career').delete_all
           end
         end
       end
@@ -705,6 +740,16 @@ class CharactersController < ApplicationController
         @character_skill.ranks = 0
         @character_skill.skill_id = skill.id
         @character_skill.save
+      end
+    end
+
+    if !params[:character_characteristics].nil?
+      ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
+        if params[:character][stat.to_sym].to_i > @character.race[stat]
+          set_experience_cost(stat, 0, params[:character][stat.to_sym].to_i, 'up')
+        elsif params[:character][stat.to_sym].to_i < @character[stat]
+          set_experience_cost(stat, 0, (@character[stat] - params[:character][stat.to_sym].to_i), 'down')
+        end
       end
     end
 
@@ -766,13 +811,25 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
   end
 
-  def save_character_skills
-    params[:character_skills].each do |skill_rank|
-      character_skill = CharacterSkill.where(:character_id => params[:character_id], :skill_id => skill_rank[0]).first
-      character_skill.ranks = skill_rank[1]
-      character_skill.save
-    end
-    redirect_to :back, :notice => "Skills updated"
+  def character_skill_rank_up
+    @character = Character.friendly.find(params[:id])
+    character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
+    character_skill.ranks += 1
+    character_skill.save
+
+    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
+
+    redirect_to :back, :notice => "#{Skill.find(params[:skill_id]).name} rank increased"
+  end
+
+  def character_skill_rank_down
+    @character = Character.friendly.find(params[:id])
+    character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
+    set_experience_cost('skill', character_skill.skill_id, character_skill.ranks, 'down')
+    character_skill.ranks -= 1 unless character_skill.ranks == 0
+    character_skill.save
+
+    redirect_to :back, :notice => "#{Skill.find(params[:skill_id]).name} rank decreased"
   end
 
   def talents
