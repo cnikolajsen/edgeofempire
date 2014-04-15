@@ -20,7 +20,7 @@
 
           <h3>Where did it go?</h3>
 
-        <table>
+        <table style="width:100%">
           <tr>
             <th>Rank</th>
             <th>Stat</th>
@@ -36,7 +36,7 @@
             <% end %>
           <% end %>
         </table>
-        <table>
+        <table style="width:100%">
           <tr>
             <th>Rank</th>
             <th>Skill</th>
@@ -50,7 +50,21 @@
             </tr>
           <% end %>
         </table>
-        <table>
+        <table style="width:100%">
+          <tr>
+            <th>#</th>
+            <th>Specialization</th>
+            <th>Cost</th>
+          </tr>
+          <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'specialization').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
+            <tr>
+              <td><%= cost.rank %></td>
+              <td><%= TalentTree.find(cost.resource_id).name %></td>
+              <td><%= cost.cost %></td>
+            </tr>
+          <% end %>
+        </table>
+        <table style="width:100%">
           <tr>
             <th>Tier</th>
             <th>Talent</th>

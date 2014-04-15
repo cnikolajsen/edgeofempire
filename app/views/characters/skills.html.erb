@@ -50,7 +50,7 @@
           <td style="text-align: center;">
           <% if character_skill.ranks != 0 and @skill_select_enabled %>
             <%= link_to "-", "/characters/#{@character.id}/skills/#{skill.id}/rank_down" %>
-          <% end -%>
+          <% end %>
           <%= character_skill.ranks %>
           <% if total_ranks < max_ranks and @skill_select_enabled %>
             <%= link_to "+", "/characters/#{@character.id}/skills/#{skill.id}/rank_up" %>

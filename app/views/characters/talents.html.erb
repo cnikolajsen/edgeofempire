@@ -15,10 +15,15 @@
       <h5>Select Specializations</h5>
       <ul>
         <% if @character.specialization_1 %>
-          <li><%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? %></li  >
+          <li>
+            <%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? and @character.purchased_skills.count == 0 %>
+            <% if @character.purchased_skills.count > 0 %>
+              <br /><small>You must first untrain all purchased skills before you can untrain the initial specialization.</small>
+            <% end %>
+          </li>
         <% end %>
         <% if @character.specialization_2 %>
-          <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li  >
+          <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li>
         <% end %>
         <% if @character.specialization_3 %>
           <li><%= TalentTree.where(:id => @character.specialization_3).first.name %> <%= link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain" %></li>
@@ -27,13 +32,13 @@
       <%= form_for @character do |specializations_form| %>
         <%= hidden_field_tag 'update_specializations', 'true' %>
         <% if @character.specialization_1.nil? %>
-          <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => true}, :class => 'input-block-level') %>
+          <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
         <% if @character.specialization_2.nil? and !@character.specialization_1.nil? %>
-          <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [tree.name, tree.id]}, {:prompt => "Second specialization", :include_blank => true}, :class => 'input-block-level') %>
+          <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
         <% if @character.specialization_3.nil? and !@character.specialization_2.nil? %>
-          <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Third  specialization", :include_blank => true}, :class => 'input-block-level') %>
+          <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Third  specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
         <%= hidden_field_tag 'destination', 'talents' %>
         <%= specializations_form.submit 'Save specializations', :class => 'button small' %>

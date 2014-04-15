@@ -4,53 +4,32 @@ module CharactersHelper
     @return = {}
     @messages = Array.new
     if character.creation?
-      state = Hash.new
-      state['state_short'] = "Creation"
-      state['state_message'] = "This character is in it creation phase. Special rules may apply."
-      state['state_label_class'] = "alert"
-      state['state_alert_class'] = "warning"
-      @messages << state
+      flash[:notice] = 'This character is in it creation phase. Special rules may apply.'
     elsif character.active?
-      state = Hash.new
-      state['state_short'] = "Active"
-      state['state_message'] = "Character is marked active and can spend experience points normally."
-      state['state_label_class'] = "success"
-      state['state_alert_class'] = "success"
-      @messages << state
+      flash[:notice] = 'Character is marked active and can spend experience points normally.'
     elsif character.retired?
-      state = Hash.new
-      state['state_short'] = "Retired"
-      state['state_message'] = "Character taken off duty and is read only."
-      state['state_label_class'] = "secondary"
-      state['state_alert_class'] = "info"
-      @messages << state
+      flash[:notice] = 'Character taken off duty and is read only.'
     end
 
     if character.selected_skill_ranks_career.count < character.free_skill_ranks_career or character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization
       state = Hash.new
       state['state_short'] = "missing_free_skills"
-      state['state_message'] = "Please select #{character.free_skill_ranks_career} free skill ranks from your career and #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks."
-      state['state_label_class'] = "alert"
-      state['state_alert_class'] = "warning"
       @messages << state
+      flash[:error] = "Please select #{character.free_skill_ranks_career} free skill ranks from your career and #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks."
     end
 
     if character.selected_skill_ranks_career.count > character.free_skill_ranks_career
       state = Hash.new
       state['state_short'] = "missing_free_skills"
-      state['state_message'] = "You have selected too many free skill ranks from your career! Please only select #{character.free_skill_ranks_career} free skill ranks from your career."
-      state['state_label_class'] = "alert"
-      state['state_alert_class'] = "warning"
       @messages << state
+      flash[:error] = "You have selected too many free skill ranks from your career! Please only select #{character.free_skill_ranks_career} free skill ranks from your career."
     end
 
     if character.selected_skill_ranks_specialization.count > character.free_skill_ranks_specialization
       state = Hash.new
       state['state_short'] = "missing_free_skills"
-      state['state_message'] = "You have selected too many free skill ranks from your first specialization! Please only select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization."
-      state['state_label_class'] = "alert"
-      state['state_alert_class'] = "warning"
       @messages << state
+      flash[:error] = "You have selected too many free skill ranks from your first specialization! Please only select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization."
     end
 
     @messages
@@ -59,7 +38,7 @@ module CharactersHelper
   def is_career_skill(skill_id, talent_select = false)
     # Build an array of career skill ids granted by character's career.
     career_skill_ids = Array.new
-    unless @character.career.nil?
+    if @character.career
       @character.career.career_skills.each do |skill|
         career_skill_ids << skill.skill_id
       end
@@ -139,21 +118,37 @@ module CharactersHelper
       end
 
     when 'specialization'
-
-    when 'skill'
-      if granted_by == 'race' or granted_by == 'specialization' or granted_by == 'career'
-        experience_cost = 0
-      else
-        experience_cost = 5 * ranks
-        unless is_career_skill(resource_id)
-          experience_cost += 5
-        end
-      end
-
       if direction == 'up'
+        specialization = TalentTree.where(:id => resource_id).first
+        if ranks == 1
+          experience_cost = 0
+        else
+          if specialization.career_id.blank?
+            experience_cost = 10 * ranks
+          elsif specialization.career_id == @character.career_id
+            experience_cost = 10 * ranks
+          else
+            experience_cost = (10 * ranks) + 10
+          end
+        end
         CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
       else
         CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+      end
+
+    when 'skill'
+      if direction == 'up'
+        if granted_by == 'race' or granted_by == 'specialization' or granted_by == 'career'
+          experience_cost = 0
+        else
+          experience_cost = 5 * ranks
+          unless is_career_skill(resource_id)
+            experience_cost += 5
+          end
+        end
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+      else
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks.to_i).delete_all
       end
     end
   end

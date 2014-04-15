@@ -608,6 +608,18 @@ class CharactersController < ApplicationController
       @character_unarmed.save
     end
 
+    if params[:update_specializations]
+      if params[:character][:specialization_1]
+        set_experience_cost('specialization', params[:character][:specialization_1], 1, direction = 'up')
+      end
+      if params[:character][:specialization_2]
+        set_experience_cost('specialization', params[:character][:specialization_2], 2, direction = 'up')
+      end
+      if params[:character][:specialization_3]
+        set_experience_cost('specialization', params[:character][:specialization_3], 3, direction = 'up')
+      end
+    end
+
     # Update talents.
     if !params[:update_talents].nil?
       @talent_trees = Array.new
@@ -832,7 +844,7 @@ class CharactersController < ApplicationController
   def character_skill_rank_down
     @character = Character.friendly.find(params[:id])
     character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
-    set_experience_cost('skill', character_skill.skill_id, character_skill.ranks, 'down')
+    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'down')
     character_skill.ranks -= 1 unless character_skill.ranks == 0
     character_skill.save
 
@@ -865,11 +877,13 @@ class CharactersController < ApplicationController
   def untrain_specialization
     @character = Character.friendly.find(params[:id])
     specialization = TalentTree.find(params[:spec_id])
+    set_experience_cost('specialization', specialization.id, params[:spec_num], direction = 'down')
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
     CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
-    if params[:spec_num] == 1
+    if params[:spec_num].to_i == 1
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
+      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
     end
     redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
