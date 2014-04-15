@@ -85,4 +85,23 @@ class Character < ActiveRecord::Base
 
   default_scope { order('name ASC') }
 
+  def purchased_skills
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => '')
+  end
+
+  def selected_skill_ranks_career
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'career')
+  end
+
+  def selected_skill_ranks_specialization
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'specialization')
+  end
+
+  def free_skill_ranks_career
+    career_free_skill_ranks = if self.race.name == 'Droid' then 6 else 4 end
+  end
+
+  def free_skill_ranks_specialization
+    specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
+  end
 end

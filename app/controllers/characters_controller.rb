@@ -10,7 +10,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.where(:user_id => current_user.id).all
+    @characters = Character.where(:user_id => current_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -28,13 +28,13 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
 
     @specializations = Array.new
-    unless @character.specialization_1.nil?
+    if @character.specialization_1
       @specializations << TalentTree.find_by_id(@character.specialization_1).name
     end
-    unless @character.specialization_2.nil?
+    if @character.specialization_2
       @specializations << TalentTree.find_by_id(@character.specialization_2).name
     end
-    unless @character.specialization_3.nil?
+    if @character.specialization_3
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
@@ -47,19 +47,19 @@ class CharactersController < ApplicationController
     @character_armor_modification_bonuses['skills'] = Array.new
     @character_armor_modification_bonuses['talents'] = Array.new
     @character_armor_modification_bonuses['characteristics'] = Array.new
-    unless equipped_armor.nil? or equipped_armor.character_armor_attachments.blank?
+    if equipped_armor and !equipped_armor.character_armor_attachments.blank?
       equipped_armor.character_armor_attachments.each do |caa|
         armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
-        unless armor_attachment.stat_bonus.nil?
+        if armor_attachment.stat_bonus
           @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
         end
-        unless caa.armor_attachment_modification_options.nil?
+        if caa.armor_attachment_modification_options
           caa.armor_attachment_modification_options.each do |option|
             modification_option = ArmorAttachmentModificationOption.find(option)
-            unless modification_option.talent_id.nil?
+            if modification_option.talent_id
               @character_armor_modification_bonuses['talents'] << modification_option.talent_id
             end
-            unless modification_option.skill_id.nil?
+            if modification_option.skill_id
               @character_armor_modification_bonuses['skills'] << modification_option.skill_id
             end
           end
@@ -74,13 +74,13 @@ class CharactersController < ApplicationController
     @character_weapon_modification_bonuses['talents'] = Array.new
     unless equipped_weapons.blank? or equipped_weapons.character_weapon_attachments.blank?
       equipped_weapons.character_weapon_attachments.each do |caa|
-        unless caa.weapon_attachment_modification_options.nil?
+        if caa.weapon_attachment_modification_options
           caa.weapon_attachment_modification_options.each do |option|
             modification_option = WeaponAttachmentModificationOption.find(option)
-            unless modification_option.talent_id.nil?
+            if modification_option.talent_id
               @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
             end
-            unless modification_option.skill_id.nil?
+            if modification_option.skill_id
               @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
             end
           end
@@ -809,6 +809,13 @@ class CharactersController < ApplicationController
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Skills"
     @character_state = character_state(@character)
+
+    @skill_select_enabled = true
+    @character_state.each do |state|
+      if state['state_short'] == "missing_free_skills"
+        @skill_select_enabled = false
+      end
+    end
   end
 
   def character_skill_rank_up
@@ -1006,6 +1013,7 @@ class CharactersController < ApplicationController
     @character_page = 'armor'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Armor"
+    @character_state = character_state(@character)
   end
 
   def armor_attachment
@@ -1013,6 +1021,7 @@ class CharactersController < ApplicationController
     @character_armor = CharacterArmor.find(params[:character_armor_id])
     @armor = Armor.find(@character_armor.armor_id)
     @title = "#{@character.name} | Armor Attachment"
+    @character_state = Array.new
 
     @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id]).order(:id)
 
@@ -1097,6 +1106,7 @@ class CharactersController < ApplicationController
     @character_page = 'weapons'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Weapons"
+    @character_state = character_state(@character)
   end
 
   def weapon_attachment
@@ -1104,6 +1114,7 @@ class CharactersController < ApplicationController
     @character_weapon = CharacterWeapon.find(params[:character_weapon_id])
     @weapon = Weapon.find(@character_weapon.weapon_id)
     @title = "#{@character.name} | Weapon Attachment"
+    @character_state = Array.new
 
     @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id]).order(:id)
 
@@ -1187,6 +1198,7 @@ class CharactersController < ApplicationController
     @character_page = 'gear'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Equipment"
+    @character_state = character_state(@character)
   end
 
   def set_activate

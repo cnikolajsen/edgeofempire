@@ -2,24 +2,58 @@ module CharactersHelper
 
   def character_state(character)
     @return = {}
+    @messages = Array.new
     if character.creation?
-      @return['state_short'] = "Creation"
-      @return['state_message'] = "This character is in it creation phase. Special rules may apply."
-      @return['state_label_class'] = "alert"
-      @return['state_alert_class'] = "warning"
+      state = Hash.new
+      state['state_short'] = "Creation"
+      state['state_message'] = "This character is in it creation phase. Special rules may apply."
+      state['state_label_class'] = "alert"
+      state['state_alert_class'] = "warning"
+      @messages << state
     elsif character.active?
-      @return['state_short'] = "Active"
-      @return['state_message'] = "Character is marked active and can spend experience points normally."
-      @return['state_label_class'] = "success"
-      @return['state_alert_class'] = "success"
+      state = Hash.new
+      state['state_short'] = "Active"
+      state['state_message'] = "Character is marked active and can spend experience points normally."
+      state['state_label_class'] = "success"
+      state['state_alert_class'] = "success"
+      @messages << state
     elsif character.retired?
-      @return['state_short'] = "Retired"
-      @return['state_message'] = "Character taken off duty and is read only."
-      @return['state_label_class'] = "secondary"
-      @return['state_alert_class'] = "info"
+      state = Hash.new
+      state['state_short'] = "Retired"
+      state['state_message'] = "Character taken off duty and is read only."
+      state['state_label_class'] = "secondary"
+      state['state_alert_class'] = "info"
+      @messages << state
     end
 
-     @return
+    if character.selected_skill_ranks_career.count < character.free_skill_ranks_career or character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      state['state_message'] = "Please select #{character.free_skill_ranks_career} free skill ranks from your career and #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks."
+      state['state_label_class'] = "alert"
+      state['state_alert_class'] = "warning"
+      @messages << state
+    end
+
+    if character.selected_skill_ranks_career.count > character.free_skill_ranks_career
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      state['state_message'] = "You have selected too many free skill ranks from your career! Please only select #{character.free_skill_ranks_career} free skill ranks from your career."
+      state['state_label_class'] = "alert"
+      state['state_alert_class'] = "warning"
+      @messages << state
+    end
+
+    if character.selected_skill_ranks_specialization.count > character.free_skill_ranks_specialization
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      state['state_message'] = "You have selected too many free skill ranks from your first specialization! Please only select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization."
+      state['state_label_class'] = "alert"
+      state['state_alert_class'] = "warning"
+      @messages << state
+    end
+
+    @messages
   end
 
   def is_career_skill(skill_id, talent_select = false)
