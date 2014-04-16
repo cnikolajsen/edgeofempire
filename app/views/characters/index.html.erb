@@ -23,11 +23,11 @@
             <td><%= link_to character.name, character_path(character) %></td>
             <td>
               <% if character.creation? %>
-                  <span class="label" title="Character creation mode"><i class='icon-wrench'></i></span>
+                  <i class='fi-battery-half' title='Character creation mode'></i>
               <% elsif character.active? %>
-                  <span class="label success" title="Active character"><i class='icon-ok'></i></span>
+                  <i class='fi-battery-full' title="Active character"></i>
               <% elsif character.retired? %>
-                  <span class="label secondary" title="Character retired"><i class='icon-fire'></i></span>
+                  <i class='fi-battery-empty' title="Character retired"></i>
               <% end %>
             </td>
             <td><%= character.race.name unless character.race.nil? %></td>
@@ -36,9 +36,9 @@
             <td>
               <div class="button-bar">
                 <ul class="button-group round">
-                  <li><%= link_to "PDF", character_path(character, :format => 'pdf'), :class => 'button tiny success', :target => "_blank" %></li>
-                  <li><%= link_to "Edit".html_safe, edit_character_path(character), :class => 'button tiny' %></li>
-                  <li><%= link_to "Delete", character_path(character),
+                  <li><%= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe, character_path(character, :format => 'pdf'), :class => 'button tiny success', :target => "_blank" %></li>
+                  <li><%= link_to "<i class='fi-pencil'> Edit</i>".html_safe, character_path(character), :class => 'button tiny' %></li>
+                  <li><%= link_to "<i class='fi-skull'> Delete</i>".html_safe, character_path(character),
                                         :method => :delete,
                                         :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                                         :class => 'button alert tiny' %></li>

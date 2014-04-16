@@ -65,32 +65,32 @@
         <div class="row">
           <div class="small-12 columns">
             <strong><%= tree.name %></strong><br />
-            <% if @character.purchased_skills.count == 0 %>
-              <% if i == 0 %>
+            <% if i == 0 %>
+              <% if @character.purchased_skills.count == 0 %>
                 <%= character_form.label :class_skills, "Select #{if @character.race.name == 'Droid' then 3 else 2 end} career skills to add a free rank to:", :class => :label %>
                 <% tree.skills.each do |class_skill| %>
                   <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_specialization_skill_rank[]" type="checkbox" <%= if @specialization_free_rank.include? class_skill.id then "checked=checked" end %>>
                   <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
                 <% end %>
-              <% end %>
-            <% else %>
-              <div class="row">
-                <div class="small-12 columns">
-                  <table class="small-12 columns">
-                    <caption>
-                      <strong>You have selected the following skills to gain a free rank in at character creation:</strong><br />
-                      <small>To alter this you must first untrain all purchased skills on the skills page.</small>
-                    </caption>
-                    <tr>
-                      <% tree.skills.each do |class_skill| %>
-                        <% if @specialization_free_rank.include? class_skill.id %>
-                          <th><%= class_skill.name %></th>
+              <% else %>
+                <div class="row">
+                  <div class="small-12 columns">
+                    <table class="small-12 columns">
+                      <caption>
+                        <strong>You have selected the following skills to gain a free rank in at character creation:</strong><br />
+                        <small>To alter this you must first untrain all purchased skills on the skills page.</small>
+                      </caption>
+                      <tr>
+                        <% tree.skills.each do |class_skill| %>
+                          <% if @specialization_free_rank.include? class_skill.id %>
+                            <th><%= class_skill.name %></th>
+                          <% end %>
                         <% end %>
-                      <% end %>
-                    </tr>
-                  </table>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
-              </div>
+              <% end %>
             <% end %>
           </div>
         </div>

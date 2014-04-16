@@ -429,7 +429,7 @@ class CharactersController < ApplicationController
     if @character.creation?
       @character.character_skills.each do |character_skill|
         if character_skill.ranks > 2
-          error_messages += "<i class='icon-thumbs-down'> You have more than the allowed <strong>2 ranks</strong> at character creation in the skill <strong>#{character_skill.skill.name}</strong>. Check your free bonus ranks from either species, career, or specialization.</i><br />"
+          error_messages += "<i class='fi-dislike'> You have more than the allowed <strong>2 ranks</strong> at character creation in the skill <strong>#{character_skill.skill.name}</strong>. Check your free bonus ranks from either species, career, or specialization.</i><br />"
         end
       end
     end
@@ -447,7 +447,7 @@ class CharactersController < ApplicationController
     end
 
     if career_free_rank.count > career_free_rank_max_count
-      error_messages += "<i class='icon-thumbs-down'> You have selected too many career skills to place a free rank in. The #{@character.race.name} species allows you to choose <strong>#{career_free_rank_max_count} skills</strong>, but you have chosen <strong>#{career_free_rank.count} skills</strong>.</i><br />"
+      error_messages += "<i class='fi-dislike'> You have selected too many career skills to place a free rank in. The #{@character.race.name} species allows you to choose <strong>#{career_free_rank_max_count} skills</strong>, but you have chosen <strong>#{career_free_rank.count} skills</strong>.</i><br />"
     end
 
     unless error_messages.blank?

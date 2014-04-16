@@ -13,9 +13,9 @@
           </tbody>
         </table>
           <% if character_experience_cost > character_available_experience %>
-            <p style="font-weight: bold"><i class='icon-thumbs-down'> You have spent more experience than you have available!</i></p>
+            <p style="font-weight: bold"><i class='fi-dislike'> You have spent more experience than you have available!</i></p>
           <% elsif character_experience_cost < character_available_experience %>
-            <p style="font-weight: bold"><i class='icon-thumbs-up'> You still have <%= character_available_experience - character_experience_cost %> experience to spend.</i></p>
+            <p style="font-weight: bold"><i class='fi-like'> You still have <%= character_available_experience - character_experience_cost %> experience to spend.</i></p>
           <% end %>
 
           <h3>Where did it go?</h3>

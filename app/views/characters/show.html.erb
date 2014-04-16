@@ -94,13 +94,11 @@
       <div class="medium-12 columns">
         <div class="button-bar">
           <ul class="button-group round">
-            <li><%= link_to "<i class='icon-chevron-left'></i> Back".html_safe,
+            <li><%= link_to "<i class='fi-rewind'> Back</i>".html_safe,
                     characters_path, :class => 'button secondary'  %></li>
-            <li><%= link_to "<i class='icon-pencil'></i> Edit".html_safe,
-                    edit_character_path(@character), :class => 'button' %></li>
-            <li><%= link_to "<i class='icon-print'></i> PDF".html_safe,
+            <li><%= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe,
                     character_path(@character, :format => 'pdf'), :class => 'button disabled', :target => "_blank" %></li>
-            <li><%= link_to "<i class='icon-trash'></i> Delete".html_safe,
+            <li><%= link_to "<i class='fi-skull'> Delete</i>".html_safe,
                     character_path(@character),
                     :method => 'delete',
                     :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
@@ -125,7 +123,7 @@
       <div class="row">
         <div class="medium-12 columns panel">
           <h5>Credits</h5>
-          <%= @character.credits %>
+          <%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @character.credits %>
         </div>
       </div>
       <div class="row">
