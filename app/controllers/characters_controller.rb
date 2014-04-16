@@ -474,8 +474,8 @@ class CharactersController < ApplicationController
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
-    pdf_vars['available_xp'] = character_available_experience
-    pdf_vars['total_xp'] = character_experience_cost
+    pdf_vars['available_xp'] = character_available_experience - character_experience_cost
+    pdf_vars['total_xp'] = character_available_experience
     pdf_vars['force_rank'] = 0
     respond_to do |format|
       format.html # show.html.erb

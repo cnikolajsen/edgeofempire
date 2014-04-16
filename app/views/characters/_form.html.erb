@@ -47,18 +47,16 @@
     </div>
   </div>
 
-  <% unless @character.new_record? or !@character.creation? %>
-      <div class="row">
-        <div class="small-6 columns">
-          <%= f.label :experience, 'Earned experience' %>
-          <%= f.number_field :experience, :min => 0 %>
-        </div>
-        <div class="small-6 columns">
-          <%= f.label :credits %>
-          <%= f.number_field :credits, :min => 0 %>
-        </div>
-      </div>
-  <% end %>
+  <div class="row">
+    <div class="small-6 columns">
+      <%= f.label :experience, 'Earned experience' %>
+      <%= f.number_field :experience, :min => 0 %>
+    </div>
+    <div class="small-6 columns">
+      <%= f.label :credits %>
+      <%= f.number_field :credits, :min => 0 %>
+    </div>
+  </div>
 
   <div class="row">
     <div class="small-6 columns">
