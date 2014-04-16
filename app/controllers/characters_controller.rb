@@ -838,7 +838,8 @@ class CharactersController < ApplicationController
 
     set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
 
-    redirect_to :back, :notice => "#{Skill.find(params[:skill_id]).name} rank increased"
+    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank increased"
+    redirect_to :back
   end
 
   def character_skill_rank_down
@@ -848,7 +849,8 @@ class CharactersController < ApplicationController
     character_skill.ranks -= 1 unless character_skill.ranks == 0
     character_skill.save
 
-    redirect_to :back, :notice => "#{Skill.find(params[:skill_id]).name} rank decreased"
+    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank decreased"
+    redirect_to :back
   end
 
   def talents
@@ -960,7 +962,8 @@ class CharactersController < ApplicationController
     unless params[:character_obligation][:obligation_id].nil?
       @obligation = CharacterObligation.where(:character_id => @character.id, :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
     end
-    redirect_to :back, :notice => "Obligation added"
+    flash[:success] = "Obligation added"
+    redirect_to :back
   end
 
   def update_obligation
@@ -972,12 +975,14 @@ class CharactersController < ApplicationController
         @obligation.save
       end
     end
-    redirect_to :back, :notice => "Obligation updated"
+    flash[:success] = "Obligation updated"
+    redirect_to :back
   end
 
   def remove_obligation
     CharacterObligation.find(params[:obligation_id]).destroy
-    redirect_to :back, :notice => "Obligation removed"
+    flash[:success] = "Obligation removed"
+    redirect_to :back
   end
 
   def motivation
@@ -1003,7 +1008,8 @@ class CharactersController < ApplicationController
     unless params[:character_motivation][:motivation_id].nil?
       @motivation = CharacterMotivation.where(:character_id => @character.id, :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
     end
-    redirect_to :back, :notice => "Motivation added"
+    flash[:success] = "Motivation added"
+    redirect_to :back
   end
 
   def update_motivation
@@ -1014,12 +1020,14 @@ class CharactersController < ApplicationController
         @motivation.save
       end
     end
-    redirect_to :back, :notice => "Motivation updated"
+    flash[:success] = "Motivation updated"
+    redirect_to :back
   end
 
   def remove_motivation
     CharacterMotivation.find(params[:motivation_id]).destroy
-    redirect_to :back, :notice => "Motivation removed"
+    flash[:success] = "Motivation removed"
+    redirect_to :back
   end
 
   def armor
@@ -1066,12 +1074,14 @@ class CharactersController < ApplicationController
 
   def add_armor_attachment
     @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
-    redirect_to :back, :notice => "Attachment added"
+    flash[:success] = "Attachment added"
+    redirect_to :back
   end
 
   def remove_armor_attachment
     CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).delete_all
-    redirect_to :back, :notice => "Attachment removed"
+    flash[:success] = "Attachment removed"
+    redirect_to :back
   end
 
   def add_armor_attachment_option
@@ -1096,7 +1106,8 @@ class CharactersController < ApplicationController
     armor_attachment.armor_attachment_modification_options = armor_attachment.armor_attachment_modification_options.uniq
     armor_attachment.save
 
-    redirect_to :back, :notice => "Modification option added."
+    flash[:success] = "Modification option added."
+    redirect_to :back
   end
 
   def remove_armor_attachment_option
@@ -1112,7 +1123,8 @@ class CharactersController < ApplicationController
       character_skill.save
     end
 
-    redirect_to :back, :notice => "Modification option removed."
+    flash[:success] = "Modification option removed."
+    redirect_to :back
   end
 
   def weapons
@@ -1159,12 +1171,14 @@ class CharactersController < ApplicationController
 
   def add_weapon_attachment
     @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
-    redirect_to :back, :notice => "Attachment added"
+    flash[:success] = "Attachment added"
+    redirect_to :back
   end
 
   def remove_weapon_attachment
     CharacterWeaponAttachment.where(:id => params[:attachment_id]).delete_all
-    redirect_to :back, :notice => "Attachment removed"
+    flash[:success] = "Attachment removed"
+    redirect_to :back
   end
 
   def add_weapon_attachment_option
@@ -1188,7 +1202,8 @@ class CharactersController < ApplicationController
     weapon_attachment.weapon_attachment_modification_options << params[:option_id]
     weapon_attachment.save
 
-    redirect_to :back, :notice => "Modification option added."
+    flash[:success] = "Modification option added."
+    redirect_to :back
   end
 
   def remove_weapon_attachment_option
@@ -1204,7 +1219,8 @@ class CharactersController < ApplicationController
       character_skill.save
     end
 
-    redirect_to :back, :notice => "Modification option removed."
+    flash[:success] = "Modification option removed."
+    redirect_to :back
   end
 
   def equipment

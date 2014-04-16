@@ -10,8 +10,17 @@
     <% if flash[:notice] -%>
       <div class="row">
         <div class="small-12 columns">
-          <div data-alert class="alert-box success radius">
+          <div data-alert class="alert-box info radius">
             <%=h flash[:notice].html_safe %>
+          </div>
+        </div>
+      </div>
+    <% end -%>
+    <% if flash[:success] -%>
+      <div class="row">
+        <div class="small-12 columns">
+          <div data-alert class="alert-box success radius">
+            <%=h flash[:success].html_safe %>
           </div>
         </div>
       </div>
