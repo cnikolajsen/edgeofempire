@@ -1,9 +1,3 @@
-<% unless @character_state.nil? or @character_state['state_message'].nil? %>
-  <div data-alert class="alert-box <%= @character_state['state_alert_class'] %> radius">
-    <%= @character_state['state_message'] %>
-  </div>
-<% end %>
-
 <nav class="top-bar" data-topbar data-options="is_hover: false" data-no-turbolink>
   <ul class="title-area">
     <li class="name"><!-- Leave this empty --></li>

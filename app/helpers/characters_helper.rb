@@ -2,30 +2,43 @@ module CharactersHelper
 
   def character_state(character)
     @return = {}
+    @messages = Array.new
     if character.creation?
-      @return['state_short'] = "Creation"
-      @return['state_message'] = "This character is in it creation phase. Special rules may apply."
-      @return['state_label_class'] = "alert"
-      @return['state_alert_class'] = "warning"
+      flash[:notice] = 'This character is in it creation phase. Special rules may apply.'
     elsif character.active?
-      @return['state_short'] = "Active"
-      @return['state_message'] = "Character is marked active and can spend experience points normally."
-      @return['state_label_class'] = "success"
-      @return['state_alert_class'] = "success"
+      flash[:notice] = 'Character is marked active and can spend experience points normally.'
     elsif character.retired?
-      @return['state_short'] = "Retired"
-      @return['state_message'] = "Character taken off duty and is read only."
-      @return['state_label_class'] = "secondary"
-      @return['state_alert_class'] = "info"
+      flash[:notice] = 'Character taken off duty and is read only.'
     end
 
-     @return
+    if character.selected_skill_ranks_career.count < character.free_skill_ranks_career or character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      @messages << state
+      flash[:error] = "Please select #{character.free_skill_ranks_career} free skill ranks from your career and #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks."
+    end
+
+    if character.selected_skill_ranks_career.count > character.free_skill_ranks_career
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      @messages << state
+      flash[:error] = "You have selected too many free skill ranks from your career! Please only select #{character.free_skill_ranks_career} free skill ranks from your career."
+    end
+
+    if character.selected_skill_ranks_specialization.count > character.free_skill_ranks_specialization
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      @messages << state
+      flash[:error] = "You have selected too many free skill ranks from your first specialization! Please only select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization."
+    end
+
+    @messages
   end
 
   def is_career_skill(skill_id, talent_select = false)
     # Build an array of career skill ids granted by character's career.
     career_skill_ids = Array.new
-    unless @character.career.nil?
+    if @character.career
       @character.career.career_skills.each do |skill|
         career_skill_ids << skill.skill_id
       end
@@ -70,154 +83,93 @@ module CharactersHelper
     career_skill_ids.include?(skill_id)
   end
 
-  def character_experience_cost(cid)
-    @character = Character.find(cid)
-    exp_cost = Hash.new
+  def set_experience_cost(type, resource_id, ranks, direction = 'up', granted_by = '')
+    case type
+    when 'brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'
+      if direction == 'up'
+        1.upto(ranks) do |rank|
+          experience = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => rank).first_or_create
 
-    exp_cost[:header_characteristics] = 0
-    # @start Calculate experience spent buying characteristics.
-    exp_cost[:brawn] = 0
-    exp_cost[:agility] = 0
-    exp_cost[:cunning] = 0
-    exp_cost[:willpower] = 0
-    exp_cost[:intellect] = 0
-    exp_cost[:presence] = 0
-    unless @character.race.nil?
-      @character.brawn.times do |time|
-        exp_cost[:brawn] += (10 * (time + 1)).to_i
-      end
-      @character.race.brawn.times do |time|
-        exp_cost[:brawn] -= (10 * (time + 1)).to_i
-      end
-      @character.agility.times do |time|
-        exp_cost[:agility] += 10 * (time + 1)
-      end
-      @character.race.agility.times do |time|
-        exp_cost[:agility] -= 10 * (time + 1)
-      end
-      @character.cunning.times do |time|
-        exp_cost[:cunning] += 10 * (time + 1)
-      end
-      @character.race.cunning.times do |time|
-        exp_cost[:cunning] -= 10 * (time + 1)
-      end
-      @character.willpower.times do |time|
-        exp_cost[:willpower] += 10 * (time + 1)
-      end
-      @character.race.willpower.times do |time|
-        exp_cost[:willpower] -= 10 * (time + 1)
-      end
-      @character.intellect.times do |time|
-        exp_cost[:intellect] += 10 * (time + 1)
-      end
-      @character.race.intellect.times do |time|
-        exp_cost[:intellect] -= 10 * (time + 1)
-      end
-      @character.presence.times do |time|
-        exp_cost[:presence] += 10 * (time + 1)
-      end
-      @character.race.presence.times do |time|
-        exp_cost[:presence] -= 10 * (time + 1)
-      end
-    end
-    # @end Characteristics.
-
-    exp_cost[:header_specializations] = 0
-    # @start Calculate experience spent buying specializations.
-    unless @character.specialization_1.blank?
-      specialization = TalentTree.find(@character.specialization_1)
-      exp_cost["#{specialization.name}".to_sym] = 0
-    end
-    unless @character.specialization_2.blank?
-      specialization = TalentTree.find(@character.specialization_2)
-      non_career_specialization_penalty = 10
-      @character.career.talent_trees.each do |tree|
-        if tree.id == @character.specialization_2
-          non_career_specialization_penalty = 0
+          if granted_by == 'race' or experience.granted_by == 'race'
+            experience.granted_by = 'race'
+            experience.cost = 0
+          else
+            experience.cost = (10 * rank).to_i
+          end
+          experience.save
+        end
+      else
+        experience = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type).order("rank DESC").first
+        experience.rank.downto((experience.rank - ranks + 1)) do |rank|
+          CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :rank => rank).delete_all
         end
       end
-      exp_cost["#{specialization.name}".to_sym] = 20 + non_career_specialization_penalty
-    end
-    unless @character.specialization_3.blank?
-      specialization = TalentTree.find(@character.specialization_3)
-      non_career_specialization_penalty = 10
-      @character.career.talent_trees.each do |tree|
-        if tree.id == @character.specialization_3
-          non_career_specialization_penalty = 0
-        end
+
+    when 'talent'
+      if granted_by == 'race'
+        experience_cost = 0
+      else
+        experience_cost = ranks * 5
       end
-      exp_cost["#{specialization.name}".to_sym] = 30 + non_career_specialization_penalty
-    end
-    # @end Specializations.
+      if direction == 'up'
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+      else
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+      end
 
-    # @start Calculate experience spent buying talents.
-    talents = {}
-    unless @character.character_talents.empty?
-      exp_cost[:header_talents] = 0
-      @character.character_talents.each do |talent_tree|
-        talent_tree.attributes.each do |key, value|
-          if key.match(/talent_[\d]_[\d]$/) and !value.nil?
-            if talents.has_key?(value) && !talent_tree["#{key}_options"].nil?
-              talents[value]['count'] = talents[value]['count'] + 1
-            else
-              talents[value] = {}
-              talents[value]['count'] = 1
-            end
-
-            talent_cost = 0
-            # find the experience cost from the row number in the key.
-            # Keys are build like this talent_#{row}_#{column}.
-            case key
-            when /^talent_1/
-              talent_cost = 5
-            when /^talent_2/
-              talent_cost = 10
-            when /^talent_3/
-              talent_cost = 15
-            when /^talent_4/
-              talent_cost = 20
-            when /^talent_5/
-              talent_cost = 25
-            end
-
-            talent = Talent.find(value)
-            specialization = TalentTree.find(talent_tree.talent_tree_id)
-            exp_cost["#{specialization.name}_#{talent.name}_#{talents[value]['count']}".to_sym] = talent_cost
+    when 'specialization'
+      if direction == 'up'
+        specialization = TalentTree.where(:id => resource_id).first
+        if ranks == 1
+          experience_cost = 0
+        else
+          if specialization.career_id.blank?
+            experience_cost = 10 * ranks
+          elsif specialization.career_id == @character.career_id
+            experience_cost = 10 * ranks
+          else
+            experience_cost = (10 * ranks) + 10
           end
         end
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+      else
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+      end
+
+    when 'skill'
+      if direction == 'up'
+        if granted_by == 'race' or granted_by == 'specialization' or granted_by == 'career'
+          experience_cost = 0
+        else
+          experience_cost = 5 * ranks
+          unless is_career_skill(resource_id)
+            experience_cost += 5
+          end
+        end
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+      else
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks.to_i).delete_all
       end
     end
-    # @end Talents.
+  end
 
-    # @start Calculate experience spent buying skills.
-    unless @character.character_skills.empty?
-      exp_cost[:header_skills] = 0
-      @character.character_skills.each do |cs|
-        skill = Skill.find(cs.skill_id)
-        skill_cost = 0
-
-        cross_career_penalty = 0
-        unless (is_career_skill(cs.skill_id))
-          cross_career_penalty = 5
-        end
-
-        cs.ranks.times do |rank|
-          skill_cost += (5 * (rank + 1)).to_i + cross_career_penalty
-        end
-
-        unless skill_cost == 0
-          exp_cost["#{cs.ranks}_#{'rank'.pluralize(cs.ranks)}_in_#{skill.name}".to_sym] = skill_cost
-        end
-      end
+  def get_experience_cost(type, resource_id, granted_by = '')
+    if granted_by.blank?
+      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id).order('rank asc')
+    else
+      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :granted_by => granted_by).order('rank asc')
     end
-    # @end Skills.
+  end
 
-    # Sum up the total.
-    exp_cost[:total_cost] = exp_cost.inject(0){|a,(_,b)|a+b}
-    exp_cost[:starting_experience] = if !@character.race.nil? then @character.race.starting_experience else 0 end
-    exp_cost[:earned_experience] = @character.experience
-    exp_cost[:available_experience] = exp_cost[:starting_experience] + exp_cost[:earned_experience]
-    exp_cost
+  def character_experience_cost
+    @character.character_experience_costs.sum(:cost)
+  end
+
+  def character_available_experience
+    starting_experience = if !@character.race.nil? then @character.race.starting_experience else 0 end
+    earned_experience = @character.experience
+
+    starting_experience + earned_experience
   end
 
   def skill_total_ranks(character_skill)

@@ -1,4 +1,8 @@
 class Character < ActiveRecord::Base
+  validates :name, presence: true
+  validates :race_id, presence: true
+  validates :career_id, presence: true
+
   include AASM
   include FriendlyId
   friendly_id :slug_candidates, :use => :slugged
@@ -30,21 +34,19 @@ class Character < ActiveRecord::Base
 
   def experience_exceeded?
     @character = Character.find(id)
-    cost = ApplicationController.helpers.character_experience_cost(id)
+
+    character_experience_cost = @character.character_experience_costs.sum(:cost)
+    starting_experience = if !@character.race.nil? then @character.race.starting_experience else 0 end
+    available_experience = starting_experience + @character.experience
 
     if @character.race.nil? or @character.career.nil?
       false
-    elsif cost[:total_cost] > cost[:available_experience]
+    elsif character_experience_cost > available_experience
       false
     else
       true
     end
-
   end
-
-  validates_presence_of :name
-  validates :race_id, presence: true, if: ":character_species.nil?"
-  validates :career_id, presence: true, if: ":character_career.nil?"
 
   belongs_to :user
 
@@ -67,6 +69,8 @@ class Character < ActiveRecord::Base
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
 
+  has_many :character_experience_costs
+
   belongs_to :race
   belongs_to :career
 
@@ -81,4 +85,23 @@ class Character < ActiveRecord::Base
 
   default_scope { order('name ASC') }
 
+  def purchased_skills
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => '')
+  end
+
+  def selected_skill_ranks_career
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'career')
+  end
+
+  def selected_skill_ranks_specialization
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'specialization')
+  end
+
+  def free_skill_ranks_career
+    career_free_skill_ranks = if self.race.name == 'Droid' then 6 else 4 end
+  end
+
+  def free_skill_ranks_specialization
+    specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
+  end
 end

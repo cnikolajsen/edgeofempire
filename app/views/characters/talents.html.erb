@@ -14,29 +14,31 @@
     <div class="panel">
       <h5>Select Specializations</h5>
       <ul>
-        <% unless @character.specialization_1.nil? %>
-          <% hide_spec_1_selctor = true %>
-          <li><%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? %></li  >
+        <% if @character.specialization_1 %>
+          <li>
+            <%= TalentTree.where(:id => @character.specialization_1).first.name %> <%= link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? and @character.purchased_skills.count == 0 %>
+            <% if @character.purchased_skills.count > 0 %>
+              <br /><small>You must first untrain all purchased skills before you can untrain the initial specialization.</small>
+            <% end %>
+          </li>
         <% end %>
-        <% unless @character.specialization_2.nil? %>
-          <% hide_spec_2_selctor = true %>
-          <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li  >
+        <% if @character.specialization_2 %>
+          <li><%= TalentTree.where(:id => @character.specialization_2).first.name %> <%= link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil? %></li>
         <% end %>
-        <% unless @character.specialization_3.nil? %>
-          <% hide_spec_3_selctor = true %>
+        <% if @character.specialization_3 %>
           <li><%= TalentTree.where(:id => @character.specialization_3).first.name %> <%= link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain" %></li>
         <% end %>
       </ul>
       <%= form_for @character do |specializations_form| %>
         <%= hidden_field_tag 'update_specializations', 'true' %>
-        <% if hide_spec_1_selctor.nil? %>
-          <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% if @character.specialization_1.nil? %>
+          <%= select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
-        <% if hide_spec_2_selctor.nil? %>
-          <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [tree.name, tree.id]}, {:prompt => "Second specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% if @character.specialization_2.nil? and !@character.specialization_1.nil? %>
+          <%= select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
-        <% if hide_spec_3_selctor.nil? %>
-          <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [tree.name, tree.id]}, {:prompt => "Third  specialization", :include_blank => true}, :class => 'input-block-level') %>
+        <% if @character.specialization_3.nil? and !@character.specialization_2.nil? %>
+          <%= select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Third  specialization", :include_blank => false}, :class => 'input-block-level') %>
         <% end %>
         <%= hidden_field_tag 'destination', 'talents' %>
         <%= specializations_form.submit 'Save specializations', :class => 'button small' %>
@@ -64,10 +66,30 @@
           <div class="small-12 columns">
             <strong><%= tree.name %></strong><br />
             <% if i == 0 %>
-              <%= character_form.label :class_skills, "Select #{if @character.race.name == 'Droid' then 3 else 2 end} career skills to add a free rank to:", :class => :label %>
-              <% tree.skills.each do |class_skill| %>
-                <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_specialization_skill_rank[]" type="checkbox" <%= if @specialization_free_rank.include? class_skill.id then "checked=checked" end %>>
-                <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
+              <% if @character.purchased_skills.count == 0 %>
+                <%= character_form.label :class_skills, "Select #{if @character.race.name == 'Droid' then 3 else 2 end} career skills to add a free rank to:", :class => :label %>
+                <% tree.skills.each do |class_skill| %>
+                  <input value="<%= class_skill.id %>" id="free_skill_rank_<%= class_skill.id %>" name="free_specialization_skill_rank[]" type="checkbox" <%= if @specialization_free_rank.include? class_skill.id then "checked=checked" end %>>
+                  <label for="free_skill_rank_<%= class_skill.id %>" class="" style="display:inline;"><%= class_skill.name %></label>
+                <% end %>
+              <% else %>
+                <div class="row">
+                  <div class="small-12 columns">
+                    <table class="small-12 columns">
+                      <caption>
+                        <strong>You have selected the following skills to gain a free rank in at character creation:</strong><br />
+                        <small>To alter this you must first untrain all purchased skills on the skills page.</small>
+                      </caption>
+                      <tr>
+                        <% tree.skills.each do |class_skill| %>
+                          <% if @specialization_free_rank.include? class_skill.id %>
+                            <th><%= class_skill.name %></th>
+                          <% end %>
+                        <% end %>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
               <% end %>
             <% end %>
           </div>

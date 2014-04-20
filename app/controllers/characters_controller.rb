@@ -10,7 +10,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.where(:user_id => current_user.id).all
+    @characters = Character.where(:user_id => current_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,16 +27,14 @@ class CharactersController < ApplicationController
     @title = "#{@character.name} | #{@title}"
     @character_state = character_state(@character)
 
-    @experience_cost = character_experience_cost(@character.id)
-
     @specializations = Array.new
-    unless @character.specialization_1.nil?
+    if @character.specialization_1
       @specializations << TalentTree.find_by_id(@character.specialization_1).name
     end
-    unless @character.specialization_2.nil?
+    if @character.specialization_2
       @specializations << TalentTree.find_by_id(@character.specialization_2).name
     end
-    unless @character.specialization_3.nil?
+    if @character.specialization_3
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
@@ -49,19 +47,19 @@ class CharactersController < ApplicationController
     @character_armor_modification_bonuses['skills'] = Array.new
     @character_armor_modification_bonuses['talents'] = Array.new
     @character_armor_modification_bonuses['characteristics'] = Array.new
-    unless equipped_armor.nil? or equipped_armor.character_armor_attachments.blank?
+    if equipped_armor and !equipped_armor.character_armor_attachments.blank?
       equipped_armor.character_armor_attachments.each do |caa|
         armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
-        unless armor_attachment.stat_bonus.nil?
+        if armor_attachment.stat_bonus
           @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
         end
-        unless caa.armor_attachment_modification_options.nil?
+        if caa.armor_attachment_modification_options
           caa.armor_attachment_modification_options.each do |option|
             modification_option = ArmorAttachmentModificationOption.find(option)
-            unless modification_option.talent_id.nil?
+            if modification_option.talent_id
               @character_armor_modification_bonuses['talents'] << modification_option.talent_id
             end
-            unless modification_option.skill_id.nil?
+            if modification_option.skill_id
               @character_armor_modification_bonuses['skills'] << modification_option.skill_id
             end
           end
@@ -76,13 +74,13 @@ class CharactersController < ApplicationController
     @character_weapon_modification_bonuses['talents'] = Array.new
     unless equipped_weapons.blank? or equipped_weapons.character_weapon_attachments.blank?
       equipped_weapons.character_weapon_attachments.each do |caa|
-        unless caa.weapon_attachment_modification_options.nil?
+        if caa.weapon_attachment_modification_options
           caa.weapon_attachment_modification_options.each do |option|
             modification_option = WeaponAttachmentModificationOption.find(option)
-            unless modification_option.talent_id.nil?
+            if modification_option.talent_id
               @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
             end
-            unless modification_option.skill_id.nil?
+            if modification_option.skill_id
               @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
             end
           end
@@ -431,7 +429,7 @@ class CharactersController < ApplicationController
     if @character.creation?
       @character.character_skills.each do |character_skill|
         if character_skill.ranks > 2
-          error_messages += "<i class='icon-thumbs-down'> You have more than the allowed <strong>2 ranks</strong> at character creation in the skill <strong>#{character_skill.skill.name}</strong>. Check your free bonus ranks from either species, career, or specialization.</i><br />"
+          error_messages += "<i class='fi-dislike'> You have more than the allowed <strong>2 ranks</strong> at character creation in the skill <strong>#{character_skill.skill.name}</strong>. Check your free bonus ranks from either species, career, or specialization.</i><br />"
         end
       end
     end
@@ -449,7 +447,7 @@ class CharactersController < ApplicationController
     end
 
     if career_free_rank.count > career_free_rank_max_count
-      error_messages += "<i class='icon-thumbs-down'> You have selected too many career skills to place a free rank in. The #{@character.race.name} species allows you to choose <strong>#{career_free_rank_max_count} skills</strong>, but you have chosen <strong>#{career_free_rank.count} skills</strong>.</i><br />"
+      error_messages += "<i class='fi-dislike'> You have selected too many career skills to place a free rank in. The #{@character.race.name} species allows you to choose <strong>#{career_free_rank_max_count} skills</strong>, but you have chosen <strong>#{career_free_rank.count} skills</strong>.</i><br />"
     end
 
     unless error_messages.blank?
@@ -476,8 +474,8 @@ class CharactersController < ApplicationController
     pdf_vars['personal_gear'] = @pdf_personal_gear
     pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
-    pdf_vars['available_xp'] = @experience_cost[:available_experience]
-    pdf_vars['total_xp'] = @experience_cost[:starting_experience] + @experience_cost[:earned_experience]
+    pdf_vars['available_xp'] = character_available_experience - character_experience_cost
+    pdf_vars['total_xp'] = character_available_experience
     pdf_vars['force_rank'] = 0
     respond_to do |format|
       format.html # show.html.erb
@@ -518,12 +516,6 @@ class CharactersController < ApplicationController
     @character = Character.new(character_params)
     @character.user_id = current_user.id
     @character.credits = 500
-    @character.brawn = 1
-    @character.agility = 1
-    @character.intellect = 1
-    @character.cunning = 1
-    @character.willpower = 1
-    @character.presence = 1
     @character.experience = 0
 
     respond_to do |format|
@@ -541,7 +533,45 @@ class CharactersController < ApplicationController
           @character_skill.save
         end
 
-        format.html { redirect_to character_species_url(@character), notice: 'Character was successfully created.' }
+        species = Race.find(@character.race_id)
+
+        # Save species characteristics.
+        ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
+          @character.update_attribute(stat.to_sym, species[stat])
+          # Save experience entries for species characteristics.
+          set_experience_cost(stat, 0, species[stat], 'up', 'race')
+        end
+
+        # Save species talents.
+        unless species.talents.nil?
+          species.talents.each do |talent|
+            character_bonus_talent = CharacterBonusTalent.new()
+            character_bonus_talent.character_id = @character.id
+            character_bonus_talent.talent_id = talent.id
+            character_bonus_talent.bonus_type = 'racial'
+            character_bonus_talent.save
+
+            # Save experience entry.
+            set_experience_cost('talent', talent.id, 1, 'up', 'race')
+          end
+        end
+
+        # Save species skill ranks.
+        RaceSkill.where(:race_id => species.id).each do |race_skill|
+          @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => race_skill.skill_id).first
+          unless @character_skill.nil?
+            @character_skill.free_ranks_race = race_skill.ranks
+            @character_skill.save
+
+            # Save experience entry.
+            race_skill.ranks.times do |rank|
+              set_experience_cost('skill', race_skill.skill_id, rank + 1, 'up', 'race')
+            end
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+          end
+        end
+
+        format.html { redirect_to character_url(@character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
         format.html { render action: "new" }
@@ -578,6 +608,18 @@ class CharactersController < ApplicationController
       @character_unarmed.save
     end
 
+    if params[:update_specializations]
+      if params[:character][:specialization_1]
+        set_experience_cost('specialization', params[:character][:specialization_1], 1, direction = 'up')
+      end
+      if params[:character][:specialization_2]
+        set_experience_cost('specialization', params[:character][:specialization_2], 2, direction = 'up')
+      end
+      if params[:character][:specialization_3]
+        set_experience_cost('specialization', params[:character][:specialization_3], 3, direction = 'up')
+      end
+    end
+
     # Update talents.
     if !params[:update_talents].nil?
       @talent_trees = Array.new
@@ -602,6 +644,17 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_specialization = 1
               character_skill.save
             end
+
+            # Check if this skill already has an entry from specialization.
+            if get_experience_cost('skill', skill.id, 'specialization').blank?
+              # Save experience entry.
+              experience_cost = get_experience_cost('skill', skill.id)
+              if experience_cost.nil? or experience_cost.blank?
+                set_experience_cost('skill', skill.id, 1, 'up', 'specialization')
+              else
+                set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'specialization')
+              end
+            end
           else
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization').delete_all
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
@@ -609,13 +662,15 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_specialization -= 1
               character_skill.save
             end
+
+            # Delete experience entry.
+            get_experience_cost('skill', skill.id, 'specialization').delete_all
           end
         end
       end
 
       @talent_trees.each do |tree|
         @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
-
         if @character_talent_tree.id.nil?
           @character_talent_tree.character_id = @character.id
           @character_talent_tree.talent_tree_id = tree.id
@@ -633,8 +688,12 @@ class CharactersController < ApplicationController
                 end
               end
               @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
+              # Save experience entry.
+              set_experience_cost('talent', params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"], r_key + 1, 'up', nil)
             else
               @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
+              # Save experience entry.
+              set_experience_cost('talent', tree["talent_#{r_key + 1}_#{c_key + 1}"], r_key + 1, 'down', nil)
             end
           end
         end
@@ -643,16 +702,8 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Save character career.
+    # Save character career skill free ranks.
     if !params[:character_career].nil? and !@character.career.nil?
-      # Handle resets due to career change.
-      if !params[:original_career_id].nil? and params[:character][:career_id] != params[:original_career_id]
-        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').delete_all
-        CharacterSkill.where(:character_id => @character.id).each do |skill|
-          skill.free_ranks_career = 0
-          skill.save
-        end
-      end
       # Save career skills to add a free rank to.
       unless params[:free_career_skill_rank].nil?
         @character.career.skills.each do |skill|
@@ -663,6 +714,17 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career = 1
               character_skill.save
             end
+
+            # Check if this skill already has an entry from specialization.
+            if get_experience_cost('skill', skill.id, 'career').blank?
+              # Save experience entry.
+              experience_cost = get_experience_cost('skill', skill.id)
+              if experience_cost.nil? or experience_cost.blank?
+                set_experience_cost('skill', skill.id, 1, 'up', 'career')
+              else
+                set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'career')
+              end
+            end
           else
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career').delete_all
             character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
@@ -670,6 +732,9 @@ class CharactersController < ApplicationController
               character_skill.free_ranks_career -= 1
               character_skill.save
             end
+
+            # Delete experience entry.
+            get_experience_cost('skill', skill.id, 'career').delete_all
           end
         end
       end
@@ -690,86 +755,12 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Save character species.
-    if !params[:character_species].nil?
-      species = Race.find(params[:character][:race_id])
-      @character.update_attribute(:brawn, species.brawn)
-      @character.update_attribute(:agility, species.agility)
-      @character.update_attribute(:intellect, species.intellect)
-      @character.update_attribute(:cunning, species.cunning)
-      @character.update_attribute(:willpower, species.willpower)
-      @character.update_attribute(:presence, species.presence)
-
-      # Save racial talents.
-      character_racial_talents = CharacterBonusTalent.where(:character_id => @character.id, :bonus_type => 'racial')
-      unless character_racial_talents.nil?
-        character_racial_talents.each do |bt|
-          bt.destroy
-        end
-      end
-
-      unless species.talents.nil?
-        species.talents.each do |talent|
-          character_bonus_talent = CharacterBonusTalent.new()
-          character_bonus_talent.character_id = @character.id
-          character_bonus_talent.talent_id = talent.id
-          character_bonus_talent.bonus_type = 'racial'
-          character_bonus_talent.save
-        end
-      end
-
-      # Save racial skill ranks, but only on initial save.
-      if params[:original_race_id].blank?
-        RaceSkill.where(:race_id => species.id).each do |race_skill|
-          @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => race_skill.skill_id).first
-          unless @character_skill.nil?
-            @character_skill.free_ranks_race = race_skill.ranks
-            @character_skill.save
-          end
-
-          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
-        end
-      end
-
-      # Handle resets due to species change.
-      if !params[:original_race_id].blank? and params[:character][:race_id] != params[:original_race_id]
-        # Delete all free skill ranks granted by the old species.
-        CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'race').delete_all
-        CharacterSkill.where(:character_id => @character.id).each do |skill|
-          skill.free_ranks_race = 0
-          skill.save
-        end
-
-        # Adjust characteristic minimums.
-        new_race = Race.find(params[:character][:race_id])
-        if @character.brawn < new_race.brawn
-          @character.update_attribute(:brawn, new_race.brawn)
-        end
-        if @character.agility < new_race.agility
-          @character.update_attribute(:agility, new_race.agility)
-        end
-        if @character.cunning < new_race.cunning
-          @character.update_attribute(:cunning, new_race.cunning)
-        end
-        if @character.willpower < new_race.willpower
-          @character.update_attribute(:willpower, new_race.willpower)
-        end
-        if @character.presence < new_race.presence
-          @character.update_attribute(:presence, new_race.presence)
-        end
-        if @character.intellect < new_race.intellect
-          @character.update_attribute(:intellect, new_race.intellect)
-        end
-
-        # Save free skill ranks granted by the new species.
-        new_race.skills.each do |skill|
-          race_skill = RaceSkill.where(:skill_id => skill.id, :race_id => new_race.id).first
-          CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
-          character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
-          if character_skill.free_ranks_race == 0 or character_skill.free_ranks_race.blank?
-            character_skill.free_ranks_race = race_skill.ranks
-            character_skill.save
-          end
+    if !params[:character_characteristics].nil?
+      ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
+        if params[:character][stat.to_sym].to_i > @character.race[stat]
+          set_experience_cost(stat, 0, params[:character][stat.to_sym].to_i, 'up')
+        elsif params[:character][stat.to_sym].to_i < @character[stat]
+          set_experience_cost(stat, 0, (@character[stat] - params[:character][stat.to_sym].to_i), 'down')
         end
       end
     end
@@ -786,15 +777,12 @@ class CharactersController < ApplicationController
           elsif params[:destination] == 'talents'
             message = 'Character talents updated.'
           elsif params[:destination] == 'career'
-            message = 'Character career saved.'
-            if !params[:original_career_id].nil? and @character.career_id != params[:original_career_id]
-              message = "Career was changed. Reselect your free skill ranks."
-            end
-          elsif params[:destination] == 'species'
-            message = 'Character species saved.'
-            if !params[:original_race_id].nil? and @character.race_id != params[:original_race_id]
-              message = "Character species has changed. You might want to adjust your #{view_context.link_to('characteristics', character_characteristics_url(@character))}."
-            end
+            message = 'Character career free skill ranks saved.'
+          #elsif params[:destination] == 'species'
+          #  message = 'Character species saved.'
+          #  if !params[:original_race_id].nil? and @character.race_id != params[:original_race_id]
+          #    message = "Character species has changed. You might want to adjust your #{view_context.link_to('characteristics', character_characteristics_url(@character))}."
+          #  end
           elsif params[:destination] == 'characteristics'
             message = 'Character characteristics saved.'
           elsif params[:destination] == 'background'
@@ -833,15 +821,36 @@ class CharactersController < ApplicationController
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Skills"
     @character_state = character_state(@character)
+
+    @skill_select_enabled = true
+    @character_state.each do |state|
+      if state['state_short'] == "missing_free_skills"
+        @skill_select_enabled = false
+      end
+    end
   end
 
-  def save_character_skills
-    params[:character_skills].each do |skill_rank|
-      character_skill = CharacterSkill.where(:character_id => params[:character_id], :skill_id => skill_rank[0]).first
-      character_skill.ranks = skill_rank[1]
-      character_skill.save
-    end
-    redirect_to :back, :notice => "Skills updated"
+  def character_skill_rank_up
+    @character = Character.friendly.find(params[:id])
+    character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
+    character_skill.ranks += 1
+    character_skill.save
+
+    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
+
+    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank increased"
+    redirect_to :back
+  end
+
+  def character_skill_rank_down
+    @character = Character.friendly.find(params[:id])
+    character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
+    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'down')
+    character_skill.ranks -= 1 unless character_skill.ranks == 0
+    character_skill.save
+
+    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank decreased"
+    redirect_to :back
   end
 
   def talents
@@ -870,11 +879,13 @@ class CharactersController < ApplicationController
   def untrain_specialization
     @character = Character.friendly.find(params[:id])
     specialization = TalentTree.find(params[:spec_id])
+    set_experience_cost('specialization', specialization.id, params[:spec_num], direction = 'down')
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
     CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
-    if params[:spec_num] == 1
+    if params[:spec_num].to_i == 1
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
+      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
     end
     redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
@@ -951,7 +962,8 @@ class CharactersController < ApplicationController
     unless params[:character_obligation][:obligation_id].nil?
       @obligation = CharacterObligation.where(:character_id => @character.id, :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
     end
-    redirect_to :back, :notice => "Obligation added"
+    flash[:success] = "Obligation added"
+    redirect_to :back
   end
 
   def update_obligation
@@ -963,12 +975,14 @@ class CharactersController < ApplicationController
         @obligation.save
       end
     end
-    redirect_to :back, :notice => "Obligation updated"
+    flash[:success] = "Obligation updated"
+    redirect_to :back
   end
 
   def remove_obligation
     CharacterObligation.find(params[:obligation_id]).destroy
-    redirect_to :back, :notice => "Obligation removed"
+    flash[:success] = "Obligation removed"
+    redirect_to :back
   end
 
   def motivation
@@ -994,7 +1008,8 @@ class CharactersController < ApplicationController
     unless params[:character_motivation][:motivation_id].nil?
       @motivation = CharacterMotivation.where(:character_id => @character.id, :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
     end
-    redirect_to :back, :notice => "Motivation added"
+    flash[:success] = "Motivation added"
+    redirect_to :back
   end
 
   def update_motivation
@@ -1005,12 +1020,14 @@ class CharactersController < ApplicationController
         @motivation.save
       end
     end
-    redirect_to :back, :notice => "Motivation updated"
+    flash[:success] = "Motivation updated"
+    redirect_to :back
   end
 
   def remove_motivation
     CharacterMotivation.find(params[:motivation_id]).destroy
-    redirect_to :back, :notice => "Motivation removed"
+    flash[:success] = "Motivation removed"
+    redirect_to :back
   end
 
   def armor
@@ -1018,6 +1035,7 @@ class CharactersController < ApplicationController
     @character_page = 'armor'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Armor"
+    @character_state = character_state(@character)
   end
 
   def armor_attachment
@@ -1025,6 +1043,7 @@ class CharactersController < ApplicationController
     @character_armor = CharacterArmor.find(params[:character_armor_id])
     @armor = Armor.find(@character_armor.armor_id)
     @title = "#{@character.name} | Armor Attachment"
+    @character_state = Array.new
 
     @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id]).order(:id)
 
@@ -1055,12 +1074,14 @@ class CharactersController < ApplicationController
 
   def add_armor_attachment
     @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
-    redirect_to :back, :notice => "Attachment added"
+    flash[:success] = "Attachment added"
+    redirect_to :back
   end
 
   def remove_armor_attachment
     CharacterArmorAttachment.where(:armor_attachment_id => params[:attachment_id]).delete_all
-    redirect_to :back, :notice => "Attachment removed"
+    flash[:success] = "Attachment removed"
+    redirect_to :back
   end
 
   def add_armor_attachment_option
@@ -1085,7 +1106,8 @@ class CharactersController < ApplicationController
     armor_attachment.armor_attachment_modification_options = armor_attachment.armor_attachment_modification_options.uniq
     armor_attachment.save
 
-    redirect_to :back, :notice => "Modification option added."
+    flash[:success] = "Modification option added."
+    redirect_to :back
   end
 
   def remove_armor_attachment_option
@@ -1101,7 +1123,8 @@ class CharactersController < ApplicationController
       character_skill.save
     end
 
-    redirect_to :back, :notice => "Modification option removed."
+    flash[:success] = "Modification option removed."
+    redirect_to :back
   end
 
   def weapons
@@ -1109,6 +1132,7 @@ class CharactersController < ApplicationController
     @character_page = 'weapons'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Weapons"
+    @character_state = character_state(@character)
   end
 
   def weapon_attachment
@@ -1116,6 +1140,7 @@ class CharactersController < ApplicationController
     @character_weapon = CharacterWeapon.find(params[:character_weapon_id])
     @weapon = Weapon.find(@character_weapon.weapon_id)
     @title = "#{@character.name} | Weapon Attachment"
+    @character_state = Array.new
 
     @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id]).order(:id)
 
@@ -1146,12 +1171,14 @@ class CharactersController < ApplicationController
 
   def add_weapon_attachment
     @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
-    redirect_to :back, :notice => "Attachment added"
+    flash[:success] = "Attachment added"
+    redirect_to :back
   end
 
   def remove_weapon_attachment
     CharacterWeaponAttachment.where(:id => params[:attachment_id]).delete_all
-    redirect_to :back, :notice => "Attachment removed"
+    flash[:success] = "Attachment removed"
+    redirect_to :back
   end
 
   def add_weapon_attachment_option
@@ -1175,7 +1202,8 @@ class CharactersController < ApplicationController
     weapon_attachment.weapon_attachment_modification_options << params[:option_id]
     weapon_attachment.save
 
-    redirect_to :back, :notice => "Modification option added."
+    flash[:success] = "Modification option added."
+    redirect_to :back
   end
 
   def remove_weapon_attachment_option
@@ -1191,7 +1219,8 @@ class CharactersController < ApplicationController
       character_skill.save
     end
 
-    redirect_to :back, :notice => "Modification option removed."
+    flash[:success] = "Modification option removed."
+    redirect_to :back
   end
 
   def equipment
@@ -1199,6 +1228,7 @@ class CharactersController < ApplicationController
     @character_page = 'gear'
     @character = Character.friendly.find(params[:id])
     @title = "#{@character.name} | Equipment"
+    @character_state = character_state(@character)
   end
 
   def set_activate

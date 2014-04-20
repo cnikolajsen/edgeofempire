@@ -684,7 +684,7 @@ class CharacterSheetPdf < Prawn::Document
             },
             :width => bounds.width,
             :column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42},
-            :row_colors => ['C0C0C0', 'FFFFFF']
+            :row_colors => ['FFFFFF', 'C0C0C0']
         end
       end
     end

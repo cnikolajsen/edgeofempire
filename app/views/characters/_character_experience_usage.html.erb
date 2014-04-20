@@ -1,0 +1,82 @@
+
+      <div class="medium-12 columns panel <% if character_experience_cost > character_available_experience %>callout<% end %> experience-cost">
+        <h4>Experience Points</h4>
+        <table class="exp-table">
+          <tbody>
+            <tr>
+              <th>Experience:</th><th>Spent:</th>
+            </tr>
+            <tr>
+              <td><%= character_available_experience %> xp</td>
+              <td><%= character_experience_cost %> xp</td>
+            </tr>
+          </tbody>
+        </table>
+          <% if character_experience_cost > character_available_experience %>
+            <p style="font-weight: bold"><i class='fi-dislike'> You have spent more experience than you have available!</i></p>
+          <% elsif character_experience_cost < character_available_experience %>
+            <p style="font-weight: bold"><i class='fi-like'> You still have <%= character_available_experience - character_experience_cost %> experience to spend.</i></p>
+          <% end %>
+
+          <h3>Where did it go?</h3>
+
+        <table style="width:100%">
+          <tr>
+            <th>Rank</th>
+            <th>Stat</th>
+            <th>Cost</th>
+          </tr>
+          <% ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat| %>
+            <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => stat).where("cost > 0").order('resource_id asc, rank asc').each do |cost| %>
+              <tr>
+                <td><%= cost.rank %></td>
+                <td><%= stat.capitalize %></td>
+                <td><%= cost.cost %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+        <table style="width:100%">
+          <tr>
+            <th>Rank</th>
+            <th>Skill</th>
+            <th>Cost</th>
+          </tr>
+          <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill').where("cost > 0").order('resource_id asc, rank asc').each do |cost| %>
+            <tr>
+              <td><%= cost.rank %></td>
+              <td><%= Skill.find(cost.resource_id).name %></td>
+              <td><%= cost.cost %></td>
+            </tr>
+          <% end %>
+        </table>
+        <table style="width:100%">
+          <tr>
+            <th>#</th>
+            <th>Specialization</th>
+            <th>Cost</th>
+          </tr>
+          <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'specialization').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
+            <tr>
+              <td><%= cost.rank %></td>
+              <td><%= TalentTree.find(cost.resource_id).name %></td>
+              <td><%= cost.cost %></td>
+            </tr>
+          <% end %>
+        </table>
+        <table style="width:100%">
+          <tr>
+            <th>Tier</th>
+            <th>Talent</th>
+            <th>Cost</th>
+          </tr>
+          <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'talent').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
+            <tr>
+              <td><%= cost.rank %></td>
+              <td><%= Talent.find(cost.resource_id).name %></td>
+              <td><%= cost.cost %></td>
+            </tr>
+          <% end %>
+        </table>
+        </div>
+      </div>

@@ -118,7 +118,10 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
-    foundation-rails (5.2.1.0)
+    foundation-icons-sass-rails (3.0.0)
+      railties (>= 3.1.1)
+      sass-rails (>= 3.1.1)
+    foundation-rails (5.2.2.0)
       railties (>= 3.1.0)
       sass (>= 3.2.0)
     friendly_id (5.0.3)
@@ -246,7 +249,8 @@ DEPENDENCIES
   debugger (~> 1.6.6)
   devise!
   formtastic!
-  foundation-rails
+  foundation-icons-sass-rails (~> 3.0.0)
+  foundation-rails (~> 5.2.2.0)
   friendly_id (~> 5.0.2)
   inherited_resources!
   jbuilder (~> 1.2)

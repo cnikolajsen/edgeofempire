@@ -9,52 +9,65 @@
   </div>
 </div>
 <div class="row">
-  <div class="small-12 columns">
-    <%= form_for :character_skills, :url => url_for(:action => 'save_character_skills') do |form| %>
-      <table>
+  <div class="small-9 columns">
+    <table>
+      <tr>
+        <th>Skill</th>
+        <th>Characteristic</th>
+        <th>Ranks</th>
+        <th>Race</th>
+        <th>Class</th>
+        <th>Specialization</th>
+        <th>Equipment</th>
+        <th>Total</th>
+      </tr>
+      <% @character.skills.each do |skill| %>
+        <% character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first %>
         <tr>
-          <th>Skill</th>
-          <th>Characteristic</th>
-          <th>Career?</th>
-          <th>Ranks</th>
-          <th>Race</th>
-          <th>Class</th>
-          <th>Specialization</th>
-          <th>Equipment</th>
-          <th>Total</th>
-        </tr>
-        <% @character.skills.each do |skill| %>
-          <% character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first %>
-          <tr>
-            <td><%= skill.name %></td>
-            <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
-            <td>
-              <% unless @character.career.nil? -%>
-                <% if( is_career_skill(skill.id)) %>YES<% end %>
-              <% end -%>
-            </td>
-            <%
-              if @character.creation?
-                skill_maximum = 2
-              else
-                skill_maximum = 5
-              end
-            %>
-            <td style="text-align: center;"><%= form.select "#{skill.id}".to_sym, (0..skill_maximum), :selected => character_skill.ranks %></td>
-            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_race}" unless character_skill.free_ranks_race == 0 %></td>
-            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_career}" unless character_skill.free_ranks_career == 0 %></td>
-            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_specialization}" unless character_skill.free_ranks_specialization == 0 %></td>
-            <td style="text-align: center;"><%= "+#{character_skill.free_ranks_equipment}" unless character_skill.free_ranks_equipment == 0 %></td>
-            <td style="text-align: center;"><%= character_skill.ranks + character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment %> </td>
-          </tr>
-        <% end %>
-      </table>
+          <td><% if( is_career_skill(skill.id)) %><strong><% end %><%= skill.name %><% if( is_career_skill(skill.id)) %> *</strong><% end %></td>
+          <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
+          <%
+            total_ranks_free = character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment
+            total_ranks = character_skill.ranks + total_ranks_free
 
-      <%= hidden_field_tag 'destination', 'skills' %>
-      <%= hidden_field_tag 'character_id', @character.id %>
-      <%= form.submit "Save skills", :class => 'button' %>
-      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
-    <% end %>
+            rank_options = Array.new
+            rank_options << 0
+            6.times do |rank|
+              if rank > total_ranks_free && rank != 0
+                rank_options << rank
+              end
+              if @character.creation? and rank == 2
+                break
+              end
+            end
+
+            if @character.creation?
+              max_ranks = 2
+            else
+              max_ranks = 5
+            end
+          %>
+          <td style="text-align: center;">
+          <% if character_skill.ranks != 0 and @skill_select_enabled %>
+            <%= link_to "-", "/characters/#{@character.id}/skills/#{skill.id}/rank_down" %>
+          <% end %>
+          <%= character_skill.ranks %>
+          <% if total_ranks < max_ranks and @skill_select_enabled %>
+            <%= link_to "+", "/characters/#{@character.id}/skills/#{skill.id}/rank_up" %>
+          <% end %>
+          </td>
+          <td style="text-align: center;"><%= "+#{character_skill.free_ranks_race}" unless character_skill.free_ranks_race == 0 %></td>
+          <td style="text-align: center;"><%= "+#{character_skill.free_ranks_career}" unless character_skill.free_ranks_career == 0 %></td>
+          <td style="text-align: center;"><%= "+#{character_skill.free_ranks_specialization}" unless character_skill.free_ranks_specialization == 0 %></td>
+          <td style="text-align: center;"><%= "+#{character_skill.free_ranks_equipment}" unless character_skill.free_ranks_equipment == 0 %></td>
+          <td style="text-align: center;"><%= total_ranks %> </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="small-3 columns">
+    <div class="row">
+      <%= render :partial => 'character_experience_usage' %>
+    </div>
   </div>
 </div>
