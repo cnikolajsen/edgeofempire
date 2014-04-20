@@ -104,4 +104,38 @@ class Character < ActiveRecord::Base
   def free_skill_ranks_specialization
     specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
   end
+
+  # Fetch character's force rating.
+  def force_rating
+    rating = 0
+    # Force rating is 1 if either of the 3 specializations is a force tree.
+    if self.specialization_1
+      tree = TalentTree.find(self.specialization_1)
+      if tree.force_tree
+        rating = 1
+      end
+    end
+    if self.specialization_2
+      tree = TalentTree.find(self.specialization_2)
+      if tree.force_tree
+        rating = 1
+      end
+    end
+    if self.specialization_3
+      tree = TalentTree.find(self.specialization_3)
+      if tree.force_tree
+        rating = 1
+      end
+    end
+
+    # Add one rank for each Force Rating talent.
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'talent').each do |talent|
+      if Talent.find(talent.resource_id).name == "Force Rating"
+        rating += 1
+      end
+    end
+
+    rating
+  end
+
 end

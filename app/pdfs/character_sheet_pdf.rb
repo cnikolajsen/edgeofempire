@@ -378,7 +378,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.left + 146),((bounds.height / 2) + 5)], 30
         fill
         fill_color "000000"
-        text_box "#{pdf_vars['force_rank']}", :at => [(bounds.left + 121), (bounds.top - 15)], :width => 52, :height => 52, :overflow => :shrink_to_fit, :size => 40, :style => :bold, :align => :center, :valign => :center
+        text_box "#{@character.force_rating}", :at => [(bounds.left + 121), (bounds.top - 15)], :width => 52, :height => 52, :overflow => :shrink_to_fit, :size => 40, :style => :bold, :align => :center, :valign => :center
       end
     end
     #===== /Status Effects and Force =====
