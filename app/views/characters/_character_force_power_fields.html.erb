@@ -1,0 +1,18 @@
+<%= debug f.object %>
+<% unless f.object.force_power_id.nil? %>
+  <% @force_power = ForcePower.find_by_id(f.object.force_power_id) %>
+  <%= f.hidden_field :force_power_id %>
+<%= debug @force_power %>
+  <li class="nested-fields">
+    <ul class="pricing-table">
+      <li class="title"><%= @force_power.name %></li>
+      <li class="description"><%= text_replace_tokens(@force_power.description).html_safe %></li>
+      <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
+    </ul>
+  </li>
+<% else %>
+  <li>
+    <%= f.select :force_power_id, ForcePower.where(true).collect  {|force_power| ["#{force_power.name}", force_power.id]}, {:prompt => "Select Force power"} %>
+  </li>
+<% end %>
+

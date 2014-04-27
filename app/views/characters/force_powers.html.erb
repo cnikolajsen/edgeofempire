@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "Manage Force Powers for #{@character.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'character_edit_menu' %>
+  </div>
+</div>
+<div class="row" data-no-turbolink>
+  <div class="small-3 columns" data-no-turbolink>
+    <%= form_for :character_force_power do |f| %>
+      <%= f.select :force_power_id, ForcePower.where(:true).collect  {|power| ["#{power.name}", power.id]}, {:prompt => "Select Force Power"} %>
+      <div class="row">
+        <div id="force-power-info" class="small-12 columns"></div>
+      </div>
+      <%= f.submit 'Add Force Power', :class => 'button tiny' %>
+    <% end %>
+  </div>
+  <div class="small-9 columns" data-no-turbolink>
+    <% if @force_powers %>
+      <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-1" id="item-grid" data-no-turbolink>
+        <% @force_powers.each do |fp| %>
+          <% power = ForcePower.find(fp.force_power_id) %>
+          <li><%= render :partial => "force_power_info", :locals => { :power => power, :character_force_power_id => fp.id, :active => :true, :force_power_upgrades => fp } %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+

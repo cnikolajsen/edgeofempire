@@ -1,0 +1,42 @@
+<%
+  case upgrade.colspan
+  when 1
+    columns = 3
+  when 2
+    columns = 4
+  when 3
+    columns = 6
+  when 5
+    columns = 9
+  end
+
+  case upgrade.column
+  when 1
+    link_left = 0
+    link_right = 1
+  when 2
+    link_left = 2
+    link_right = 3
+  when 3
+    link_left = 4
+    link_right = 5
+  when 4
+    link_left = 6
+    link_right = 7
+  end
+
+  active = CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => power.id, :force_power_upgrade_id => upgrade.id).first
+
+%>
+
+  <div class="small-<%= columns %> columns <% if power.upgrade_links_horizontal[upgrade.row-1][link_right] == 1 %>link-right<% end %> <% if power.upgrade_links_horizontal[upgrade.row-1][link_left] == 1 %>link-left<% end %>">
+    <div class="panel radius talent-box <% if active %>callout<% end %>">
+      <strong><%= upgrade.name %></strong>
+      <%= text_replace_tokens(upgrade.description) %>
+      <% if active %>
+        <%= link_to "Remove", "/characters/#{@character.id}/force-power/#{power.id}/upgrade/#{upgrade.id}/remove" %>
+      <% else %>
+        <%= link_to "Buy", "/characters/#{@character.id}/force-power/#{power.id}/upgrade/#{upgrade.id}/add" %>
+      <% end %>
+    </div>
+  </div>

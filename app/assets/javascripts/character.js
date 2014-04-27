@@ -63,3 +63,14 @@ $('#character_motivation_motivation_id').change(function(){
     }
   })
 });
+
+$('#character_force_power_force_power_id').change(function(){
+  $.ajax({
+    url: "/character/find/force_power_selection",
+    type: "GET",
+    data: "force_power_id="+$('#character_force_power_force_power_id').val(),
+    success: function(data) {
+      jQuery("#force-power-info").html(data);
+    }
+  })
+});

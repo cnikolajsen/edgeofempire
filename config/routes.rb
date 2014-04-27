@@ -36,6 +36,7 @@ EdgeOfEmpire::Application.routes.draw do
     get "logout", :to => "devise/sessions#destroy"
     get "register", :to => "devise/registrations#new"
     get "me", :to => "devise/registrations#edit"
+    get "users/omniauth_callbacks", :controllers => :omniauth_callbacks
   end
 
   get "home/index"
@@ -104,6 +105,14 @@ EdgeOfEmpire::Application.routes.draw do
   get 'character/find/career_selection' => 'characters#career_selection'
   get 'character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
   get 'character/find/weapon_attachment_selection' => 'characters#weapon_attachment_selection'
+  get 'character/find/force_power_selection' => 'characters#force_power_selection'
+
+  get 'characters/:id/force-powers' => 'characters#force_powers', :as => :character_force_powers
+  post 'characters/:id/force-powers' => 'characters#add_force_power'
+  get 'characters/:id/force-power/:force_power_id/remove' => 'characters#remove_force_power'
+  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'characters#add_force_power_upgrade'
+  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'characters#remove_force_power_upgrade'
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 

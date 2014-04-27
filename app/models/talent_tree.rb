@@ -9,4 +9,14 @@ class TalentTree < ActiveRecord::Base
 
   default_scope { order('name ASC') }
 
+  # Check if a talent tree is a force tree.
+  def force_tree
+    force_trees = [ "Force Sensitive Exile" ]
+
+    if force_trees.include? self.name
+      true
+    else
+      false
+    end
+  end
 end

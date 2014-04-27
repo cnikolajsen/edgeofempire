@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140324081502) do
+ActiveRecord::Schema.define(version: 20140427100129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,6 +179,21 @@ ActiveRecord::Schema.define(version: 20140324081502) do
     t.datetime "updated_at"
   end
 
+  create_table "character_force_power_upgrades", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "force_power_id"
+    t.integer  "force_power_upgrade_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "character_force_powers", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "force_power_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "character_gears", force: true do |t|
     t.integer  "character_id"
     t.integer  "gear_id"
@@ -326,6 +341,31 @@ ActiveRecord::Schema.define(version: 20140324081502) do
   end
 
   add_index "characters", ["slug"], name: "index_characters_on_slug", unique: true, using: :btree
+
+  create_table "force_power_upgrades", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.boolean  "ranked"
+    t.integer  "cost"
+    t.integer  "row"
+    t.integer  "column"
+    t.integer  "colspan"
+    t.integer  "parent_1"
+    t.integer  "parent_2"
+    t.integer  "force_power_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "force_powers", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "slug"
+  end
+
+  add_index "force_powers", ["slug"], name: "index_force_powers_on_slug", unique: true, using: :btree
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -534,6 +574,8 @@ ActiveRecord::Schema.define(version: 20140324081502) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "slug"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
