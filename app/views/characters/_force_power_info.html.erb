@@ -1,0 +1,76 @@
+<% if power %>
+<ul class="pricing-table">
+  <li class="title"><%= power.name %></li>
+  <% if !active %>
+    <li class="description"><%= text_replace_tokens(power.description).html_safe %></li>
+  <% else %>
+    <%
+      upgrades_row_1 = ForcePowerUpgrade.where(:force_power_id => power.id, :row => 1).order(:column)
+      upgrades_row_2 = ForcePowerUpgrade.where(:force_power_id => power.id, :row => 2).order(:column)
+      upgrades_row_3 = ForcePowerUpgrade.where(:force_power_id => power.id, :row => 3).order(:column)
+      upgrades_row_4 = ForcePowerUpgrade.where(:force_power_id => power.id, :row => 4).order(:column)
+    %>
+    <li class="description talent-tree">
+      <div class="row">
+        <div class="small-12 columns">
+          <div class="small-12 columns panel callout" style="height:auto;">
+          <%= text_replace_tokens(power.description).html_safe %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <% power.upgrade_links_vertical[0].each do |link| %>
+          <div class="small-1 columns <% if link == 1 %>link-down-active<% end %>">&nbsp;</div>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <% upgrades_row_1.each_with_index do |upg, i| %>
+            <%= render :partial => 'force_power_upgrade_box', :locals => { :power => power, :upgrade => upg, :row => 1, :column => 1}  %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% power.upgrade_links_vertical[1].each do |link| %>
+          <div class="small-1 columns <% if link == 1 %>link-down-active<% end %>">&nbsp;</div>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <% upgrades_row_2.each_with_index do |upg, i| %>
+            <%= render :partial => 'force_power_upgrade_box', :locals => { :power => power, :upgrade => upg, :row => 1, :column => 1}  %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% power.upgrade_links_vertical[2].each do |link| %>
+          <div class="small-1 columns <% if link == 1 %>link-down-active<% end %>">&nbsp;</div>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <% upgrades_row_3.each_with_index do |upg, i| %>
+            <%= render :partial => 'force_power_upgrade_box', :locals => { :power => power, :upgrade => upg, :row => 1, :column => 1}  %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% power.upgrade_links_vertical[3].each do |link| %>
+          <div class="small-1 columns <% if link == 1 %>link-down-active<% end %>">&nbsp;</div>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <% upgrades_row_4.each_with_index do |upg, i| %>
+            <%= render :partial => 'force_power_upgrade_box', :locals => { :power => power, :upgrade => upg, :row => 1, :column => 1}  %>
+          <% end %>
+        </div>
+      </div>
+    </li>
+    <li class="cta-button"><%= link_to "Remove power", "/characters/#{@character.id}/force-power/#{power.id}/remove", :class => 'button tiny alert' %></li>
+  <% end -%>
+</ul>
+<% end -%>

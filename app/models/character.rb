@@ -62,6 +62,8 @@ class Character < ActiveRecord::Base
   has_many :obligations, :through => :character_obligations
   has_many :character_motivations, :dependent => :destroy
   has_many :motivations, :through => :character_motivations
+  has_many :character_force_powers, :dependent => :destroy
+  has_many :force_powers, :through => :character_force_powers
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents
@@ -78,6 +80,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_armor, :reject_if => proc { |a| a['armor_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :character_weapons, :reject_if => proc { |a| a['weapon_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :character_gears, :reject_if => proc { |a| a['gear_id'].blank? }, :allow_destroy => true
+  accepts_nested_attributes_for :character_force_powers, :reject_if => proc { |a| a['force_power_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :character_obligations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true

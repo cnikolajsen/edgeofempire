@@ -14,6 +14,12 @@ gem 'ransack',             github: 'ernie/ransack'
 gem 'activeadmin',         github: 'gregbell/active_admin'
 gem 'formtastic',          github: 'justinfrench/formtastic'
 
+# OmniAuth together with Devise should make Facebook auth possible.
+gem 'omniauth'
+gem 'omniauth-facebook'
+# And Google auth.
+gem 'omniauth-google-oauth2'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 gem 'sprockets', '2.11.0'

@@ -1230,6 +1230,54 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def force_powers
+    @character_page = 'forcepowers'
+    @character = Character.friendly.find(params[:id])
+    @title = "#{@character.name} | Force Powers"
+    @character_state = character_state(@character)
+
+    @force_powers = CharacterForcePower.where(:character_id => @character.id).order(:id)
+  end
+
+  def force_power_selection
+    if params[:force_power_id]
+      @power = ForcePower.find(params[:force_power_id])
+
+      render :partial => "force_power_info", :locals => { :power => @power, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
+    else
+      render :partial => "force_power_info", :locals => { :power => nil, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
+    end
+  end
+
+  def add_force_power
+    @character = Character.friendly.find(params[:id])
+    CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:character_force_power][:force_power_id]).first_or_create
+    flash[:success] = "Force Power added"
+    redirect_to :back
+  end
+
+  def remove_force_power
+    @character = Character.friendly.find(params[:id])
+    CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:force_power_id]).delete_all
+    CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id]).delete_all
+    flash[:success] = "Force Power removed"
+    redirect_to :back
+  end
+
+  def add_force_power_upgrade
+    @character = Character.friendly.find(params[:id])
+    CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id], :force_power_upgrade_id => params[:force_power_upgrade_id]).first_or_create
+    flash[:success] = "Force Power upgraded"
+    redirect_to :back
+  end
+
+  def remove_force_power_upgrade
+    @character = Character.friendly.find(params[:id])
+    CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id], :force_power_upgrade_id => params[:force_power_upgrade_id]).delete_all
+    flash[:success] = "Force Power removed"
+    redirect_to :back
+  end
+
   def set_activate
     @character = Character.friendly.find(params[:id])
     @character.activate
@@ -1292,7 +1340,8 @@ class CharactersController < ApplicationController
         character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ]
+        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ],
+        character_force_powers_attributes: [ :id, :force_power_id, :character_id, :_destroy ]
       )
     end
   end

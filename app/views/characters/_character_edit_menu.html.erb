@@ -21,6 +21,9 @@
       <li<% if @character_page == 'career' %> class="active"<% end %>><%= link_to "Career", character_career_url(@character) %></li>
       <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", character_talents_url(@character) %></li>
       <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", character_skills_url(@character) %></li>
+      <% if @character.force_rating > 0 %>
+        <li<% if @character_page == 'forcepowers' %> class="active"<% end %>><%= link_to "Force Powers", character_force_powers_url(@character) %></li>
+      <% end %>
       <li class="has-dropdown">
         <a href="#">Equipment</a>
         <ul class="dropdown">

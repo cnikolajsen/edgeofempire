@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  ranked: 
+  cost: 1
+  row_span: 1
+  parent_1: 1
+  parent_2: 1
+
+two:
+  name: MyString
+  description: MyText
+  ranked: 
+  cost: 1
+  row_span: 1
+  parent_1: 1
+  parent_2: 1
