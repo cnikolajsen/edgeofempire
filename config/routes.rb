@@ -9,7 +9,7 @@ EdgeOfEmpire::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users
+  #devise_for :users
 
   resources :characters
   #resources :characters do
@@ -31,12 +31,12 @@ EdgeOfEmpire::Application.routes.draw do
   resources :talents
   resources :obligations
 
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   devise_scope :user do
     get "login", :to => "devise/sessions#new"
     get "logout", :to => "devise/sessions#destroy"
     get "register", :to => "devise/registrations#new"
     get "me", :to => "devise/registrations#edit"
-    get "users/omniauth_callbacks", :controllers => :omniauth_callbacks
   end
 
   get "home/index"
