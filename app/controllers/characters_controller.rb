@@ -1267,15 +1267,27 @@ class CharactersController < ApplicationController
   def add_force_power_upgrade
     @character = Character.friendly.find(params[:id])
     CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id], :force_power_upgrade_id => params[:force_power_upgrade_id]).first_or_create
-    flash[:success] = "Force Power upgraded"
-    redirect_to :back
+
+    @force_powers = CharacterForcePower.where(:character_id => @character.id).order(:id)
+    upgrade = ForcePowerUpgrade.where(:id => params[:force_power_upgrade_id]).first
+    flash[:success] = "Added <strong>'#{upgrade.name}'</strong> upgrade to the <strong>'#{upgrade.force_power.name}'</strong> Force Power ."
+
+    respond_to do |format|
+      format.js  {}
+    end
   end
 
   def remove_force_power_upgrade
     @character = Character.friendly.find(params[:id])
     CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id], :force_power_upgrade_id => params[:force_power_upgrade_id]).delete_all
-    flash[:success] = "Force Power removed"
-    redirect_to :back
+
+    @force_powers = CharacterForcePower.where(:character_id => @character.id).order(:id)
+    upgrade = ForcePowerUpgrade.where(:id => params[:force_power_upgrade_id]).first
+    flash[:success] = "Removed <strong>'#{upgrade.name}'</strong> upgrade from the <strong>'#{upgrade.force_power.name}'</strong> Force Power ."
+
+    respond_to do |format|
+      format.js  {}
+    end
   end
 
   def set_activate

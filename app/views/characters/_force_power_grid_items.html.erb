@@ -1,0 +1,4 @@
+<% force_powers.each do |fp| %>
+  <% power = ForcePower.find(fp.force_power_id) %>
+    <li><%= render :partial => "force_power_info", :locals => { :power => power, :character_force_power_id => fp.id, :active => :true, :force_power_upgrades => fp } %></li>
+<% end %>
