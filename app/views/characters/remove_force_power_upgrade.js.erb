@@ -1,0 +1,2 @@
+$('#item-grid').html("<%= escape_javascript(render(:partial => 'force_power_grid_items', :locals => { :force_powers => @force_powers })).html_safe %>");
+$('#flash_messages').html("<%= escape_javascript(render(:partial => 'layouts/flash')).html_safe %>");

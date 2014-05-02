@@ -8,8 +8,8 @@
     <%= render :partial => 'character_edit_menu' %>
   </div>
 </div>
-<div class="row" data-no-turbolink>
-  <div class="small-3 columns" data-no-turbolink>
+<div class="row">
+  <div class="small-3 columns">
     <%= form_for :character_force_power do |f| %>
       <%= f.select :force_power_id, ForcePower.where(:true).collect  {|power| ["#{power.name}", power.id]}, {:prompt => "Select Force Power"} %>
       <div class="row">
@@ -17,14 +17,14 @@
       </div>
       <%= f.submit 'Add Force Power', :class => 'button tiny' %>
     <% end %>
+    <div class="row">
+      <div class="small-12 columns"><%= render :partial => 'character_experience_usage' %></div>
+    </div>
   </div>
-  <div class="small-9 columns" data-no-turbolink>
+  <div class="small-9 columns">
     <% if @force_powers %>
-      <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-1" id="item-grid" data-no-turbolink>
-        <% @force_powers.each do |fp| %>
-          <% power = ForcePower.find(fp.force_power_id) %>
-          <li><%= render :partial => "force_power_info", :locals => { :power => power, :character_force_power_id => fp.id, :active => :true, :force_power_upgrades => fp } %></li>
-        <% end %>
+      <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-1" id="item-grid">
+        <%= render :partial => "force_power_grid_items", :locals => { :force_powers => @force_powers } %>
       </ul>
     <% end %>
   </div>

@@ -991,6 +991,9 @@ $price-cta-padding: rem-calc(10 20 0);
 // $topbar-sticky-class: ".sticky";
 // $topbar-arrows: true; //Set false to remove the triangle icon from the menu item
 
+@import 'foundation';
+
+
 .credit-icon {
   vertical-align: inherit;
   width: 11px;
@@ -1055,6 +1058,15 @@ $price-cta-padding: rem-calc(10 20 0);
   }
 }
 
+.panel.experience-cost {
+  padding: 0.5em;
+}
+.panel.experience-cost table {
+  font-size: 0.675rem;
+  border-spacing: 0;
+}
+.panel.experience-cost table td {
+  font-size: 0.675rem;
+}
 
 
-@import 'foundation';
