@@ -78,4 +78,17 @@
             </tr>
           <% end %>
         </table>
+
+        <table style="width:100%">
+          <tr>
+            <th>Force Power</th>
+            <th>Cost</th>
+          </tr>
+          <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'force_power').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
+            <tr>
+              <td><%= ForcePower.find(cost.resource_id).name %></td>
+              <td><%= cost.cost %></td>
+            </tr>
+          <% end %>
+        </table>
       </div>
