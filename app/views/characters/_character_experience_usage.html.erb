@@ -1,14 +1,14 @@
 
       <div class="medium-12 columns panel <% if character_experience_cost > character_available_experience %>callout<% end %> experience-cost">
         <h4>Experience Points</h4>
-        <table class="exp-table">
+        <table class="exp-table" width="100%">
           <tbody>
             <tr>
-              <th>Experience:</th><th>Spent:</th>
+              <th>Experience</th><th>Spent</th>
             </tr>
             <tr>
-              <td><%= character_available_experience %> xp</td>
-              <td><%= character_experience_cost %> xp</td>
+              <td align="center" width="50%"><%= character_available_experience %> xp</td>
+              <td align="center" width="50%"><%= character_experience_cost %> xp</td>
             </tr>
           </tbody>
         </table>
@@ -22,72 +22,68 @@
 
         <table style="width:100%">
           <tr>
-            <th>Rank</th>
-            <th>Stat</th>
+            <th align="left">Stat</th>
             <th>Cost</th>
           </tr>
           <% ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat| %>
             <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => stat).where("cost > 0").order('resource_id asc, rank asc').each do |cost| %>
               <tr>
-                <td><%= cost.rank %></td>
-                <td><%= stat.capitalize %></td>
-                <td><%= cost.cost %></td>
+                <td><%= stat.capitalize %> <%= cost.rank %></td>
+                <td align="center"><%= cost.cost %></td>
               </tr>
             <% end %>
           <% end %>
         </table>
         <table style="width:100%">
           <tr>
-            <th>Rank</th>
-            <th>Skill</th>
+            <th align="left">Rank</th>
+            <th align="left">Skill</th>
             <th>Cost</th>
           </tr>
           <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill').where("cost > 0").order('resource_id asc, rank asc').each do |cost| %>
             <tr>
               <td><%= cost.rank %></td>
               <td><%= Skill.find(cost.resource_id).name %></td>
-              <td><%= cost.cost %></td>
+              <td align="center"><%= cost.cost %></td>
             </tr>
           <% end %>
         </table>
         <table style="width:100%">
           <tr>
-            <th>#</th>
-            <th>Specialization</th>
+            <th align="left">Specialization</th>
             <th>Cost</th>
           </tr>
           <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'specialization').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
             <tr>
-              <td><%= cost.rank %></td>
               <td><%= TalentTree.find(cost.resource_id).name %></td>
-              <td><%= cost.cost %></td>
+              <td align="center"><%= cost.cost %></td>
             </tr>
           <% end %>
         </table>
         <table style="width:100%">
           <tr>
-            <th>Tier</th>
-            <th>Talent</th>
+            <th align="left">Tier</th>
+            <th align="left">Talent</th>
             <th>Cost</th>
           </tr>
           <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'talent').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
             <tr>
               <td><%= cost.rank %></td>
-              <td><%= Talent.find(cost.resource_id).name %></td>
-              <td><%= cost.cost %></td>
+              <td><%= link_to Talent.find(cost.resource_id).name, character_talents_url(@character) %></td>
+              <td align="center"><%= cost.cost %></td>
             </tr>
           <% end %>
         </table>
 
         <table style="width:100%">
           <tr>
-            <th>Force Power</th>
+            <th align="left">Force Power</th>
             <th>Cost</th>
           </tr>
           <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'force_power').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
             <tr>
-              <td><%= ForcePower.find(cost.resource_id).name %></td>
-              <td><%= cost.cost %></td>
+              <td><%= link_to ForcePower.find(cost.resource_id).name, character_force_powers_url(@character) %></td>
+              <td align="center"><%= cost.cost %></td>
             </tr>
           <% end %>
         </table>

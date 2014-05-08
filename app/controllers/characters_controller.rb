@@ -837,8 +837,13 @@ class CharactersController < ApplicationController
 
     set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
 
-    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank increased"
-    redirect_to :back
+    @skill = Skill.find(params[:skill_id])
+    @skill_select_enabled = true
+    flash[:success] = "#{@skill.name} rank increased"
+
+    respond_to do |format|
+      format.js  {}
+    end
   end
 
   def character_skill_rank_down
@@ -848,8 +853,13 @@ class CharactersController < ApplicationController
     character_skill.ranks -= 1 unless character_skill.ranks == 0
     character_skill.save
 
-    flash[:success] = "#{Skill.find(params[:skill_id]).name} rank decreased"
-    redirect_to :back
+    @skill = Skill.find(params[:skill_id])
+    @skill_select_enabled = true
+    flash[:success] = "#{@skill.name} rank decreased"
+
+    respond_to do |format|
+      format.js  {}
+    end
   end
 
   def talents
