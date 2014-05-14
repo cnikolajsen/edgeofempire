@@ -141,4 +141,42 @@ class Character < ActiveRecord::Base
     rating
   end
 
+  def force_power_upgrades_computed
+    force_powers_with_upgrade = Array.new
+    self.character_force_powers.each do |fp|
+      upgrades = Array.new
+      CharacterForcePowerUpgrade.where(:character_id => self.id, :force_power_id => fp.force_power.id).each do |upg|
+        if upg.force_power_upgrade.ranked
+          if upgrades.select {|upgrade| upgrade['name'] == upg.force_power_upgrade.name }.blank?
+            upgrades << {
+              'name' => upg.force_power_upgrade.name,
+              'description' => upg.force_power_upgrade.description,
+              'rank' => 1
+            }
+          else
+            upgrades.each do |upgrade|
+              if upgrade['name'] == upg.force_power_upgrade.name
+                upgrade['rank'] += 1
+              end
+            end
+          end
+        else
+          upgrades << {
+            'name' => upg.force_power_upgrade.name,
+            'description' => upg.force_power_upgrade.description,
+            'rank' => nil
+          }
+        end
+      end
+
+      force_powers_with_upgrade << {
+        'name' => fp.force_power.name,
+        'description' => fp.force_power.description,
+        'upgrades' => upgrades
+      }
+    end
+
+    force_powers_with_upgrade
+  end
+
 end
