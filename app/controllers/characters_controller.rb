@@ -38,146 +38,69 @@ class CharactersController < ApplicationController
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
-    @pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
+    #@pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
 
-    # Find equipped armor.
-    equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
-    @pdf_armor = equipped_armor
-    @character_armor_modification_bonuses = {}
-    @character_armor_modification_bonuses['skills'] = Array.new
-    @character_armor_modification_bonuses['talents'] = Array.new
-    @character_armor_modification_bonuses['characteristics'] = Array.new
-    if equipped_armor and !equipped_armor.character_armor_attachments.blank?
-      equipped_armor.character_armor_attachments.each do |caa|
-        armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
-        if armor_attachment.stat_bonus
-          @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
-        end
-        if caa.armor_attachment_modification_options
-          caa.armor_attachment_modification_options.each do |option|
-            modification_option = ArmorAttachmentModificationOption.find(option)
-            if modification_option.talent_id
-              @character_armor_modification_bonuses['talents'] << modification_option.talent_id
-            end
-            if modification_option.skill_id
-              @character_armor_modification_bonuses['skills'] << modification_option.skill_id
-            end
-          end
-        end
-      end
-    end
+    ## Find equipped armor.
+    #equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
+    #@pdf_armor = equipped_armor
+    #@character_armor_modification_bonuses = {}
+    #@character_armor_modification_bonuses['skills'] = Array.new
+    #@character_armor_modification_bonuses['talents'] = Array.new
+    #@character_armor_modification_bonuses['characteristics'] = Array.new
+    #if equipped_armor and !equipped_armor.character_armor_attachments.blank?
+    #  equipped_armor.character_armor_attachments.each do |caa|
+    #    armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
+    #    if armor_attachment.stat_bonus
+    #      @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
+    #    end
+    #    if caa.armor_attachment_modification_options
+    #      caa.armor_attachment_modification_options.each do |option|
+    #        modification_option = ArmorAttachmentModificationOption.find(option)
+    #        if modification_option.talent_id
+    #          @character_armor_modification_bonuses['talents'] << modification_option.talent_id
+    #        end
+    #        if modification_option.skill_id
+    #          @character_armor_modification_bonuses['skills'] << modification_option.skill_id
+    #        end
+    #      end
+    #    end
+    #  end
+    #end
 
-    # Find equipped weapons.
-    equipped_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true).first
-    @character_weapon_modification_bonuses = {}
-    @character_weapon_modification_bonuses['skills'] = Array.new
-    @character_weapon_modification_bonuses['talents'] = Array.new
-    unless equipped_weapons.blank? or equipped_weapons.character_weapon_attachments.blank?
-      equipped_weapons.character_weapon_attachments.each do |caa|
-        if caa.weapon_attachment_modification_options
-          caa.weapon_attachment_modification_options.each do |option|
-            modification_option = WeaponAttachmentModificationOption.find(option)
-            if modification_option.talent_id
-              @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
-            end
-            if modification_option.skill_id
-              @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
-            end
-          end
-        end
-      end
-    end
+    ## Find equipped weapons.
+    #equipped_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true).first
+    #@character_weapon_modification_bonuses = {}
+    #@character_weapon_modification_bonuses['skills'] = Array.new
+    #@character_weapon_modification_bonuses['talents'] = Array.new
+    #unless equipped_weapons.blank? or equipped_weapons.character_weapon_attachments.blank?
+    #  equipped_weapons.character_weapon_attachments.each do |caa|
+    #    if caa.weapon_attachment_modification_options
+    #      caa.weapon_attachment_modification_options.each do |option|
+    #        modification_option = WeaponAttachmentModificationOption.find(option)
+    #        if modification_option.talent_id
+    #          @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
+    #        end
+    #        if modification_option.skill_id
+    #          @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
+    #        end
+    #      end
+    #    end
+    #  end
+    #end
 
-    # Build character talent selection.
-    @talents = {}
-    unless @character.character_talents.empty?
-      @character.character_talents.each do |talent_tree|
-        talent_tree.attributes.each do |key, value|
-          if key.match(/talent_[\d]_[\d]$/) and !value.nil?
-            if @talents.has_key?(value) && !talent_tree["#{key}_options"].nil?
-              @talents[value]['count'] = @talents[value]['count'] + 1
-              talent_tree["#{key}_options"].each do |opt|
-                opt_test = opt.to_i
-                if opt_test.is_a? Integer and opt_test > 0
-                  @talents[value]['options'] << Skill.find_by_id(opt).name
-                else
-                  @talents[value]['options'] << opt.capitalize
-                end
-              end
-            else
-              @talents[value] = {}
-              @talents[value]['count'] = 1
-              @talents[value]['options'] = Array.new
-              unless talent_tree["#{key}_options"].nil?
-                unless talent_tree["#{key}_options"].empty?
-                  talent_tree["#{key}_options"].each do |opt|
-                    opt_test = opt.to_i
-                    if opt_test.is_a? Integer and opt_test > 0
-                      @talents[value]['options'] << Skill.find_by_id(opt).name
-                    else
-                      @talents[value]['options'] << opt.capitalize
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
 
-    character_bonus_talents = CharacterBonusTalent.where(:character_id => @character.id)
-    unless character_bonus_talents.empty?
-      character_bonus_talents.each do |bt|
-        talent_ranks = RaceTalent.where(:race_id => @character.race.id, :talent_id => bt.talent_id).first#.ranks
-        unless talent_ranks.nil?
-          if @talents.has_key?(bt.talent_id)
-            @talents[bt.talent_id]['count'] = @talents[bt.talent_id]['count'] + talent_ranks.ranks
-          else
-            @talents[bt.talent_id] = {}
-            @talents[bt.talent_id]['count'] = talent_ranks.ranks
-            @talents[bt.talent_id]['options'] = Array.new
-          end
-        end
-      end
-    end
 
-    # Include talent alterations from equipped armor.
-    unless @character_armor_modification_bonuses['talents'].blank?
-      @character_armor_modification_bonuses['talents'].each do |armor_talents|
-        if @talents.has_key?(armor_talents)
-          @talents[armor_talents]['count'] = @talents[armor_talents]['count'] + 1
-        else
-          @talents[armor_talents] = {}
-          @talents[armor_talents]['count'] = 1
-          @talents[armor_talents]['options'] = Array.new
-        end
-      end
-    end
-    # Include talent alterations from equipped weapons.
-    unless @character_weapon_modification_bonuses['talents'].blank?
-      @character_weapon_modification_bonuses['talents'].each do |weapon_talents|
-        if @talents.has_key?(weapon_talents)
-          @talents[weapon_talents]['count'] = @talents[weapon_talents]['count'] + 1
-        else
-          @talents[weapon_talents] = {}
-          @talents[weapon_talents]['count'] = 1
-          @talents[weapon_talents]['options'] = Array.new
-        end
-      end
-    end
-
-    talent_alterations = {}
-    @talents.each do |id, count|
-      name = Talent.find(id).name.gsub(' ', '').downcase
-      if respond_to?("talent_parser_#{name}")
-        talent_alterations[id] = {}
-        talent_alterations[id] = send("talent_parser_#{name}", count)
-      end
-    end
+    #talent_alterations = {}
+    #@talents.each do |id, count|
+    #  name = Talent.find(id).name.gsub(' ', '').downcase
+    #  if respond_to?("talent_parser_#{name}")
+    #    talent_alterations[id] = {}
+    #    talent_alterations[id] = send("talent_parser_#{name}", count)
+    #  end
+    #end
 
     # Determine characteristic increases from talents.
-    talent_alterations.each do |talent_id, stat|
+    @character.talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
         if type == :on_purchase && value[:type] == :select_characteristic
           if @talents[talent_id]['options'].include?('Brawn') && @character.brawn < 6
@@ -207,7 +130,7 @@ class CharactersController < ApplicationController
     unless @character.race.nil?
       if !@character.race.wound_threshold.nil?
         @wound_th += @character.race.wound_threshold
-        talent_alterations.each do |talent_id, stat|
+        @character.talent_alterations.each do |talent_id, stat|
           stat.each do |type, value|
             if type == :wound
               @wound_th += value['count']
@@ -223,7 +146,7 @@ class CharactersController < ApplicationController
     unless @character.race.nil?
       if !@character.race.strain_threshold.nil?
         @strain_th += @character.race.strain_threshold
-        talent_alterations.each do |talent_id, stat|
+        @character.talent_alterations.each do |talent_id, stat|
           stat.each do |type, value|
             if type == :strain
               @strain_th += value['count']
@@ -237,13 +160,13 @@ class CharactersController < ApplicationController
     @soak = @character.brawn
     @defense = 0
     @equipment = Array.new
-    @attacks = Array.new
+    #@attacks = Array.new
     @pdf_personal_gear = Array.new
 
     # Increase characteristics that don't affect derived stats.
     # I.e armor attachments increasing brawn.
-    unless @character_armor_modification_bonuses['characteristics'].blank?
-      @character_armor_modification_bonuses['characteristics'].each do |stat|
+    unless @character.armor_modification_bonuses['characteristics'].blank?
+      @character.armor_modification_bonuses['characteristics'].each do |stat|
         unless stat.blank?
           @character[stat] += 1
         end
@@ -268,104 +191,6 @@ class CharactersController < ApplicationController
         unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
           if params[:format] != 'pdf'
             @equipment << "#{weapon_name}"
-          end
-        end
-      end
-
-      # Build attacks list.
-      @character.character_weapons.each do |cw|
-        unless cw.weapon.nil?
-          @wq = Array.new
-          cw.weapon.weapon_quality_ranks.each do |q|
-            ranks = ''
-            if q.ranks > 0
-              ranks = " #{q.ranks}"
-            end
-            @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
-          end
-
-          character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, cw.weapon.skill.id)
-          if character_skill_ranks.first.nil?
-            ranks = 0
-          else
-            ranks =  character_skill_ranks.first.ranks
-          end
-
-          if cw.weapon.skill.name == 'Brawl'
-            cw.weapon.damage = @character.brawn
-
-            if cw.weapon.name == 'Unarmed'
-              # Trandoshans have claws.
-              if !@character.race.nil? and @character.race.name == 'Trandoshan'
-                cw.weapon.name = 'Claws'
-                cw.weapon.damage += 1
-                cw.weapon.crit = 3
-              end
-            end
-
-            talent_alterations.each do |talent_id, stat|
-              stat.each do |type, value|
-                if type == :brawl_damage_bonus
-                  cw.weapon.damage += value['count']
-                end
-              end
-            end
-          end
-
-          if cw.weapon.skill.name == 'Melee'
-            talent_alterations.each do |talent_id, stat|
-              stat.each do |type, value|
-                if type == :melee_damage_bonus
-                  cw.weapon.damage += value['count']
-                end
-              end
-            end
-          end
-
-          unless cw.weapon_model_id.nil?
-            cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
-          end
-
-          unless cw.character_weapon_attachments.blank?
-            cw.weapon.name = "Modified " + cw.weapon.name
-          end
-
-          weapon_attachment = Array.new
-          cw.character_weapon_attachments.each do |cwa|
-            weapon_attachment << WeaponAttachment.find(cwa.weapon_attachment_id).name
-            weapon_attachment_damage_bonus = WeaponAttachment.find(cwa.weapon_attachment_id).damage_bonus
-            unless weapon_attachment_damage_bonus.nil?
-              cw.weapon.damage += weapon_attachment_damage_bonus
-            end
-            unless cwa.weapon_attachment_modification_options.nil?
-              cwa.weapon_attachment_modification_options.each do |option|
-                modification_option = WeaponAttachmentModificationOption.find(option)
-                unless modification_option.weapon_quality_id.nil?
-                  wq_ranks = ''
-                  if modification_option.weapon_quality_rank > 0
-                    wq_ranks = " #{modification_option.weapon_quality_rank}"
-                  end
-                  @wq << "#{WeaponQuality.find_by_id(modification_option.weapon_quality_id).name}#{wq_ranks}"
-                end
-                unless modification_option.damage_bonus.nil?
-                  cw.weapon.damage += modification_option.damage_bonus
-                end
-                unless modification_option.custom.blank?
-                  weapon_attachment << "#{modification_option.custom}"
-                end
-              end
-            end
-          end
-
-          attachment_text = nil
-          unless weapon_attachment.blank?
-            attachment_text = "; [<strong>Attachments:</strong> #{weapon_attachment.join(', ')}]"
-          end
-
-          if params[:format] != 'pdf'
-            dice = render_to_string "_dice_pool", :locals => {:score => @character.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
-
-            @attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')}#{attachment_text})"
           end
         end
       end
@@ -395,7 +220,7 @@ class CharactersController < ApplicationController
       end
     end
 
-    talent_alterations.each do |talent_id, stat|
+    @character.talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
         if type == :soak
           @soak += value['count']

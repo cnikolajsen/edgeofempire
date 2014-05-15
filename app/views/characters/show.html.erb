@@ -38,71 +38,113 @@
           <td colspan="3"><strong>Skills:</strong>
             <% @character.character_skills.each do |character_skill| %>
               <% unless character_skill.skill.nil? or skill_total_ranks(character_skill) < 1 %>
-                <span style="display: inline; white-space:nowrap;"><%= character_skill.skill.name %> <%= skill_total_ranks(character_skill) unless skill_total_ranks(character_skill) < 1  %> <%= render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => skill_total_ranks(character_skill)} %><% if @character.  character_skills.last != character_skill %>,<% end %></span>
+                <span style="display: inline; white-space:nowrap;"><%= character_skill.skill.name %> <%= skill_total_ranks(character_skill) %> <%= render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => skill_total_ranks(character_skill)} %><% if @character.  character_skills.last != character_skill %>,<% end %></span>
               <% end %>
             <% end %>
           </td>
         </tr>
-        <tr>
-          <td colspan="3"><strong>Talents:</strong>
-            <% @talents.each_with_index do |element, index| %>
-              <% talent_name = Talent.find_by_id(element[0]).name %>
-              <%
-                count = ''
-                delimiter = ''
-                options = ''
-                if element[1]['count'] > 1
-                  unless element[1]['options'].empty?
-                    options = " (#{element[1]['options'].join(', ')})"
-                  else
-                    options = " (#{element[1]['count']})"
-                  end
-                else
-                  unless element[1]['options'].empty?
-                    options = " (#{element[1]['options'].join(', ')})"
-                  end
-                end
-
-                if index != @talents.length - 1
-                  delimiter = ", "
-                end
-              %>
-              <%= "#{talent_name}#{options}#{delimiter}" %>
-            <% end %>
-          </td>
-        </tr>
-        <% if @character.force_rating > 0 %>
-          <tr>
-            <td colspan="3"><strong>Force Powers:</strong> Force rating <%= @character.force_rating %>
-            <% @character.force_power_upgrades_computed.each do |fp| %>
-              <p>
-                <strong><%= fp['name'] %>:</strong> (<%= text_replace_tokens(fp['description']) %>)
-                <ul>
-                <% fp['upgrades'].each do |upg| %>
-                  <li><strong><%= upg['name'] %> <% if upg['rank'] %>[<%= upg['rank'] %>] <% end %>:</strong> <%= text_replace_tokens(upg['description']) %></li>
-                <% end %>
-                </ul>
-              </p>
-            <% end %>
-            </td>
-          </tr>
-        <% end %>
         <tr>
           <td><strong>Soak:</strong> <%= @soak%></td>
           <td></td>
           <td><strong>Defense:</strong> <%= @defense %></td>
         </tr>
         <tr>
-          <td colspan="3"><strong>Wound Threshold:</strong> <%= @wound_th %></td>
+          <td><strong>Wound Threshold:</strong> <%= @wound_th %></td>
+          <td></td>
+          <td><strong>Strain Threshold:</strong> <%= @strain_th %></td>
         </tr>
         <tr>
-          <td colspan="3"><strong>Strain Threshold:</strong> <%= @strain_th %></td>
+          <td colspan="3">
+            <h5>Attacks</h5>
+            <table>
+              <thead>
+                <tr>
+                  <th>Weapon</th>
+                  <th>Skill</th>
+                  <th>Dice</th>
+                  <th>Dam</th>
+                  <th>Crit</th>
+                  <th>Range</th>
+                  <th>Misc</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @character.attacks.each do |attack| %>
+                  <tr>
+                    <td><%= attack['weapon'].name %></td>
+                    <td><%= attack['skill'].name %></td>
+                    <td><%= render :partial => 'dice_pool', :locals => {:score => @character.send(attack['skill'].characteristic.downcase), :ranks => attack['ranks']} %></td>
+                    <td><%= attack['weapon'].damage %></td>
+                    <td><%= attack['weapon'].crit %></td>
+                    <td><%= attack['weapon'].range %></td>
+                    <td><%= attack['attachments'] %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </td>
         </tr>
+        <tr>
+          <td colspan="3">
+            <h5>Talents</h5>
+            <table>
+              <tbody>
+                <% @character.talents.each_with_index do |element, index| %>
+                  <% talent = Talent.find_by_id(element[0]) %>
+                  <%
+                    count = ''
+                    options = ''
+                    if element[1]['count'] > 1
+                      unless element[1]['options'].empty?
+                        options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+                      else
+                        options = "<span class='label success round'>#{element[1]['count']}</span>"
+                      end
+                    else
+                      unless element[1]['options'].empty?
+                        options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+                      end
+                    end
+                  %>
+                  <tr>
+                    <td><strong><%= talent.name %></strong></td>
+                    <td><%= options.html_safe %></td>
+                    <td><%= text_replace_tokens(talent.description) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <% if @character.force_rating > 0 %>
+          <tr>
+            <td colspan="3">
+              <h5>Force Powers <small>Force rating <%= @character.force_rating %></small></h5>
+              <% @character.force_power_upgrades_computed.each do |fp| %>
+                <table>
+                  <thead>
+                    <tr>
+                      <th colspan="2"><%= fp['name'] %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td colspan="2"><%= text_replace_tokens(fp['description']) %></td>
+                  </tr>
+                  <% fp['upgrades'].each do |upg| %>
+                    <tr>
+                      <td><strong><%= upg['name'] %><% if upg['rank'] %>&nbsp;<span class='label success round'><%= upg['rank'] %></span><% end %></strong></td>
+                      <td><%= text_replace_tokens(upg['description']) %></td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
         <tr>
           <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ').html_safe %></td>
-        </tr>
-        <tr>
-          <td colspan="3"><strong>Attacks:</strong> <ul><li><%= @attacks.join('</li><li>').html_safe %></li></ul></td>
         </tr>
       </tbody>
     </table>
