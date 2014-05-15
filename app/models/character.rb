@@ -186,11 +186,14 @@ class Character < ActiveRecord::Base
       unless cw.weapon.nil?
         @wq = Array.new
         cw.weapon.weapon_quality_ranks.each do |q|
-          ranks = ''
+          ranks = nil
           if q.ranks > 0
-            ranks = " #{q.ranks}"
+            ranks = q.ranks
           end
-          @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
+          @wq << {
+            'name' => q.weapon_quality.name,
+            'ranks' => ranks,
+          }
         end
 
         character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", self.id, cw.weapon.skill.id)
@@ -212,17 +215,18 @@ class Character < ActiveRecord::Base
             end
           end
 
-          #talent_alterations.each do |talent_id, stat|
-          #  stat.each do |type, value|
-          #    if type == :brawl_damage_bonus
-          #      cw.weapon.damage += value['count']
-          #    end
-          #  end
-          #end
+          self.talent_alterations.each do |talent_id, stat|
+            stat.each do |type, value|
+              if type == :brawl_damage_bonus
+                cw.weapon.damage += value['count']
+              end
+            end
+          end
         end
 
         if cw.weapon.skill.name == 'Melee'
-          talent_alterations.each do |talent_id, stat|
+          logger.warn(self.talent_alterations)
+          self.talent_alterations.each do |talent_id, stat|
             stat.each do |type, value|
               if type == :melee_damage_bonus
                 cw.weapon.damage += value['count']
@@ -241,35 +245,45 @@ class Character < ActiveRecord::Base
 
         weapon_attachment = Array.new
         cw.character_weapon_attachments.each do |cwa|
-          weapon_attachment << WeaponAttachment.find(cwa.weapon_attachment_id).name
           weapon_attachment_damage_bonus = WeaponAttachment.find(cwa.weapon_attachment_id).damage_bonus
           unless weapon_attachment_damage_bonus.nil?
             cw.weapon.damage += weapon_attachment_damage_bonus
           end
+          options = Array.new
           unless cwa.weapon_attachment_modification_options.nil?
             cwa.weapon_attachment_modification_options.each do |option|
               modification_option = WeaponAttachmentModificationOption.find(option)
               unless modification_option.weapon_quality_id.nil?
-                wq_ranks = ''
+                wq_ranks = nil
                 if modification_option.weapon_quality_rank > 0
-                  wq_ranks = " #{modification_option.weapon_quality_rank}"
+                  wq_ranks = modification_option.weapon_quality_rank
                 end
-                @wq << "#{WeaponQuality.find_by_id(modification_option.weapon_quality_id).name}#{wq_ranks}"
+                @wq << {
+                  'name' => WeaponQuality.find_by_id(modification_option.weapon_quality_id).name,
+                  'ranks' => wq_ranks,
+                }
               end
               unless modification_option.damage_bonus.nil?
                 cw.weapon.damage += modification_option.damage_bonus
+                options << "Damage +#{modification_option.damage_bonus}"
               end
               unless modification_option.custom.blank?
-                weapon_attachment << "#{modification_option.custom}"
+                options << modification_option.custom
               end
             end
           end
+
+          weapon_attachment << {
+            'name' => WeaponAttachment.find(cwa.weapon_attachment_id).name,
+            'options' => options,
+          }
+
         end
 
-        attachment_text = nil
-        unless weapon_attachment.blank?
-          attachment_text = "; [<strong>Attachments:</strong> #{weapon_attachment.join(', ')}]"
-        end
+        #attachment_text = nil
+        #unless weapon_attachment.blank?
+        #  attachment_text = "; [<strong>Attachments:</strong> #{weapon_attachment.join(', ')}]"
+        #end
 
         #if params[:format] != 'pdf'
           #dice = render_to_string "_dice_pool", :locals => {:score => self.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
@@ -282,7 +296,8 @@ class Character < ActiveRecord::Base
         'weapon' => cw.weapon,
         'skill' => cw.weapon.skill,
         'ranks' => ranks,
-        'attachments' => attachment_text,
+        'qualities' => @wq,
+        'attachments' => weapon_attachment,
       }
     end
 
@@ -292,10 +307,11 @@ class Character < ActiveRecord::Base
   def talent_alterations
     talent_alterations = {}
     self.talents.each do |id, count|
-      name = Talent.find(id).name.gsub(' ', '').downcase
-      if respond_to?("talent_parser_#{name}")
+      talent = Talent.find(id)
+      name = talent.name.gsub(' ', '').downcase
+      if talent.respond_to?("#{name}")
         talent_alterations[id] = {}
-        talent_alterations[id] = send("talent_parser_#{name}", count)
+        talent_alterations[id] = talent.send("#{name}", count)
       end
     end
 
@@ -339,6 +355,7 @@ class Character < ActiveRecord::Base
           end
         end
       end
+      talents
     end
 
     character_bonus_talents = CharacterBonusTalent.where(:character_id => self.id)

@@ -8,5 +8,5 @@
       proficiency = ranks
     end
   %>
-  [<span class="yellow-dice"><% proficiency.times do %><%= image_tag("dice/proficiency.png", :alt => "proficiency", :title => "Proficiency Dice", :size => '12') %><% end %></span><span class="green-dice"><% ability.times do %><%= image_tag("dice/ability.png", :alt => "ability", :title => "Ability Dice", :size => '12') %><% end %></span>]
+  <span class="yellow-dice"><% proficiency.times do %><%= image_tag("dice/proficiency.png", :alt => "proficiency", :title => "Proficiency Dice", :size => '12') %><% end %></span><span class="green-dice"><% ability.times do %><%= image_tag("dice/ability.png", :alt => "ability", :title => "Ability Dice", :size => '12') %><% end %></span>
 <% end -%>

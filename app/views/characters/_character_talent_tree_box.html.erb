@@ -6,8 +6,8 @@
     <%= text_replace_tokens(talent.description) %>
     <%
       parser_name = talent.name.gsub(' ', '').downcase
-      if respond_to?("talent_parser_#{parser_name}")
-        talent_alterations = send("talent_parser_#{parser_name}", 0)
+      if talent.respond_to?("#{parser_name}")
+        talent_alterations = talent.send("#{parser_name}", 0)
       end
 
       option_enabled = true
