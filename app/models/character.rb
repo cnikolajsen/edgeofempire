@@ -435,23 +435,29 @@ class Character < ActiveRecord::Base
 
   # Find equipped weapons.
   def equipped_weapons
-    CharacterWeapon.where(:character_id => self.id, :equipped => :true).first
+    CharacterWeapon.where(:character_id => self.id, :equipped => :true)
+  end
+  # All carried weapons, equipped first.
+  def carried_weapons
+    CharacterWeapon.where(:character_id => self.id, :carried => :true).order('equipped desc')
   end
 
   def weapon_modification_bonuses
     modification_bonuses = {}
     modification_bonuses['skills'] = Array.new
     modification_bonuses['talents'] = Array.new
-    unless self.equipped_weapons.blank? or self.equipped_weapons.character_weapon_attachments.blank?
-      self.equipped_weapons.character_weapon_attachments.each do |caa|
-        if caa.weapon_attachment_modification_options
-          caa.weapon_attachment_modification_options.each do |option|
-            modification_option = WeaponAttachmentModificationOption.find(option)
-            if modification_option.talent_id
-              modification_bonuses['talents'] << modification_option.talent_id
-            end
-            if modification_option.skill_id
-              modification_bonuses['skills'] << modification_option.skill_id
+    if self.equipped_weapons
+      self.equipped_weapons.each do |equipped_weapon|
+        equipped_weapon.character_weapon_attachments.each do |caa|
+          if caa.weapon_attachment_modification_options
+            caa.weapon_attachment_modification_options.each do |option|
+              modification_option = WeaponAttachmentModificationOption.find(option)
+              if modification_option.talent_id
+                modification_bonuses['talents'] << modification_option.talent_id
+              end
+              if modification_option.skill_id
+                modification_bonuses['skills'] << modification_option.skill_id
+              end
             end
           end
         end

@@ -138,16 +138,17 @@
                 <table>
                   <thead>
                     <tr>
-                      <th colspan="2"><%= fp['name'] %></th>
+                      <th colspan="3"><%= fp['name'] %></th>
                     </tr>
                   </thead>
                   <tbody>
                   <tr>
-                    <td colspan="2"><%= text_replace_tokens(fp['description']) %></td>
+                    <td colspan="3"><%= text_replace_tokens(fp['description']) %></td>
                   </tr>
                   <% fp['upgrades'].each do |upg| %>
                     <tr>
-                      <td><strong><%= upg['name'] %><% if upg['rank'] %>&nbsp;<span class='label success round'><%= upg['rank'] %></span><% end %></strong></td>
+                      <td><strong><%= upg['name'] %></strong></td>
+                      <td><% if upg['rank'] %><span class='label success round'><%= upg['rank'] %></span><% end %></td>
                       <td><%= text_replace_tokens(upg['description']) %></td>
                     </tr>
                   <% end %>

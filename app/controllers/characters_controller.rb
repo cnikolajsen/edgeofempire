@@ -38,67 +38,6 @@ class CharactersController < ApplicationController
       @specializations << TalentTree.find_by_id(@character.specialization_3).name
     end
 
-    #@pdf_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true)
-
-    ## Find equipped armor.
-    #equipped_armor = CharacterArmor.where(:character_id => @character.id, :equipped => :true).first
-    #@pdf_armor = equipped_armor
-    #@character_armor_modification_bonuses = {}
-    #@character_armor_modification_bonuses['skills'] = Array.new
-    #@character_armor_modification_bonuses['talents'] = Array.new
-    #@character_armor_modification_bonuses['characteristics'] = Array.new
-    #if equipped_armor and !equipped_armor.character_armor_attachments.blank?
-    #  equipped_armor.character_armor_attachments.each do |caa|
-    #    armor_attachment = ArmorAttachment.find(caa.armor_attachment_id)
-    #    if armor_attachment.stat_bonus
-    #      @character_armor_modification_bonuses['characteristics'] << armor_attachment.stat_bonus
-    #    end
-    #    if caa.armor_attachment_modification_options
-    #      caa.armor_attachment_modification_options.each do |option|
-    #        modification_option = ArmorAttachmentModificationOption.find(option)
-    #        if modification_option.talent_id
-    #          @character_armor_modification_bonuses['talents'] << modification_option.talent_id
-    #        end
-    #        if modification_option.skill_id
-    #          @character_armor_modification_bonuses['skills'] << modification_option.skill_id
-    #        end
-    #      end
-    #    end
-    #  end
-    #end
-
-    ## Find equipped weapons.
-    #equipped_weapons = CharacterWeapon.where(:character_id => @character.id, :equipped => :true).first
-    #@character_weapon_modification_bonuses = {}
-    #@character_weapon_modification_bonuses['skills'] = Array.new
-    #@character_weapon_modification_bonuses['talents'] = Array.new
-    #unless equipped_weapons.blank? or equipped_weapons.character_weapon_attachments.blank?
-    #  equipped_weapons.character_weapon_attachments.each do |caa|
-    #    if caa.weapon_attachment_modification_options
-    #      caa.weapon_attachment_modification_options.each do |option|
-    #        modification_option = WeaponAttachmentModificationOption.find(option)
-    #        if modification_option.talent_id
-    #          @character_weapon_modification_bonuses['talents'] << modification_option.talent_id
-    #        end
-    #        if modification_option.skill_id
-    #          @character_weapon_modification_bonuses['skills'] << modification_option.skill_id
-    #        end
-    #      end
-    #    end
-    #  end
-    #end
-
-
-
-    #talent_alterations = {}
-    #@talents.each do |id, count|
-    #  name = Talent.find(id).name.gsub(' ', '').downcase
-    #  if respond_to?("talent_parser_#{name}")
-    #    talent_alterations[id] = {}
-    #    talent_alterations[id] = send("talent_parser_#{name}", count)
-    #  end
-    #end
-
     # Determine characteristic increases from talents.
     @character.talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
@@ -294,10 +233,7 @@ class CharactersController < ApplicationController
     pdf_vars['wound_th'] = @wound_th
     pdf_vars['strain_th'] = @strain_th
     pdf_vars['defense'] = @defense
-    pdf_vars['weapons'] = @pdf_weapons
-    pdf_vars['armor'] = @pdf_armor
     pdf_vars['personal_gear'] = @pdf_personal_gear
-    pdf_vars['talents'] = @talents
     pdf_vars['specializations'] = @specializations
     pdf_vars['available_xp'] = character_available_experience - character_experience_cost
     pdf_vars['total_xp'] = character_available_experience
