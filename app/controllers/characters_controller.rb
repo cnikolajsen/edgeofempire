@@ -1025,7 +1025,6 @@ class CharactersController < ApplicationController
     force_power = ForcePower.find(params[:character_force_power][:force_power_id])
 
     if force_power
-      logger.debug(force_power.inspect)
       CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:character_force_power][:force_power_id]).first_or_create
       set_experience_cost('force_power', force_power.id, 10, 'up')
       flash[:success] = "Force Power added"

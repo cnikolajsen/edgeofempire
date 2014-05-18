@@ -225,7 +225,6 @@ class Character < ActiveRecord::Base
         end
 
         if cw.weapon.skill.name == 'Melee'
-          logger.warn(self.talent_alterations)
           self.talent_alterations.each do |talent_id, stat|
             stat.each do |type, value|
               if type == :melee_damage_bonus
