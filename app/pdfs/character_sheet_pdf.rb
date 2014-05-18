@@ -768,8 +768,8 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "000000"
 
     fill_color "000000"
-    if !pdf_vars['talents'].empty?
-      talents = pdf_vars['talents'].map do |talent_id, index|
+    if @character.talents
+      talents = @character.talents.map do |talent_id, index|
         talent = Talent.find_by_id(talent_id)
         font "Helvetica", :size=> 8
         [
@@ -1037,7 +1037,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.soak unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.soak}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1057,7 +1057,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.defense unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1077,7 +1077,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.defense unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1097,7 +1097,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.encumbrance unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.encumbrance}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1117,7 +1117,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.hard_points unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.hard_points}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1146,13 +1146,13 @@ class CharacterSheetPdf < Prawn::Document
         end
         fill_color "000000"
         draw_text "ARMOR TYPE:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 15)]
-        draw_text "#{pdf_vars['armor'].armor.name unless pdf_vars['armor'].nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
+        draw_text "#{@character.equipped_armor.armor.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
         draw_text "MAKE / MODEL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 33)]
-        unless pdf_vars['armor'].nil? || pdf_vars['armor'].armor_model.nil?
-          draw_text "#{pdf_vars['armor'].armor_model.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
+        if @character.equipped_armor.armor_model
+          draw_text "#{@character.equipped_armor.armor_model.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
         end
         draw_text "SEPCIAL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 50)]
-        draw_text "#{pdf_vars['armor'].description unless pdf_vars['armor'].nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
+        draw_text "#{@character.equipped_armor.description}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
       end
       bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => ((bounds.width / 4)), :height => 70) do
         fill_color "354555"
@@ -1210,19 +1210,19 @@ class CharacterSheetPdf < Prawn::Document
           :width => bounds.width,
           :column_widths => [100, 50, ((bounds.width - 150) / 2), ((bounds.width - 150) / 2)]
 
-        unless pdf_vars['armor'].nil? or pdf_vars['armor'].character_armor_attachments.blank?
-          modifications = pdf_vars['armor'].character_armor_attachments.map do |attachment|
+        if @character.equipped_armor && @character.equipped_armor.character_armor_attachments
+          modifications = @character.equipped_armor.character_armor_attachments.map do |attachment|
             armor_attachment = ArmorAttachment.find(attachment.armor_attachment_id)
 
             armor_attachment_text = Array.new
-            unless attachment.armor_attachment_modification_options.nil?
+            if attachment.armor_attachment_modification_options
               attachment.armor_attachment_modification_options.each do |option|
                 modification_option = ArmorAttachmentModificationOption.find(option)
 
-                unless modification_option.talent_id.nil?
+                if modification_option.talent_id
                   armor_attachment_text << "Innate talent: #{Talent.find(modification_option.talent_id).name}"
                 end
-                unless modification_option.skill_id.nil?
+                if modification_option.skill_id
                   armor_attachment_text << "Skill bonus: #{Skill.find(modification_option.skill_id).name}"
                 end
               end
@@ -1264,7 +1264,7 @@ class CharacterSheetPdf < Prawn::Document
   fill_color "ffffff"
   text_box "WEAPONS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center, :at => [0, (bounds.top - 133)]
   bounding_box([bounds.left, (bounds.top - 146)], :width => bounds.width, :height => 360) do
-    pdf_vars['weapons'].first(3).each_with_index do |weapon, i|
+    @character.equipped_weapons.first(3).each_with_index do |weapon, i|
       top_margin = 120
       rectangle_top_margin = 0
       bounding_box([bounds.left, (bounds.top - (top_margin * i))], :width => bounds.width, :height => 120) do
