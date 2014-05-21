@@ -1,12 +1,19 @@
 <% unless f.object.gear_id.nil? %>
   <% @item = Gear.find_by_id(f.object.gear_id) %>
   <%= f.hidden_field :gear_id %>
-  <li class="nested-fields">
+  <li class="nested-fields" data-equalizer-watch>
     <ul class="pricing-table">
       <li class="title"><%= @item.name %></li>
       <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @item.price %></li>
-      <li class="description">
-        <%= text_replace_tokens(@item.description).html_safe %>
+      <li class="bullet-item">
+        <a href="#" data-reveal-id="itemDescription-<%= f.object.id %>">View description</a>
+        <div id="itemDescription-<%= f.object.id %>" class="reveal-modal" data-reveal>
+          <h2><%= @item.name %></h2>
+          <p><%= text_replace_tokens(@item.description).html_safe %></p>
+          <a class="close-reveal-modal">&#215;</a>
+        </div>
+      </li>
+      <li class="bullet-item">
         <%= f.check_box :carried %>
         <%= f.label :carried %>
       </li>

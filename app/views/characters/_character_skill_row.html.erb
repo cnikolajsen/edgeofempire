@@ -1,0 +1,38 @@
+<% character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first %>
+<td><% if( is_career_skill(skill.id)) %><strong><% end %><%= skill.name %><% if( is_career_skill(skill.id)) %> *</strong><% end %></td>
+<td><%= skill.characteristic.truncate(3, :omission => '') %></td>
+<%
+  total_ranks_free = character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment
+  total_ranks = character_skill.ranks + total_ranks_free
+
+  rank_options = Array.new
+  rank_options << 0
+  6.times do |rank|
+    if rank > total_ranks_free && rank != 0
+      rank_options << rank
+    end
+    if @character.creation? and rank == 2
+      break
+    end
+  end
+
+  if @character.creation?
+    max_ranks = 2
+  else
+    max_ranks = 5
+  end
+%>
+<td style="text-align: center;">
+<% if character_skill.ranks != 0 and @skill_select_enabled %>
+  <%= link_to "-", "/characters/#{@character.id}/skills/#{skill.id}/rank_down", :remote => :true %>
+<% end %>
+<%= character_skill.ranks %>
+<% if total_ranks < max_ranks and @skill_select_enabled %>
+  <%= link_to "+", "/characters/#{@character.id}/skills/#{skill.id}/rank_up", :remote => :true %>
+<% end %>
+</td>
+<td style="text-align: center;"><%= "+#{character_skill.free_ranks_race}" unless character_skill.free_ranks_race == 0 %></td>
+<td style="text-align: center;"><%= "+#{character_skill.free_ranks_career}" unless character_skill.free_ranks_career == 0 %></td>
+<td style="text-align: center;"><%= "+#{character_skill.free_ranks_specialization}" unless character_skill.free_ranks_specialization == 0 %></td>
+<td style="text-align: center;"><%= "+#{character_skill.free_ranks_equipment}" unless character_skill.free_ranks_equipment == 0 %></td>
+<td style="text-align: center;"><%= total_ranks %> </td>

@@ -659,6 +659,10 @@ class CharacterSheetPdf < Prawn::Document
           end
         end
 
+        (10 - weapons.count).times do
+          weapons << ['','','','','','']
+        end
+
         bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
           table [
            ['WEAPON', 'SKILL', 'DAMAGE', 'RANGE', 'CRIT', 'SPECIAL']
@@ -768,8 +772,8 @@ class CharacterSheetPdf < Prawn::Document
     fill_color "000000"
 
     fill_color "000000"
-    if !pdf_vars['talents'].empty?
-      talents = pdf_vars['talents'].map do |talent_id, index|
+    if @character.talents
+      talents = @character.talents.map do |talent_id, index|
         talent = Talent.find_by_id(talent_id)
         font "Helvetica", :size=> 8
         [
@@ -777,6 +781,10 @@ class CharacterSheetPdf < Prawn::Document
           talent.activation,
           talent.description
         ]
+      end
+
+      (17 - talents.count).times do
+        talents << ['','','']
       end
 
       bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
@@ -1037,7 +1045,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.soak unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.soak}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1057,7 +1065,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.defense unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1077,7 +1085,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.defense unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1097,7 +1105,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.encumbrance unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.encumbrance}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1117,7 +1125,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{pdf_vars['armor'].armor.hard_points unless pdf_vars['armor'].nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.hard_points}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1146,13 +1154,13 @@ class CharacterSheetPdf < Prawn::Document
         end
         fill_color "000000"
         draw_text "ARMOR TYPE:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 15)]
-        draw_text "#{pdf_vars['armor'].armor.name unless pdf_vars['armor'].nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
+        draw_text "#{@character.equipped_armor.armor.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
         draw_text "MAKE / MODEL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 33)]
-        unless pdf_vars['armor'].nil? || pdf_vars['armor'].armor_model.nil?
-          draw_text "#{pdf_vars['armor'].armor_model.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
+        if @character.equipped_armor.armor_model
+          draw_text "#{@character.equipped_armor.armor_model.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
         end
         draw_text "SEPCIAL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 50)]
-        draw_text "#{pdf_vars['armor'].description unless pdf_vars['armor'].nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
+        draw_text "#{@character.equipped_armor.description}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
       end
       bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => ((bounds.width / 4)), :height => 70) do
         fill_color "354555"
@@ -1210,19 +1218,19 @@ class CharacterSheetPdf < Prawn::Document
           :width => bounds.width,
           :column_widths => [100, 50, ((bounds.width - 150) / 2), ((bounds.width - 150) / 2)]
 
-        unless pdf_vars['armor'].nil? or pdf_vars['armor'].character_armor_attachments.blank?
-          modifications = pdf_vars['armor'].character_armor_attachments.map do |attachment|
+        if @character.equipped_armor && @character.equipped_armor.character_armor_attachments
+          modifications = @character.equipped_armor.character_armor_attachments.map do |attachment|
             armor_attachment = ArmorAttachment.find(attachment.armor_attachment_id)
 
             armor_attachment_text = Array.new
-            unless attachment.armor_attachment_modification_options.nil?
+            if attachment.armor_attachment_modification_options
               attachment.armor_attachment_modification_options.each do |option|
                 modification_option = ArmorAttachmentModificationOption.find(option)
 
-                unless modification_option.talent_id.nil?
+                if modification_option.talent_id
                   armor_attachment_text << "Innate talent: #{Talent.find(modification_option.talent_id).name}"
                 end
-                unless modification_option.skill_id.nil?
+                if modification_option.skill_id
                   armor_attachment_text << "Skill bonus: #{Skill.find(modification_option.skill_id).name}"
                 end
               end
@@ -1264,7 +1272,7 @@ class CharacterSheetPdf < Prawn::Document
   fill_color "ffffff"
   text_box "WEAPONS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center, :at => [0, (bounds.top - 133)]
   bounding_box([bounds.left, (bounds.top - 146)], :width => bounds.width, :height => 360) do
-    pdf_vars['weapons'].first(3).each_with_index do |weapon, i|
+    @character.equipped_weapons.first(3).each_with_index do |weapon, i|
       top_margin = 120
       rectangle_top_margin = 0
       bounding_box([bounds.left, (bounds.top - (top_margin * i))], :width => bounds.width, :height => 120) do
@@ -1485,6 +1493,213 @@ class CharacterSheetPdf < Prawn::Document
         end
       end
     end
+
+    #=== DUMMY COPIES TO FILL OUT THE PAGE ====
+    (3 - @character.equipped_weapons.first(3).count).times do |i|
+    end
+    (3 - @character.equipped_weapons.first(3).count).times do |i|
+      i = i + @character.equipped_weapons.first(3).count
+      top_margin = 120
+      rectangle_top_margin = 0
+      bounding_box([bounds.left, (bounds.top - (top_margin * i))], :width => bounds.width, :height => 120) do
+        bounding_box([bounds.left, bounds.top], :width => ((bounds.width / 2)), :height => 60) do
+          fill_color "761114"
+          rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+          fill
+
+          # DAMAGE
+          bounding_box([bounds.left, bounds.top], :width => (bounds.width / 4), :height => bounds.height) do
+            fill_color "ffffff"
+            self.line_width = 2
+            # Outer
+            circle [(bounds.width / 2),(bounds.top - 25)], 22
+            fill_and_stroke
+            self.line_width = 1
+            # Inner
+            circle [(bounds.width / 2),(bounds.top - 25)], 20
+            fill_and_stroke
+            fill_color "000000"
+            text_box "", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+            fill_color "52644B"
+            rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
+            fill
+            fill_color "ffffff"
+            text_box "DAMAGE", :size => 6, :style => :normal, :at => [bounds.left, (bounds.bottom + 10)], :width => bounds.width, :height => 9, :align => :center, :valign => :center
+            fill
+          end
+          # CRIT
+          bounding_box([(bounds.left + ((bounds.width / 4) * 1)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
+            fill_color "ffffff"
+            self.line_width = 2
+            # Outer
+            circle [(bounds.width / 2),(bounds.top - 25)], 22
+            fill_and_stroke
+            self.line_width = 1
+            # Inner
+            circle [(bounds.width / 2),(bounds.top - 25)], 20
+            fill_and_stroke
+            fill_color "000000"
+            text_box "", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+            fill_color "52644B"
+            rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
+            fill
+            fill_color "ffffff"
+            text_box "CRIT", :size => 6, :style => :normal, :at => [bounds.left, (bounds.bottom + 10)], :width => bounds.width, :height => 9, :align => :center, :valign => :center
+            fill
+          end
+          # ENCUMBRANCE
+          bounding_box([(bounds.left + ((bounds.width / 4) * 2)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
+            fill_color "ffffff"
+            self.line_width = 2
+            # Outer
+            circle [(bounds.width / 2),(bounds.top - 25)], 22
+            fill_and_stroke
+            self.line_width = 1
+            # Inner
+            circle [(bounds.width / 2),(bounds.top - 25)], 20
+            fill_and_stroke
+            fill_color "000000"
+            text_box "", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+            fill_color "52644B"
+            rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
+            fill
+            fill_color "ffffff"
+            text_box "ENCUM", :size => 6, :style => :normal, :at => [bounds.left, (bounds.bottom + 10)], :width => bounds.width, :height => 9, :align => :center, :valign => :center
+            fill
+          end
+          # HARD POINTS
+          bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
+            fill_color "ffffff"
+            self.line_width = 2
+            # Outer
+            circle [(bounds.width / 2),(bounds.top - 25)], 22
+            fill_and_stroke
+            self.line_width = 1
+            # Inner
+            circle [(bounds.width / 2),(bounds.top - 25)], 20
+            fill_and_stroke
+            fill_color "000000"
+            text_box "", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+            fill_color "52644B"
+            rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
+            fill
+            fill_color "ffffff"
+            text_box "HP", :size => 6, :style => :normal, :at => [bounds.left, (bounds.bottom + 10)], :width => bounds.width, :height => 9, :align => :center, :valign => :center
+            fill
+          end
+        end
+
+        bounding_box([(bounds.left + (bounds.width / 2)), bounds.top], :width => (bounds.width / 2), :height => 60) do
+          bounding_box([bounds.left, bounds.top], :width => ((bounds.width / 4) * 3), :height => bounds.height) do
+            fill_color "C0C0C0"
+            rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+            fill_and_stroke
+            fill_color "FFFFFF"
+            rounded_rectangle [(bounds.left + 2), (bounds.top - 2)], (bounds.width - 4), (bounds.height - 4), 4
+            fill_and_stroke
+
+            stroke do
+              stroke_color "000000"
+              self.line_width = 0.5
+
+              horizontal_line (bounds.left + 4), (bounds.right - 4), :at => (bounds.top - 20)
+              horizontal_line (bounds.left + 4), (bounds.right - 4), :at => (bounds.top - 38)
+              horizontal_line (bounds.left + 4), (bounds.right - 4), :at => (bounds.top - 55)
+            end
+            fill_color "000000"
+            draw_text "WEAPON TYPE:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 15)]
+            draw_text "", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
+            draw_text "MAKE / MODEL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 33)]
+            draw_text "", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
+            draw_text "SEPCIAL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 50)]
+            draw_text "", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
+          end
+          bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => ((bounds.width / 4)), :height => 70) do
+            fill_color "354555"
+            polygon [(bounds.left),(bounds.top - 7)], [(bounds.left + 10),(bounds.top - 2)], [(bounds.right - 10),(bounds.top - 2)], [(bounds.right),(bounds.top - 7)], [(bounds.right - 10),(bounds.top - 12)], [(bounds.left + 10),(bounds.top - 12)]
+            fill
+            fill_color "ffffff"
+            text_box "CONDITION", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 5, :style => :bold, :align => :center, :valign => :center
+
+            rectangle [(bounds.left + 5), (bounds.top - 15)], 10, 10
+            rectangle [(bounds.left + 5), (bounds.top - 30)], 10, 10
+            rectangle [(bounds.left + 5), (bounds.top - 45)], 10, 10
+            self.line_width = 1
+            fill_and_stroke
+            fill_color "000000"
+            draw_text "MINOR", :size => 5, :style => :normal, :at => [(bounds.left + 20), (bounds.top - 22)]
+            draw_text "MODERATE", :size => 5, :style => :normal, :at => [(bounds.left + 20), (bounds.top - 37)]
+            draw_text "MAJOR", :size => 5, :style => :normal, :at => [(bounds.left + 20), (bounds.top - 52)]
+
+            fill_color "532380"
+            polygon [(bounds.right - 8),(bounds.top - 20)], [(bounds.right - 4),(bounds.top - 15)], [(bounds.right),(bounds.top - 20)], [(bounds.right - 4),(bounds.top - 25)]
+            #==
+            polygon [(bounds.right - 8),(bounds.top - 35)], [(bounds.right - 4),(bounds.top - 30)], [(bounds.right),(bounds.top - 35)], [(bounds.right - 4),(bounds.top - 40)]
+            polygon [(bounds.right - 17),(bounds.top - 35)], [(bounds.right - 13),(bounds.top - 30)], [(bounds.right - 9),(bounds.top - 35)], [(bounds.right - 13),(bounds.top - 40)]
+            #==
+            polygon [(bounds.right - 8),(bounds.top - 50)], [(bounds.right - 4),(bounds.top - 45)], [(bounds.right),(bounds.top - 50)], [(bounds.right - 4),(bounds.top - 55)]
+            polygon [(bounds.right - 17),(bounds.top - 50)], [(bounds.right - 13),(bounds.top - 45)], [(bounds.right - 9),(bounds.top - 50)], [(bounds.right - 13),(bounds.top - 55)]
+            polygon [(bounds.right - 26),(bounds.top - 50)], [(bounds.right - 22),(bounds.top - 45)], [(bounds.right - 18),(bounds.top - 50)], [(bounds.right - 22),(bounds.top - 55)]
+            fill
+          end
+        end
+
+        bounding_box([bounds.left, (bounds.top - 60)], :width => bounds.width, :height => 55) do
+          fill_color "FFFFFF"
+          rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
+          fill_and_stroke
+
+          fill_color "6b6767"
+          polygon [(bounds.left + 242),(bounds.top - 4)], [(bounds.left + 250),(bounds.top - 1)], [(bounds.right - 250),(bounds.top - 1)], [(bounds.right - 242),(bounds.top - 4)], [(bounds.right - 250),(bounds.top - 7)], [(bounds.left + 250),(bounds.top - 7)]
+          fill
+          fill_color "ffffff"
+          text_box "ATTACHMENTS", :width => bounds.width, :height => 9, :size => 4, :align => :center, :valign => :center
+
+          bounding_box([(bounds.left + 5), (bounds.top - 7)], :width => (bounds.width - 10), :height => 50) do
+            fill_color "000000"
+            table [
+              ['NAME', 'HARD POINT REQ', 'BASE MODIFIERS', 'MODIFICATIONS']
+            ],
+            :cell_style => {
+              :height => 9,
+              :padding => 1,
+              :size => 5,
+              :align => :center,
+              :border_width => 0,
+              :font_style => :bold,
+            },
+            :width => bounds.width,
+            :column_widths => [100, 50, ((bounds.width - 150) / 2), ((bounds.width - 150) / 2)]
+
+              modifications = 1.times.map do |attachment|
+                [
+                  '',
+                  '',
+                  '',
+                  ''
+                ]
+              end
+
+              table(modifications,
+              :cell_style => {
+                :height => 9,
+                :padding => 1,
+                :border_width => 0,
+                :size => 5,
+              },
+              :width => bounds.width,
+              :column_widths => [100, 50, ((bounds.width - 150) / 2), ((bounds.width - 150) / 2)],
+              :row_colors => ['FFFFFF', 'C0C0C0']
+              ) do
+                column(0).style :align => :left
+                column(1).style :align => :center
+                column(2).style :align => :left
+              end
+            end
+        end
+      end
+    end
+    #=== /DUMMY COPIES TO FILL OUT THE PAGE ===
   end
   #===== /WEAPONS =====
 
@@ -1535,6 +1750,217 @@ class CharacterSheetPdf < Prawn::Document
   #text "bottom: #{bounds.bottom}"
   #text "left: #{bounds.left}"
   #text "right: #{bounds.right}"
+
+  #===== Personal finances =====
+  bounding_box([bounds.left, bounds.top], :width => bounds.width, :height => 50) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "PERSONAL FINANCES", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+    bounding_box([(bounds.left + 10), (bounds.top - 12)], :width => 150, :height => (bounds.height - 7)) do
+      # Outer Box.
+      stroke do
+        self.line_width = 2
+        fill_color "ffffff"
+        stroke_color "474D46"
+        polygon [bounds.left, (bounds.bottom + 13)], [bounds.left, (bounds.top - 13)], [(bounds.left + 15),bounds.top], [(bounds.right - 15),bounds.top], [bounds.right,(bounds.top - 13)], [bounds.right,(bounds.bottom + 13)], [(bounds.right - 15), (bounds.bottom + 2)], [(bounds.left + 15), (bounds.bottom + 2)]
+        fill_and_stroke
+      end
+      # Label box.
+      fill_color "354555"
+      polygon [(bounds.left + 11),(bounds.bottom + 9)], [(bounds.left + 17),(bounds.bottom + 4)], [(bounds.right - 17),(bounds.bottom + 4)], [(bounds.right - 11),(bounds.bottom + 9)], [(bounds.right - 17),(bounds.bottom + 13)], [(bounds.left + 17),(bounds.bottom + 13)]
+      fill
+      fill_color "ffffff"
+      text_box "CREDITS", :at => [bounds.left, (bounds.bottom + 12)], :width => bounds.width, :height => 8, :overflow => :shrink_to_fit, :size => 6, :style => :bold, :align => :center, :valign => :bottom
+      fill_color "000000"
+      text_box "#{@character.credits}", :at => [bounds.left, (bounds.top)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+    end
+    #end
+    #bounding_box([bounds.left, bounds.top], :width => (bounds.width / 2), :height => bounds.height) do
+    #end
+
+  end
+  #===== /Personal Finances =====
+
+  #===== Carried equipment =====
+  bounding_box([bounds.left, (bounds.top - 65)], :width => bounds.width, :height => 350) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "WORN / GENERALLY CARRIED", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+    bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width / 5), :height => 50) do
+      # Outer Box.
+      stroke do
+        self.line_width = 2
+        fill_color "ffffff"
+        stroke_color "474D46"
+        polygon [bounds.left,(bounds.top - 43)], [bounds.left,(bounds.top - 8)], [(bounds.left + 14),bounds.top], [(bounds.right - 14),bounds.top], [bounds.right,(bounds.top - 8)], [bounds.right,(bounds.top - 43)], [(bounds.right - 14),(bounds.top - 53)], [(bounds.left + 14),(bounds.top - 53)]
+        fill_and_stroke
+      end
+      # Label box.
+      fill_color "354555"
+      polygon [(bounds.left + 2),(bounds.top - 9)], [(bounds.left + 14),(bounds.top - 2)], [(bounds.right - 14),(bounds.top - 2)], [(bounds.right - 2),(bounds.top - 9)], [(bounds.right - 14),(bounds.top - 16)], [(bounds.left + 14),(bounds.top - 16)]
+      fill
+      fill_color "ffffff"
+      text_box "ENCUMBRANCE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
+      fill_color "000000"
+      text_box "", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+      line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
+      fill
+      text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+      text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    end
+
+    inventory_carried = @character.inventory(true)
+
+    if inventory_carried.any?
+      items_left = inventory_carried[0..16].map do |item|
+        font "Helvetica", :size => 8
+        [
+          item['name'],
+          item['quantity'],
+          item['encumbrance'],
+          item['location']
+        ]
+      end
+
+      items_right = inventory_carried.drop(17).map do |item|
+        font "Helvetica", :size => 8
+        [
+          item['name'],
+          item['quantity'],
+          item['encumbrance'],
+          item['location']
+        ]
+      end
+
+      bounding_box([(bounds.left + 10), (bounds.top - 85)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
+        table [
+         ['ITEM', 'QTY', 'ENCUMB.', 'LOCATION']
+        ],
+        :cell_style => {
+          :height => 10,
+          :padding => [2, 3],
+          :size => 5,
+          :align => :left,
+          :border_width => 0,
+        },
+        :width => 257,
+        :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
+
+        table items_left,
+          :cell_style => {
+            #:background_color => "FFFFFF",
+            :height => 12,
+            :padding => [2, 3],
+            :size => 6,
+            :border_width => 1,
+          },
+          :width => 257,
+          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
+
+      bounding_box([(bounds.left + (bounds.width / 2) + 10), (bounds.top - 20)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
+        table [
+         ['ITEM', 'QUANTITY', 'ENCUMB.', 'LOCATION']
+        ],
+        :cell_style => {
+          :height => 10,
+          :padding => [2, 3],
+          :size => 5,
+          :align => :left,
+          :border_width => 0,
+          #:background_color => "FFFFFF",
+        },
+        :width => 257,
+        :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
+
+        table items_right,
+          :cell_style => {
+            #:background_color => "FFFFFF",
+            :height => 12,
+            :padding => [2, 3],
+            :size => 6,
+            :border_width => 1,
+          },
+          :width => 257,
+          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
+    end
+  end
+  #===== /Carried equipment =====
+
+  #===== Other property =====
+  bounding_box([bounds.left, (bounds.top - 430)], :width => bounds.width, :height => 350) do
+    fill_color "C0C0C0"
+    rounded_rectangle [bounds.left, (bounds.top - 7)], bounds.width, bounds.height, 5
+    fill
+
+    fill_color "354555"
+    polygon [(bounds.left + 200),(bounds.top - 7)], [(bounds.left + 210),(bounds.top - 2)], [(bounds.right - 210),(bounds.top - 2)], [(bounds.right - 200),(bounds.top - 7)], [(bounds.right - 210),(bounds.top - 12)], [(bounds.left + 210),(bounds.top - 12)]
+    fill
+    fill_color "ffffff"
+    text_box "OTHER PROPERTY", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
+    fill_color "000000"
+
+    if @character.inventory(false).any?
+      items = @character.inventory(false).map do |item|
+        font "Helvetica", :size=> 8
+        [
+          item['name'],
+          item['quantity'],
+          item['encumbrance'],
+          item['location']
+        ]
+      end
+
+      bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
+        table [
+         ['ITEM', 'QUANTITY', 'ENCUMB.', 'LOCATION']
+        ],
+        :cell_style => {
+          :height => 10,
+          :padding => 1,
+          :size => 5,
+          :align => :left,
+          :border_width => 0,
+          #:background_color => "FFFFFF",
+        },
+        :width => bounds.width
+        #:column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
+
+        table items,
+          :cell_style => {
+            #:background_color => "FFFFFF",
+            :height => 12,
+            :padding => [2, 3],
+            :size => 6,
+            :border_width => 0,
+          },
+          :width => bounds.width,
+          #:column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42},
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
+    end
+  end
+  #===== /Other property =====
+
 
   #===== FOOTER =====
   bounding_box([bounds.left, (bounds.bottom + 45)], :width => bounds.width, :height => 45) do

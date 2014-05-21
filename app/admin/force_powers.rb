@@ -2,19 +2,7 @@ ActiveAdmin.register ForcePower do
   permit_params :name, :description, :activation, :ranked,
     force_power_upgrades_attributes: [ :id, :force_power_id, :name, :description, :ranked, :cost, :column, :row, :colspan, :parent_1, :parent_2 ]
 
-  #menu :parent => "Force Powers"
-
   config.sort_order = "name_asc"
-
-  #index do
-  #  column :name
-  #  column :description do |desc|
-  #    truncate(desc.description)
-  #  end
-  #  column :activation
-  #  column :ranked
-  #  default_actions
-  #end
 
   show :title => :name do
     table '', :class => 'talent-tree' do
@@ -110,16 +98,10 @@ ActiveAdmin.register ForcePower do
           end
         end
       end
-
-
-
-
-
     end
   end
 
   form do |f|
-  logger.warn(force_power.inspect)
     f.inputs "Basic Power" do
       f.input :name
       f.input :description

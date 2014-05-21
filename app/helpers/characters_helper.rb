@@ -150,6 +150,24 @@ module CharactersHelper
       else
         CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks.to_i).delete_all
       end
+
+    when 'force_power'
+      if direction == 'up'
+        experience_cost = ranks
+        ranks = 1
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+      else
+        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+      end
+
+    when 'force_power_upgrade'
+      force_power_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'force_power', :resource_id => resource_id).first
+      if direction == 'up'
+        force_power_cost.cost += ranks
+      else
+        force_power_cost.cost -= ranks
+      end
+      force_power_cost.save
     end
   end
 
