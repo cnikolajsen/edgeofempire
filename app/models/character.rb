@@ -441,6 +441,49 @@ class Character < ActiveRecord::Base
     CharacterWeapon.where(:character_id => self.id, :carried => :true).order('equipped desc')
   end
 
+  def inventory(carried = nil)
+    inventory = Array.new
+
+    self.character_gears.each do |cg|
+      if (carried && cg.carried) || (!carried && !cg.carried) || carried.nil?
+        inventory << {
+         'name' => cg.gear.name,
+         'description' => cg.gear.description,
+         'carried' => cg.carried,
+         'quantity' => cg.qty,
+         'total_encumbrance' => cg.gear.encumbrance, # calculate total
+         'location' => nil,
+        }
+      end
+    end
+    self.character_weapons.each do |cg|
+      if ((carried && cg.carried) || (!carried && !cg.carried) || carried.nil?) && cg.weapon.name != 'Unarmed'
+        inventory << {
+         'name' => cg.weapon.name,
+         'description' => cg.weapon.description,
+         'carried' => cg.carried,
+         'quantity' => 1,
+         'total_encumbrance' => cg.weapon.encumbrance, # calculate total
+         'location' => nil,
+        }
+      end
+    end
+    self.character_armor.each do |cg|
+      if (carried && cg.carried) || (!carried && !cg.carried) || carried.nil?
+        inventory << {
+         'name' => cg.armor.name,
+         'description' => cg.armor.description,
+         'carried' => cg.carried,
+         'quantity' => 1,
+         'total_encumbrance' => cg.armor.encumbrance, # calculate total
+         'location' => nil,
+        }
+      end
+    end
+
+    inventory
+  end
+
   def weapon_modification_bonuses
     modification_bonuses = {}
     modification_bonuses['skills'] = Array.new
