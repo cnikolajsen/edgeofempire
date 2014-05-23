@@ -1128,7 +1128,7 @@ class CharactersController < ApplicationController
         character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
         character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
         character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :armor_model_id, :_destroy ],
+        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ],
         character_force_powers_attributes: [ :id, :force_power_id, :character_id, :_destroy ]
       )
     end

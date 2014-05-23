@@ -1045,7 +1045,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{@character.equipped_armor.armor.soak}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.soak unless @character.equipped_armor.nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1065,7 +1065,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense unless @character.equipped_armor.nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1085,7 +1085,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{@character.equipped_armor.armor.defense}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.defense unless @character.equipped_armor.nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1105,7 +1105,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{@character.equipped_armor.armor.encumbrance}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.encumbrance unless @character.equipped_armor.nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1125,7 +1125,7 @@ class CharacterSheetPdf < Prawn::Document
         circle [(bounds.width / 2),(bounds.top - 25)], 20
         fill_and_stroke
         fill_color "000000"
-        text_box "#{@character.equipped_armor.armor.hard_points}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
+        text_box "#{@character.equipped_armor.armor.hard_points unless @character.equipped_armor.nil?}", :size => 30, :style => :bold, :at => [bounds.left, (bounds.top + 2)], :width => bounds.width, :height => bounds.height, :align => :center, :valign => :center, :overflow => :shrink_to_fit
         fill_color "04AEED"
         rounded_rectangle [(bounds.left + 2), (bounds.bottom + 11)], (bounds.width - 4), 9, 5
         fill
@@ -1154,13 +1154,13 @@ class CharacterSheetPdf < Prawn::Document
         end
         fill_color "000000"
         draw_text "ARMOR TYPE:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 15)]
-        draw_text "#{@character.equipped_armor.armor.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
+        draw_text "#{@character.equipped_armor.armor.name unless @character.equipped_armor.nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 15)]
         draw_text "MAKE / MODEL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 33)]
-        if @character.equipped_armor.armor_model
-          draw_text "#{@character.equipped_armor.armor_model.name}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
+        if @character.equipped_armor && @character.equipped_armor.armor_model
+          draw_text "#{@character.equipped_armor.armor_model.name unless @character.equipped_armor.nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 33)]
         end
         draw_text "SEPCIAL:", :size => 7, :style => :normal, :at => [(bounds.left + 4), (bounds.top - 50)]
-        draw_text "#{@character.equipped_armor.description}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
+        draw_text "#{@character.equipped_armor.description unless @character.equipped_armor.nil?}", :size => 7, :style => :bold, :at => [(bounds.left + 60), (bounds.top - 50)]
       end
       bounding_box([(bounds.left + ((bounds.width / 4) * 3)), bounds.top], :width => ((bounds.width / 4)), :height => 70) do
         fill_color "354555"
