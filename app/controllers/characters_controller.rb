@@ -538,11 +538,6 @@ class CharactersController < ApplicationController
             message = 'Character talents updated.'
           elsif params[:destination] == 'career'
             message = 'Character career free skill ranks saved.'
-          #elsif params[:destination] == 'species'
-          #  message = 'Character species saved.'
-          #  if !params[:original_race_id].nil? and @character.race_id != params[:original_race_id]
-          #    message = "Character species has changed. You might want to adjust your #{view_context.link_to('characteristics', character_characteristics_url(@character))}."
-          #  end
           elsif params[:destination] == 'characteristics'
             message = 'Character characteristics saved.'
           elsif params[:destination] == 'background'
@@ -1137,5 +1132,7 @@ class CharactersController < ApplicationController
         character_force_powers_attributes: [ :id, :force_power_id, :character_id, :_destroy ]
       )
     end
+  else
+    Hash.new
   end
 end
