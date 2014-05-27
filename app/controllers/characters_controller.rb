@@ -1017,7 +1017,7 @@ class CharactersController < ApplicationController
 
   def add_force_power
     @character = Character.friendly.find(params[:id])
-    force_power = ForcePower.find(params[:character_force_power][:force_power_id])
+    force_power = ForcePower.find(params[:character_force_power][:force_power_id]) unless params[:character_force_power][:force_power_id].blank?
 
     if force_power
       CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:character_force_power][:force_power_id]).first_or_create
@@ -1096,43 +1096,36 @@ class CharactersController < ApplicationController
   end
 
   def character_params
-    # This is not quite right, but for some reason I don't have the character
-    # parameter when saving character talents...
-    unless params[:character].nil?
-
-      params.require(:character).permit(
-        :age,
-        :agility,
-        :brawn,
-        :career_id,
-        :cunning,
-        :gender,
-        :intellect,
-        :name,
-        :presence,
-        :race_id,
-        :willpower,
-        :experience,
-        :credits,
-        :bio,
-        :height,
-        :build,
-        :hair,
-        :eyes,
-        :notable_features,
-        :other,
-        :specialization_1,
-        :specialization_2,
-        :specialization_3,
-        character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
-        character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
-        character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
-        character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
-        character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ],
-        character_force_powers_attributes: [ :id, :force_power_id, :character_id, :_destroy ]
-      )
-    end
-  else
-    Hash.new
+    params.require(:character).permit(
+      :age,
+      :agility,
+      :brawn,
+      :career_id,
+      :cunning,
+      :gender,
+      :intellect,
+      :name,
+      :presence,
+      :race_id,
+      :willpower,
+      :experience,
+      :credits,
+      :bio,
+      :height,
+      :build,
+      :hair,
+      :eyes,
+      :notable_features,
+      :other,
+      :specialization_1,
+      :specialization_2,
+      :specialization_3,
+      character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
+      character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
+      character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
+      character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],
+      character_armor_attributes: [ :id, :armor_id, :description, :equipped, :carried, :_destroy ],
+      character_force_powers_attributes: [ :id, :force_power_id, :character_id, :_destroy ],
+    )
   end
 end

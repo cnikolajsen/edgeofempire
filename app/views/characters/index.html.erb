@@ -23,11 +23,11 @@
             <td><%= link_to character.name, character_path(character) %></td>
             <td>
               <% if character.creation? %>
-                  <i class='fi-battery-half' title='Character creation mode'></i>
+                  <i class='fi-wrench' title='Character creation mode'></i>
               <% elsif character.active? %>
-                  <i class='fi-battery-full' title="Active character"></i>
+                  <i class='fi-torso' title="Active character"></i>
               <% elsif character.retired? %>
-                  <i class='fi-battery-empty' title="Character retired"></i>
+                  <i class='fi-blind' title="Character retired"></i>
               <% end %>
             </td>
             <td><%= character.race.name unless character.race.nil? %></td>

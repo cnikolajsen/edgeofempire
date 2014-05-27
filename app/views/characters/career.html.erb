@@ -12,6 +12,7 @@
   <div class="small-12 columns">
     <% if @character.purchased_skills.count == 0 %>
       <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
+        <%= f.hidden_field :id %>
         <%= hidden_field_tag 'character_career', 'true' %>
         <%= hidden_field_tag 'original_career_id', @character.career_id %>
         <% if @character.errors.any? %>
