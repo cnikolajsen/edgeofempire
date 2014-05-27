@@ -59,6 +59,7 @@
 <div class="row">
   <div class="small-12 medium-12 columns">
     <%= form_for @character do |character_form| %>
+      <%= character_form.hidden_field :id %>
       <%= hidden_field_tag 'update_talents', 'true' %>
       <% @talent_trees.each_with_index do |tree, i| %>
         <% @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id) %>
