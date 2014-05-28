@@ -38,6 +38,23 @@
               <% end %>
             </div>
           </div>
+
+          <div class="row">
+            <div class="small-12 columns">
+              <% if @character.race.respond_to?("#{@character.race.name.gsub(' ', '').downcase}_traits") %>
+                <h5><%= @character.race.name %> trait</h5>
+                <% traits = @character.race.send("#{@character.race.name.gsub(' ', '').downcase}_traits") %>
+                <% if traits[:bonus_non_class_skill_ranks] %>
+                  <%= f.label :free_non_class_skills, "Select #{traits[:bonus_non_class_skill_ranks]} non-career skills to add a free rank to:" %>
+                  <% @character.career.non_career_skills.each do |non_class_skill| %>
+                    <input value="<%= non_class_skill.id %>" id="free_skill_rank_<%= non_class_skill.id %>" name="free_non_career_skill_rank[]" type="checkbox" <%= if @racial_trait_free_rank.include? non_class_skill.id then  "checked=checked" end %>>
+                    <label for="free_skill_rank_<%= non_class_skill.id %>"><small><%= non_class_skill.name %></small></label>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
         <% end %>
 
         <div class="form-actions">
@@ -58,6 +75,11 @@
             <tr>
               <% @character.career.skills.each do |class_skill| %>
                 <% if @career_free_rank.include? class_skill.id %>
+                  <th><%= class_skill.name %></th>
+                <% end %>
+              <% end %>
+              <% @character.career.non_career_skills.each do |class_skill| %>
+                <% if @racial_trait_free_rank.include? class_skill.id %>
                   <th><%= class_skill.name %></th>
                 <% end %>
               <% end %>

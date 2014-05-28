@@ -9,4 +9,8 @@ class Career < ActiveRecord::Base
 
   default_scope { order('name ASC') }
 
+  def non_career_skills
+    Skill.where('id NOT IN (?)', self.skills.to_a)
+  end
+
 end

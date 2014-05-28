@@ -11,4 +11,9 @@ class Race < ActiveRecord::Base
   has_many :talents, :through => :race_talents
   accepts_nested_attributes_for :race_talents, :reject_if => :all_blank, :allow_destroy => true
 
+  def human_traits
+    traits = {
+      :bonus_non_class_skill_ranks => 2,
+    }
+  end
 end
