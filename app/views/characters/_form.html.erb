@@ -75,7 +75,7 @@
         <%= select('character', 'race_id', Race.where(:true).collect  {|race| [race.name, race.id]}, {:prompt => "Select species"}, :class => 'input-block-level') %>
         <div class="panel" id="species-info">
           <% unless @character.race_id.blank? %>
-            <%= render :partial => 'species_info', :locals => { :species => @character.race, :changed => false } %>
+            <%= render :partial => 'species_info', :locals => { :species => @character.race, :character => @character, :changed => false } %>
           <% end %>
         </div>
       </div>

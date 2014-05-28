@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140427100129) do
+ActiveRecord::Schema.define(version: 20140528133652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -338,6 +338,7 @@ ActiveRecord::Schema.define(version: 20140427100129) do
     t.string   "aasm_state"
     t.string   "image_url"
     t.string   "slug"
+    t.string   "subspecies"
   end
 
   add_index "characters", ["slug"], name: "index_characters_on_slug", unique: true, using: :btree

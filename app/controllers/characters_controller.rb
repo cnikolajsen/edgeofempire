@@ -302,6 +302,17 @@ class CharactersController < ApplicationController
           set_experience_cost(stat, 0, species[stat], 'up', 'race')
         end
 
+        # Save subspecies.
+        if params[:sub_species]
+          if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits")
+            traits = species.send("#{species.name.gsub(' ', '').downcase}_traits")
+            if traits[:sub_species][params[:sub_species]]
+              @character.update_attribute(:experience, traits[:sub_species][params[:sub_species]][:exp_bonus])
+              @character.update_attribute(:subspecies, params[:sub_species])
+            end
+          end
+        end
+
         # Save species talents.
         unless species.talents.nil?
           species.talents.each do |talent|
@@ -724,7 +735,7 @@ class CharactersController < ApplicationController
   def species_selection
     @species = Race.find(params[:species_id])
 
-    render :partial => "species_info", :locals => { :species => @species, :changed => :true }
+    render :partial => "species_info", :locals => { :species => @species, :character => @character, :changed => :true }
   end
 
   def characteristics
@@ -1146,6 +1157,7 @@ class CharactersController < ApplicationController
       :name,
       :presence,
       :race_id,
+      :subspecies,
       :willpower,
       :experience,
       :credits,

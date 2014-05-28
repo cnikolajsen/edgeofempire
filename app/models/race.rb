@@ -16,4 +16,19 @@ class Race < ActiveRecord::Base
       :bonus_non_class_skill_ranks => 2,
     }
   end
+
+  def gand_traits
+    traits = {
+      :sub_species => {
+        'Ammonia breather' => {
+          :exp_bonus => 10,
+          :description => 'You breathe an ammonia gas mixture, and start playing with an ammonia respirator. Oxygen is a dangerous atmosphere with Rating 8.'
+        },
+        'Lungless' => {
+          :exp_bonus => 0,
+          :description => 'You do not have lungs, and are immune to suffocation.'
+        }
+      },
+    }
+  end
 end
