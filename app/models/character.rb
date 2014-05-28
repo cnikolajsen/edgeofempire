@@ -108,6 +108,23 @@ class Character < ActiveRecord::Base
     specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
   end
 
+  def encumbrance_threshold
+    et = self.brawn + 5
+    self.inventory(true).each do |inv|
+      if inv['name'] == 'Backpack'
+        et += 4
+        break
+      end
+    end
+    self.inventory(true).each do |inv|
+      if inv['name'] == 'Utility Belt'
+        et += 1
+        break
+      end
+    end
+    et
+  end
+
   # Fetch character's force rating.
   def force_rating
     rating = 0

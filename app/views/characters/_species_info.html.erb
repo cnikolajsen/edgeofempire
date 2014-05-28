@@ -1,4 +1,14 @@
-<h4><%= species.name %></h4>
+<h4><%= species.name %><% if character && character.subspecies %> <small><%= character.subspecies %></small><% end %></h4>
+<% if !character || character.new_record? %>
+  <% if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits") %>
+    <% traits = species.send("#{species.name.gsub(' ', '').downcase}_traits") %>
+    <% if traits[:sub_species] %>
+      <h5>Subspecies</h5>
+      <%= select_tag :sub_species, options_for_select(traits[:sub_species], nil), :class => 'input-block-level' %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <table class="table table-striped" width="100%">
   <thead>
     <tr>

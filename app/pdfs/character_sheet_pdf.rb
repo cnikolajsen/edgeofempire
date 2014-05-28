@@ -1243,7 +1243,7 @@ class CharacterSheetPdf < Prawn::Document
               armor_attachment_text.join(', ')
             ]
           end
-
+          if modifications.any?
           table(modifications,
             :cell_style => {
               :height => 9,
@@ -1259,6 +1259,7 @@ class CharacterSheetPdf < Prawn::Document
               column(1).style :align => :center
               column(2).style :align => :left
             end
+          end
         end
       end
     end
@@ -1818,7 +1819,7 @@ class CharacterSheetPdf < Prawn::Document
       fill_color "ffffff"
       text_box "ENCUMBRANCE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
       fill_color "000000"
-      text_box "", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+      text_box @character.encumbrance_threshold.to_s, :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
       line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
       fill
       text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -1838,6 +1839,10 @@ class CharacterSheetPdf < Prawn::Document
         ]
       end
 
+      (21 - items_left.count).times do
+        items_left << ['','','','']
+      end
+
       items_right = inventory_carried.drop(17).map do |item|
         font "Helvetica", :size => 8
         [
@@ -1846,6 +1851,10 @@ class CharacterSheetPdf < Prawn::Document
           item['encumbrance'],
           item['location']
         ]
+      end
+
+      (26 - items_right.count).times do
+        items_right << ['','','','']
       end
 
       bounding_box([(bounds.left + 10), (bounds.top - 85)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
@@ -1862,20 +1871,22 @@ class CharacterSheetPdf < Prawn::Document
         :width => 257,
         :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
 
-        table items_left,
-          :cell_style => {
-            #:background_color => "FFFFFF",
-            :height => 12,
-            :padding => [2, 3],
-            :size => 6,
-            :border_width => 1,
-          },
-          :width => 257,
-          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
-          :row_colors => ['FFFFFF', 'C0C0C0']
+        if items_left.any?
+          table items_left,
+            :cell_style => {
+              #:background_color => "FFFFFF",
+              :height => 12,
+              :padding => [2, 3],
+              :size => 6,
+              :border_width => 1,
+            },
+            :width => 257,
+            :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
+            :row_colors => ['FFFFFF', 'C0C0C0']
+        end
       end
 
-      bounding_box([(bounds.left + (bounds.width / 2) + 10), (bounds.top - 20)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
+      bounding_box([(bounds.left + (bounds.width / 2) + 10), (bounds.top - 25)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
         table [
          ['ITEM', 'QUANTITY', 'ENCUMB.', 'LOCATION']
         ],
@@ -1890,17 +1901,19 @@ class CharacterSheetPdf < Prawn::Document
         :width => 257,
         :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
 
-        table items_right,
-          :cell_style => {
-            #:background_color => "FFFFFF",
-            :height => 12,
-            :padding => [2, 3],
-            :size => 6,
-            :border_width => 1,
-          },
-          :width => 257,
-          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
-          :row_colors => ['FFFFFF', 'C0C0C0']
+        if items_right.any?
+          table items_right,
+            :cell_style => {
+              #:background_color => "FFFFFF",
+              :height => 12,
+              :padding => [2, 3],
+              :size => 6,
+              :border_width => 1,
+            },
+            :width => 257,
+            :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
+            :row_colors => ['FFFFFF', 'C0C0C0']
+        end
       end
     end
   end
@@ -1919,42 +1932,91 @@ class CharacterSheetPdf < Prawn::Document
     text_box "OTHER PROPERTY", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     fill_color "000000"
 
-    if @character.inventory(false).any?
-      items = @character.inventory(false).map do |item|
-        font "Helvetica", :size=> 8
-        [
-          item['name'],
-          item['quantity'],
-          item['encumbrance'],
-          item['location']
-        ]
-      end
+    inventory_other = @character.inventory(false)
 
-      bounding_box([(bounds.left + 10), (bounds.top - 20)], :width => (bounds.width - 20), :height => bounds.height) do
-        table [
-         ['ITEM', 'QUANTITY', 'ENCUMB.', 'LOCATION']
-        ],
-        :cell_style => {
-          :height => 10,
-          :padding => 1,
-          :size => 5,
-          :align => :left,
-          :border_width => 0,
-          #:background_color => "FFFFFF",
-        },
-        :width => bounds.width
-        #:column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42}
+    items_left = inventory_other[0..25].map do |item|
+      font "Helvetica", :size => 8
+      [
+        item['name'],
+        item['quantity'],
+        item['encumbrance'],
+        item['location']
+      ]
+    end
 
-        table items,
+    (26 - items_left.count).times do
+      items_left << ['','','','']
+    end
+
+    items_right = inventory_other.drop(26).map do |item|
+      font "Helvetica", :size => 8
+      [
+        item['name'],
+        item['quantity'],
+        item['encumbrance'],
+        item['location']
+      ]
+    end
+
+    (26 - items_right.count).times do
+      items_right << ['','','','']
+    end
+
+    bounding_box([(bounds.left + 10), (bounds.top - 25)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
+      table [
+       ['ITEM', 'QTY', 'ENCUMB.', 'LOCATION']
+      ],
+      :cell_style => {
+        :height => 10,
+        :padding => [2, 3],
+        :size => 5,
+        :align => :left,
+        :border_width => 0,
+      },
+      :width => 257,
+      :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
+
+      if items_left.any?
+        table items_left,
           :cell_style => {
             #:background_color => "FFFFFF",
             :height => 12,
             :padding => [2, 3],
             :size => 6,
-            :border_width => 0,
+            :border_width => 1,
           },
-          :width => bounds.width,
-          #:column_widths => {0 => 115, 1 => 100, 2 => 42, 3 => 42, 4 => 42},
+          :width => 257,
+          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
+    end
+
+    bounding_box([(bounds.left + (bounds.width / 2) + 10), (bounds.top - 25)], :width => ((bounds.width / 2) - 20), :height => bounds.height) do
+      table [
+       ['ITEM', 'QUANTITY', 'ENCUMB.', 'LOCATION']
+      ],
+      :cell_style => {
+        :height => 10,
+        :padding => [2, 3],
+        :size => 5,
+        :align => :left,
+        :border_width => 0,
+        #:background_color => "FFFFFF",
+      },
+      :width => 257,
+      :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72}
+
+      if items_right.any?
+        table items_right,
+          :cell_style => {
+            #:background_color => "FFFFFF",
+            :height => 12,
+            :padding => [2, 3],
+            :size => 6,
+            :border_width => 1,
+          },
+          :width => 257,
+          :column_widths => {0 => 125, 1 => 30, 2 => 30, 3 => 72},
           :row_colors => ['FFFFFF', 'C0C0C0']
       end
     end
