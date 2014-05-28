@@ -138,7 +138,7 @@ module CharactersHelper
 
     when 'skill'
       if direction == 'up'
-        if granted_by == 'race' or granted_by == 'specialization' or granted_by == 'career'
+        if granted_by == 'race' || granted_by == 'racial_trait' || granted_by == 'specialization' || granted_by == 'career'
           experience_cost = 0
         else
           experience_cost = 5 * ranks

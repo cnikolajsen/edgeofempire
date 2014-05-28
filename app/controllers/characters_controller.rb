@@ -465,7 +465,7 @@ class CharactersController < ApplicationController
     # Save character career skill free ranks.
     if !params[:character_career].nil? and !@character.career.nil?
       # Save career skills to add a free rank to.
-      unless params[:free_career_skill_rank].nil?
+      if params[:free_career_skill_rank]
         @character.career.skills.each do |skill|
           if params[:free_career_skill_rank].include? skill.id.to_s
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career', :ranks => 1).first_or_create
@@ -495,6 +495,41 @@ class CharactersController < ApplicationController
 
             # Delete experience entry.
             get_experience_cost('skill', skill.id, 'career').delete_all
+          end
+        end
+      end
+
+      # Save non career skills to add a free rank to. Mainly from racial traits.
+      if params[:free_non_career_skill_rank]
+        @character.career.non_career_skills.each do |skill|
+          if params[:free_non_career_skill_rank].include? skill.id.to_s
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'racial_trait', :ranks => 1).first_or_create
+            character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+            if character_skill.free_ranks_race == 0 or character_skill.free_ranks_race.blank?
+              character_skill.free_ranks_race = 1
+              character_skill.save
+            end
+
+            # Check if this skill already has an entry from specialization.
+            if get_experience_cost('skill', skill.id, 'racial_trait').blank?
+              # Save experience entry.
+              experience_cost = get_experience_cost('skill', skill.id)
+              if experience_cost.nil? or experience_cost.blank?
+                set_experience_cost('skill', skill.id, 1, 'up', 'racial_trait')
+              else
+                set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'racial_trait')
+              end
+            end
+          else
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'racial_trait').delete_all
+            character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
+            unless character_skill.free_ranks_race.blank? or character_skill.free_ranks_race == 0
+              character_skill.free_ranks_race -= 1
+              character_skill.save
+            end
+
+            # Delete experience entry.
+            get_experience_cost('skill', skill.id, 'racial_trait').delete_all
           end
         end
       end
@@ -665,6 +700,10 @@ class CharactersController < ApplicationController
     @career_free_rank = Array.new()
     CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
       @career_free_rank << career_skill.skill_id
+    end
+    @racial_trait_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'racial_trait').each do |non_career_skill|
+      @racial_trait_free_rank << non_career_skill.skill_id
     end
   end
 
