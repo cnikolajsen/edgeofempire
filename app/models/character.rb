@@ -198,9 +198,10 @@ class Character < ActiveRecord::Base
 
   def attacks
     attacks = Array.new
+
     # Build attacks list.
     self.character_weapons.each do |cw|
-      unless cw.weapon.nil?
+      if cw.weapon && cw.equipped?
         @wq = Array.new
         cw.weapon.weapon_quality_ranks.each do |q|
           ranks = nil
@@ -213,11 +214,11 @@ class Character < ActiveRecord::Base
           }
         end
 
-        character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", self.id, cw.weapon.skill.id)
-        if character_skill_ranks.first.nil?
+        character_skill = CharacterSkill.where("character_id = ? AND skill_id = ?", self.id, cw.weapon.skill.id).first
+        if character_skill.nil?
           ranks = 0
         else
-          ranks =  character_skill_ranks.first.ranks
+          ranks = character_skill.ranks + character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment
         end
 
         if cw.weapon.skill.name == 'Brawl'
@@ -296,18 +297,6 @@ class Character < ActiveRecord::Base
 
         end
 
-        #attachment_text = nil
-        #unless weapon_attachment.blank?
-        #  attachment_text = "; [<strong>Attachments:</strong> #{weapon_attachment.join(', ')}]"
-        #end
-
-        #if params[:format] != 'pdf'
-          #dice = render_to_string "_dice_pool", :locals => {:score => self.send(cw.weapon.skill.characteristic.downcase), :ranks => ranks}, :layout => false
-
-          #attacks << "<strong>#{cw.weapon.name}</strong> (#{cw.weapon.skill.name} #{dice}; Damage: #{cw.weapon.damage}; Critical: #{cw.weapon.crit}; Range: #{cw.weapon.range}; #{@wq.join(', ')}#{attachment_text})"
-        #end
-      end
-
       attacks << {
         'weapon' => cw.weapon,
         'skill' => cw.weapon.skill,
@@ -315,6 +304,7 @@ class Character < ActiveRecord::Base
         'qualities' => @wq,
         'attachments' => weapon_attachment,
       }
+      end
     end
 
     attacks
