@@ -17,7 +17,7 @@ ActiveAdmin.register Armor do
     column :hard_points
     column :rarity
 
-    default_actions
+    actions
   end
 
   form do |f|

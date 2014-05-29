@@ -2,7 +2,7 @@ ActiveAdmin.register WeaponQualityRank do
   permit_params :ranks, :weapon_id, :weapon_quality_id
 
   menu false #:parent => "Equipment"
-  
+
   index do
     column :weapon_id do |weapon|
       Weapon.find_by_id(weapon.weapon_id).name
@@ -11,8 +11,8 @@ ActiveAdmin.register WeaponQualityRank do
       WeaponQuality.find_by_id(weapon_quality.weapon_quality_id).name
     end
     column :ranks
-    
-    default_actions
+
+    actions
   end
 
   controller do
@@ -22,5 +22,5 @@ ActiveAdmin.register WeaponQualityRank do
        end
      end
    end
-  
+
 end

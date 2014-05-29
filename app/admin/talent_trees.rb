@@ -18,7 +18,7 @@ ActiveAdmin.register TalentTree do
     column :description do |desc|
       truncate(desc.description)
     end
-    default_actions
+    actions
   end
 
   form do |f|

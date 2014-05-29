@@ -27,7 +27,7 @@ ActiveAdmin.register Weapon do
     column "Special" do |weapon|
       render "weapon_qualties", :qualities => weapon.weapon_quality_ranks
     end
-    default_actions
+    actions
   end
 
   form do |f|

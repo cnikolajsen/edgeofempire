@@ -14,7 +14,7 @@ ActiveAdmin.register Skill do
     column :name
     column :description
     column :characteristic
-    default_actions
+    actions
   end
 
   form do |f|

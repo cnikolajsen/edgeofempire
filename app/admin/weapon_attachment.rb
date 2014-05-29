@@ -12,7 +12,7 @@ ActiveAdmin.register WeaponAttachment do
     column :name
     column :hard_points
     column :price
-    default_actions
+    actions
   end
 
   form do |f|

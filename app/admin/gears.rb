@@ -11,7 +11,7 @@ ActiveAdmin.register Gear do
     column :encumbrance
     column :rarity
     column :price
-    default_actions
+    actions
   end
 
   form do |f|
