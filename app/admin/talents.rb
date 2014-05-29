@@ -12,7 +12,7 @@ ActiveAdmin.register Talent do
     end
     column :activation
     column :ranked
-    default_actions
+    actions
   end
 
   show do

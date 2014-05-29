@@ -11,7 +11,7 @@ ActiveAdmin.register Obligation do
     column :range
     column :name
     column :description
-    default_actions
+    actions
   end
 
   controller do

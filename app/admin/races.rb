@@ -15,7 +15,7 @@ ActiveAdmin.register Race do
     column :presence
     column :intellect
     column :willpower
-    default_actions
+    actions
   end
 
   form do |f|

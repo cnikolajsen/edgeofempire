@@ -12,7 +12,7 @@ ActiveAdmin.register ArmorQualityRank do
     end
     column :ranks
 
-    default_actions
+    actions
   end
 
   controller do

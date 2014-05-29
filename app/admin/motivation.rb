@@ -11,7 +11,7 @@ ActiveAdmin.register Motivation do
     column :category
     column :name
     column :description
-    default_actions
+    actions
   end
 
 form do |f|

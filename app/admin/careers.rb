@@ -7,7 +7,7 @@ ActiveAdmin.register Career do
     column :description do |career|
       career.description.html_safe
     end
-    default_actions
+    actions
   end
 
   form do |f|
