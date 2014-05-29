@@ -342,6 +342,16 @@ class CharactersController < ApplicationController
           end
         end
 
+        # Save a weapon entry for unarmed combat.
+        unarmed_weapon = Weapon.where(:name => 'Unarmed').first
+        character_unarmed = CharacterWeapon.where(:character_id => @character.id, :weapon_id => unarmed_weapon.id).first_or_create
+        character_unarmed = CharacterWeapon.new()
+        character_unarmed.character_id = @character.id
+        character_unarmed.weapon_id = unarmed_weapon.id
+        character_unarmed.carried = true
+        character_unarmed.equipped = true
+        character_unarmed.save
+
         format.html { redirect_to character_url(@character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
@@ -367,16 +377,6 @@ class CharactersController < ApplicationController
           @item.destroy
         end
       end
-    end
-
-    # Save a weapon entry for unarmed combat if not.
-    unarmed_weapon = Weapon.where(:name => 'Unarmed').first
-    @character_unarmed = CharacterWeapon.where(:character_id => @character.id, :weapon_id => unarmed_weapon.id).first_or_create
-    if @character_unarmed.character_id.nil?
-      @character_unarmed = CharacterWeapon.new()
-      @character_unarmed.character_id = @character.id
-      @character_unarmed.weapon_id = unarmed_weapon.id
-      @character_unarmed.save
     end
 
     if params[:update_specializations]
