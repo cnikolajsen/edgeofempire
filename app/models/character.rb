@@ -204,13 +204,13 @@ class Character < ActiveRecord::Base
       if cw.weapon && cw.equipped?
         @wq = Array.new
         cw.weapon.weapon_quality_ranks.each do |q|
-          ranks = nil
+          ranks = 0
           if q.ranks > 0
             ranks = q.ranks
           end
           @wq << {
-            'name' => q.weapon_quality.name,
-            'ranks' => ranks,
+            :name => q.weapon_quality.name,
+            :ranks => ranks,
           }
         end
 
@@ -276,8 +276,8 @@ class Character < ActiveRecord::Base
                   wq_ranks = modification_option.weapon_quality_rank
                 end
                 @wq << {
-                  'name' => WeaponQuality.find_by_id(modification_option.weapon_quality_id).name,
-                  'ranks' => wq_ranks,
+                  :name => WeaponQuality.find_by_id(modification_option.weapon_quality_id).name,
+                  :ranks => wq_ranks,
                 }
               end
               unless modification_option.damage_bonus.nil?
@@ -291,22 +291,22 @@ class Character < ActiveRecord::Base
           end
 
           weapon_attachment << {
-            'name' => WeaponAttachment.find(cwa.weapon_attachment_id).name,
-            'options' => options,
+            :name => WeaponAttachment.find(cwa.weapon_attachment_id).name,
+            :options => options,
           }
 
         end
 
       attacks << {
-        'weapon' => cw.weapon,
-        'skill' => cw.weapon.skill,
-        'ranks' => ranks,
-        'qualities' => @wq,
-        'attachments' => weapon_attachment,
+        :weapon => cw.weapon,
+        :skill => cw.weapon.skill,
+        :ranks => ranks,
+        :qualities => @wq,
+        :attachments => weapon_attachment,
       }
       end
     end
-
+logger.warn(attacks)
     attacks
   end
 
@@ -441,7 +441,7 @@ class Character < ActiveRecord::Base
 
   # Find equipped weapons.
   def equipped_weapons
-    CharacterWeapon.where(:character_id => self.id, :equipped => :true)
+    CharacterWeapon.where(:character_id => self.id, :equipped => :true).where('weapon_id != 12')
   end
   # All carried weapons, equipped first.
   def carried_weapons
