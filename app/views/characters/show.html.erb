@@ -56,7 +56,7 @@
         <tr>
           <td colspan="3">
             <h5>Attacks</h5>
-            <table>
+            <table style="width:100%">
               <thead>
                 <tr>
                   <th>Weapon</th>
@@ -71,24 +71,24 @@
               <tbody>
                 <% @character.attacks.each do |attack| %>
                   <tr>
-                    <td><%= attack['weapon'].name %></td>
-                    <td><%= attack['skill'].name %></td>
-                    <td><%= render :partial => 'dice_pool', :locals => {:score => @character.send(attack['skill'].characteristic.downcase), :ranks => attack['ranks']} %></td>
-                    <td><%= attack['weapon'].damage %></td>
-                    <td><%= attack['weapon'].crit %></td>
-                    <td><%= attack['weapon'].range %></td>
+                    <td><%= attack[:weapon].name %></td>
+                    <td><%= attack[:skill].name %></td>
+                    <td><%= render :partial => 'dice_pool', :locals => {:score => @character.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]} %></td>
+                    <td><%= attack[:weapon].damage %></td>
+                    <td><%= attack[:weapon].crit %></td>
+                    <td><%= attack[:weapon].range %></td>
                     <td>
-                      <% unless attack['qualities'].blank? %>
+                      <% unless attack[:qualities].blank? %>
                         <strong>Qualities:</strong>&nbsp;
-                        <% attack['qualities'].each_with_index do |q, key| %>
-                          <%= q['name'] %><%= " #{q['ranks']}" if q['ranks'] %><% if key+1 < attack['qualities'].count %>,<% end%>
+                        <% attack[:qualities].each_with_index do |q, key| %>
+                          <%= q[:name] %><%= " #{q[:ranks]}" if q[:ranks] > 0 %><% if key+1 < attack[:qualities].count %>,<% end%>
                         <% end %>
                         <br />
                       <% end %>
-                      <% unless attack['attachments'].blank? %>
+                      <% if attack[:attachments].any? %>
                         <strong>Attch:</strong>&nbsp;
-                        <% attack['attachments'].each_with_index do |q, key| %>
-                          <%= q['name'] %><%= " #{q['ranks']}" if q['ranks'] %><% if key+1 < attack['attachments'].count %>,<% end%>
+                        <% attack[:attachments].each_with_index do |q, key| %>
+                          <%= q[:name] %><%= " #{q[:ranks]}" if q[:ranks] %><% if key+1 < attack[:attachments].count %>,<% end%>
                         <% end %>
                       <% end %>
                     </td>
@@ -101,7 +101,7 @@
         <tr>
           <td colspan="3">
             <h5>Talents</h5>
-            <table>
+            <table style="width:100%">
               <tbody>
                 <% @character.talents.each_with_index do |element, index| %>
                   <% talent = Talent.find_by_id(element[0]) %>

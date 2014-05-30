@@ -408,17 +408,18 @@ class CharacterSheetPdf < Prawn::Document
 
       combat_skills = combat.map do |skill|
         font "Helvetica", :size=> 8
+        total_ranks = skill.ranks + skill.free_ranks_race + skill.free_ranks_career + skill.free_ranks_specialization + skill.free_ranks_equipment
         dice_ability = "#{Rails.root}/public/dice/blank.png"
         dice_proficiency = "#{Rails.root}/public/dice/blank.png"
-        if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
-        elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-          dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+        if @character.send(skill.skill.characteristic.downcase) == total_ranks
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
+        elsif @character.send(skill.skill.characteristic.downcase) < total_ranks
+          dice_ability = "#{Rails.root}/public/dice/ability_#{total_ranks - @character.send(skill.skill.characteristic.downcase)}.png"
           dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
         else
-          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
-          if skill.ranks > 0
-            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - total_ranks}.png"
+          if total_ranks > 0
+            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
           end
         end
         [
@@ -432,18 +433,19 @@ class CharacterSheetPdf < Prawn::Document
       end
 
       general_skills = other.map do |skill|
-        font "Helvetica", :size=> 7
+        font "Helvetica", :size=> 8
+        total_ranks = skill.ranks + skill.free_ranks_race + skill.free_ranks_career + skill.free_ranks_specialization + skill.free_ranks_equipment
         dice_ability = "#{Rails.root}/public/dice/blank.png"
         dice_proficiency = "#{Rails.root}/public/dice/blank.png"
-        if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
-        elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-          dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+        if @character.send(skill.skill.characteristic.downcase) == total_ranks
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
+        elsif @character.send(skill.skill.characteristic.downcase) < total_ranks
+          dice_ability = "#{Rails.root}/public/dice/ability_#{total_ranks - @character.send(skill.skill.characteristic.downcase)}.png"
           dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
         else
-          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
-          if skill.ranks > 0
-            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - total_ranks}.png"
+          if total_ranks > 0
+            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
           end
         end
         [
@@ -554,18 +556,19 @@ class CharacterSheetPdf < Prawn::Document
       dice_ability = "#{Rails.root}/public/dice/blank.png"
 
       knowledge_skills = knowledge.map do |skill|
-        font "Helvetica", :size=> 7
+        font "Helvetica", :size=> 8
+        total_ranks = skill.ranks + skill.free_ranks_race + skill.free_ranks_career + skill.free_ranks_specialization + skill.free_ranks_equipment
         dice_ability = "#{Rails.root}/public/dice/blank.png"
         dice_proficiency = "#{Rails.root}/public/dice/blank.png"
-        if @character.send(skill.skill.characteristic.downcase) == skill.ranks
-          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
-        elsif @character.send(skill.skill.characteristic.downcase) < skill.ranks
-          dice_ability = "#{Rails.root}/public/dice/ability_#{skill.ranks - @character.send(skill.skill.characteristic.downcase)}.png"
+        if @character.send(skill.skill.characteristic.downcase) == total_ranks
+          dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
+        elsif @character.send(skill.skill.characteristic.downcase) < total_ranks
+          dice_ability = "#{Rails.root}/public/dice/ability_#{total_ranks - @character.send(skill.skill.characteristic.downcase)}.png"
           dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{@character.send(skill.skill.characteristic.downcase)}.png"
         else
-          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - skill.ranks}.png"
-          if skill.ranks > 0
-            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{skill.ranks}.png"
+          dice_ability = "#{Rails.root}/public/dice/ability_#{@character.send(skill.skill.characteristic.downcase) - total_ranks}.png"
+          if total_ranks > 0
+            dice_proficiency = "#{Rails.root}/public/dice/proficiency_#{total_ranks}.png"
           end
         end
         [
@@ -627,33 +630,33 @@ class CharacterSheetPdf < Prawn::Document
       text_box "WEAPONS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
       fill_color "000000"
 
-      if @character.weapons.any?
-        weapons = @character.weapons.map do |weapon|
-          unless weapon.nil?
+      if @character.attacks.any?
+        weapons = @character.attacks.map do |atk|
+          if atk
             font "Helvetica", :size=> 8
-            unless weapon.skill.nil?
-              character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, weapon.skill.id)
+            if atk[:skill]
+              character_skill_ranks = CharacterSkill.where("character_id = ? AND skill_id = ?", @character.id, atk[:skill].id)
               ranks = character_skill_ranks.first.ranks
             else
               ranks = 0
             end
 
               @wq = Array.new
-              weapon.weapon_quality_ranks.each do |q|
+              atk[:qualities].each do |q|
                 ranks = ''
-                if q.ranks > 0
-                  ranks = " #{q.ranks}"
+                if q[:ranks] > 0
+                  ranks = " #{q[:ranks]}"
                 end
-                @wq << "#{WeaponQuality.find_by_id(q.weapon_quality_id).name}#{ranks}"
+                @wq << "#{q[:name]}#{ranks}"
               end
             weapon_data = @wq.join(',')
 
             [
-              weapon.name,
-              "#{weapon.skill.name}",
-              weapon.damage,
-              weapon.range,
-              weapon.crit,
+              atk[:weapon].name,
+              "#{atk[:skill].name}",
+              atk[:weapon].damage,
+              atk[:weapon].range,
+              atk[:weapon].crit,
               weapon_data
             ]
           end
