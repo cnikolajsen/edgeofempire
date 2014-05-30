@@ -17,6 +17,12 @@ class Race < ActiveRecord::Base
     }
   end
 
+  def twilek_traits
+    traits = {
+      :skill_rank_choice => [['Charm', 4], ['Deception', 9]]
+    }
+  end
+
   def gand_traits
     traits = {
       :sub_species => {

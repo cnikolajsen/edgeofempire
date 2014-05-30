@@ -109,7 +109,10 @@ class Talent < ActiveRecord::Base
 
   def toughened(count)
     @return = {}
-    @return[:wound] = count
+
+    unless count == 0
+      @return[:wound] = count["count"] * 2
+    end
 
     @return
   end
