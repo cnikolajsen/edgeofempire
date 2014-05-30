@@ -1,10 +1,14 @@
 <h4><%= species.name %><% if character && character.subspecies %> <small><%= character.subspecies %></small><% end %></h4>
 <% if !character || character.new_record? %>
-  <% if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits") %>
-    <% traits = species.send("#{species.name.gsub(' ', '').downcase}_traits") %>
+  <% if species.respond_to?("#{species.name.gsub(/[^a-zA-Z0-9\-]/,"").downcase}_traits") %>
+    <% traits = species.send("#{species.name.gsub(/[^a-zA-Z0-9\-]/,"").downcase}_traits") %>
     <% if traits[:sub_species] %>
       <h5>Subspecies</h5>
       <%= select_tag :sub_species, options_for_select(traits[:sub_species], nil), :class => 'input-block-level' %>
+    <% end %>
+    <% if traits[:skill_rank_choice] %>
+      <h5>Select one skill to gain a free rank in:</h5>
+      <%= select_tag :skill_rank_choice, options_for_select(traits[:skill_rank_choice], nil), :class => 'input-block-level' %>
     <% end %>
   <% end %>
 <% end %>

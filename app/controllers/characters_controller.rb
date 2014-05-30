@@ -72,7 +72,7 @@ class CharactersController < ApplicationController
         @character.talent_alterations.each do |talent_id, stat|
           stat.each do |type, value|
             if type == :wound
-              @wound_th += value['count']
+              @wound_th += value
             end
           end
         end
@@ -327,7 +327,7 @@ class CharactersController < ApplicationController
           end
         end
 
-        # Save species skill ranks.
+        # Save fixed free species skill ranks.
         RaceSkill.where(:race_id => species.id).each do |race_skill|
           @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => race_skill.skill_id).first
           unless @character_skill.nil?
@@ -339,6 +339,18 @@ class CharactersController < ApplicationController
               set_experience_cost('skill', race_skill.skill_id, rank + 1, 'up', 'race')
             end
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+          end
+        end
+        # Save selectable free species skill ranks.
+        if params[:skill_rank_choice]
+          @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice]).first
+          if @character_skill
+            @character_skill.free_ranks_race = 1
+            @character_skill.save
+
+            # Save experience entry.
+            set_experience_cost('skill', params[:skill_rank_choice], 1, 'up', 'race')
+            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice], :granted_by => 'race', :ranks => 1).first_or_create
           end
         end
 
