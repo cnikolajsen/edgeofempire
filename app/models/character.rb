@@ -108,6 +108,68 @@ class Character < ActiveRecord::Base
     specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
   end
 
+  # Determine Soak. Brawn plus armor plus talents.
+  def soak
+    soak = self.brawn
+
+    if self.equipped_armor
+      soak += self.equipped_armor.armor.soak
+    end
+
+    # Then increase based on selected talents.
+    self.talent_alterations.each do |talent_id, stat|
+      stat.each do |type, value|
+        if type == :soak
+          soak += value['count']
+        end
+      end
+    end
+
+    soak
+  end
+
+  def defense
+    defense = 0
+    if self.equipped_armor
+      defense += self.equipped_armor.armor.defense
+    end
+    defense
+  end
+
+  # Determine strain threshold. Species stat plus willpower.
+  def strain_threshold
+    strain_th = self.willpower
+    if self.race && self.race.strain_threshold
+      strain_th += self.race.strain_threshold
+    end
+    # Then increase based on selected talents.
+    self.talent_alterations.each do |talent_id, stat|
+      stat.each do |type, value|
+        if type == :strain
+          strain_th += value['count']
+        end
+      end
+    end
+    strain_th
+  end
+
+  # Determine starting wound threshold. Species stat plus brawn.
+  def wound_threshold
+    wound_th = self.brawn
+    if self.race && self.race.wound_threshold
+      wound_th += self.race.wound_threshold
+    end
+    # Then increase based on selected talents.
+    self.talent_alterations.each do |talent_id, stat|
+      stat.each do |type, value|
+        if type == :wound
+          wound_th += value
+        end
+      end
+    end
+    wound_th
+  end
+
   def encumbrance_threshold
     et = self.brawn + 5
     self.inventory(true).each do |inv|
@@ -306,8 +368,23 @@ class Character < ActiveRecord::Base
       }
       end
     end
-logger.warn(attacks)
+
     attacks
+  end
+
+  def specializations
+    specializations = Array.new
+    if self.specialization_1
+      specializations << TalentTree.find_by_id(self.specialization_1).name
+    end
+    if self.specialization_2
+      specializations << TalentTree.find_by_id(self.specialization_2).name
+    end
+    if self.specialization_3
+      specializations << TalentTree.find_by_id(self.specialization_3).name
+    end
+
+    specializations
   end
 
   def talent_alterations

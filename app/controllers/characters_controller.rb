@@ -1,5 +1,4 @@
 class CharactersController < ApplicationController
-  #prawnto :prawn => { :size => "A4", :margin => 0, :font => 'Times-Roman' }
   include TalentsHelper
   include RacesHelper
   include CharactersHelper
@@ -36,17 +35,6 @@ class CharactersController < ApplicationController
     @title = "#{@character.name} | #{@title}"
     @character_state = character_state(@character)
 
-    @specializations = Array.new
-    if @character.specialization_1
-      @specializations << TalentTree.find_by_id(@character.specialization_1).name
-    end
-    if @character.specialization_2
-      @specializations << TalentTree.find_by_id(@character.specialization_2).name
-    end
-    if @character.specialization_3
-      @specializations << TalentTree.find_by_id(@character.specialization_3).name
-    end
-
     # Determine characteristic increases from talents.
     @character.talent_alterations.each do |talent_id, stat|
       stat.each do |type, value|
@@ -73,44 +61,6 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Determine starting wound threshold. Species stat plus brawn.
-    @wound_th = @character.brawn
-    unless @character.race.nil?
-      if !@character.race.wound_threshold.nil?
-        @wound_th += @character.race.wound_threshold
-        @character.talent_alterations.each do |talent_id, stat|
-          stat.each do |type, value|
-            if type == :wound
-              @wound_th += value
-            end
-          end
-        end
-      end
-    end
-    # Then increase based on selected talents.
-
-    # Determine starting strain threshold. Species stat plus willpower.
-    @strain_th = @character.willpower
-    unless @character.race.nil?
-      if !@character.race.strain_threshold.nil?
-        @strain_th += @character.race.strain_threshold
-        @character.talent_alterations.each do |talent_id, stat|
-          stat.each do |type, value|
-            if type == :strain
-              @strain_th += value['count']
-            end
-          end
-        end
-      end
-    end
-    # Then increase based on selected talents.
-
-    @soak = @character.brawn
-    @defense = 0
-    @equipment = Array.new
-    #@attacks = Array.new
-    @pdf_personal_gear = Array.new
-
     # Increase characteristics that don't affect derived stats.
     # I.e armor attachments increasing brawn.
     unless @character.armor_modification_bonuses['characteristics'].blank?
@@ -121,6 +71,7 @@ class CharactersController < ApplicationController
       end
     end
 
+    @equipment = Array.new
     # Add weapons to equipment list
     if !@character.character_weapons.nil?
       unarmed_weapon = Weapon.where(:name => 'Unarmed').first
@@ -157,21 +108,11 @@ class CharactersController < ApplicationController
 
         if ca.equipped?
           if armor_applied == :false
-            @soak += ca.armor.soak
-            @defense += ca.armor.defense
             armor_applied = :true
             @equipment << "#{ca.armor.name} (+#{ca.armor.soak} soak, +#{ca.armor.defense} defense)"
           end
         else
           @equipment << "#{ca.armor.name}"
-        end
-      end
-    end
-
-    @character.talent_alterations.each do |talent_id, stat|
-      stat.each do |type, value|
-        if type == :soak
-          @soak += value['count']
         end
       end
     end
@@ -184,7 +125,6 @@ class CharactersController < ApplicationController
         end
 
         @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
-        @pdf_personal_gear << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
       end
     end
 
@@ -227,30 +167,11 @@ class CharactersController < ApplicationController
       flash.now[:error] = error_messages
     end
 
-    # Specific for the PDF.
-    pdf_vars = Hash.new
-    if params[:format] == 'pdf'
-      if params[:gfx] == 'off'
-        pdf_vars['pdf_background'] = 'off'
-        pdf_vars['pdf_border_color'] = "000000"
-      else
-        pdf_vars['pdf_background'] = 'on'
-        pdf_vars['pdf_border_color'] = "c8c8c8"
-      end
-    end
-    pdf_vars['soak'] = @soak
-    pdf_vars['wound_th'] = @wound_th
-    pdf_vars['strain_th'] = @strain_th
-    pdf_vars['defense'] = @defense
-    pdf_vars['personal_gear'] = @pdf_personal_gear
-    pdf_vars['specializations'] = @specializations
-    pdf_vars['available_xp'] = character_available_experience - character_experience_cost
-    pdf_vars['total_xp'] = character_available_experience
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @character }
       format.pdf do
-        pdf = CharacterSheetPdf.new(@character, view_context, pdf_vars)
+        pdf = CharacterSheetPdf.new(@character, view_context)
         send_data pdf.render, filename: "Character_Sheet_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
       end
     end
