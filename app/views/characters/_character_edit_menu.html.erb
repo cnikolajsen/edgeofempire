@@ -11,7 +11,6 @@
         <a href="#">Basics</a>
         <ul class="dropdown">
           <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></li>
-          <li<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></li>
           <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></li>
           <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></li>
           <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></li>
