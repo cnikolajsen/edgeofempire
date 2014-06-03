@@ -5,7 +5,7 @@ class CharactersController < ApplicationController
   include CharactersHelper
 
   before_filter :set_up
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except =>:show
 
   before_action :find_character, :only => [:show, :edit, :update, :destroy,
     :skills, :character_skill_rank_up, :character_skill_rank_down, :talents,
