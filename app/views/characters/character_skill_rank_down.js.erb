@@ -1,3 +1,4 @@
 $('#skill-row-<%= @skill.id %>').html("<%= escape_javascript(render(:partial => 'character_skill_row', :locals => {:skill => @skill})).html_safe %>");
 $('#flash_messages').html("<%= escape_javascript(render(:partial => 'layouts/flash')).html_safe %>");
 $('#experience_usage_bar').html("<%= escape_javascript(render(:partial => 'character_experience_usage')).html_safe %>");
+$('#free_skill_ranks_form').html("<%= escape_javascript(render(:partial => 'free_skill_ranks_form', :locals => {:career_free_rank => @career_free_rank})).html_safe %>");

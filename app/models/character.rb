@@ -100,12 +100,28 @@ class Character < ActiveRecord::Base
     CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'specialization')
   end
 
+  def selected_skill_ranks_racial_trait
+    CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => 'racial_trait')
+  end
+
+
   def free_skill_ranks_career
     career_free_skill_ranks = if self.race.name == 'Droid' then 6 else 4 end
   end
 
   def free_skill_ranks_specialization
     specialization_free_skill_ranks = if self.race.name == 'Droid' then 3 else 2 end
+  end
+
+  def free_skill_ranks_racial_trait
+    racial_trait_free_skill_ranks = 0
+    if self.race.respond_to?("#{self.race.name.gsub(' ', '').downcase}_traits")
+      traits = self.race.send("#{self.race.name.gsub(' ', '').downcase}_traits")
+      if traits[:bonus_non_class_skill_ranks]
+        racial_trait_free_skill_ranks = traits[:bonus_non_class_skill_ranks]
+      end
+    end
+    racial_trait_free_skill_ranks
   end
 
   # Determine Soak. Brawn plus armor plus talents.

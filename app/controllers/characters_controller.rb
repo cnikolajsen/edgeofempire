@@ -331,21 +331,9 @@ class CharactersController < ApplicationController
       end
     end
 
-    # Update talents.
-    if !params[:update_talents].nil?
-      @talent_trees = Array.new
-      unless @character.specialization_1.nil?
-        @talent_trees << TalentTree.find_by_id(@character.specialization_1)
-      end
-      unless @character.specialization_2.nil?
-        @talent_trees << TalentTree.find_by_id(@character.specialization_2)
-      end
-      unless @character.specialization_3.nil?
-        @talent_trees << TalentTree.find_by_id(@character.specialization_3)
-      end
-
+    if params[:free_skill_ranks]
       # Save specialization skills to add a free rank to.
-      unless params[:free_specialization_skill_rank].nil?
+      if params[:free_specialization_skill_rank]
         specialization_skills = TalentTree.find_by_id(@character.specialization_1).skills
         specialization_skills.each do |skill|
           if params[:free_specialization_skill_rank].include? skill.id.to_s
@@ -380,41 +368,6 @@ class CharactersController < ApplicationController
         end
       end
 
-      @talent_trees.each do |tree|
-        @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
-        if @character_talent_tree.id.nil?
-          @character_talent_tree.character_id = @character.id
-          @character_talent_tree.talent_tree_id = tree.id
-        end
-
-        # Save data for 5 rows with 4 columns.
-        5.times do |r_key|
-          4.times do |c_key|
-            if !params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"].nil?
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = tree["talent_#{r_key + 1}_#{c_key + 1}"]
-              talent_options = Array.new
-              3.times do |o_key|
-                unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
-                  talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
-                end
-              end
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
-              # Save experience entry.
-              set_experience_cost('talent', params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"], r_key + 1, 'up', nil)
-            else
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
-              # Save experience entry.
-              set_experience_cost('talent', tree["talent_#{r_key + 1}_#{c_key + 1}"], r_key + 1, 'down', nil)
-            end
-          end
-        end
-
-        @character_talent_tree.save
-      end
-    end
-
-    # Save character career skill free ranks.
-    if !params[:character_career].nil? and !@character.career.nil?
       # Save career skills to add a free rank to.
       if params[:free_career_skill_rank]
         @character.career.skills.each do |skill|
@@ -486,6 +439,52 @@ class CharactersController < ApplicationController
       end
     end
 
+    # Update talents.
+    if !params[:update_talents].nil?
+      @talent_trees = Array.new
+      unless @character.specialization_1.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_1)
+      end
+      unless @character.specialization_2.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_2)
+      end
+      unless @character.specialization_3.nil?
+        @talent_trees << TalentTree.find_by_id(@character.specialization_3)
+      end
+
+      @talent_trees.each do |tree|
+        @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
+        if @character_talent_tree.id.nil?
+          @character_talent_tree.character_id = @character.id
+          @character_talent_tree.talent_tree_id = tree.id
+        end
+
+        # Save data for 5 rows with 4 columns.
+        5.times do |r_key|
+          4.times do |c_key|
+            if !params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"].nil?
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = tree["talent_#{r_key + 1}_#{c_key + 1}"]
+              talent_options = Array.new
+              3.times do |o_key|
+                unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
+                  talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
+                end
+              end
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
+              # Save experience entry.
+              set_experience_cost('talent', params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"], r_key + 1, 'up', nil)
+            else
+              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
+              # Save experience entry.
+              set_experience_cost('talent', tree["talent_#{r_key + 1}_#{c_key + 1}"], r_key + 1, 'down', nil)
+            end
+          end
+        end
+
+        @character_talent_tree.save
+      end
+    end
+
     # Update character skill entries for character to add in new skills created since the character was created.
     existing_skills = Array.new
     @character.character_skills.each do |skill|
@@ -522,7 +521,7 @@ class CharactersController < ApplicationController
             message = 'Character armor updated.'
           elsif params[:destination] == 'talents'
             message = 'Character talents updated.'
-          elsif params[:destination] == 'career'
+          elsif params[:destination] == 'skills'
             message = 'Character career free skill ranks saved.'
           elsif params[:destination] == 'characteristics'
             message = 'Character characteristics saved.'
@@ -560,11 +559,34 @@ class CharactersController < ApplicationController
     @character_page = 'skills'
     @title = "#{@character.name} | Skills"
     @character_state = character_state(@character)
+    @skill_state = skill_state(@character)
 
     @skill_select_enabled = true
     @character_state.each do |state|
       if state['state_short'] == "missing_free_skills"
         @skill_select_enabled = false
+      end
+    end
+    free_skill_ranks
+  end
+
+  def free_skill_ranks
+    @career_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
+      @career_free_rank << career_skill.skill_id
+    end
+    @racial_trait_free_rank = Array.new()
+    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'racial_trait').each do |non_career_skill|
+      @racial_trait_free_rank << non_career_skill.skill_id
+    end
+
+    @initial_talent_tree = nil
+    if @character.specialization_1
+      @initial_talent_tree = TalentTree.find_by_id(@character.specialization_1)
+
+      @specialization_free_rank = Array.new()
+      CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').each do |career_skill|
+        @specialization_free_rank << career_skill.skill_id
       end
     end
   end
@@ -578,6 +600,7 @@ class CharactersController < ApplicationController
 
     @skill = Skill.find(params[:skill_id])
     @skill_select_enabled = true
+    free_skill_ranks
     flash[:success] = "#{@skill.name} rank increased"
 
     respond_to do |format|
@@ -593,6 +616,7 @@ class CharactersController < ApplicationController
 
     @skill = Skill.find(params[:skill_id])
     @skill_select_enabled = true
+    free_skill_ranks
     flash[:success] = "#{@skill.name} rank decreased"
 
     respond_to do |format|
@@ -633,22 +657,6 @@ class CharactersController < ApplicationController
       CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
     end
     redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
-  end
-
-  def career
-    @character_menu = 'career'
-    @character_page = 'career'
-    @title = "#{@character.name} | Career"
-    @character_state = character_state(@character)
-
-    @career_free_rank = Array.new()
-    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'career').each do |career_skill|
-      @career_free_rank << career_skill.skill_id
-    end
-    @racial_trait_free_rank = Array.new()
-    CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'racial_trait').each do |non_career_skill|
-      @racial_trait_free_rank << non_career_skill.skill_id
-    end
   end
 
   def career_selection

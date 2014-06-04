@@ -4,18 +4,11 @@ module CharactersHelper
     @return = {}
     @messages = Array.new
     if character.creation?
-      flash[:notice] = 'This character is in it creation phase. Special rules may apply.'
+      flash[:notice] = 'This character is in its creation phase. Special rules may apply.'
     elsif character.active?
       flash[:notice] = 'Character is marked active and can spend experience points normally.'
     elsif character.retired?
       flash[:notice] = 'Character taken off duty and is read only.'
-    end
-
-    if character.selected_skill_ranks_career.count < character.free_skill_ranks_career or character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization
-      state = Hash.new
-      state['state_short'] = "missing_free_skills"
-      @messages << state
-      flash[:error] = "Please select #{character.free_skill_ranks_career} free skill ranks from your career and #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks."
     end
 
     if character.selected_skill_ranks_career.count > character.free_skill_ranks_career
@@ -32,7 +25,34 @@ module CharactersHelper
       flash[:error] = "You have selected too many free skill ranks from your first specialization! Please only select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization."
     end
 
+    if character.selected_skill_ranks_racial_trait.count > character.free_skill_ranks_racial_trait
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      @messages << state
+      flash[:error] = "You have selected too many free skill ranks from your #{character.race.name} trait! Please only select #{character.free_skill_ranks_racial_trait} free skill ranks from your #{character.race.name} trait."
+    end
+
     @messages
+  end
+
+  def skill_state(character)
+    if character.selected_skill_ranks_career.count < character.free_skill_ranks_career || character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization || character.selected_skill_ranks_racial_trait.count < character.free_skill_ranks_racial_trait
+      state = Hash.new
+      state['state_short'] = "missing_free_skills"
+      @messages << state
+      racial_trait_text = ''
+      if character.free_skill_ranks_racial_trait > 0 && character.selected_skill_ranks_racial_trait.count < character.free_skill_ranks_racial_trait
+        racial_trait_text = "<li>Please select #{character.free_skill_ranks_racial_trait} free skill ranks from your #{character.race.name} trait before buying skill ranks.</li>"
+      end
+      if character.selected_skill_ranks_career.count < character.free_skill_ranks_career
+        career_text = "<li>Please select #{character.free_skill_ranks_career} free skill ranks from your career before buying skill ranks.</li>"
+      end
+      if character.selected_skill_ranks_specialization.count < character.free_skill_ranks_specialization
+        specialization_text = "<li>Please select #{character.free_skill_ranks_specialization} free skill ranks from your first specialization before buying skill ranks.</li>"
+      end
+      flash[:error] = "<ul>#{career_text}#{specialization_text}#{racial_trait_text}</ul>"
+    end
+
   end
 
   def is_career_skill(skill_id, talent_select = false)
