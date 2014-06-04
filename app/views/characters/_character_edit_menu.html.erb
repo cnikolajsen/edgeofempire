@@ -11,14 +11,12 @@
         <a href="#">Basics</a>
         <ul class="dropdown">
           <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></li>
-          <li<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></li>
           <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></li>
           <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></li>
           <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></li>
           <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></li>
         </ul>
       </li>
-      <li<% if @character_page == 'career' %> class="active"<% end %>><%= link_to "Career", character_career_url(@character) %></li>
       <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", character_talents_url(@character) %></li>
       <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", character_skills_url(@character) %></li>
       <% if @character.force_rating > 0 %>
@@ -32,7 +30,6 @@
           <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></li>
         </ul>
       </li>
-      <li><a href="#">Vehicles</a></li>
     </ul>
   </section>
 </nav>
@@ -40,7 +37,6 @@
   <dl class="sub-nav" data-no-turbolink>
     <dt>Basics:</dt>
     <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></dd>
-    <dd<% if @character_page == 'species' %> class="active"<% end %>><%= link_to "Species", character_species_url(@character) %></dd>
     <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></dd>
     <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></dd>
     <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></dd>

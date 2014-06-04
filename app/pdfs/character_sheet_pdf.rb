@@ -2,25 +2,17 @@ class CharacterSheetPdf < Prawn::Document
   include CharactersHelper
   include ApplicationHelper
 
-  def initialize(character, view, pdf_vars)
+  def initialize(character, view)
     super( :left_margin => 30, :right_margin => 30, :top_margin => 0, :bottom_margin => 0, :page_size => 'A4')
-    #if pdf_vars['pdf_background'] == 'on'
-    #  image "#{Rails.root}/public/BKSheet1_opt.png",
-    #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-    #    :fit => [595.28, 841.89]
-    #end
-
     @character = character
     @view = view
 
     fill_color "000000"
-    #rounded_rectangle(point,width,height,radius)
     rectangle [(bounds.right - 115), bounds.top], 111, 60 # logo box
     fill
     image "#{Rails.root}/public/eote_logo_white.png", :at => [(bounds.right - 105), (bounds.top - 5)], :width => 90
 
-    fill_color "C0C0C0" #pdf_vars['pdf_border_color']
-    #
+    fill_color "C0C0C0"
     rounded_rectangle [0, 690], bounds.width, 83, 10 # Vitals box
     fill
 
@@ -29,8 +21,6 @@ class CharacterSheetPdf < Prawn::Document
       fill_color "c8c8c8"
       rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 3 # Character box
       fill
-      #fill_color "6d7b68"
-      #draw_text "Character", :size => 7, :style => :bold, :at => [10, 85]
       fill_color "505b4d"
       draw_text "CHARACTER NAME", :size => 10, :style => :bold, :at => [15, (bounds.top - 20)]
       draw_text "SPECIES", :size => 8, :at => [15, (bounds.top - 35)]
@@ -40,9 +30,7 @@ class CharacterSheetPdf < Prawn::Document
       draw_text "#{@character.name}", :size => 12, :at => [140, (bounds.top - 20)]
       draw_text "#{@character.race.name}", :size => 8, :at => [140, (bounds.top - 35)]
       draw_text "#{@character.career.name}", :size => 8, :at => [140, (bounds.top - 50)]
-      draw_text pdf_vars['specializations'].join(' / '), :size => 8, :at => [140, (bounds.top - 65)]
-      #text_box "#{@character.user.email}", :size => 8, :at => [458, y - 90]
-      #stroke_bounds
+      draw_text @character.specializations.join(' / '), :size => 8, :at => [140, (bounds.top - 65)]
     end
     #===== /Character details =====
 
@@ -64,8 +52,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "WOUNDS", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        #text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 26, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
-        text_box "#{pdf_vars['wound_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{@character.wound_threshold}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -87,7 +74,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "STRAIN", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['strain_th']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{@character.strain_threshold}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -109,7 +96,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "SOAK VALUE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['soak']}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{@character.soak}", :at => [bounds.left, (bounds.top - 18)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
       end
       bounding_box([(bounds.left + ((bounds.width / 5) * 3)), bounds.top], :width => (bounds.width / 5), :height => bounds.height) do
         # Outer Box.
@@ -127,7 +114,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "DEFENSE", :at => [bounds.left, bounds.top], :width => bounds.width, :height => 16, :overflow => :shrink_to_fit, :size => 10, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['defense']}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{@character.defense}", :at => [bounds.left, (bounds.top - 18)], :width => (bounds.width / 2), :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "RANGED", :at => [bounds.left, (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
@@ -720,7 +707,7 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "TOTAL XP", :at => [bounds.left, (bounds.bottom + 12)], :width => bounds.width, :height => 8, :overflow => :shrink_to_fit, :size => 6, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['total_xp']}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{character_available_experience}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
       end
 
       bounding_box([(bounds.left + 100), (bounds.bottom + 45)], :width => (bounds.width - 200), :height => 45) do
@@ -748,18 +735,12 @@ class CharacterSheetPdf < Prawn::Document
         fill_color "ffffff"
         text_box "AVAILABLE XP", :at => [bounds.left, (bounds.bottom + 12)], :width => bounds.width, :height => 8, :overflow => :shrink_to_fit, :size => 6, :style => :bold, :align => :center, :valign => :bottom
         fill_color "000000"
-        text_box "#{pdf_vars['available_xp']}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
+        text_box "#{character_available_experience - character_experience_cost}", :at => [bounds.left, (bounds.top - 3)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
       end
     end
     #===== /FOOTER =====
 
     start_new_page
-    # Background image.
-    #if pdf_vars['pdf_background'] == 'on'
-    #  image "#{Rails.root}/public/BKSheet2_opt.png",
-    #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-    #    :fit => [595.28, 841.89]
-    #end
 
   #===== TALENTS =====
   bounding_box([bounds.left, (bounds.top - 5)], :width => bounds.width, :height => 240) do
@@ -1016,12 +997,6 @@ class CharacterSheetPdf < Prawn::Document
   #===== /FOOTER =====
 
   start_new_page
-  # Background image.
-  #if pdf_vars['pdf_background'] == 'on'
-  #  image "#{Rails.root}/public/BKSheet3_opt.png",
-  #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-  #    :fit => [595.28, 841.89]
-  #end
 
   #===== ARMOR =====
   fill_color "244060"
@@ -1743,17 +1718,6 @@ class CharacterSheetPdf < Prawn::Document
   #===== /FOOTER =====
 
   start_new_page
-  # Background image.
-  #if pdf_vars['pdf_background'] == 'on'
-  #  image "#{Rails.root}/public/BKSheet4_opt.png",
-  #    :at  => [-bounds.absolute_left, 841.89 - bounds.absolute_bottom],
-  #    :fit => [595.28, 841.89]
-  #end
-
-  #text "top: #{bounds.top}"
-  #text "bottom: #{bounds.bottom}"
-  #text "left: #{bounds.left}"
-  #text "right: #{bounds.right}"
 
   #===== Personal finances =====
   bounding_box([bounds.left, bounds.top], :width => bounds.width, :height => 50) do
@@ -1786,9 +1750,6 @@ class CharacterSheetPdf < Prawn::Document
       fill_color "000000"
       text_box "#{@character.credits}", :at => [bounds.left, (bounds.top)], :width => bounds.width, :height => 36, :overflow => :shrink_to_fit, :size => 25, :style => :bold, :align => :center, :valign => :center
     end
-    #end
-    #bounding_box([bounds.left, bounds.top], :width => (bounds.width / 2), :height => bounds.height) do
-    #end
 
   end
   #===== /Personal Finances =====
