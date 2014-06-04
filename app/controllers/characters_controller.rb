@@ -169,7 +169,7 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @character }
+      format.json { render json: @character, :methods => [:soak, :defense, :strain_threshold, :wound_threshold, :attacks, :encumbrance_threshold, :inventory, :talents, :specializations, :force_rating] }
       format.pdf do
         pdf = CharacterSheetPdf.new(@character, view_context)
         send_data pdf.render, filename: "Character_Sheet_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
