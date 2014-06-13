@@ -1,10 +1,8 @@
-<% if f.object.gear_id %>
-  <% @item = Gear.find_by_id(f.object.gear_id) %>
-  <%= f.hidden_field :gear_id %>
+  <% @item = Gear.find_by_id(item.gear_id) %>
   <tr class="nested-fields">
     <td>
-      <a href="#" data-reveal-id="itemDescription-<%= f.object.id %>"><%= @item.name %></a>
-      <div id="itemDescription-<%= f.object.id %>" class="reveal-modal" data-reveal>
+      <a href="#" data-reveal-id="itemDescription-<%= item.id %>"><%= @item.name %></a>
+      <div id="itemDescription-<%= item.id %>" class="reveal-modal" data-reveal>
         <h2><%= @item.name %></h2>
         <p><%= text_replace_tokens(@item.description).html_safe %></p>
         <p><strong>Rarity:</strong> <%= @item.rarity %></p>
@@ -14,21 +12,17 @@
     </td>
     <td>
       <% if @item.gear_models.any? %>
-        <%= f.select :gear_model_id, @item.gear_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %>
+        <%#= f.select :gear_model_id, @item.gear_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %>
       <% end %>
     </td>
-    <td><%= @item.encumbrance %></td>
-    <td><%= f.number_field :qty, :min => 0 %></td>
-    <td><%= f.check_box :carried %></td>
-    <td><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></td>
+    <td><%= @item.encumbrance * item.qty %></td>
+    <td>- <%= item.qty %> +</td>
+    <td>
+      <% if item.carried %>
+        <%= link_to "Carried", place_item_path(@character, item, 'storage'), :class => 'label success' %>
+      <% else %>
+        <%= link_to "Stored", place_item_path(@character, item, 'inventory'), :class => 'label secondary' %>
+      <% end %>
+    </td>
+    <td><%= link_to "Remove", remove_item_path(@character, item), :class => 'label alert' %></td>
   </tr>
-<% else %>
-  <tr>
-    <td>New item</td>
-    <td colspan="2"><%= f.select :gear_id, Gear.where(:true).collect  {|gear| [gear.name, gear.id]}, {:prompt => "Select Item"} %></td>
-    <td><%= f.number_field :qty, :min => 0, :value => 1 %></td>
-    <td><%= f.check_box :carried, :checked => 'checked' %></td>
-    <td></td>
-  </tr>
-<% end %>
-

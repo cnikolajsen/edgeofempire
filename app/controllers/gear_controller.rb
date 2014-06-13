@@ -2,7 +2,7 @@ class GearController < ApplicationController
   before_filter :set_up
 
   def index
-    @gear = Gear.find(:all, :order => :name)
+    @gear = Gear.where(:true)
 
     respond_to do |format|
       format.html # index.html.erb

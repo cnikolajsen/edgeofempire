@@ -63,6 +63,10 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/armor' => 'characters#armor', :as => :character_armor
   get 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
   get 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
+  post 'characters/:id/equipment' => 'characters#add_equipment'
+  get 'characters/:id/equipment/:character_gear_id/remove' => 'characters#remove_equipment', :as => :remove_item
+  get 'characters/:id/equipment/:character_gear_id/move/:action_id' => 'characters#place_equipment', :as => :place_item
+  get 'character/find/equipment_selection' => 'characters#equipment_selection'
   get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
   get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character

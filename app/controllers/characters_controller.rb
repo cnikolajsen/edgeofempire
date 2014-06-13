@@ -12,7 +12,8 @@ class CharactersController < ApplicationController
     :obligation, :add_obligation, :motivation, :add_motivation, :armor,
     :armor_attachment, :add_armor_attachment_option, :remove_armor_attachment_option,
     :weapons, :weapon_attachment, :add_weapon_attachment_option,
-    :remove_weapon_attachment_option, :equipment, :force_powers, :add_force_power,
+    :remove_weapon_attachment_option, :equipment, :add_equipment,
+    :remove_equipment, :place_equipment, :force_powers, :add_force_power,
     :remove_force_power, :add_force_power_upgrade, :remove_force_power_upgrade,
     :set_activate, :set_retired, :set_creation]
 
@@ -962,6 +963,54 @@ class CharactersController < ApplicationController
     @character_page = 'gear'
     @title = "#{@character.name} | Equipment"
     @character_state = character_state(@character)
+  end
+
+  def equipment_selection
+    if params[:gear_id]
+      item = Gear.find(params[:gear_id])
+
+      #render :partial => "gear_info", :locals => { :gear => gear, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
+      render :partial => "gear_info", :locals => { :gear => item}
+    else
+      #render :partial => "gear_info", :locals => { :gear => nil, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
+      render :partial => "gear_info", :locals => { :gear => nil}
+    end
+  end
+
+  def add_equipment
+    item = Gear.find(params[:character_gears][:gear_id]) unless params[:character_gears][:gear_id].blank?
+
+    if item
+      character_gear = CharacterGear.where(:character_id => @character.id, :gear => params[:character_gears][:gear_id]).create
+      character_gear.update_attribute(:carried, params[:character_gears][:carried])
+      character_gear.update_attribute(:qty, params[:character_gears][:qty])
+      flash[:success] = "#{item.name} added"
+    else
+      flash[:error] = "Item not found."
+    end
+    redirect_to :back
+  end
+
+  def remove_equipment
+    item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+    item.delete
+    flash[:success] = "#{item.gear.name} removed"
+    redirect_to :back
+  end
+
+  def place_equipment
+    item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+
+    if params[:action_id] == 'storage'
+      item.update_attribute(:carried, :false)
+      flash[:success] = "#{item.gear.name} moved to storage."
+    else
+      item.update_attribute(:carried, 1)
+      flash[:success] = "#{item.gear.name} moved to inventory."
+    end
+
+    redirect_to :back
+
   end
 
   def force_powers
