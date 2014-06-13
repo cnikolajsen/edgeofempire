@@ -10,6 +10,7 @@
 </div>
 <div class="row">
   <div class="small-3 columns">
+    <h5>Add general item</h5>
     <%= form_for :character_gears do |f| %>
       <%= f.select :gear_id, Gear.where(:true).collect  {|gear| ["#{gear.name}", gear.id]}, {:prompt => "Select Item"} %>
       <div class="row">
@@ -32,13 +33,35 @@
         </div>
       </div>
     <% end %>
+    <hr />
+    <h5>Add custom item</h5>
+    <%= form_for :character_custom_gears do |f| %>
+      <div class="row">
+        <div class="small-12 columns">
+          <%= f.label :description %>
+          <%= f.text_field :description %>
+          <%= f.check_box :carried, {checked: true} %>
+          <%= f.label :carried %>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-6 columns">
+          <%= f.label :encumbrance %>
+          <%= f.number_field :encumbrance, :min => 0, :value => 0 %>
+        </div>
+        <div class="small-6 columns">
+          <label>Quantity</label><%= f.number_field :qty, :min => 1, :value => 1 %>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-12 columns">
+          <%= f.submit 'Add Item', :class => 'button tiny' %>
+        </div>
+      </div>
+    <% end %>
+
   </div>
   <div class="small-9 columns">
-    <!--
-    <div class="panel">
-
-    </div>
-    -->
     <div class="row">
       <div class="small-12 columns">
         <table class="responsive" style="width:100%">
@@ -52,6 +75,9 @@
           </thead>
           <tbody id="item-grid">
             <% @character.character_gears.each do |item| %>
+             <%= render :partial => 'character_gear_fields', :locals => { :item => item } %>
+            <% end %>
+            <% @character.character_custom_gears.each do |item| %>
              <%= render :partial => 'character_gear_fields', :locals => { :item => item } %>
             <% end %>
           </tbody>

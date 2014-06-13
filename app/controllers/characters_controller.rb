@@ -978,35 +978,69 @@ class CharactersController < ApplicationController
   end
 
   def add_equipment
-    item = Gear.find(params[:character_gears][:gear_id]) unless params[:character_gears][:gear_id].blank?
+    if params[:character_gears]
+      item = Gear.find(params[:character_gears][:gear_id]) unless params[:character_gears][:gear_id].blank?
 
-    if item
-      character_gear = CharacterGear.where(:character_id => @character.id, :gear => params[:character_gears][:gear_id]).create
-      character_gear.update_attribute(:carried, params[:character_gears][:carried])
-      character_gear.update_attribute(:qty, params[:character_gears][:qty])
-      flash[:success] = "#{item.name} added"
-    else
-      flash[:error] = "Item not found."
+      if item
+        character_gear = CharacterGear.where(:character_id => @character.id, :gear => params[:character_gears][:gear_id]).create
+        character_gear.update_attribute(:carried, params[:character_gears][:carried])
+        character_gear.update_attribute(:qty, params[:character_gears][:qty])
+        flash[:success] = "#{item.name} added"
+      else
+        flash[:error] = "Item not found."
+      end
+    elsif params[:character_custom_gears]
+      @custom_gear = CharacterCustomGear.new(
+        :character_id => @character.id,
+        :description => params[:character_custom_gears][:description],
+        :carried => params[:character_custom_gears][:carried],
+        :encumbrance => params[:character_custom_gears][:encumbrance],
+        :qty => params[:character_custom_gears][:qty],
+      )
+
+      if @custom_gear.save
+        flash[:success] = "Custom item added."
+      else
+        flash[:error] = "Custom item not added. Description can not be blank."
+      end
     end
     redirect_to :back
   end
 
   def remove_equipment
-    item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+    if params[:custom]
+      item = CharacterCustomGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+      name = item.description
+    else
+      item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+      name = item.gear.name
+    end
     item.delete
-    flash[:success] = "#{item.gear.name} removed"
+    flash[:success] = "'#{name}' removed"
     redirect_to :back
   end
 
   def place_equipment
-    item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+    if params[:custom]
+      item = CharacterCustomGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
 
-    if params[:action_id] == 'storage'
-      item.update_attribute(:carried, :false)
-      flash[:success] = "#{item.gear.name} moved to storage."
+      if params[:action_id] == 'storage'
+        item.update_attribute(:carried, :false)
+        flash[:success] = "'#{item.description}' moved to storage."
+      else
+        item.update_attribute(:carried, 1)
+        flash[:success] = "'#{item.description}' moved to inventory."
+      end
     else
-      item.update_attribute(:carried, 1)
-      flash[:success] = "#{item.gear.name} moved to inventory."
+      item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+
+      if params[:action_id] == 'storage'
+        item.update_attribute(:carried, :false)
+        flash[:success] = "'#{item.gear.name}' moved to storage."
+      else
+        item.update_attribute(:carried, 1)
+        flash[:success] = "'#{item.gear.name}' moved to inventory."
+      end
     end
 
     redirect_to :back
@@ -1135,6 +1169,7 @@ class CharactersController < ApplicationController
       :specialization_2,
       :specialization_3,
       character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
+      character_custom_gears_attributes: [ :id, :description, :qty, :carried, :encumbrance, :_destroy ],
       character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
       character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
       character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],

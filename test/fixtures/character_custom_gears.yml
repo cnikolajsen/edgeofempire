@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  character_id: 1
+  description: MyString
+  encumbrance: 1
+  qty: 1
+  carried: false
+
+two:
+  character_id: 1
+  description: MyString
+  encumbrance: 1
+  qty: 1
+  carried: false
