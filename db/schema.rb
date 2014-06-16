@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528133652) do
+ActiveRecord::Schema.define(version: 20140613075851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,6 +164,16 @@ ActiveRecord::Schema.define(version: 20140528133652) do
     t.integer  "character_id"
     t.integer  "talent_id"
     t.string   "bonus_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "character_custom_gears", force: true do |t|
+    t.integer  "character_id"
+    t.string   "description"
+    t.integer  "encumbrance"
+    t.integer  "qty"
+    t.boolean  "carried"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

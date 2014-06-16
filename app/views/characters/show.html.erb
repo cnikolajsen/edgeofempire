@@ -24,7 +24,7 @@
 <% end %>
 <div class="row">
   <div class="medium-9 columns">
-    <table class="small-12 columns">
+    <table class="small-12 columns responsive">
       <tbody>
         <tr>
           <td><strong><%= model_class.human_attribute_name(:brawn) %> <%= @character.brawn %></strong></td>
@@ -58,7 +58,7 @@
         <tr>
           <td colspan="3">
             <h5>Attacks</h5>
-            <table style="width:100%">
+            <table style="width:100%" class="responsive">
               <thead>
                 <tr>
                   <th>Weapon</th>
@@ -103,7 +103,7 @@
         <tr>
           <td colspan="3">
             <h5>Talents</h5>
-            <table style="width:100%">
+            <table style="width:100%" class="responsive">
               <tbody>
                 <% @character.talents.each_with_index do |element, index| %>
                   <% talent = Talent.find_by_id(element[0]) %>
@@ -137,7 +137,7 @@
             <td colspan="3">
               <h5>Force Powers <small>Force rating <%= @character.force_rating %></small></h5>
               <% @character.force_power_upgrades_computed.each do |fp| %>
-                <table>
+                <table class="responsive">
                   <thead>
                     <tr>
                       <th colspan="3"><%= fp['name'] %></th>
@@ -161,7 +161,14 @@
           </tr>
         <% end %>
         <tr>
-          <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ').html_safe %></td>
+          <td colspan="3">
+            <strong>Equipment:</strong>
+            <% @character.inventory.each_with_index do |item, delta| %>
+              <% count = item[:quantity] > 1 ? " (#{item[:quantity]})" : "" %>
+              <% delimiter = delta < @character.inventory.count - 1  ? ", " : "" %>
+              <%= "#{item[:name]}#{count}#{delimiter}" %>
+            <% end %>
+          </td>
         </tr>
       </tbody>
     </table>

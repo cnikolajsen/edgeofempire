@@ -1,41 +1,19 @@
-<% unless f.object.gear_id.nil? %>
-  <% @item = Gear.find_by_id(f.object.gear_id) %>
-  <%= f.hidden_field :gear_id %>
-  <li class="nested-fields" data-equalizer-watch>
-    <ul class="pricing-table">
-      <li class="title"><%= @item.name %></li>
-      <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @item.price %></li>
-      <li class="bullet-item">
-        <a href="#" data-reveal-id="itemDescription-<%= f.object.id %>">View description</a>
-        <div id="itemDescription-<%= f.object.id %>" class="reveal-modal" data-reveal>
-          <h2><%= @item.name %></h2>
-          <p><%= text_replace_tokens(@item.description).html_safe %></p>
-          <a class="close-reveal-modal">&#215;</a>
-        </div>
-      </li>
-      <li class="bullet-item">
-        <%= f.check_box :carried %>
-        <%= f.label :carried %>
-      </li>
-      <% unless @item.gear_models.blank? %>
-        <li class="bullet-item"><%= f.select :gear_model_id, @item.gear_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model"} %></li>
-      <% end -%>
-      <li class="bullet-item">Enc: <%= @item.encumbrance %></li>
-      <li class="bullet-item">Rarity: <%= @item.rarity %></li>
-      <li class="bullet-item"><label>Quantity</label><%= f.number_field :qty, :min => 0 %></li>
-      <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
-    </ul>
-  </li>
-<% else %>
-  <li>
-    <ul class="pricing-table">
-      <li class="title">New item</li>
-      <li class="bullet-item"><%= f.select :gear_id, Gear.where(:true).collect  {|gear| [gear.name, gear.id]}, {:prompt => "Select Item"} %></li>
-      <li class="bullet-item"><label>Quantity</label><%= f.number_field :qty, :min => 0, :value => 1 %></li>
-      <li class="bullet-item">
-        <%= f.check_box :carried, :checked => 'checked' %>
-        <%= f.label :carried %>
-      </li>
-    </ul>
-  </li>
-<% end %>
+<tr class="nested-fields">
+  <td>
+    <%= item[:name] %>
+  </td>
+  <td><%= item[:total_encumbrance] %></td>
+  <td>
+    <%= link_to "- ", decrease_item_qty_path(@character, item[:id], item[:custom] ? 'custom' : '') unless item[:quantity] == 1 %>
+    <%= item[:quantity] %>
+    <%= link_to " +", increase_item_qty_path(@character, item[:id], item[:custom] ? 'custom' : '') %>
+  </td>
+  <td>
+    <% if item[:carried] %>
+      <%= link_to "Carried", place_item_path(@character, item[:id], 'storage', item[:custom] ? 'custom' : ''), :class => 'label success' %>
+    <% else %>
+      <%= link_to "Stored", place_item_path(@character, item[:id], 'inventory', item[:custom] ? 'custom' : ''), :class => 'label secondary' %>
+    <% end %>
+    <%= link_to "Remove", remove_item_path(@character, item[:id], item[:custom] ? 'custom' : ''), :class => 'label alert' %>
+  </td>
+</tr>

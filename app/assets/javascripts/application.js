@@ -16,5 +16,6 @@
 //= require foundation
 //= require cocoon
 //= require character
+//= require responsive-tables
 
 $(function(){ $(document).foundation(); });

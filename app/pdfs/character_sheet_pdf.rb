@@ -1790,16 +1790,16 @@ class CharacterSheetPdf < Prawn::Document
       text_box "CURRENT", :at => [(bounds.width / 2), (bounds.top - 55)], :width => (bounds.width / 2), :height => 10, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     end
 
-    inventory_carried = @character.inventory(true)
+    inventory_carried = @character.inventory({:carried => true})
 
     if inventory_carried.any?
       items_left = inventory_carried[0..16].map do |item|
         font "Helvetica", :size => 8
         [
-          item['name'],
-          item['quantity'],
-          item['encumbrance'],
-          item['location']
+          item[:name],
+          item[:quantity],
+          item[:total_encumbrance],
+          item[:location]
         ]
       end
 
@@ -1810,10 +1810,10 @@ class CharacterSheetPdf < Prawn::Document
       items_right = inventory_carried.drop(17).map do |item|
         font "Helvetica", :size => 8
         [
-          item['name'],
-          item['quantity'],
-          item['encumbrance'],
-          item['location']
+          item[:name],
+          item[:quantity],
+          item[:total_encumbrance],
+          item[:location]
         ]
       end
 
@@ -1896,15 +1896,15 @@ class CharacterSheetPdf < Prawn::Document
     text_box "OTHER PROPERTY", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     fill_color "000000"
 
-    inventory_other = @character.inventory(false)
+    inventory_other = @character.inventory({:carried => false})
 
     items_left = inventory_other[0..25].map do |item|
       font "Helvetica", :size => 8
       [
-        item['name'],
-        item['quantity'],
-        item['encumbrance'],
-        item['location']
+        item[:name],
+        item[:quantity],
+        item[:total_encumbrance],
+        item[:location]
       ]
     end
 
@@ -1915,10 +1915,10 @@ class CharacterSheetPdf < Prawn::Document
     items_right = inventory_other.drop(26).map do |item|
       font "Helvetica", :size => 8
       [
-        item['name'],
-        item['quantity'],
-        item['encumbrance'],
-        item['location']
+        item[:name],
+        item[:quantity],
+        item[:total_encumbrance],
+        item[:location]
       ]
     end
 

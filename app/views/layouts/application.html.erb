@@ -30,12 +30,12 @@
               <li class="has-dropdown">
                 <a href="#">Names</a>
                 <ul class="dropdown">
-                  <li<% if current_page('human_names') %> class="active"<% end %>><%= link_to "Human names", "/names/human" %></li>
-                  <li<% if current_page('bothan_names') %> class="active"<% end %>><%= link_to "Bothan names", "/names/bothan" %></li>
-                  <li<% if current_page('rodian_names') %> class="active"<% end %>><%= link_to "Rodian names", "/names/rodian" %></li>
-                  <li<% if current_page('trandoshan_names') %> class="active"<% end %>><%= link_to "Trandoshan names", "/names/trandoshan"%></li>
-                  <li<% if current_page('twilek_names') %> class="active"<% end %>><%= link_to "Twi'lek names", "/names/twilek" %></li>
-                  <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", "/names/droid" %></li>
+                  <li<% if current_page('human_names') %> class="active"<% end %>><%= link_to "Human names", human_names_path %></li>
+                  <li<% if current_page('bothan_names') %> class="active"<% end %>><%= link_to "Bothan names", bothan_names_path %></li>
+                  <li<% if current_page('rodian_names') %> class="active"<% end %>><%= link_to "Rodian names", rodian_names_path %></li>
+                  <li<% if current_page('trandoshan_names') %> class="active"<% end %>><%= link_to "Trandoshan names", trandoshan_names_path %></li>
+                  <li<% if current_page('twilek_names') %> class="active"<% end %>><%= link_to "Twi'lek names", twilek_names_path %></li>
+                  <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", droid_names_path %></li>
                 </ul>
               </li>
               <li<% if current_page('rules_summary') %> class="active"<% end %>><%= link_to "Rules Summary", rules_path %></li>

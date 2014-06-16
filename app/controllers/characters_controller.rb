@@ -12,7 +12,8 @@ class CharactersController < ApplicationController
     :obligation, :add_obligation, :motivation, :add_motivation, :armor,
     :armor_attachment, :add_armor_attachment_option, :remove_armor_attachment_option,
     :weapons, :weapon_attachment, :add_weapon_attachment_option,
-    :remove_weapon_attachment_option, :equipment, :force_powers, :add_force_power,
+    :remove_weapon_attachment_option, :equipment, :add_equipment,
+    :remove_equipment, :place_equipment, :force_powers, :add_force_power,
     :remove_force_power, :add_force_power_upgrade, :remove_force_power_upgrade,
     :set_activate, :set_retired, :set_creation]
 
@@ -71,63 +72,6 @@ class CharactersController < ApplicationController
       end
     end
 
-    @equipment = Array.new
-    # Add weapons to equipment list
-    if !@character.character_weapons.nil?
-      unarmed_weapon = Weapon.where(:name => 'Unarmed').first
-
-      @character.character_weapons.each do |cw|
-        if cw.weapon_model_id.nil?
-          weapon_name = cw.weapon.name
-        else
-          weapon_name = WeaponModel.find(cw.weapon_model_id).name
-        end
-
-        unless cw.character_weapon_attachments.blank?
-          weapon_name = "Modified " + weapon_name
-        end
-
-        unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
-          if params[:format] != 'pdf'
-            @equipment << "#{weapon_name}"
-          end
-        end
-      end
-    end
-
-    armor_applied = :false
-    if !@character.character_armor.nil?
-      @character.character_armor.each do |ca|
-        unless ca.armor_model_id.nil?
-          ca.armor.name = ArmorModel.find(ca.armor_model_id).name
-        end
-
-        unless ca.character_armor_attachments.blank?
-          ca.armor.name = "Modified " + ca.armor.name
-        end
-
-        if ca.equipped?
-          if armor_applied == :false
-            armor_applied = :true
-            @equipment << "#{ca.armor.name} (+#{ca.armor.soak} soak, +#{ca.armor.defense} defense)"
-          end
-        else
-          @equipment << "#{ca.armor.name}"
-        end
-      end
-    end
-
-    # Add general items to equipment list
-    if !@character.character_gears.nil?
-      @character.character_gears.each do |cg|
-        unless cg.gear_model_id.nil?
-          cg.gear.name = GearModel.find(cg.gear_model_id).name
-        end
-
-        @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
-      end
-    end
-
     # Apply species special abilities.
     race_alterations = {}
     unless @character.race.nil?
@@ -169,7 +113,7 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @character }
+      format.json { render json: @character, :methods => [:soak, :defense, :strain_threshold, :wound_threshold, :attacks, :encumbrance_threshold, :inventory, :talents, :specializations, :force_rating] }
       format.pdf do
         pdf = CharacterSheetPdf.new(@character, view_context)
         send_data pdf.render, filename: "Character_Sheet_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
@@ -964,6 +908,113 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def equipment_selection
+    if params[:gear_id]
+      item = Gear.find(params[:gear_id])
+      render :partial => "gear_info", :locals => { :gear => item}
+    else
+      render :partial => "gear_info", :locals => { :gear => nil}
+    end
+  end
+
+  def add_equipment
+    if params[:character_gears]
+      item = Gear.find(params[:character_gears][:gear_id]) unless params[:character_gears][:gear_id].blank?
+
+      if item
+        character_gear = CharacterGear.where(:character_id => @character.id, :gear => params[:character_gears][:gear_id]).create
+        character_gear.update_attribute(:carried, params[:character_gears][:carried])
+        character_gear.update_attribute(:qty, params[:character_gears][:qty])
+        flash[:success] = "#{item.name} added"
+      else
+        flash[:error] = "Item not found."
+      end
+    elsif params[:character_custom_gears]
+      @custom_gear = CharacterCustomGear.new(
+        :character_id => @character.id,
+        :description => params[:character_custom_gears][:description],
+        :carried => params[:character_custom_gears][:carried],
+        :encumbrance => params[:character_custom_gears][:encumbrance],
+        :qty => params[:character_custom_gears][:qty],
+      )
+
+      if @custom_gear.save
+        flash[:success] = "Custom item added."
+      else
+        flash[:error] = "Custom item not added. Description can not be blank."
+      end
+    end
+    redirect_to :back
+  end
+
+  def increase_equipment_qty
+    if params[:custom]
+      item = CharacterCustomGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty + 1)
+      name = item.description
+    else
+      item = CharacterGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty + 1)
+      name = item.gear.name
+    end
+    flash[:success] = "'#{name}' count increased"
+    redirect_to :back
+  end
+
+  def decrease_equipment_qty
+    if params[:custom]
+      item = CharacterCustomGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty - 1)
+      name = item.description
+    else
+      item = CharacterGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty - 1)
+      name = item.gear.name
+    end
+    flash[:success] = "'#{name}' count decreased"
+    redirect_to :back
+  end
+
+  def remove_equipment
+    if params[:custom]
+      item = CharacterCustomGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+      name = item.description
+    else
+      item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+      name = item.gear.name
+    end
+    item.delete
+    flash[:success] = "'#{name}' removed"
+    redirect_to :back
+  end
+
+  def place_equipment
+    if params[:custom]
+      item = CharacterCustomGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+
+      if params[:action_id] == 'storage'
+        item.update_attribute(:carried, :false)
+        flash[:success] = "'#{item.description}' moved to storage."
+      else
+        item.update_attribute(:carried, 1)
+        flash[:success] = "'#{item.description}' moved to inventory."
+      end
+    else
+      item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
+
+      if params[:action_id] == 'storage'
+        item.update_attribute(:carried, :false)
+        flash[:success] = "'#{item.gear.name}' moved to storage."
+      else
+        item.update_attribute(:carried, 1)
+        flash[:success] = "'#{item.gear.name}' moved to inventory."
+      end
+    end
+
+    redirect_to :back
+
+  end
+
   def force_powers
     @character_page = 'forcepowers'
     @title = "#{@character.name} | Force Powers"
@@ -1086,6 +1137,7 @@ class CharactersController < ApplicationController
       :specialization_2,
       :specialization_3,
       character_gears_attributes: [ :id, :gear_id, :qty, :carried, :gear_model_id, :_destroy ],
+      character_custom_gears_attributes: [ :id, :description, :qty, :carried, :encumbrance, :_destroy ],
       character_weapons_attributes: [ :id, :weapon_id, :description, :equipped, :carried, :weapon_model_id, :_destroy ],
       character_obligations_attributes: [ :id, :character_id, :obligation_id, :description, :magnitude, :_destroy ],
       character_skills_attributes: [ :id, :character_id, :ranks, :skill_id ],

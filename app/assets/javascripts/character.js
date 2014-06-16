@@ -74,3 +74,15 @@ $('#character_force_power_force_power_id').change(function(){
     }
   })
 });
+
+$('#character_gears_gear_id').change(function(){
+  $.ajax({
+    url: "/character/find/equipment_selection",
+    type: "GET",
+    data: "gear_id="+$('#character_gears_gear_id').val(),
+    success: function(data) {
+      jQuery("#item-info").html(data);
+    }
+  })
+});
+

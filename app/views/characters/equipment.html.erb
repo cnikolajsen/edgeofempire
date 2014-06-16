@@ -9,28 +9,76 @@
   </div>
 </div>
 <div class="row">
-  <div class="small-12 columns">
-    <div class="panel">
-      Check the Carried checkbox to mark an item as placed on the character's person and account for in calculating encumbrance. Leave unchecked if it's an item owned by the character but located somewhere such as on the group's ship.
+  <div class="small-3 columns">
+    <h5>Add general item</h5>
+    <%= form_for :character_gears do |f| %>
+      <%= f.select :gear_id, Gear.where(:true).collect  {|gear| ["#{gear.name}", gear.id]}, {:prompt => "Select Item"} %>
+      <div class="row">
+        <div class="small-12 columns">
+          <div id="item-info"></div>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-6 columns">
+          <%= f.check_box :carried, {checked: true} %>
+          <%= f.label :carried %>
+        </div>
+        <div class="small-6 columns">
+          <label>Quantity</label><%= f.number_field :qty, :min => 1, :value => 1 %>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-12 columns">
+          <%= f.submit 'Add Item', :class => 'button tiny' %>
+        </div>
+      </div>
+    <% end %>
+    <hr />
+    <h5>Add custom item</h5>
+    <%= form_for :character_custom_gears do |f| %>
+      <div class="row">
+        <div class="small-12 columns">
+          <%= f.label :description %>
+          <%= f.text_field :description %>
+          <%= f.check_box :carried, {checked: true} %>
+          <%= f.label :carried %>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-6 columns">
+          <%= f.label :encumbrance %>
+          <%= f.number_field :encumbrance, :min => 0, :value => 0 %>
+        </div>
+        <div class="small-6 columns">
+          <label>Quantity</label><%= f.number_field :qty, :min => 1, :value => 1 %>
+        </div>
+      </div>
+       <div class="row">
+        <div class="small-12 columns">
+          <%= f.submit 'Add Item', :class => 'button tiny' %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+  <div class="small-9 columns">
+    <div class="row">
+      <div class="small-12 columns">
+        <table class="responsive" style="width:100%">
+          <thead>
+            <th>Item</th>
+            <th>Encumbrance</th>
+            <th width="90px">Quantity</th>
+            <th></th>
+          </thead>
+          <tbody id="item-grid">
+            <% @character.inventory({:type => ['gear']}).each do |item| %>
+             <%= render :partial => 'character_gear_fields', :locals => { :item => item } %>
+            <% end %>
+          </tbody>
+        </table>
+        <caption><small>Check the Carried checkbox to mark an item as placed on the character's person and account for in calculating encumbrance. Leave unchecked if it's an item owned by the character but located somewhere such as on the group's ship.</caption>
+      </div>
     </div>
   </div>
 </div>
-<%= form_for @character do |character_form| %>
-  <%= character_form.hidden_field :id %>
-   <div id="character-inventory" class="row">
-    <div class="medium-12 columns">
-      <ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-5" id="item-grid">
-        <%= character_form.fields_for :character_gears do |item| %>
-          <%= render 'character_gear_fields', :f => item %>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="row">
-    <div class="medium-12 columns">
-      <%= link_to_add_association 'Add item', character_form, :character_gears, 'data-association-insertion-node' => "#item-grid", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|item| item.build_gear; item }, :class => 'button success small' %>
-      <%= hidden_field_tag 'destination', 'gear' %>
-      <%= character_form.submit 'Save equipment', :class => 'button small' %>
-    </div>
-  </div>
-<% end %>
