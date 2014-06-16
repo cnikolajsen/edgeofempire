@@ -72,63 +72,6 @@ class CharactersController < ApplicationController
       end
     end
 
-    @equipment = Array.new
-    # Add weapons to equipment list
-    if !@character.character_weapons.nil?
-      unarmed_weapon = Weapon.where(:name => 'Unarmed').first
-
-      @character.character_weapons.each do |cw|
-        if cw.weapon_model_id.nil?
-          weapon_name = cw.weapon.name
-        else
-          weapon_name = WeaponModel.find(cw.weapon_model_id).name
-        end
-
-        unless cw.character_weapon_attachments.blank?
-          weapon_name = "Modified " + weapon_name
-        end
-
-        unless cw.weapon.nil? or cw.weapon.name == 'Unarmed'
-          if params[:format] != 'pdf'
-            @equipment << "#{weapon_name}"
-          end
-        end
-      end
-    end
-
-    armor_applied = :false
-    if !@character.character_armor.nil?
-      @character.character_armor.each do |ca|
-        unless ca.armor_model_id.nil?
-          ca.armor.name = ArmorModel.find(ca.armor_model_id).name
-        end
-
-        unless ca.character_armor_attachments.blank?
-          ca.armor.name = "Modified " + ca.armor.name
-        end
-
-        if ca.equipped?
-          if armor_applied == :false
-            armor_applied = :true
-            @equipment << "#{ca.armor.name} (+#{ca.armor.soak} soak, +#{ca.armor.defense} defense)"
-          end
-        else
-          @equipment << "#{ca.armor.name}"
-        end
-      end
-    end
-
-    # Add general items to equipment list
-    if !@character.character_gears.nil?
-      @character.character_gears.each do |cg|
-        unless cg.gear_model_id.nil?
-          cg.gear.name = GearModel.find(cg.gear_model_id).name
-        end
-
-        @equipment << "#{cg.gear.name}#{' (' unless cg.qty < 2}#{cg.qty unless cg.qty < 2}#{')' unless cg.qty < 2}"
-      end
-    end
-
     # Apply species special abilities.
     race_alterations = {}
     unless @character.race.nil?
@@ -968,11 +911,8 @@ class CharactersController < ApplicationController
   def equipment_selection
     if params[:gear_id]
       item = Gear.find(params[:gear_id])
-
-      #render :partial => "gear_info", :locals => { :gear => gear, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
       render :partial => "gear_info", :locals => { :gear => item}
     else
-      #render :partial => "gear_info", :locals => { :gear => nil, :character_force_power_id => nil, :active => nil, :force_power_upgrades => nil}
       render :partial => "gear_info", :locals => { :gear => nil}
     end
   end
@@ -1004,6 +944,34 @@ class CharactersController < ApplicationController
         flash[:error] = "Custom item not added. Description can not be blank."
       end
     end
+    redirect_to :back
+  end
+
+  def increase_equipment_qty
+    if params[:custom]
+      item = CharacterCustomGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty + 1)
+      name = item.description
+    else
+      item = CharacterGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty + 1)
+      name = item.gear.name
+    end
+    flash[:success] = "'#{name}' count increased"
+    redirect_to :back
+  end
+
+  def decrease_equipment_qty
+    if params[:custom]
+      item = CharacterCustomGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty - 1)
+      name = item.description
+    else
+      item = CharacterGear.find(params[:character_gear_id])
+      item.update_attribute(:qty, item.qty - 1)
+      name = item.gear.name
+    end
+    flash[:success] = "'#{name}' count decreased"
     redirect_to :back
   end
 

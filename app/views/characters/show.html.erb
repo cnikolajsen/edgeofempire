@@ -161,7 +161,14 @@
           </tr>
         <% end %>
         <tr>
-          <td colspan="3"><strong>Equipment:</strong> <%= @equipment.join(', ').html_safe %></td>
+          <td colspan="3">
+            <strong>Equipment:</strong>
+            <% @character.inventory.each_with_index do |item, delta| %>
+              <% count = item[:quantity] > 1 ? " (#{item[:quantity]})" : "" %>
+              <% delimiter = delta < @character.inventory.count - 1  ? ", " : "" %>
+              <%= "#{item[:name]}#{count}#{delimiter}" %>
+            <% end %>
+          </td>
         </tr>
       </tbody>
     </table>

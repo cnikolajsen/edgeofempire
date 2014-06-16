@@ -67,17 +67,12 @@
         <table class="responsive" style="width:100%">
           <thead>
             <th>Item</th>
-            <th>Model</th>
-            <th>Enc.</th>
-            <th width="90px">Qty.</th>
-            <th>Carried</th>
+            <th>Encumbrance</th>
+            <th width="90px">Quantity</th>
             <th></th>
           </thead>
           <tbody id="item-grid">
-            <% @character.character_gears.each do |item| %>
-             <%= render :partial => 'character_gear_fields', :locals => { :item => item } %>
-            <% end %>
-            <% @character.character_custom_gears.each do |item| %>
+            <% @character.inventory({:type => ['gear']}).each do |item| %>
              <%= render :partial => 'character_gear_fields', :locals => { :item => item } %>
             <% end %>
           </tbody>

@@ -190,13 +190,13 @@ class Character < ActiveRecord::Base
 
   def encumbrance_threshold
     et = self.brawn + 5
-    self.inventory(true).each do |inv|
+    self.inventory({:carried => true}).each do |inv|
       if inv['name'] == 'Backpack'
         et += 4
         break
       end
     end
-    self.inventory(true).each do |inv|
+    self.inventory({:carried => true}).each do |inv|
       if inv['name'] == 'Utility Belt'
         et += 1
         break
@@ -543,47 +543,93 @@ class Character < ActiveRecord::Base
     CharacterWeapon.where(:character_id => self.id, :carried => :true).order('equipped desc')
   end
 
-  def inventory(carried = nil)
+  def inventory(options = {})
     inventory = Array.new
 
-    self.character_gears.each do |cg|
-      if (carried && cg.carried) || (!carried && !cg.carried) || carried.nil?
-        inventory << {
-         'name' => cg.gear.name,
-         'description' => cg.gear.description,
-         'carried' => cg.carried,
-         'quantity' => cg.qty,
-         'total_encumbrance' => cg.gear.encumbrance, # calculate total
-         'location' => nil,
-        }
+    if options[:type].nil? || options[:type].include?('gear')
+      self.character_gears.each do |cg|
+        if (options[:carried] && cg.carried) ||
+          (!options[:carried] && !cg.carried) || options[:carried].nil?
+          inventory << {
+            :id => cg.id,
+            :name => cg.gear.name,
+            :description => cg.gear.description,
+            :carried => cg.carried,
+            :quantity => cg.qty,
+            :total_encumbrance => cg.gear.encumbrance.nil? ? 0 : cg.gear.encumbrance * cg.qty, # calculate total
+            :location => nil,
+            :custom => false,
+            :type => 'gear',
+          }
+        end
       end
-    end
-    self.character_weapons.each do |cg|
-      if ((carried && cg.carried) || (!carried && !cg.carried) || carried.nil?) && cg.weapon.name != 'Unarmed'
-        inventory << {
-         'name' => cg.weapon.name,
-         'description' => cg.weapon.description,
-         'carried' => cg.carried,
-         'quantity' => 1,
-         'total_encumbrance' => cg.weapon.encumbrance, # calculate total
-         'location' => nil,
-        }
-      end
-    end
-    self.character_armor.each do |cg|
-      if (carried && cg.carried) || (!carried && !cg.carried) || carried.nil?
-        inventory << {
-         'name' => cg.armor.name,
-         'description' => cg.armor.description,
-         'carried' => cg.carried,
-         'quantity' => 1,
-         'total_encumbrance' => cg.armor.encumbrance, # calculate total
-         'location' => nil,
-        }
+      self.character_custom_gears.each do |cg|
+        if (options[:carried] && cg.carried) ||
+          (!options[:carried] && !cg.carried) || options[:carried].nil?
+          inventory << {
+            :id => cg.id,
+            :name => cg.description,
+            :description => '',
+            :carried => cg.carried,
+            :quantity => cg.qty,
+            :total_encumbrance => cg.encumbrance.nil? ? 0 : cg.encumbrance * cg.qty, # calculate total
+            :location => nil,
+            :custom => true,
+            :type => 'gear',
+          }
+        end
       end
     end
 
-    inventory
+    if options[:type].nil? || options[:type].include?('weapon')
+      self.character_weapons.each do |cg|
+        if ((options[:carried] && cg.carried) || (!options[:carried] && !cg.carried) || options[:carried].nil?) && cg.weapon.name != 'Unarmed'
+          if cg.weapon_model_id
+            cg.weapon.name = WeaponModel.find(cg.weapon_model_id).name
+          end
+          if cg.character_weapon_attachments.any?
+            cg.weapon.name = "Modified " + cg.weapon.name
+          end
+          inventory << {
+            :id => cg.id,
+            :name => cg.weapon.name,
+            :description => cg.weapon.description,
+            :carried => cg.carried,
+            :quantity => 1,
+            :total_encumbrance => cg.weapon.encumbrance, # calculate total
+            :location => nil,
+            :custom => false,
+            :type => 'weapon',
+          }
+        end
+      end
+    end
+
+    if options[:type].nil? || options[:type].include?('armor')
+      self.character_armor.each do |cg|
+        if (options[:carried] && cg.carried) || (!options[:carried] && !cg.carried) || options[:carried].nil?
+          if cg.armor_model_id
+            cg.armor.name = ArmorModel.find(cg.armor_model_id).name
+          end
+          if cg.character_armor_attachments.any?
+            cg.armor.name = "Modified " + cg.armor.name
+          end
+          inventory << {
+            :id => cg.id,
+            :name => cg.armor.name,
+            :description => cg.armor.description,
+            :carried => cg.carried,
+            :quantity => 1,
+            :total_encumbrance => cg.armor.encumbrance, # calculate total
+            :location => nil,
+            :custom => false,
+            :type => 'armor',
+          }
+        end
+      end
+    end
+
+    inventory.sort_by{|e| e[:name]}
   end
 
   def weapon_modification_bonuses

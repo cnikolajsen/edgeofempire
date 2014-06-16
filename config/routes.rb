@@ -66,6 +66,8 @@ EdgeOfEmpire::Application.routes.draw do
   post 'characters/:id/equipment' => 'characters#add_equipment'
   get 'characters/:id/equipment/:character_gear_id/remove(/:custom)' => 'characters#remove_equipment', :as => :remove_item
   get 'characters/:id/equipment/:character_gear_id/move/:action_id(/:custom)' => 'characters#place_equipment', :as => :place_item
+  get 'characters/:id/equipment/:character_gear_id/increase(/:custom)' => 'characters#increase_equipment_qty', :as => :increase_item_qty
+  get 'characters/:id/equipment/:character_gear_id/decrease(/:custom)' => 'characters#decrease_equipment_qty', :as => :decrease_item_qty
   get 'character/find/equipment_selection' => 'characters#equipment_selection'
   get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
   get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
