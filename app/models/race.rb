@@ -11,9 +11,19 @@ class Race < ActiveRecord::Base
   has_many :talents, :through => :race_talents
   accepts_nested_attributes_for :race_talents, :reject_if => :all_blank, :allow_destroy => true
 
+  # :skill_rank_choice = [['label', skill_id]]
+  # :skill_rank_creation_limit = [[skill_id, limit]]
+
   def human_traits
     traits = {
       :bonus_non_class_skill_ranks => 2,
+    }
+  end
+
+  def corellianhuman_traits
+    traits = {
+      :skill_rank_choice => [['Piloting (Planetary)', 19], ['Piloting (Space)', 33]],
+      :skill_rank_creation_limit => [[19, 3], [33, 3]],
     }
   end
 

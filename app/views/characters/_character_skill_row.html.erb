@@ -18,6 +18,18 @@
 
   if @character.creation?
     max_ranks = 2
+
+    # Check id racial trait raises creation rank limit for some skills.
+    if @character.race.respond_to?("#{@character.race.name.gsub(' ', '').downcase}_traits")
+      traits = @character.race.send("#{@character.race.name.gsub(' ', '').downcase}_traits")
+      if traits[:skill_rank_creation_limit]
+        traits[:skill_rank_creation_limit].each do |skill_id, skill_rank_limit|
+          if skill_id == skill.id
+            max_ranks = skill_rank_limit
+          end
+        end
+      end
+    end
   else
     max_ranks = 5
   end
