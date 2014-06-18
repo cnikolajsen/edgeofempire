@@ -8,9 +8,9 @@ ActiveAdmin.register Gear do
 
   index do |gear|
     column :name
+    column :price
     column :encumbrance
     column :rarity
-    column :price
     actions
   end
 

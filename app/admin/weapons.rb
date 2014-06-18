@@ -39,9 +39,9 @@ ActiveAdmin.register Weapon do
       f.input :damage
       f.input :crit
       f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Extreme', 'Engaged']
-      f.input :price
       f.input :encumbrance
       f.input :hard_points
+      f.input :price
       f.input :rarity
       f.has_many :weapon_quality_ranks do |wqr_form|
         wqr_form.input :weapon_quality_id, :as => :select, :collection => WeaponQuality.all
