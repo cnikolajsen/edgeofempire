@@ -1051,6 +1051,73 @@ $price-cta-padding: rem-calc(10 20 0);
     /*min-height: 200px;*/
     height: 150px;
     overflow: hidden;
+    position: relative;
+    background-color: #FFFFFF;
+
+    p.ribbon {
+      display: inline;
+      margin: 0;
+      padding: 0;
+      font-size: 0.8em;
+
+      :before {
+        content: "";
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: -17px;
+        right: 69px;
+        z-index: -1;
+        border: 17px solid;
+        border-color: transparent transparent transparent transparent;
+      }
+
+      :after {
+        content: "";
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 74px;
+        z-index: -1;
+        right: -10px;
+        border: 17px solid;
+        border-color: transparent transparent transparent transparent;
+      }
+
+      span {
+        position: absolute;
+        display: inline-block;
+        right: -28px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.2), inset 0px 5px 30px rgba(255,255,255,0.2);
+        text-align: center;
+        text-transform: uppercase;
+        top: 4px;
+        //background: #f61000;
+        color: #ffffff;
+        width: 110px;
+        padding: 0px;
+        -webkit-transform: rotate(20deg);
+        -moz-transform: rotate(20deg);
+        -o-transform: rotate(20eg);
+        -ms-transform: rotate(20deg);
+      }
+    }
+  }
+  .panel.active {
+    border-width: 2px;
+    border-color: #501213;
+
+    .ribbon span {
+      background-color: #501213;
+    }
+  }
+  .panel.passive {
+    border-width: 2px;
+    border-color: #262235;
+
+    .ribbon span {
+      background-color: #262235;
+    }
   }
 
   li {
