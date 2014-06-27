@@ -191,13 +191,13 @@ class Character < ActiveRecord::Base
   def encumbrance_threshold
     et = self.brawn + 5
     self.inventory({:carried => true}).each do |inv|
-      if inv['name'] == 'Backpack'
+      if inv[:name] == 'Backpack'
         et += 4
         break
       end
     end
     self.inventory({:carried => true}).each do |inv|
-      if inv['name'] == 'Utility Belt'
+      if inv[:name] == 'Utility Belt'
         et += 1
         break
       end
