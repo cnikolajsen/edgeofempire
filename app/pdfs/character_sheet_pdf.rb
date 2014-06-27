@@ -972,7 +972,7 @@ class CharacterSheetPdf < Prawn::Document
       rounded_rectangle [bounds.left, bounds.top], bounds.width, bounds.height, 5
       fill
       fill_color "000000"
-      text_box "#{@character.bio}", :width => (bounds.width - 10), :height => (bounds.height - 10), :overflow => :shrink_to_fit, :size => 7, :style => :normal, :align => :left, :valign => :top, :at => [(bounds.left + 5), (bounds.top - 5)]
+      text_box "#{@character.bio}\n\n#{@character.other}", :width => (bounds.width - 10), :height => (bounds.height - 10), :overflow => :shrink_to_fit, :size => 7, :style => :normal, :align => :left, :valign => :top, :at => [(bounds.left + 5), (bounds.top - 5)]
     end
 
   end
