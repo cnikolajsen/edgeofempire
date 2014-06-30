@@ -204,10 +204,7 @@ module CharactersHelper
   end
 
   def character_available_experience
-    starting_experience = if !@character.race.nil? then @character.race.starting_experience else 0 end
-    earned_experience = @character.experience
-
-    starting_experience + earned_experience
+    @character.character_adventure_logs.sum(:experience)
   end
 
   def skill_total_ranks(character_skill)
