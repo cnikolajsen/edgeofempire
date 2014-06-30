@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  character_id: 1
+  date: 2014-06-27 13:42:29
+  log: MyText
+  experience: 1
+
+two:
+  character_id: 1
+  date: 2014-06-27 13:42:29
+  log: MyText
+  experience: 1

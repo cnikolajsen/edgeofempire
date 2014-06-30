@@ -1,6 +1,6 @@
 <li class="<% if talent_tree["talent_#{row}_#{column}_require_#{row}_#{column + 1}"] == 1 %>link-right<% end %> <% if talent_tree["talent_#{row}_#{column - 1}_require_#{row}_#{column}"] == 1 %>link-left<% end %>">
   <% talent = Talent.find_by_id(talent_tree["talent_#{row}_#{column}"]) %>
-  <div class="panel radius talent-box <% if talent.activation.match(/^Active/) %>callout<% end %>">
+  <div class="panel radius talent-box <% if talent.activation.match(/^Active/) %>active<% else %>passive<% end %>">
     <strong><%= talent.name %></strong>
     <%= check_box_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}", talent_tree["talent_#{row}_#{column}"], (@character_tree_talents.first["talent_#{row}_#{column}"] unless @character_tree_talents.first.nil?) %><br />
     <%= text_replace_tokens(talent.description) %>
@@ -30,6 +30,7 @@
         <% end %>
       <% end %>
     <% end %>
+    <p class="ribbon"><span><% if talent.activation.match(/^Active/) %>Active<% else %>Passive<% end %></span></p>
   </div>
   <div class="link-down<% if talent_tree["talent_#{row + 1}_#{column}_require_#{row}_#{column}"] == 1 %>-active<% end %>"></div>
 </li>

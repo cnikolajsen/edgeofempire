@@ -149,7 +149,6 @@ class CharactersController < ApplicationController
     @character = Character.new(character_params)
     @character.user_id = current_user.id
     @character.credits = 500
-    @character.experience = 0
 
     respond_to do |format|
       if @character.save
@@ -168,6 +167,9 @@ class CharactersController < ApplicationController
 
         species = Race.find(@character.race_id)
 
+        # Add experience entry in the adventure log for species starting XP.
+        CharacterAdventureLog.where(:character_id => @character.id, :experience => species.starting_experience, :date => @character.created_at, :log => "#{species.name} starting experience").create
+
         # Save species characteristics.
         ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
           @character.update_attribute(stat.to_sym, species[stat])
@@ -180,7 +182,8 @@ class CharactersController < ApplicationController
           if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits")
             traits = species.send("#{species.name.gsub(' ', '').downcase}_traits")
             if traits[:sub_species][params[:sub_species]]
-              @character.update_attribute(:experience, traits[:sub_species][params[:sub_species]][:exp_bonus])
+              # Add experience entry in the adventure log for species bonus XP.
+              CharacterAdventureLog.where(:character_id => @character.id, :experience => traits[:sub_species][params[:sub_species]][:exp_bonus], :date => @character.created_at, :log => "Subspecies bonus experience").create
               @character.update_attribute(:subspecies, params[:sub_species])
             end
           end

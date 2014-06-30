@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613075851) do
+ActiveRecord::Schema.define(version: 20140630072112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,17 @@ ActiveRecord::Schema.define(version: 20140613075851) do
   end
 
   add_index "careers", ["slug"], name: "index_careers_on_slug", unique: true, using: :btree
+
+  create_table "character_adventure_logs", force: true do |t|
+    t.datetime "date"
+    t.text     "log"
+    t.integer  "experience"
+    t.integer  "character_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "character_adventure_logs", ["character_id"], name: "index_character_adventure_logs_on_character_id", using: :btree
 
   create_table "character_armor_attachments", force: true do |t|
     t.integer  "character_armor_id"
@@ -334,7 +345,6 @@ ActiveRecord::Schema.define(version: 20140613075851) do
     t.integer  "user_id"
     t.text     "bio"
     t.integer  "credits"
-    t.integer  "experience"
     t.integer  "age"
     t.string   "height"
     t.string   "build"

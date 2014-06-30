@@ -10,7 +10,9 @@ EdgeOfEmpire::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  resources :characters
+  resources :characters do
+    resources :character_adventure_logs
+  end
   resources :skills
   resources :careers
   resources :races
@@ -93,5 +95,5 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/force-power/:force_power_id/remove' => 'characters#remove_force_power'
   get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'characters#add_force_power_upgrade'
   get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'characters#remove_force_power_upgrade'
-
+  get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
 end

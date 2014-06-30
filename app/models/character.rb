@@ -36,8 +36,7 @@ class Character < ActiveRecord::Base
     @character = Character.find(id)
 
     character_experience_cost = @character.character_experience_costs.sum(:cost)
-    starting_experience = if !@character.race.nil? then @character.race.starting_experience else 0 end
-    available_experience = starting_experience + @character.experience
+    available_experience = @character.character_adventure_logs.sum(:experience)
 
     if @character.race.nil? or @character.career.nil?
       false
@@ -72,6 +71,8 @@ class Character < ActiveRecord::Base
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
 
+  has_many :character_adventure_logs, :dependent => :destroy
+
   has_many :character_experience_costs
 
   belongs_to :race
@@ -87,6 +88,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
+  accepts_nested_attributes_for :character_adventure_logs, :allow_destroy => true
 
   default_scope { order('name ASC') }
 
@@ -191,13 +193,13 @@ class Character < ActiveRecord::Base
   def encumbrance_threshold
     et = self.brawn + 5
     self.inventory({:carried => true}).each do |inv|
-      if inv['name'] == 'Backpack'
+      if inv[:name] == 'Backpack'
         et += 4
         break
       end
     end
     self.inventory({:carried => true}).each do |inv|
-      if inv['name'] == 'Utility Belt'
+      if inv[:name] == 'Utility Belt'
         et += 1
         break
       end
