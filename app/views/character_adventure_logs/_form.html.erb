@@ -4,7 +4,7 @@
       <span class="radius"><%= f.label :date, :class=> 'inline' %></span>
     </div>
     <div class="small-9 columns">
-      <%= f.date_field :date %>
+      <%= f.date_field :date, :value => Date.today %>
     </div>
   </div>
   <div class="row">
