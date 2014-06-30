@@ -72,6 +72,8 @@ class Character < ActiveRecord::Base
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
 
+  has_many :character_adventure_logs, :dependent => :destroy
+
   has_many :character_experience_costs
 
   belongs_to :race
@@ -87,6 +89,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
+  accepts_nested_attributes_for :character_adventure_logs, :allow_destroy => true
 
   default_scope { order('name ASC') }
 

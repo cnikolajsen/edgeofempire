@@ -30,6 +30,7 @@
           <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></li>
         </ul>
       </li>
+      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", log_url(@character) %></li>
     </ul>
   </section>
 </nav>

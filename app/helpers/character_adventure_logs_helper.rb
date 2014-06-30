@@ -1,0 +1,2 @@
+module CharacterAdventureLogsHelper
+end

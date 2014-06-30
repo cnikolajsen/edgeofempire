@@ -27,7 +27,7 @@
         <div class="small-4 columns">
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :brawn %></span>
+              <span class="prefix radius"><%= f.label :brawn, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :brawn, :in => @character.race.brawn...6 %>
@@ -35,7 +35,7 @@
           </div>
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :intellect %></span>
+              <span class="prefix radius"><%= f.label :intellect, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :intellect, :in => @character.race.intellect...6 %>
@@ -45,7 +45,7 @@
         <div class="small-4 columns">
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :agility %></span>
+              <span class="prefix radius"><%= f.label :agility, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :agility, :in => @character.race.agility...6 %>
@@ -53,7 +53,7 @@
           </div>
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :willpower %></span>
+              <span class="prefix radius"><%= f.label :willpower, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :willpower, :in => @character.race.willpower...6 %>
@@ -63,7 +63,7 @@
         <div class="small-4 columns">
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :cunning %></span>
+              <span class="prefix radius"><%= f.label :cunning, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :cunning, :in => @character.race.cunning...6 %>
@@ -71,7 +71,7 @@
           </div>
           <div class="row collapse">
             <div class="small-6 columns">
-              <span class="prefix radius"><%= f.label :presence %></span>
+              <span class="prefix radius"><%= f.label :presence, :class=> 'inline' %></span>
             </div>
             <div class="small-6 columns">
               <%= f.number_field :presence, :in => @character.race.presence...6 %>
