@@ -22,6 +22,19 @@ class CharacterAdventureLogsController < ApplicationController
   end
 
   def show
+    @character_page = 'log'
+
+    @title = "#{@character.name} | Adventure Log"
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @character.character_adventure_logs }
+      format.xml { render xml: @character.character_adventure_logs }
+      #format.pdf do
+      #  pdf = CharacterSheetPdf.new(@character, view_context)
+      #  send_data pdf.render, filename: "AdventureLog_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
+      #end
+    end
 
   end
 
