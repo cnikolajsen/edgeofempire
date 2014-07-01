@@ -9,7 +9,6 @@ class CharactersController < ApplicationController
   before_action :find_character, :only => [:show, :edit, :update, :destroy,
     :skills, :character_skill_rank_up, :character_skill_rank_down, :talents,
     :untrain_specialization, :career, :species, :characteristics, :background,
-    :obligation, :add_obligation, :motivation, :add_motivation,
     :set_activate, :set_retired, :set_creation]
 
   # GET /characters
@@ -625,93 +624,6 @@ class CharactersController < ApplicationController
     @character_page = 'background'
     @title = "#{@character.name} | Background"
     @character_state = character_state(@character)
-  end
-
-  def obligation
-    @character_menu = 'basics'
-    @character_page = 'obligation'
-    @title = "#{@character.name} | Obligation"
-    @character_state = character_state(@character)
-  end
-
-  def obligation_selection
-    unless params[:obligation_id].blank?
-      @obligation = Obligation.find(params[:obligation_id])
-
-      render :partial => "obligation_info", :locals => { :obligation => @obligation, :character_obligation => nil, :active => nil }
-    else
-      render :partial => "obligation_info", :locals => { :obligation => nil, :character_obligation => nil, :active => nil }
-    end
-  end
-
-  def add_obligation
-    unless params[:character_obligation][:obligation_id].nil?
-      @obligation = CharacterObligation.where(:character_id => @character.id, :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
-    end
-    flash[:success] = "Obligation added"
-    redirect_to :back
-  end
-
-  def update_obligation
-    unless params[:character_obligation][:character_obligation_id].nil?
-      @obligation = CharacterObligation.where(:id => params[:character_obligation][:character_obligation_id]).first
-      unless @obligation.nil?
-        @obligation.description = params[:character_obligation][:description]
-        @obligation.magnitude = params[:character_obligation][:magnitude]
-        @obligation.save
-      end
-    end
-    flash[:success] = "Obligation updated"
-    redirect_to :back
-  end
-
-  def remove_obligation
-    CharacterObligation.find(params[:obligation_id]).destroy
-    flash[:success] = "Obligation removed"
-    redirect_to :back
-  end
-
-  def motivation
-    @character_menu = 'basics'
-    @character_page = 'motivation'
-    @title = "#{@character.name} | Motivation"
-    @character_state = character_state(@character)
-  end
-
-  def motivation_selection
-    unless params[:motivation_id].blank?
-      @motivation = Motivation.find(params[:motivation_id])
-
-      render :partial => "motivation_info", :locals => { :motivation => @motivation, :character_motivation => nil, :active => nil }
-    else
-      render :partial => "motivation_info", :locals => { :motivation => nil, :character_motivation => nil, :active => nil }
-    end
-  end
-
-  def add_motivation
-    unless params[:character_motivation][:motivation_id].nil?
-      @motivation = CharacterMotivation.where(:character_id => @character.id, :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
-    end
-    flash[:success] = "Motivation added"
-    redirect_to :back
-  end
-
-  def update_motivation
-    unless params[:character_motivation][:character_motivation_id].nil?
-      @motivation = CharacterMotivation.where(:id => params[:character_motivation][:character_motivation_id]).first
-      unless @motivation.nil?
-        @motivation.description = params[:character_motivation][:description]
-        @motivation.save
-      end
-    end
-    flash[:success] = "Motivation updated"
-    redirect_to :back
-  end
-
-  def remove_motivation
-    CharacterMotivation.find(params[:motivation_id]).destroy
-    flash[:success] = "Motivation removed"
-    redirect_to :back
   end
 
   def set_activate

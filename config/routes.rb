@@ -73,18 +73,18 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/skills/:skill_id/rank_down' => 'characters#character_skill_rank_down'
 
   # Character obligation routes.
-  get 'characters/:id/obligation' => 'characters#obligation', :as => :character_obligation
-  get 'character/find/obligation_selection' => 'characters#obligation_selection'
-  post 'characters/:id/obligation' => 'characters#add_obligation'
-  post 'characters/:id/obligation/update' => 'characters#update_obligation'
-  get 'characters/:id/obligation/:obligation_id/remove' => 'characters#remove_obligation'
+  get 'characters/:id/obligation' => 'character_obligations#show', :as => :character_obligation
+  get 'character/find/obligation_selection' => 'character_obligations#obligation_selection'
+  post 'characters/:id/obligation' => 'character_obligations#add_obligation'
+  post 'characters/:id/obligation/update' => 'character_obligations#update_obligation'
+  get 'characters/:id/obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
 
   # Character motivation routes.
-  get 'characters/:id/motivation' => 'characters#motivation', :as => :character_motivation
-  get 'character/find/motivation_selection' => 'characters#motivation_selection'
-  post 'characters/:id/motivation' => 'characters#add_motivation'
-  post 'characters/:id/motivation/update' => 'characters#update_motivation'
-  get 'characters/:id/motivation/:motivation_id/remove' => 'characters#remove_motivation'
+  get 'characters/:id/motivation' => 'character_motivations#show', :as => :character_motivation
+  get 'character/find/motivation_selection' => 'character_motivations#motivation_selection'
+  post 'characters/:id/motivation' => 'character_motivations#add_motivation'
+  post 'characters/:id/motivation/update' => 'character_motivations#update_motivation'
+  get 'characters/:id/motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
 
   # Character Armor routes.
   get 'characters/:id/armor' => 'character_armors#show' , :as => :character_armor
