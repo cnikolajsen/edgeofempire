@@ -411,7 +411,7 @@ class CharacterSheetPdf < Prawn::Document
         end
         [
           "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-          if is_career_skill(skill.skill.id)
+          if is_career_skill(skill.skill.id, false, @character)
             'Yes'
           end,
           {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},
@@ -437,7 +437,7 @@ class CharacterSheetPdf < Prawn::Document
         end
         [
           "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-          if is_career_skill(skill.skill.id)
+          if is_career_skill(skill.skill.id, false, @character)
             'Yes'
           end,
           {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},
@@ -560,7 +560,7 @@ class CharacterSheetPdf < Prawn::Document
         end
         [
           "#{skill.skill.name} (#{skill.skill.characteristic.truncate(3, :omission => '')})",
-          if is_career_skill(skill.skill.id)
+          if is_career_skill(skill.skill.id, false, @character)
             'Yes'
           end,
           {:image => dice_ability, :fit => [58, 12], :position => :right, :vposition => :center},

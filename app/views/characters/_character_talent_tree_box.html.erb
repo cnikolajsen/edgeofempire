@@ -7,7 +7,7 @@
     <%
       parser_name = talent.name.gsub(' ', '').downcase
       if talent.respond_to?("#{parser_name}")
-        talent_alterations = talent.send("#{parser_name}", 0)
+        talent_alterations = talent.send("#{parser_name}", 0, @character)
       end
 
       option_enabled = true

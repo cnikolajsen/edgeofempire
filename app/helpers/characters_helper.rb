@@ -55,7 +55,8 @@ module CharactersHelper
 
   end
 
-  def is_career_skill(skill_id, talent_select = false)
+  def is_career_skill(skill_id, talent_select = false, character)
+    @character = @character ||= character
     # Build an array of career skill ids granted by character's career.
     career_skill_ids = Array.new
     if @character.career

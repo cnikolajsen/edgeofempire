@@ -414,7 +414,7 @@ class Character < ActiveRecord::Base
       name = talent.name.gsub(' ', '').downcase
       if talent.respond_to?("#{name}")
         talent_alterations[id] = {}
-        talent_alterations[id] = talent.send("#{name}", count)
+        talent_alterations[id] = talent.send("#{name}", count, self)
       end
     end
 

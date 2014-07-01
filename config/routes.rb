@@ -41,6 +41,7 @@ EdgeOfEmpire::Application.routes.draw do
     get "me", :to => "devise/registrations#edit"
   end
 
+  # General pages.
   get "names/human", :to => "pages#human_naming_tables", :as => :human_names
   get "names/bothan", :to => "pages#bothan_naming_tables", :as => :bothan_names
   get "names/rodian", :to => "pages#rodian_naming_tables", :as => :rodian_names
@@ -49,30 +50,41 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
   get "rules", :to => "pages#rules_summary", :as => :rules
 
+  # Character routes.
   get 'characters/:id/description' => 'characters#edit', :as => :character_description
   get 'characters/:id/characteristics' => 'characters#characteristics', :as => :character_characteristics
   get 'characters/:id/background' => 'characters#background', :as => :character_background
+  get 'character/find/species_selection' => 'characters#species_selection'
+  get 'character/find/career_selection' => 'characters#career_selection'
+  get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
+
+  # Character state routes.
+  get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
+  get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
+  get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
+
+  # Character talent routes.
+  get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
+  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
+
+  # Character skill routes.
+  get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
+  get 'characters/:id/skills/:skill_id/rank_up' => 'characters#character_skill_rank_up'
+  get 'characters/:id/skills/:skill_id/rank_down' => 'characters#character_skill_rank_down'
+
+  # Character obligation routes.
   get 'characters/:id/obligation' => 'characters#obligation', :as => :character_obligation
   get 'character/find/obligation_selection' => 'characters#obligation_selection'
   post 'characters/:id/obligation' => 'characters#add_obligation'
   post 'characters/:id/obligation/update' => 'characters#update_obligation'
   get 'characters/:id/obligation/:obligation_id/remove' => 'characters#remove_obligation'
+
+  # Character motivation routes.
   get 'characters/:id/motivation' => 'characters#motivation', :as => :character_motivation
   get 'character/find/motivation_selection' => 'characters#motivation_selection'
   post 'characters/:id/motivation' => 'characters#add_motivation'
   post 'characters/:id/motivation/update' => 'characters#update_motivation'
   get 'characters/:id/motivation/:motivation_id/remove' => 'characters#remove_motivation'
-  get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
-  get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
-  get 'characters/:id/skills/:skill_id/rank_up' => 'characters#character_skill_rank_up'
-  get 'characters/:id/skills/:skill_id/rank_down' => 'characters#character_skill_rank_down'
-  get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
-  get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
-  get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
-  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
-  get 'character/find/species_selection' => 'characters#species_selection'
-  get 'character/find/career_selection' => 'characters#career_selection'
-  get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
 
   # Character Armor routes.
   get 'characters/:id/armor' => 'character_armors#show' , :as => :character_armor
