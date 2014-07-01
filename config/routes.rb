@@ -12,6 +12,7 @@ EdgeOfEmpire::Application.routes.draw do
 
   resources :characters do
     resources :character_adventure_logs
+    resources :character_armors
   end
   resources :skills
   resources :careers
@@ -62,7 +63,6 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
   get 'characters/:id/skills/:skill_id/rank_up' => 'characters#character_skill_rank_up'
   get 'characters/:id/skills/:skill_id/rank_down' => 'characters#character_skill_rank_down'
-  get 'characters/:id/armor' => 'characters#armor', :as => :character_armor
   get 'characters/:id/weapons' => 'characters#weapons', :as => :character_weapons
   get 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
   post 'characters/:id/equipment' => 'characters#add_equipment'
@@ -75,11 +75,16 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
   get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
-  get 'characters/:id/armor/:character_armor_id/attachments' => 'characters#armor_attachment'
-  post 'characters/:id/armor/:character_armor_id/attachments' => 'characters#add_armor_attachment'
-  get 'characters/:id/armor/attachment/:attachment_id/remove' => 'characters#remove_armor_attachment'
-  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'characters#add_armor_attachment_option'
-  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'characters#remove_armor_attachment_option'
+
+  # Character Armor routes.
+  get 'characters/:id/armor' => 'character_armors#show' , :as => :character_armor
+  get 'characters/:id/armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
+  post 'characters/:id/armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
+  get 'characters/:id/armor/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
+  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
+  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
+  get 'character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
+
   get 'characters/:id/weapon/:character_weapon_id/attachments' => 'characters#weapon_attachment'
   post 'characters/:id/weapon/:character_weapon_id/attachments' => 'characters#add_weapon_attachment'
   get 'characters/:id/weapon/attachment/:attachment_id/remove' => 'characters#remove_weapon_attachment'
@@ -87,7 +92,6 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/weapon/attachment/:attachment_id/option/:option_id/remove' => 'characters#remove_weapon_attachment_option'
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
-  get 'character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
   get 'character/find/weapon_attachment_selection' => 'characters#weapon_attachment_selection'
   get 'character/find/force_power_selection' => 'characters#force_power_selection'
   get 'characters/:id/force-powers' => 'characters#force_powers', :as => :character_force_powers

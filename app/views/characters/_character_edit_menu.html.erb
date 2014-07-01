@@ -22,7 +22,7 @@
       <% if @character.force_rating > 0 %>
         <li<% if @character_page == 'forcepowers' %> class="active"<% end %>><%= link_to "Force Powers", character_force_powers_url(@character) %></li>
       <% end %>
-      <li class="has-dropdown">
+      <li class="<% if @character_menu == 'equipment' %>active<% end %> has-dropdown">
         <a href="#">Equipment</a>
         <ul class="dropdown">
           <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></li>
