@@ -114,11 +114,11 @@ EdgeOfEmpire::Application.routes.draw do
   get 'character/find/equipment_selection' => 'character_gears#equipment_selection'
 
   # Character Force Power routes.
-  get 'character/find/force_power_selection' => 'characters#force_power_selection'
-  get 'characters/:id/force-powers' => 'characters#force_powers', :as => :character_force_powers
-  post 'characters/:id/force-powers' => 'characters#add_force_power'
-  get 'characters/:id/force-power/:force_power_id/remove' => 'characters#remove_force_power'
-  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'characters#add_force_power_upgrade'
-  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'characters#remove_force_power_upgrade'
+  get 'characters/:id/force-powers' => 'character_force_powers#show', :as => :character_force_powers
+  get 'character/find/force_power_selection' => 'character_force_powers#force_power_selection'
+  post 'characters/:id/force-powers' => 'character_force_powers#add_force_power'
+  get 'characters/:id/force-power/:force_power_id/remove' => 'character_force_powers#remove_force_power'
+  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => {:format => "js"}
+  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => {:format => "js"}
 
 end
