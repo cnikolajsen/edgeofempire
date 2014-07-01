@@ -93,13 +93,13 @@ EdgeOfEmpire::Application.routes.draw do
   get 'character/find/weapon_attachment_selection' => 'character_weapons#weapon_attachment_selection'
 
   # Character Gear routes.
-  get 'characters/:id/equipment' => 'characters#equipment', :as => :character_gear
-  post 'characters/:id/equipment' => 'characters#add_equipment'
-  get 'characters/:id/equipment/:character_gear_id/remove(/:custom)' => 'characters#remove_equipment', :as => :remove_item
-  get 'characters/:id/equipment/:character_gear_id/move/:action_id(/:custom)' => 'characters#place_equipment', :as => :place_item
-  get 'characters/:id/equipment/:character_gear_id/increase(/:custom)' => 'characters#increase_equipment_qty', :as => :increase_item_qty
-  get 'characters/:id/equipment/:character_gear_id/decrease(/:custom)' => 'characters#decrease_equipment_qty', :as => :decrease_item_qty
-  get 'character/find/equipment_selection' => 'characters#equipment_selection'
+  get 'characters/:id/equipment' => 'character_gears#show', :as => :character_gear
+  post 'characters/:id/equipment' => 'character_gears#add_equipment'
+  get 'characters/:id/equipment/:character_gear_id/remove(/:custom)' => 'character_gears#remove_equipment', :as => :remove_item
+  get 'characters/:id/equipment/:character_gear_id/move/:action_id(/:custom)' => 'character_gears#place_equipment', :as => :place_item
+  get 'characters/:id/equipment/:character_gear_id/increase(/:custom)' => 'character_gears#increase_equipment_qty', :as => :increase_item_qty
+  get 'characters/:id/equipment/:character_gear_id/decrease(/:custom)' => 'character_gears#decrease_equipment_qty', :as => :decrease_item_qty
+  get 'character/find/equipment_selection' => 'character_gears#equipment_selection'
 
   # Character Force Power routes.
   get 'character/find/force_power_selection' => 'characters#force_power_selection'
