@@ -1,0 +1,2 @@
+class CharacterForcePowersController < ApplicationController
+end

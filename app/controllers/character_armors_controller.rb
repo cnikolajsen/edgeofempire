@@ -98,7 +98,8 @@ class CharacterArmorsController < ApplicationController
 private
 
   def find_character
-    @character = Character.friendly.find(params[:id])
+    character_id = params[:character_id] || params[:id]
+    @character = Character.friendly.find(character_id)
   end
 
 

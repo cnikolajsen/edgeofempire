@@ -1,0 +1,2 @@
+class CharacterGearsController < ApplicationController
+end
