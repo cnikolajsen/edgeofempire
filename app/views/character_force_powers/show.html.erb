@@ -17,9 +17,7 @@
       </div>
       <%= f.submit 'Add Force Power', :class => 'button tiny' %>
     <% end %>
-    <div class="row">
-      <div class="small-12 columns" id="experience_usage_bar"><%= render :partial => 'characters/character_experience_usage' %></div>
-    </div>
+    <div class="row" id="experience_usage_bar"><%= render :partial => 'characters/character_experience_usage' %></div>
   </div>
   <div class="small-9 columns">
     <% if @force_powers %>

@@ -1123,6 +1123,17 @@ $price-cta-padding: rem-calc(10 20 0);
   li {
     padding-bottom: 0 !important;
   }
+
+  input[type=checkbox] {
+    margin-bottom: 0px;
+  }
+  select {
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 2.2em;
+    font-size: 1em;
+  }
 }
 
 .panel.experience-cost {
