@@ -2,12 +2,12 @@
   <% talent = Talent.find_by_id(talent_tree["talent_#{row}_#{column}"]) %>
   <div class="panel radius talent-box <% if talent.activation.match(/^Active/) %>active<% else %>passive<% end %>">
     <strong><%= talent.name %></strong>
-    <%= check_box_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}", talent_tree["talent_#{row}_#{column}"], (@character_tree_talents.first["talent_#{row}_#{column}"] unless @character_tree_talents.first.nil?) %><br />
-    <%= text_replace_tokens(talent.description) %>
+    <%= check_box_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}", talent_tree["talent_#{row}_#{column}"], (@character_tree_talents.first["talent_#{row}_#{column}"] unless @character_tree_talents.first.nil?) %>
+    <%= simple_format(text_replace_tokens(talent.description), {}, wrapper_tag: "div") %>
     <%
       parser_name = talent.name.gsub(' ', '').downcase
       if talent.respond_to?("#{parser_name}")
-        talent_alterations = talent.send("#{parser_name}", 0)
+        talent_alterations = talent.send("#{parser_name}", 0, @character)
       end
 
       option_enabled = true

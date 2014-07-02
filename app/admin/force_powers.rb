@@ -18,8 +18,7 @@ ActiveAdmin.register ForcePower do
       tr do
         td :class => 'talent', :colspan => 7 do
           span strong "#{force_power.name} Basic Power"
-          #br strong talent.activation
-          span text_replace_tokens(force_power.description.html_safe)
+          span simple_format text_replace_tokens(force_power.description.html_safe)
         end
       end
 
@@ -39,8 +38,8 @@ ActiveAdmin.register ForcePower do
       tr do
         upgrades_row_1.each_with_index do |upg, i|
           td :class => 'talent', :colspan => upg.colspan do
-            span upg.name
-            br text_replace_tokens(upg.description.html_safe)
+            strong upg.name
+            span simple_format text_replace_tokens(upg.description.html_safe)
           end
           unless upgrades_row_1.last == upg or i == 3
             td :class => 'horizontal-link link-' + force_power.upgrade_links_horizontal_admin[0][i].to_s
@@ -56,8 +55,8 @@ ActiveAdmin.register ForcePower do
       tr do
         upgrades_row_2.each_with_index do |upg, i|
           td :class => 'talent', :colspan => upg.colspan do
-            span upg.name
-            br text_replace_tokens(upg.description.html_safe)
+            strong upg.name
+            span simple_format text_replace_tokens(upg.description.html_safe)
           end
           unless upgrades_row_2.last == upg or i == 3
             td :class => 'horizontal-link link-' + force_power.upgrade_links_horizontal_admin[1][i].to_s
@@ -73,8 +72,8 @@ ActiveAdmin.register ForcePower do
       tr do
         upgrades_row_3.each_with_index do |upg, i|
           td :class => 'talent', :colspan => upg.colspan do
-            span upg.name
-            br text_replace_tokens(upg.description.html_safe)
+            strong upg.name
+            span simple_format text_replace_tokens(upg.description.html_safe)
           end
           unless upgrades_row_3.last == upg or i == 3
             td :class => 'horizontal-link link-' + force_power.upgrade_links_horizontal_admin[2][i].to_s
@@ -90,8 +89,8 @@ ActiveAdmin.register ForcePower do
       tr do
         upgrades_row_4.each_with_index do |upg, i|
           td :class => 'talent', :colspan => upg.colspan do
-            span upg.name
-            br text_replace_tokens(upg.description.html_safe)
+            strong upg.name
+            span simple_format text_replace_tokens(upg.description.html_safe)
           end
           unless upgrades_row_4.last == upg or i == 3
             td :class => 'horizontal-link link-' + force_power.upgrade_links_horizontal_admin[3][i].to_s

@@ -32,7 +32,7 @@
   <div id="power<%= upgrade.id %>" class="small-<%= columns %> columns <% if power.upgrade_links_horizontal[upgrade.row-1][link_right] == 1 %>link-right<% end %> <% if power.upgrade_links_horizontal[upgrade.row-1][link_left] == 1 %>link-left<% end %>">
     <div class="panel radius talent-box <% if active %>callout<% end %>">
       <strong><%= upgrade.name %></strong>
-      <%= text_replace_tokens(upgrade.description) %>
+      <%= simple_format text_replace_tokens(upgrade.description) %>
       <% if active %>
         <%= link_to "Remove", "/characters/#{@character.id}/force-power/#{power.id}/upgrade/#{upgrade.id}/remove", remote: true %>
       <% else %>

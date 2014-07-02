@@ -14,7 +14,7 @@
       <div class="row">
         <div class="small-12 columns">
           <div class="small-12 columns panel callout" style="height:auto;">
-          <%= text_replace_tokens(power.description).html_safe %>
+          <%= simple_format text_replace_tokens(power.description).html_safe %>
           </div>
         </div>
       </div>

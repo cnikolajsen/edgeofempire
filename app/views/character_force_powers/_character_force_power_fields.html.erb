@@ -1,8 +1,6 @@
-<%= debug f.object %>
 <% unless f.object.force_power_id.nil? %>
   <% @force_power = ForcePower.find_by_id(f.object.force_power_id) %>
   <%= f.hidden_field :force_power_id %>
-<%= debug @force_power %>
   <li class="nested-fields">
     <ul class="pricing-table">
       <li class="title"><%= @force_power.name %></li>

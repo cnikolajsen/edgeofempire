@@ -1,5 +1,5 @@
 <% character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first %>
-<td><% if( is_career_skill(skill.id)) %><strong><% end %><%= skill.name %><% if( is_career_skill(skill.id)) %> *</strong><% end %></td>
+<td><% if( is_career_skill(skill.id, false, @character)) %><strong><% end %><%= skill.name %><% if( is_career_skill(skill.id, false, @character)) %> *</strong><% end %></td>
 <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
 <%
   total_ranks_free = character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment
