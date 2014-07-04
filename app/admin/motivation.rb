@@ -1,5 +1,5 @@
 ActiveAdmin.register Motivation do
-  permit_params :description, :name, :category
+  permit_params :description, :name, :category, :career_id
 
   menu :label => "Motivation", :parent => "Character Backgrounds"
 
@@ -7,18 +7,25 @@ ActiveAdmin.register Motivation do
 
   config.per_page = 50
 
+  filter :category, :as => :select
+  filter :name, :as => :string
+
   index do |motivation|
     column :category
     column :name
-    column :description
+    column :career
+    column :description do |desc|
+      simple_format desc.description
+    end
     actions
   end
 
 form do |f|
     f.inputs "Motivation Details" do
+      f.input :career
       f.input :name
       f.input :description
-      f.input :category, :as => :select, :collection => ["Ambition", "Cause", "Relationship"]
+      f.input :category, :as => :select, :collection => ["Ambition", "Cause", "Relationship", "Discovery"]
     end
     f.actions
   end

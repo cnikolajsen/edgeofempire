@@ -8,7 +8,7 @@ ActiveAdmin.register Talent do
   index do
     column :name
     column :description do |desc|
-      truncate(desc.description)
+      simple_format(text_replace_tokens(desc.description))
     end
     column :activation
     column :ranked
@@ -35,6 +35,7 @@ ActiveAdmin.register Talent do
   filter :name
   filter :ranked
   filter :activation, :as => :select, :collection => proc { ['Active (Incidental)', 'Active (Action)', 'Active (Maneuver)', 'Passive'] }
+  filter :talent_tree_id
 
   controller do
     def create

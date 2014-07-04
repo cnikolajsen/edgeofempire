@@ -8,6 +8,11 @@ ActiveAdmin.register ArmorAttachment do
   config.sort_order = "name_asc"
   config.per_page = 50
 
+  filter :name
+  filter :hard_points
+  filter :price
+
+
   index do |armor|
     column :name
     column :hard_points

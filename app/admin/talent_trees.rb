@@ -8,15 +8,13 @@ ActiveAdmin.register TalentTree do
   config.sort_order = "name_asc"
 
   filter :name
-  filter :career_id
+  filter :career
 
   index do
     column :name
-    column :career_id do |career|
-      Career.find_by_id(career.career_id).name unless !career.career_id
-    end
+    column :career
     column :description do |desc|
-      truncate(desc.description)
+      simple_format desc.description
     end
     actions
   end
@@ -25,7 +23,7 @@ ActiveAdmin.register TalentTree do
     f.inputs "Talent Tree Details" do
       f.input :name
       f.input :description
-      f.input :career_id, :as => :select, :collection => Career.all
+      f.input :career
 
       f.input :talent_1_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 1"
       f.input :talent_2_1, :as => :select, :collection => Talent.all, :label => "Column 1 row 2"
@@ -80,7 +78,7 @@ ActiveAdmin.register TalentTree do
       f.input :talent_5_4_require_4_4, :as => :boolean, :label => "Link row 5 with row 4"
 
       f.has_many :talent_tree_career_skills do |skill_form|
-        skill_form.input :skill_id, :as => :select, :collection => Skill.all
+        skill_form.input :skill
       end
 
     end

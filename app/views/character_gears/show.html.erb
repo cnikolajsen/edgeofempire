@@ -12,7 +12,15 @@
   <div class="small-3 columns">
     <h5>Add general item</h5>
     <%= form_for :character_gears do |f| %>
-      <%= f.select :gear_id, Gear.where(:true).collect  {|gear| ["#{gear.name}", gear.id]}, {:prompt => "Select Item"} %>
+      <%#= f.select :gear_id, Gear.where(:true).collect  {|gear| ["#{gear.name}", gear.id]}, {:prompt => "Select Item"} %>
+      <%
+        grouped_options = Array.new
+        GearCategory.where(:true).each do |cat|
+          grouped_options << [cat.name, Gear.where(:gear_category_id => cat.id).collect { |gear| ["#{gear.name} - #{gear.price}", gear.id]}]
+        end
+      %>
+      <%= f.select :gear_id, grouped_options_for_select(grouped_options), {:prompt => "Select Item"} %>
+
       <div class="row">
         <div class="small-12 columns">
           <div id="item-info"></div>

@@ -1,5 +1,5 @@
 ActiveAdmin.register Obligation do
-  permit_params :description, :name, :range
+  permit_params :description, :name, :range, :career_id
 
   menu :label => "Obligation", :parent => "Character Backgrounds"
 
@@ -8,11 +8,17 @@ ActiveAdmin.register Obligation do
   config.per_page = 50
 
   index do |obligation|
-    column :range
+    column :career
     column :name
-    column :description
+    column :description do |desc|
+      simple_format desc.description
+    end
     actions
   end
+
+  #preserve_default_filters!
+  filter :name
+  filter :career
 
   controller do
      def create

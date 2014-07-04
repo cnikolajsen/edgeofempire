@@ -11,7 +11,18 @@
 <div class="row" data-no-turbolink>
   <div class="small-4 columns" data-no-turbolink>
     <%= form_for :character_obligation, :url => url_for(:action => 'add_obligation') do |form| %>
-      <%= form.select :obligation_id, Obligation.where(:true).collect  {|obligation| ["#{obligation.range} | #{obligation.name}", obligation.id]}, {:prompt => "Select Obligation"} %>
+      <%
+        generic_obligations = Obligation.where("career_id IS NULL").order(:name).collect {|obl| [obl.name, obl.id]}
+        career_obligations = Obligation.where("career_id = ?", @character.career_id).order(:name).collect {|obl| [obl.name, obl.id]}
+
+        grouped_options = [
+          ['Generic obligations',
+            generic_obligations],
+          [@character.career.name,
+            career_obligations]
+        ]
+      %>
+      <%= form.select :obligation_id, grouped_options_for_select(grouped_options), {:prompt => "Select Obligation"} %>
       <%= form.submit 'Add obligation', :class => 'button tiny' %>
     <% end -%>
     <br />

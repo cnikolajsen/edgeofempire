@@ -7,12 +7,13 @@ ActiveAdmin.register Skill do
   config.per_page = 10
 
   filter :name
-  filter :description
   filter :characteristic, :as => :select, :collection => ['Agility', 'Brawn', 'Cunning', 'Intellect', 'Presence', 'Willpower']
 
   index do
     column :name
-    column :description
+    column :description do |desc|
+      simple_format(text_replace_tokens(desc.description))
+    end
     column :characteristic
     actions
   end
