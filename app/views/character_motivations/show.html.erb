@@ -11,9 +11,18 @@
 <div class="row" data-no-turbolink>
   <div class="small-4 columns" data-no-turbolink>
     <%= form_for :character_motivation, :url => url_for(:action => 'add_motivation') do |form| %>
-      <%= form.select :motivation_id, Motivation.where(:true).order(:category => :asc).collect  {|motivation| ["#{motivation.category} | #{motivation.name}", motivation.id]}, {:prompt => "Select Motivation"} %>
+      <%
+        grouped_options = [
+          ['Generic motivations',
+            Motivation.where("career_id IS NULL").order(:category).order(:name).collect {|mot| ["#{mot.category} | #{mot.name}", mot.id]}],
+          [@character.career.name,
+            Motivation.where("career_id = ?", @character.career_id).order(:category).order(:name).collect {|mot| ["#{mot.category} | #{mot.name}", mot.id]}]
+        ]
+      %>
+      <%= form.select :motivation_id, grouped_options_for_select(grouped_options), {:prompt => "Select Motivation"} %>
+
       <%= form.submit 'Add Motivation', :class => 'button tiny' %>
-    <% end -%>
+    <% end %>
     <br />
     <div class="row">
       <div id="motivation-info" class="small-12 columns"></div>
