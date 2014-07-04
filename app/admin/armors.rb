@@ -5,6 +5,12 @@ ActiveAdmin.register Armor do
 
   menu :label => "Armor", :parent => "Equipment"
 
+  filter :name
+  filter :defense
+  filter :soak
+  filter :price
+  filter :rarity
+
   config.sort_order = "name_asc"
   config.per_page = 50
 
@@ -31,8 +37,8 @@ ActiveAdmin.register Armor do
       f.input :encumbrance
       f.input :hard_points
       f.input :rarity
-      f.has_many :armor_models do |wm_form|
-        wm_form.input :name
+      f.has_many :armor_models do |armor_model_form|
+        armor_model_form.input :name
       end
 
     end
