@@ -68,7 +68,13 @@
   <% end %>
 <% else %>
   <li>
-    <%= f.select :weapon_id, Weapon.where.not(name: 'Unarmed').collect  {|weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}, {:prompt => "Select Weapon"} %>
+    <%
+      grouped_options = Array.new
+      WeaponCategory.where(:true).each do |cat|
+        grouped_options << [cat.name.pluralize, Weapon.where(:weapon_category_id => cat.id).where.not(name: 'Unarmed').collect { |weapon| [weapon.name, weapon.id]}]
+      end
+    %>
+    <%= f.select :weapon_id, grouped_options_for_select(grouped_options), {:prompt => "Select Weapon"} %>
     <%= f.text_area :description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
     <%= f.check_box :equipped %>
     <%= f.label :equipped %>

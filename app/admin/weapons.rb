@@ -1,6 +1,6 @@
 ActiveAdmin.register Weapon do
   permit_params :crit, :damage, :description, :name, :price, :skill_id, :range,
-    :encumbrance, :rarity, :hard_points, :image_url,
+    :encumbrance, :rarity, :hard_points, :image_url, :weapon_category_id,
     weapon_quality_ranks_attributes: [ :id, :ranks, :weapon_id, :weapon_quality_id ],
     weapon_models_attributes: [ :id, :weapon_id, :name ]
 
@@ -10,13 +10,13 @@ ActiveAdmin.register Weapon do
   config.per_page = 50
 
   index do |weapon|
+    selectable_column
     column :name
-    column :skill_id do |s|
-      skill = Skill.find_by_id(s.skill_id)
-      unless skill.nil?
-        skill.name
-      end
+    column :category do |cat|
+      cat.name
     end
+    column :weapon_category
+    column :skill
     column :damage
     column :crit
     column :range
@@ -36,6 +36,8 @@ ActiveAdmin.register Weapon do
       f.input :description
       f.input :image_url
       f.input :skill_id, :as => :select, :collection => Skill.where("name IN ('Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)')")
+      #f.input :category_id, :as => :select, :collection => WeaponCategory.where(:true)
+      f.input :weapon_category
       f.input :damage
       f.input :crit
       f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Extreme', 'Engaged']
@@ -53,6 +55,15 @@ ActiveAdmin.register Weapon do
 
     end
     f.actions
+  end
+
+  WeaponCategory.where(:true).each do |i|
+    batch_action "Set Category '#{i.name}' on" do |selection|
+      Weapon.find(selection).each do |weapon|
+        weapon.update_attribute(:weapon_category_id, i.id)
+      end
+      redirect_to :back
+    end
   end
 
   controller do

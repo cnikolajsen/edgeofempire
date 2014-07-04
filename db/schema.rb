@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140630072112) do
+ActiveRecord::Schema.define(version: 20140704123626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,7 @@ ActiveRecord::Schema.define(version: 20140630072112) do
     t.string   "category"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "career_id"
   end
 
   create_table "obligations", force: true do |t|
@@ -436,6 +437,7 @@ ActiveRecord::Schema.define(version: 20140630072112) do
     t.string   "range"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "career_id"
   end
 
   create_table "race_skills", force: true do |t|
@@ -634,6 +636,12 @@ ActiveRecord::Schema.define(version: 20140630072112) do
     t.integer  "damage_bonus"
   end
 
+  create_table "weapon_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "weapon_models", force: true do |t|
     t.integer  "weapon_id"
     t.string   "name"
@@ -664,14 +672,15 @@ ActiveRecord::Schema.define(version: 20140630072112) do
     t.integer  "damage"
     t.integer  "crit"
     t.integer  "price"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "range"
     t.integer  "encumbrance"
     t.integer  "hard_points"
     t.integer  "rarity"
     t.string   "image_url"
     t.string   "slug"
+    t.integer  "weapon_category_id"
   end
 
   add_index "weapons", ["slug"], name: "index_weapons_on_slug", unique: true, using: :btree
