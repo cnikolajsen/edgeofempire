@@ -1,5 +1,6 @@
 ActiveAdmin.register Gear do
   permit_params :description, :name, :price, :encumbrance, :rarity, :image_url,
+    :gear_category_id,
     gear_models_attributes: [ :id, :gear_id, :name ]
 
   menu :label => "Gear", :parent => "Equipment"
@@ -7,7 +8,9 @@ ActiveAdmin.register Gear do
   config.per_page = 50
 
   index do |gear|
+    selectable_column
     column :name
+    column :gear_category
     column :price
     column :encumbrance
     column :rarity
@@ -17,6 +20,7 @@ ActiveAdmin.register Gear do
   form do |f|
     f.inputs "Equipment Details" do
       f.input :name
+      f.input :gear_category
       f.input :description
       f.input :image_url
       f.input :price
@@ -28,6 +32,15 @@ ActiveAdmin.register Gear do
 
     end
     f.actions
+  end
+
+  GearCategory.where(:true).each do |i|
+    batch_action "Set Category '#{i.name}' on" do |selection|
+      Gear.find(selection).each do |gear|
+        gear.update_attribute(:gear_category_id, i.id)
+      end
+      redirect_to :back
+    end
   end
 
   controller do

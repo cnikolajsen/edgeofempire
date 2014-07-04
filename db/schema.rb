@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140704123626) do
+ActiveRecord::Schema.define(version: 20140704204711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,12 @@ ActiveRecord::Schema.define(version: 20140704123626) do
     t.string   "stat_bonus"
   end
 
+  create_table "armor_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "armor_models", force: true do |t|
     t.integer  "armor_id"
     t.string   "name"
@@ -104,13 +110,14 @@ ActiveRecord::Schema.define(version: 20140704123626) do
     t.integer  "defense"
     t.integer  "soak"
     t.integer  "price"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "encumbrance"
     t.integer  "hard_points"
     t.integer  "rarity"
     t.string   "image_url"
     t.string   "slug"
+    t.integer  "armor_category_id"
   end
 
   add_index "armors", ["slug"], name: "index_armors_on_slug", unique: true, using: :btree
@@ -401,6 +408,12 @@ ActiveRecord::Schema.define(version: 20140704123626) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
+  create_table "gear_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gear_models", force: true do |t|
     t.integer  "gear_id"
     t.string   "name"
@@ -412,12 +425,13 @@ ActiveRecord::Schema.define(version: 20140704123626) do
     t.string   "name"
     t.text     "description"
     t.integer  "price"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "encumbrance"
     t.integer  "rarity"
     t.string   "image_url"
     t.string   "slug"
+    t.integer  "gear_category_id"
   end
 
   add_index "gears", ["slug"], name: "index_gears_on_slug", unique: true, using: :btree
