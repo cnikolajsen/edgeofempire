@@ -34,14 +34,14 @@ ActiveAdmin.register Gear do
     f.actions
   end
 
-  #GearCategory.where(:true).each do |i|
-  #  batch_action "Set Category '#{i.name}' on" do |selection|
-  #    Gear.find(selection).each do |gear|
-  #      gear.update_attribute(:gear_category_id, i.id)
-  #    end
-  #    redirect_to :back
-  #  end
-  #end
+  GearCategory.where(:true).each do |i|
+    batch_action "Set Category '#{i.name}' on" do |selection|
+      Gear.find(selection).each do |gear|
+        gear.update_attribute(:gear_category_id, i.id)
+      end
+      redirect_to :back
+    end
+  end
 
   controller do
     def find_resource

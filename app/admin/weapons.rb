@@ -57,14 +57,14 @@ ActiveAdmin.register Weapon do
     f.actions
   end
 
-  #WeaponCategory.where(:true).each do |i|
-  #  batch_action "Set Category '#{i.name}' on" do |selection|
-  #    Weapon.find(selection).each do |weapon|
-  #      weapon.update_attribute(:weapon_category_id, i.id)
-  #    end
-  #    redirect_to :back
-  #  end
-  #end
+  WeaponCategory.where(:true).each do |i|
+    batch_action "Set Category '#{i.name}' on" do |selection|
+      Weapon.find(selection).each do |weapon|
+        weapon.update_attribute(:weapon_category_id, i.id)
+      end
+      redirect_to :back
+    end
+  end
 
   controller do
     def find_resource
