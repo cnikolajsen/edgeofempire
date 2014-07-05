@@ -49,14 +49,14 @@ ActiveAdmin.register Armor do
     f.actions
   end
 
-  ArmorCategory.where(:true).each do |i|
-    batch_action "Set Category '#{i.name}' on" do |selection|
-      Armor.find(selection).each do |armor|
-        armor.update_attribute(:armor_category_id, i.id)
-      end
-      redirect_to :back
-    end
-  end
+  #ArmorCategory.where(:true).each do |i|
+  #  batch_action "Set Category '#{i.name}' on" do |selection|
+  #    Armor.find(selection).each do |armor|
+  #      armor.update_attribute(:armor_category_id, i.id)
+  #    end
+  #    redirect_to :back
+  #  end
+  #end
 
   controller do
     def find_resource
