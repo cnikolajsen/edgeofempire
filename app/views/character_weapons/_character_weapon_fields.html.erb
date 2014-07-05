@@ -70,7 +70,7 @@
   <li>
     <%
       grouped_options = Array.new
-      WeaponCategory.where(:true).sort(:name).each do |cat|
+      WeaponCategory.where(:true).order(:name).each do |cat|
         grouped_options << [cat.name.pluralize, Weapon.where(:weapon_category_id => cat.id).where.not(name: 'Unarmed').collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
       end
     %>
