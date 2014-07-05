@@ -15,7 +15,7 @@
       <%#= f.select :gear_id, Gear.where(:true).collect  {|gear| ["#{gear.name}", gear.id]}, {:prompt => "Select Item"} %>
       <%
         grouped_options = Array.new
-        GearCategory.where(:true).sort(:name).each do |cat|
+        GearCategory.where(:true).order(:name).each do |cat|
           grouped_options << [cat.name, Gear.where(:gear_category_id => cat.id).collect { |gear| ["#{gear.name} - #{gear.price}", gear.id]}]
         end
       %>

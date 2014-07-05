@@ -51,7 +51,7 @@
   <li>
     <%
       grouped_options = Array.new
-      ArmorCategory.where(:true).sort(:name).each do |cat|
+      ArmorCategory.where(:true).order(:name).each do |cat|
         grouped_options << [cat.name.pluralize, Armor.where(:armor_category_id => cat.id).collect { |armor| ["#{armor.name} - #{armor.price}", armor.id]}]
       end
     %>
