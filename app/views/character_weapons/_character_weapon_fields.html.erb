@@ -71,7 +71,7 @@
     <%
       grouped_options = Array.new
       WeaponCategory.where(:true).order(:name).each do |cat|
-        grouped_options << [cat.name.pluralize, Weapon.where(:weapon_category_id => cat.id).where.not(name: 'Unarmed').collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
+        grouped_options << [cat.name.pluralize, Weapon.where(:weapon_category_id => cat.id).where.not(name: 'Unarmed').order(:name).collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
       end
     %>
     <%= f.select :weapon_id, grouped_options_for_select(grouped_options), {:prompt => "Select Weapon"} %>
