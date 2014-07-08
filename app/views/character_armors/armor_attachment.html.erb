@@ -19,7 +19,7 @@
     <div class="small-3 columns" data-no-turbolink>
       <%= form_for :character_armor_attachment do |f| %>
         <% if @armor.attachments.any? %>
-          <%= f.select :weapon_attachment_id, @armor.attachments.collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+          <%= f.select :armor_attachment_id, @armor.attachments.collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
         <% else %>
           <%= f.select :armor_attachment_id, ArmorAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
         <% end %>
