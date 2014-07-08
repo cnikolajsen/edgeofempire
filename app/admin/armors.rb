@@ -55,10 +55,22 @@ ActiveAdmin.register Armor do
     f.actions
   end
 
+  batch_priority = 0
   ArmorCategory.where(:true).each do |i|
-    batch_action "Set Category '#{i.name}' on" do |selection|
+    batch_priority += 1
+    batch_action "Set Category '#{i.name}' on", :priority => batch_priority do |selection|
       Armor.find(selection).each do |armor|
         armor.update_attribute(:armor_category_id, i.id)
+      end
+      redirect_to :back
+    end
+  end
+
+  ArmorAttachment.where(:true).each do |i|
+    batch_priority += 1
+    batch_action "Add attachment '#{i.name}' to", :priority => batch_priority do |selection|
+      Armor.find(selection).each do |armor|
+        ArmorAttachmentsArmor.where(:armor_id => armor.id, :armor_attachment_id => i.id).first_or_create
       end
       redirect_to :back
     end
