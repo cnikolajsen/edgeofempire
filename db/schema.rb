@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140704204711) do
+ActiveRecord::Schema.define(version: 20140707201340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,16 @@ ActiveRecord::Schema.define(version: 20140704204711) do
     t.datetime "updated_at"
     t.string   "stat_bonus"
   end
+
+  create_table "armor_attachments_armors", force: true do |t|
+    t.integer  "armor_id"
+    t.integer  "armor_attachment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "armor_attachments_armors", ["armor_attachment_id"], name: "index_armor_attachments_armors_on_armor_attachment_id", using: :btree
+  add_index "armor_attachments_armors", ["armor_id"], name: "index_armor_attachments_armors_on_armor_id", using: :btree
 
   create_table "armor_categories", force: true do |t|
     t.string   "name"
@@ -649,6 +659,16 @@ ActiveRecord::Schema.define(version: 20140704204711) do
     t.datetime "updated_at"
     t.integer  "damage_bonus"
   end
+
+  create_table "weapon_attachments_weapons", force: true do |t|
+    t.integer  "weapon_id"
+    t.integer  "weapon_attachment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "weapon_attachments_weapons", ["weapon_attachment_id"], name: "index_weapon_attachments_weapons_on_weapon_attachment_id", using: :btree
+  add_index "weapon_attachments_weapons", ["weapon_id"], name: "index_weapon_attachments_weapons_on_weapon_id", using: :btree
 
   create_table "weapon_categories", force: true do |t|
     t.string   "name"

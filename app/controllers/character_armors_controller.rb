@@ -19,7 +19,10 @@ class CharacterArmorsController < ApplicationController
 
     @hard_points_used = 0
     @armor_attachments.each do |attachment|
-      @hard_points_used += ArmorAttachment.where(:id => attachment.armor_attachment_id).first.hard_points
+      armor_attachment = ArmorAttachment.where(:id => attachment.armor_attachment_id).first
+      unless armor_attachment.nil?
+        @hard_points_used += ArmorAttachment.where(:id => attachment.armor_attachment_id).first.hard_points
+      end
     end
 
     @hard_point_meter = ((@hard_points_used.to_f / @armor.hard_points.to_f) * 100)

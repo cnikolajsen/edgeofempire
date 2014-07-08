@@ -35,6 +35,62 @@
         <% end -%>
       </ul>
     <% end -%>
+
+    <h5>Available Attachments</h5>
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid" data-no-turbolink>
+      <% @weapon.attachments.each do |attachment| %>
+        <li>
+          <ul class="pricing-table">
+            <li class="title"><%= attachment.name %></li>
+            <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= attachment.price %></li>
+            <li class="description"><%= text_replace_tokens(attachment.description).html_safe %></li>
+            <li class="bullet-item"><strong>Hard Point cost:</strong> <%= attachment.hard_points %></li>
+            <% unless attachment.weapon_attachment_quality_ranks.blank? %>
+              <li class="title">Base modification</li>
+              <% attachment.weapon_attachment_quality_ranks.each do |qual| %>
+                <li class="bullet-item"><strong><%= qual.weapon_quality.name %></strong><br /><%= qual.weapon_quality.description %></li>
+              <% end -%>
+            <% end -%>
+            <% unless attachment.weapon_attachment_modification_options.blank? %>
+              <li class="title">Modification options</li>
+              <% attachment.weapon_attachment_modification_options.each do |aamo| %>
+                <% unless aamo.talent_id.nil? %>
+                  <% talent = Talent.find(aamo.talent_id) %>
+                  <li class="bullet-item">
+                    <strong>Innate talent:</strong>
+                    <%= talent.name %>
+                  </li>
+                <% end -%>
+                <% unless aamo.skill_id.nil? %>
+                  <% skill = Skill.find(aamo.skill_id) %>
+                  <li class="bullet-item">
+                    <strong>Skill:</strong>
+                    <%= skill.name %> +1
+                  </li>
+                <% end -%>
+                <% unless aamo.weapon_quality_id.nil? %>
+                  <% weapon_quality = WeaponQuality.find(aamo.weapon_quality_id) %>
+                  <li class="bullet-item">
+                    <strong>Weapon Quality:</strong>
+                    <%= weapon_quality.name %> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
+                  </li>
+                <% end -%>
+                <% unless aamo.damage_bonus.nil? %>
+                  <li class="bullet-item">
+                    <strong>Damage Bonus:</strong> +<%= aamo.damage_bonus %>
+                  </li>
+                <% end -%>
+                <% unless aamo.custom.blank? %>
+                  <li class="bullet-item">
+                    <strong><%= aamo.custom %></strong>
+                    <% end %>
+                  </li>
+                <% end -%>
+            <% end -%>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
   </div>
 
   <div class="small-3 columns panel">

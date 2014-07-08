@@ -2,7 +2,8 @@ ActiveAdmin.register Weapon do
   permit_params :crit, :damage, :description, :name, :price, :skill_id, :range,
     :encumbrance, :rarity, :hard_points, :image_url, :weapon_category_id,
     weapon_quality_ranks_attributes: [ :id, :ranks, :weapon_id, :weapon_quality_id ],
-    weapon_models_attributes: [ :id, :weapon_id, :name ]
+    weapon_models_attributes: [ :id, :weapon_id, :name ],
+    weapon_attachments_weapons_attributes: [ :id, :weapon_id, :weapon_attachment_id ]
 
   menu :label => "Weapons", :parent => "Equipment"
 
@@ -51,6 +52,9 @@ ActiveAdmin.register Weapon do
       end
       f.has_many :weapon_models do |wm_form|
         wm_form.input :name
+      end
+      f.has_many :weapon_attachments_weapons, :heading => 'Allowed weapon attachments' do |wm_form|
+        wm_form.input :weapon_attachment_id, :as => :select, :collection => WeaponAttachment.all.map{|u| ["#{u.name}", u.id]}
       end
 
     end
