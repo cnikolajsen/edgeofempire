@@ -26,6 +26,9 @@ ActiveAdmin.register Armor do
     column :encumbrance
     column :hard_points
     column :rarity
+    column "Attachments" do |armor|
+      armor.attachments.count
+    end
 
     actions
   end

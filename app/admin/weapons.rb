@@ -28,6 +28,9 @@ ActiveAdmin.register Weapon do
     column "Special" do |weapon|
       render "weapon_qualties", :qualities => weapon.weapon_quality_ranks
     end
+    column "Attachments" do |weapon|
+      weapon.attachments.count
+    end
     actions
   end
 
