@@ -18,7 +18,11 @@
   <% else %>
     <div class="small-3 columns" data-no-turbolink>
       <%= form_for :character_weapon_attachment do |f| %>
-        <%= f.select :weapon_attachment_id, WeaponAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <% if @weapon.attachments.any? %>
+          <%= f.select :weapon_attachment_id, @weapon.attachments.collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <% else %>
+          <%= f.select :weapon_attachment_id, WeaponAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <% end %>
         <%= f.submit 'Add attachment', :class => 'button tiny' %>
       <% end -%>
       <div class="row">

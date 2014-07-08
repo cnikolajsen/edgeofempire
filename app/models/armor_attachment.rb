@@ -4,4 +4,5 @@ class ArmorAttachment < ActiveRecord::Base
     accepts_nested_attributes_for :armor_quality_ranks
     has_many :armor_attachment_modification_options
     accepts_nested_attributes_for :armor_attachment_modification_options
+    has_many :armor_attachments_armors
 end

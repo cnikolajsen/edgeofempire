@@ -17,6 +17,45 @@
       <dd><%= @armor.price %></dd>
     </dl>
 
+    <h5>Available Attachments</h5>
+    <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid" data-no-turbolink>
+      <% @armor.attachments.each do |attachment| %>
+        <li>
+
+    <ul class="pricing-table">
+      <li class="title"><%= attachment.name %></li>
+      <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= attachment.price %></li>
+      <li class="description"><%= text_replace_tokens(attachment.description).html_safe %></li>
+      <li class="bullet-item"><strong>Hard Point cost:</strong> <%= attachment.hard_points %></li>
+      <% unless attachment.armor_quality_ranks.blank? %>
+        <li class="title">Base modification</li>
+        <% attachment.armor_quality_ranks.each do |qual| %>
+          <li class="bullet-item"><strong><%= qual.armor_quality.name %></strong><br /><%= qual.armor_quality.description %></li>
+        <% end -%>
+      <% end -%>
+      <% unless attachment.armor_attachment_modification_options.blank? %>
+        <li class="title">Modification options</li>
+        <% attachment.armor_attachment_modification_options.each do |aamo| %>
+          <% unless aamo.talent_id.nil? %>
+            <% talent = Talent.find(aamo.talent_id) %>
+            <li class="bullet-item">
+              <strong>Innate talent:</strong>
+              <%= talent.name %>
+            </li>
+          <% end -%>
+          <% unless aamo.skill_id.nil? %>
+            <% skill = Skill.find(aamo.skill_id) %>
+            <li class="bullet-item">
+              <strong>Skill:</strong>
+              <%= skill.name %> +1
+            </li>
+          <% end -%>
+        <% end -%>
+      <% end -%>
+    </ul>
+</li>
+<% end %>
+</ul>
     <%= link_to t('.back', :default => t("helpers.links.back")),
                   "/armor", :class => 'button'  %>
   </div>

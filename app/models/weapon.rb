@@ -12,6 +12,15 @@ class Weapon < ActiveRecord::Base
   belongs_to :weapon_category
   accepts_nested_attributes_for :weapon_models, :reject_if => :all_blank, :allow_destroy => true
 
-  #default_scope { order('name ASC') }
+  has_many :weapon_attachments_weapons
+  accepts_nested_attributes_for :weapon_attachments_weapons, :reject_if => :all_blank, :allow_destroy => true
+
+  def attachments
+    attachments = Array.new
+    self.weapon_attachments_weapons.each do |waw|
+      attachments << WeaponAttachment.find(waw.weapon_attachment_id)
+    end
+    attachments
+  end
 
 end
