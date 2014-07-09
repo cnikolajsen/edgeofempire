@@ -16,7 +16,9 @@ class Armor < ActiveRecord::Base
   def attachments
     attachments = Array.new
     self.armor_attachments_armors.each do |aaa|
-      attachments << ArmorAttachment.find(aaa.armor_attachment_id)
+      if aaa.armor_attachment_id
+        attachments << ArmorAttachment.find(aaa.armor_attachment_id)
+      end
     end
     attachments
   end
