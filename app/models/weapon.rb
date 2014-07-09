@@ -18,7 +18,12 @@ class Weapon < ActiveRecord::Base
   def attachments
     attachments = Array.new
     self.weapon_attachments_weapons.each do |waw|
-      attachments << WeaponAttachment.find(waw.weapon_attachment_id)
+      if waw.weapon_attachment_id
+        attachment = WeaponAttachment.find(waw.weapon_attachment_id)
+        if attachment.hard_points <= self.hard_points
+          attachments << attachment
+        end
+      end
     end
     attachments
   end
