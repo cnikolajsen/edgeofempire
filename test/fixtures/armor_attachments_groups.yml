@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  armor_id: 1
+  attachment_group_id: 1
+
+two:
+  armor_id: 1
+  attachment_group_id: 1

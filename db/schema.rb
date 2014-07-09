@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140707201340) do
+ActiveRecord::Schema.define(version: 20140709124555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,13 @@ ActiveRecord::Schema.define(version: 20140707201340) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "armor_attachment_attachments_groups", force: true do |t|
+    t.integer  "armor_attachment_id"
+    t.integer  "attachment_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "armor_attachment_modification_options", force: true do |t|
     t.integer  "armor_attachment_id"
     t.integer  "talent_id"
@@ -84,6 +91,13 @@ ActiveRecord::Schema.define(version: 20140707201340) do
 
   add_index "armor_attachments_armors", ["armor_attachment_id"], name: "index_armor_attachments_armors_on_armor_attachment_id", using: :btree
   add_index "armor_attachments_armors", ["armor_id"], name: "index_armor_attachments_armors_on_armor_id", using: :btree
+
+  create_table "armor_attachments_groups", force: true do |t|
+    t.integer  "armor_id"
+    t.integer  "attachment_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "armor_categories", force: true do |t|
     t.string   "name"
@@ -131,6 +145,12 @@ ActiveRecord::Schema.define(version: 20140707201340) do
   end
 
   add_index "armors", ["slug"], name: "index_armors_on_slug", unique: true, using: :btree
+
+  create_table "attachment_groups", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "campaigns", force: true do |t|
     t.string   "name"
@@ -630,6 +650,13 @@ ActiveRecord::Schema.define(version: 20140707201340) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
 
+  create_table "weapon_attachment_attachments_groups", force: true do |t|
+    t.integer  "weapon_attachment_id"
+    t.integer  "attachment_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "weapon_attachment_modification_options", force: true do |t|
     t.integer  "weapon_attachment_id"
     t.integer  "talent_id"
@@ -658,6 +685,13 @@ ActiveRecord::Schema.define(version: 20140707201340) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "damage_bonus"
+  end
+
+  create_table "weapon_attachments_groups", force: true do |t|
+    t.integer  "weapon_id"
+    t.integer  "attachment_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "weapon_attachments_weapons", force: true do |t|

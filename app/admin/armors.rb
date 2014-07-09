@@ -2,7 +2,8 @@ ActiveAdmin.register Armor do
   permit_params :name, :description, :defense, :soak, :price, :encumbrance,
     :rarity, :hard_points, :image_url, :armor_category_id,
     armor_models_attributes: [ :id, :armor_id, :name ],
-    armor_attachments_armors_attributes: [ :id, :armor_id, :armor_attachment_id ]
+    armor_attachments_armors_attributes: [ :id, :armor_id, :armor_attachment_id ],
+    armor_attachments_groups_attributes: [ :id, :armor_id, :attachment_group_id ]
 
   menu :label => "Armor", :parent => "Equipment"
 
@@ -50,6 +51,9 @@ ActiveAdmin.register Armor do
       end
       f.has_many :armor_attachments_armors, :heading => 'Allowed armor attachments' do |wm_form|
         wm_form.input :armor_attachment_id, :as => :select, :collection => ArmorAttachment.all.map{|u| ["#{u.name}", u.id]}
+      end
+      f.has_many :armor_attachments_groups do |wm_form|
+        wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
       end
     end
     f.actions

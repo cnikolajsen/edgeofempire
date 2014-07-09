@@ -1,7 +1,8 @@
 ActiveAdmin.register WeaponAttachment do
   permit_params :name, :description, :price, :hard_points, :damage_bonus,
   weapon_attachment_quality_ranks_attributes: [ :id, :ranks, :weapon_attachment_id, :weapon_quality_id ],
-  weapon_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id, :damage_bonus, :weapon_quality_id, :weapon_quality_rank, :custom ]
+  weapon_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id, :damage_bonus, :weapon_quality_id, :weapon_quality_rank, :custom ],
+  weapon_attachment_attachments_groups_attributes: [ :id, :weapon_attachment_id, :attachment_group_id ]
 
   menu :label => "Weapon Attachments", :parent => "Equipment"
 
@@ -44,6 +45,11 @@ ActiveAdmin.register WeaponAttachment do
           amo_form.input :custom
         end
       end
+
+      f.has_many :weapon_attachment_attachments_groups do |wm_form|
+        wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
+      end
+
 
     end
     f.actions

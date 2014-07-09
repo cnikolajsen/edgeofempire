@@ -11,15 +11,25 @@ class Armor < ActiveRecord::Base
   has_many :armor_attachments_armors
   accepts_nested_attributes_for :armor_attachments_armors, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :armor_attachments_groups
+  has_many :attachment_groups, :through => :armor_attachments_groups
+  accepts_nested_attributes_for :armor_attachments_groups, :reject_if => :all_blank, :allow_destroy => true
+
   default_scope { order('name ASC') }
 
   def attachments
     attachments = Array.new
-    self.armor_attachments_armors.each do |aaa|
-      if aaa.armor_attachment_id
-        attachments << ArmorAttachment.find(aaa.armor_attachment_id)
+    self.armor_attachments_groups.each do |wag|
+      ArmorAttachmentAttachmentsGroup.where(:attachment_group_id => wag.attachment_group.id).each do |waag|
+        if waag.armor_attachment_id
+          attachment = ArmorAttachment.find(waag.armor_attachment_id)
+          if attachment.hard_points <= self.hard_points
+            attachments << attachment
+          end
+        end
       end
     end
     attachments
   end
+
 end
