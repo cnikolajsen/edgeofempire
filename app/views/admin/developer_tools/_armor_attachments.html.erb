@@ -1,0 +1,14 @@
+<table>
+  <% Armor.where("hard_points > 0").order("name ASC").map do |armor| %>
+    <tr class="<%= "#{cycle('odd', 'even')}" %>">
+      <td><%= armor.name %></td>
+      <% ArmorAttachment.all.order("name ASC").map do |attachment| %>
+        <% check = ArmorAttachmentsArmor.where(:armor_id => armor.id, :armor_attachment_id => attachment.id).first %>
+        <% field_class = check.blank? ? "" : "active-attachment-group" %>
+        <td class="<%= field_class%>">
+          <%= link_to "#{attachment.name}", admin_developer_tools_toggle_armor_attachment_path(:armor => armor.id, :attachment => attachment.id), :method => :post, :remote => :true %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

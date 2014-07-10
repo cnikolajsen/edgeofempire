@@ -5,6 +5,10 @@ ActiveAdmin.register Gear do
 
   menu :label => "Gear", :parent => "Equipment"
 
+  action_item do
+    link_to "Categories", admin_gear_categories_path
+  end
+
   config.per_page = 50
 
   index do |gear|

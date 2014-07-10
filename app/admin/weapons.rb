@@ -8,6 +8,16 @@ ActiveAdmin.register Weapon do
 
   menu :label => "Weapons", :parent => "Equipment"
 
+  action_item do
+    link_to "Attachments", admin_weapon_attachments_path
+  end
+  action_item do
+    link_to "Categories", admin_weapon_categories_path
+  end
+  action_item do
+    link_to "Qualities", admin_weapon_qualities_path
+  end
+
   config.sort_order = "name_asc"
   config.per_page = 50
 
@@ -30,7 +40,9 @@ ActiveAdmin.register Weapon do
       render "weapon_qualties", :qualities => weapon.weapon_quality_ranks
     end
     column "Attachments" do |weapon|
-      weapon.attachments.count
+      weapon.attachments.each do |a|
+        br a.name
+      end
     end
     actions
   end
@@ -61,9 +73,9 @@ ActiveAdmin.register Weapon do
         wm_form.input :weapon_attachment_id, :as => :select, :collection => WeaponAttachment.all.map{|u| ["#{u.name}", u.id]}
       end
 
-      f.has_many :weapon_attachments_groups do |wm_form|
-        wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
-      end
+      #f.has_many :weapon_attachments_groups do |wm_form|
+      #  wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
+      #end
 
     end
     f.actions
@@ -80,15 +92,15 @@ ActiveAdmin.register Weapon do
     end
   end
 
-  WeaponAttachment.where(:true).each do |i|
-    batch_priority += 1
-    batch_action "Add attachment '#{i.name}' to", :priority => batch_priority do |selection|
-      Weapon.find(selection).each do |weapon|
-        WeaponAttachmentsWeapon.where(:weapon_id => weapon.id, :weapon_attachment_id => i.id).first_or_create
-      end
-      redirect_to :back
-    end
-  end
+  #WeaponAttachment.where(:true).each do |i|
+  #  batch_priority += 1
+  #  batch_action "Add attachment '#{i.name}' to", :priority => batch_priority do |selection|
+  #    Weapon.find(selection).each do |weapon|
+  #      WeaponAttachmentsWeapon.where(:weapon_id => weapon.id, :weapon_attachment_id => i.id).first_or_create
+  #    end
+  #    redirect_to :back
+  #  end
+  #end
 
   controller do
     def find_resource

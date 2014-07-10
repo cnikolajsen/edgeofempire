@@ -1,5 +1,10 @@
 ActiveAdmin.register GearCategory do
   permit_params :name
 
-  menu :label => "Gear Categories", :parent => "Equipment"
+  menu false
+
+  action_item do
+    link_to "Gear", admin_gears_path
+  end
+
 end
