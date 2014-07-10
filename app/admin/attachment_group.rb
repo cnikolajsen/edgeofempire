@@ -1,7 +1,8 @@
 ActiveAdmin.register AttachmentGroup do
   permit_params :name
 
-  menu :label => "Attachment Groups", :parent => "Equipment"
+  #menu :label => "Attachment Groups", :parent => "Equipment"
+  menu false
 
   config.sort_order = "name_asc"
   config.per_page = 50

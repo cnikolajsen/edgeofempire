@@ -1,7 +1,11 @@
 ActiveAdmin.register WeaponQuality do
 	permit_params :description, :name, :trigger
 
-  menu :label => "Weapon Qualities", :parent => "Equipment"
+  menu false
+
+  action_item do
+    link_to "Weapons", admin_weapons_path
+  end
 
   config.sort_order = "name_asc"
 

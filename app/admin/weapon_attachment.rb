@@ -4,7 +4,11 @@ ActiveAdmin.register WeaponAttachment do
   weapon_attachment_modification_options_attributes: [ :id, :skill_id, :talent_id, :damage_bonus, :weapon_quality_id, :weapon_quality_rank, :custom ],
   weapon_attachment_attachments_groups_attributes: [ :id, :weapon_attachment_id, :attachment_group_id ]
 
-  menu :label => "Weapon Attachments", :parent => "Equipment"
+  menu false
+
+  action_item do
+    link_to "Weapons", admin_weapons_path
+  end
 
   config.sort_order = "name_asc"
   config.per_page = 50
@@ -47,23 +51,22 @@ ActiveAdmin.register WeaponAttachment do
         end
       end
 
-      f.has_many :weapon_attachment_attachments_groups do |wm_form|
-        wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
-      end
-
+      #f.has_many :weapon_attachment_attachments_groups do |wm_form|
+      #  wm_form.input :attachment_group_id, :as => :select, :collection => AttachmentGroup.all.map{|u| ["#{u.name}", u.id]}
+      #end
 
     end
     f.actions
   end
 
-  batch_priority = 0
-  AttachmentGroup.where(:true).each do |i|
-    batch_priority += 1
-    batch_action "Set'#{i.name}' attachment group on", :priority => batch_priority do |selection|
-      WeaponAttachment.find(selection).each do |weapon|
-        WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => weapon.id, :attachment_group_id => i.id).first_or_create
-      end
-      redirect_to :back
-    end
-  end
+  #batch_priority = 0
+  #AttachmentGroup.where(:true).each do |i|
+  #  batch_priority += 1
+  #  batch_action "Set'#{i.name}' attachment group on", :priority => batch_priority do |selection|
+  #    WeaponAttachment.find(selection).each do |weapon|
+  #      WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => weapon.id, :attachment_group_id => i.id).first_or_create
+  #    end
+  #    redirect_to :back
+  #  end
+  #end
 end

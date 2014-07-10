@@ -28,53 +28,77 @@ ActiveAdmin.register_page "Developer Tools" do
     redirect_to admin_developer_tools_path, :notice => "All player characters have been deleted. U Cry Now?"
   end
 
-  page_action :toggle_armor_attachment_group, :method => :post do
-    check = ArmorAttachmentsGroup.where(:armor_id => params[:armor], :attachment_group_id => params[:group]).first
+  page_action :toggle_armor_attachment, :method => :post do
+    check = ArmorAttachmentsArmor.where(:armor_id => params[:armor], :armor_attachment_id => params[:attachment]).first
     if check
-      check.destroy
+      check.delete
     else
-      ArmorAttachmentsGroup.where(:armor_id => params[:armor], :attachment_group_id => params[:group]).create
+      ArmorAttachmentsArmor.where(:armor_id => params[:armor], :armor_attachment_id => params[:attachment]).create
     end
     respond_to do |format|
       format.js  {}
     end
   end
 
-  page_action :toggle_weapon_attachment_group, :method => :post do
-    check = WeaponAttachmentsGroup.where(:weapon_id => params[:weapon], :attachment_group_id => params[:group]).first
+  page_action :toggle_weapon_attachment, :method => :post do
+    check = WeaponAttachmentsWeapon.where(:weapon_id => params[:weapon], :weapon_attachment_id => params[:attachment]).first
     if check
-      check.destroy
+      check.delete
     else
-      WeaponAttachmentsGroup.where(:weapon_id => params[:weapon], :attachment_group_id => params[:group]).create
+      WeaponAttachmentsWeapon.where(:weapon_id => params[:weapon], :weapon_attachment_id => params[:attachment]).create
     end
     respond_to do |format|
       format.js  {}
     end
   end
 
-  page_action :toggle_armor_attachment_attachment_group, :method => :post do
-    check = ArmorAttachmentAttachmentsGroup.where(:armor_attachment_id => params[:attachment], :attachment_group_id => params[:group]).first
-    if check
-      check.destroy
-    else
-      ArmorAttachmentAttachmentsGroup.where(:armor_attachment_id => params[:attachment], :attachment_group_id => params[:group]).create
-    end
-    respond_to do |format|
-      format.js  {}
-    end
-  end
-
-  page_action :toggle_weapon_attachment_attachment_group, :method => :post do
-    check = WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => params[:attachment], :attachment_group_id => params[:group]).first
-    if check
-      check.destroy
-    else
-      WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => params[:attachment], :attachment_group_id => params[:group]).create
-    end
-    respond_to do |format|
-      format.js  {}
-    end
-  end
+  #page_action :toggle_armor_attachment_group, :method => :post do
+  #  check = ArmorAttachmentsGroup.where(:armor_id => params[:armor], :attachment_group_id => params[:group]).first
+  #  if check
+  #    check.destroy
+  #  else
+  #    ArmorAttachmentsGroup.where(:armor_id => params[:armor], :attachment_group_id => params[:group]).create
+  #  end
+  #  respond_to do |format|
+  #    format.js  {}
+  #  end
+  #end
+#
+  #page_action :toggle_weapon_attachment_group, :method => :post do
+  #  check = WeaponAttachmentsGroup.where(:weapon_id => params[:weapon], :attachment_group_id => params[:group]).first
+  #  if check
+  #    check.destroy
+  #  else
+  #    WeaponAttachmentsGroup.where(:weapon_id => params[:weapon], :attachment_group_id => params[:group]).create
+  #  end
+  #  respond_to do |format|
+  #    format.js  {}
+  #  end
+  #end
+#
+  #page_action :toggle_armor_attachment_attachment_group, :method => :post do
+  #  check = ArmorAttachmentAttachmentsGroup.where(:armor_attachment_id => params[:attachment], :attachment_group_id => params[:group]).first
+  #  if check
+  #    check.destroy
+  #  else
+  #    ArmorAttachmentAttachmentsGroup.where(:armor_attachment_id => params[:attachment], :attachment_group_id => params[:group]).create
+  #  end
+  #  respond_to do |format|
+  #    format.js  {}
+  #  end
+  #end
+#
+  #page_action :toggle_weapon_attachment_attachment_group, :method => :post do
+  #  check = WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => params[:attachment], :attachment_group_id => params[:group]).first
+  #  if check
+  #    check.destroy
+  #  else
+  #    WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => params[:attachment], :attachment_group_id => params[:group]).create
+  #  end
+  #  respond_to do |format|
+  #    format.js  {}
+  #  end
+  #end
 
   action_item do
     link_to "Delete all characters", admin_developer_tools_delete_characters_path, :method => :post, :confirm => "Are you sure? This will delete all characters in the database. No refunds!"
@@ -105,29 +129,41 @@ ActiveAdmin.register_page "Developer Tools" do
     #  end
     #end
 
-    panel "Armor - Attachment groups" do
-      div :id => "armor_attachment_groups" do
-        render "armor_attachment_groups"
+    panel "Armor attachments" do
+      div :id => "allowed_armor_attachments" do
+        render "armor_attachments"
       end
     end
 
-    panel "Weapon - Attachment groups" do
-      div :id => "weapon_attachment_groups" do
-        render "weapon_attachment_groups"
+    panel "Weapon attachments" do
+      div :id => "allowed_weapon_attachments" do
+        render "weapon_attachments"
       end
     end
 
-    panel "Armor Attachment - Attachment groups" do
-      div :id => "armor_attachment_attachment_groups" do
-        render "armor_attachment_attachment_groups"
-      end
-    end
-
-    panel "Weapon Attachment - Attachment groups" do
-      div :id => "weapon_attachment_attachment_groups" do
-        render "weapon_attachment_attachment_groups"
-      end
-    end
+    #panel "Armor - Attachment groups" do
+    #  div :id => "armor_attachment_groups" do
+    #    render "armor_attachment_groups"
+    #  end
+    #end
+#
+    #panel "Weapon - Attachment groups" do
+    #  div :id => "weapon_attachment_groups" do
+    #    render "weapon_attachment_groups"
+    #  end
+    #end
+#
+    #panel "Armor Attachment - Attachment groups" do
+    #  div :id => "armor_attachment_attachment_groups" do
+    #    render "armor_attachment_attachment_groups"
+    #  end
+    #end
+#
+    #panel "Weapon Attachment - Attachment groups" do
+    #  div :id => "weapon_attachment_attachment_groups" do
+    #    render "weapon_attachment_attachment_groups"
+    #  end
+    #end
 
   end
 end
