@@ -1,7 +1,7 @@
 <table>
   <% Weapon.where("hard_points > 0").order("name ASC").map do |weapon| %>
     <tr class="<%= "#{cycle('odd', 'even')}" %>">
-      <td><%= weapon.name %></td>
+      <td><%= link_to weapon.name, admin_weapon_path(weapon) %><br/><em><%= weapon.weapon_category.name unless weapon.weapon_category.nil?  %></em></td>
       <% WeaponAttachment.all.order("name ASC").map do |attachment| %>
         <% check = WeaponAttachmentsWeapon.where(:weapon_id => weapon.id, :weapon_attachment_id => attachment.id).first %>
         <% field_class = check.blank? ? "" : "active-attachment-group" %>
