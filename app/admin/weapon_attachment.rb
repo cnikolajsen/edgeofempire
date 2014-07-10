@@ -10,6 +10,7 @@ ActiveAdmin.register WeaponAttachment do
   config.per_page = 50
 
   index do |weapon|
+    selectable_column
     column :name
     column :hard_points
     column :price
@@ -55,4 +56,14 @@ ActiveAdmin.register WeaponAttachment do
     f.actions
   end
 
+  batch_priority = 0
+  AttachmentGroup.where(:true).each do |i|
+    batch_priority += 1
+    batch_action "Set'#{i.name}' attachment group on", :priority => batch_priority do |selection|
+      WeaponAttachment.find(selection).each do |weapon|
+        WeaponAttachmentAttachmentsGroup.where(:weapon_attachment_id => weapon.id, :attachment_group_id => i.id).first_or_create
+      end
+      redirect_to :back
+    end
+  end
 end

@@ -7,8 +7,13 @@ ActiveAdmin.register AttachmentGroup do
   config.per_page = 50
 
   filter :name
-  #filter :weapon
-  #filter :armor
+
+  form do |f|
+    f.inputs "Attachment Group Details" do
+      f.input :name
+    end
+    f.actions
+  end
 
   controller do
     def create

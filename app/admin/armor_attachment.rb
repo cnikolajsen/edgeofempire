@@ -15,6 +15,7 @@ ActiveAdmin.register ArmorAttachment do
 
 
   index do |armor|
+    selectable_column
     column :name
     column :hard_points
     column :price
@@ -46,6 +47,17 @@ ActiveAdmin.register ArmorAttachment do
       end
     end
     f.actions
+  end
+
+  batch_priority = 0
+  AttachmentGroup.where(:true).each do |i|
+    batch_priority += 1
+    batch_action "Set'#{i.name}' attachment group on", :priority => batch_priority do |selection|
+      ArmorAttachment.find(selection).each do |armor|
+        ArmorAttachmentAttachmentsGroup.where(:armor_attachment_id => armor.id, :attachment_group_id => i.id).first_or_create
+      end
+      redirect_to :back
+    end
   end
 
 end

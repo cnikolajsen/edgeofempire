@@ -1,0 +1,14 @@
+<table>
+  <% Weapon.where("hard_points > 0").order("name ASC").map do |weapon| %>
+    <tr class="<%= "#{cycle('odd', 'even')}" %>">
+      <td><%= weapon.name %></td>
+      <% AttachmentGroup.all.order("name ASC").map do |group| %>
+        <% check = WeaponAttachmentsGroup.where(:weapon_id => weapon.id, :attachment_group_id => group.id).first %>
+        <% field_class = check.blank? ? "" : "active-attachment-group" %>
+        <td class="<%= field_class%>">
+          <%= link_to "#{group.name}", admin_developer_tools_toggle_weapon_attachment_group_path(:weapon => weapon.id, :group => group.id), :method => :post, :remote => :true %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

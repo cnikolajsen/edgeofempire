@@ -20,7 +20,7 @@
 //
 // Notice that Active Admin CSS rules are nested within a
 // 'body.active_admin' selector to prevent conflicts with
-// other pages in the app. It is best to wrap your changes in a 
+// other pages in the app. It is best to wrap your changes in a
 // namespace so they are properly recognized. You have options
 // if you e.g. want different styles for different namespaces:
 //
@@ -28,10 +28,18 @@
 // .admin_namespace    applies to the admin namespace (eg: /admin)
 // .other_namespace    applies to a custom namespace named other (eg: /other)
 
+td.active-attachment-group {
+  background-color: green !important;
+
+  a {
+    color: #fff;
+  }
+}
+
 table.talent-tree {
   //border: 1px solid black !important;
   table-layout: fixed;
-  
+
   .talent {
     border: 1px solid blue;
   }
@@ -44,5 +52,5 @@ table.talent-tree {
   .horizontal-link.link-1 {
     background: url(talent-link-hor.png) repeat-x 0 50%;
   }
-  
+
 }
