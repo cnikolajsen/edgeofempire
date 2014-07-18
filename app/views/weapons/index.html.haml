@@ -1,0 +1,50 @@
+.row
+  .small-12.columns
+    %h1
+      Weapons
+      - if can? :create, @weapon
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_weapon_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('weapons'))}
+        = link_to "Weapons", weapons_path
+      %dd{:class => ("active" if current_page('weapon_qualities'))}
+        = link_to "Qualities", weapon_qualities_path
+      %dd{:class => ("active" if current_page('weapon_attachments'))}
+        = link_to "Attachments", weapon_attachments_path
+
+.row
+  .small-12.columns
+    %table.responsive
+      %thead
+        %tr
+          %th Name
+          %th Skill
+          %th Dam
+          %th Crit
+          %th Range
+          %th Encum
+          %th HP
+          %th Price
+          %th Rarity
+          %th Special
+      - @weapon_categories.each do |category|
+        - if category.weapons.any?
+          %tr
+            %td{colspan: "10", style: "background-color: #000; color: #fff;"}= category.name.pluralize
+          - category.weapons.each do |weapon|
+            %tr
+              %td
+                = link_to weapon.name, weapon_path(weapon)
+                - if can? :edit, @weapon
+                  %small
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_path(weapon)
+              %td= weapon.skill.name unless weapon.skill.nil?
+              %td= weapon.damage
+              %td= weapon.crit
+              %td= weapon.range
+              %td= weapon.encumbrance
+              %td= weapon.hard_points
+              %td= weapon.price
+              %td= weapon.rarity
+              %td= render "weapons/weapon_qualities", :qualities => weapon.weapon_quality_ranks

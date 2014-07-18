@@ -4,10 +4,10 @@ class Weapon < ActiveRecord::Base
 
   belongs_to :skill
   has_many :weapon_qualities, :through => :weapon_quality_ranks
-  has_many :weapon_quality_ranks
-  accepts_nested_attributes_for :weapon_quality_ranks
+  has_many :weapon_quality_ranks, :dependent => :destroy
+  accepts_nested_attributes_for :weapon_quality_ranks, :reject_if => lambda { |a| a[:weapon_quality_id].blank? }, :allow_destroy => true
   has_many :characters, :through => :character_weapons
-  has_many :character_weapons
+  has_many :character_weapons, :dependent => :destroy
   has_many :weapon_models
   belongs_to :weapon_category
   accepts_nested_attributes_for :weapon_models, :reject_if => :all_blank, :allow_destroy => true
@@ -15,9 +15,7 @@ class Weapon < ActiveRecord::Base
   has_many :weapon_attachments_weapons
   accepts_nested_attributes_for :weapon_attachments_weapons, :reject_if => :all_blank, :allow_destroy => true
 
-  #has_many :weapon_attachments_groups
-  #has_many :attachment_groups, :through => :weapon_attachments_groups
-  #accepts_nested_attributes_for :weapon_attachments_groups, :reject_if => :all_blank, :allow_destroy => true
+  validates :name, presence: true
 
   def attachments
     attachments = Array.new

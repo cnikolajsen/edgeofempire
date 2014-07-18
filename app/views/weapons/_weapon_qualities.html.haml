@@ -1,0 +1,10 @@
+- qualities.each do |quality|
+  %a{"data-reveal-id" => "weaponQuality-#{quality.id}", href: "#"}= WeaponQuality.find_by_id(quality.weapon_quality_id).name
+  - if quality.ranks > 0
+    = quality.ranks
+  - if quality != qualities.last
+    ,
+  .reveal-modal.small{"data-reveal" => "", id: "weaponQuality-#{quality.id}"}
+    %h2= WeaponQuality.find_by_id(quality.weapon_quality_id).name
+    %p= text_replace_tokens(WeaponQuality.find_by_id(quality.weapon_quality_id).description).html_safe
+    %a.close-reveal-modal ×

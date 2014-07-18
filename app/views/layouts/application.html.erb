@@ -24,23 +24,26 @@
         <!-- Right Nav Section -->
         <ul class="right">
         <% if user_signed_in? %>
-          <li class="has-dropdown <% if @parent_page == 'misc' %>active<% end %>">
-            <a href="#">Misc.</a>
-            <ul class="dropdown">
-              <li class="has-dropdown">
-                <a href="#">Names</a>
-                <ul class="dropdown">
-                  <li<% if current_page('human_names') %> class="active"<% end %>><%= link_to "Human names", human_names_path %></li>
-                  <li<% if current_page('bothan_names') %> class="active"<% end %>><%= link_to "Bothan names", bothan_names_path %></li>
-                  <li<% if current_page('rodian_names') %> class="active"<% end %>><%= link_to "Rodian names", rodian_names_path %></li>
-                  <li<% if current_page('trandoshan_names') %> class="active"<% end %>><%= link_to "Trandoshan names", trandoshan_names_path %></li>
-                  <li<% if current_page('twilek_names') %> class="active"<% end %>><%= link_to "Twi'lek names", twilek_names_path %></li>
-                  <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", droid_names_path %></li>
-                </ul>
-              </li>
-              <li<% if current_page('rules_summary') %> class="active"<% end %>><%= link_to "Rules Summary", rules_path %></li>
-            </ul>
-          </li>
+          <% if can? :read, :all %>
+            <li class="has-dropdown <% if @parent_page == 'misc' %>active<% end %>">
+              <a href="#">Misc.</a>
+              <ul class="dropdown">
+                <li class="has-dropdown">
+                  <a href="#">Names</a>
+                  <ul class="dropdown">
+                    <li<% if current_page('human_names') %> class="active"<% end %>><%= link_to "Human names", human_names_path %></li>
+                    <li<% if current_page('bothan_names') %> class="active"<% end %>><%= link_to "Bothan names", bothan_names_path %></li>
+                    <li<% if current_page('rodian_names') %> class="active"<% end %>><%= link_to "Rodian names", rodian_names_path %></li>
+                    <li<% if current_page('trandoshan_names') %> class="active"<% end %>><%= link_to "Trandoshan names", trandoshan_names_path %></li>
+                    <li<% if current_page('twilek_names') %> class="active"<% end %>><%= link_to "Twi'lek names", twilek_names_path %></li>
+                    <li<% if current_page('droid_names') %> class="active"<% end %>><%= link_to "Droid names", droid_names_path %></li>
+                  </ul>
+                </li>
+                <li<% if current_page('rules_summary') %> class="active"<% end %>><%= link_to "Rules Summary", rules_path %></li>
+              </ul>
+            </li>
+          <% end %>
+          <% if can? :manage, Character %>
           <li class="has-dropdown <% if ['characters', 'new_character'].include?(@page) %>active<% end %>">
             <a href="#">Characters</a>
             <ul class="dropdown">
@@ -48,6 +51,7 @@
               <li<% if current_page('new_character') %> class="active"<% end %>><%= link_to "Create character", new_character_path()  %></li>
             </ul>
           </li>
+          <% end %>
           <li class="has-dropdown <% if current_page('user') %>active<% end %>">
             <a href="#">Account</a>
             <ul class="dropdown">
@@ -63,7 +67,7 @@
 
         <!-- Left Nav Section -->
         <ul class="left">
-          <% if user_signed_in? %>
+          <% if can? :read, :all %>
           <li<% if current_page('races') %> class="active"<% end %>><%= link_to "Races", races_path  %></li>
           <li<% if current_page('careers') %> class="active"<% end %>><%= link_to "Careers", careers_path  %></li>
           <li<% if current_page('skills') %> class="active"<% end %>><%= link_to "Skills", skills_path  %></li>
@@ -81,6 +85,9 @@
         </ul>
       </section>
     </nav>
+    <div id="flash_messages">
+      <%= render :partial => 'layouts/flash' %>
+    </div>
 
     <%= yield %>
 

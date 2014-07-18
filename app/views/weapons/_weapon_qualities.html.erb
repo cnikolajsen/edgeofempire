@@ -1,8 +1,0 @@
-<% qualities.each do |quality| %>
-  <a href="#" data-reveal-id="weaponQuality-<%= quality.id %>"><%= WeaponQuality.find_by_id(quality.weapon_quality_id).name %></a> <% if quality.ranks > 0 %> <%= quality.ranks %><% end %><% if quality != qualities.last %>,<% end %>
-  <div id="weaponQuality-<%= quality.id %>" class="reveal-modal small" data-reveal>
-    <h2><%= WeaponQuality.find_by_id(quality.weapon_quality_id).name %></h2>
-    <p><%= text_replace_tokens(WeaponQuality.find_by_id(quality.weapon_quality_id).description).html_safe %></p>
-    <a class="close-reveal-modal">&#215;</a>
-  </div>
-<% end %>

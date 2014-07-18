@@ -1,0 +1,104 @@
+= simple_form_for @weapon, html: { class: 'form-horizontal' } do |f|
+  = hidden_field_tag 'character_basics', 'true'
+  - if @weapon.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@weapon.errors.count, "error")
+        prohibited this weapon from being saved:
+      %ul
+        - @weapon.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Weapon name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Weapon description', label: false
+      .row
+        .small-3.columns
+          = f.label :image_url, :class => 'inline right'
+        .small-9.columns
+          = f.input :image_url, :placeholder => 'URL to external image source', label: false
+      .row.panel
+        .small-12.columns
+          %h4 Weapon Qualities
+          = f.simple_fields_for :weapon_quality_ranks do |builder|
+            = render 'weapon_quality_rank_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Quality</i>".html_safe, f, :weapon_quality_ranks
+      .row.panel
+        .small-12.columns
+          %h4 Weapon Models
+          = f.simple_fields_for :weapon_models do |builder|
+            = render 'weapon_model_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Model</i>".html_safe, f, :weapon_models
+      .row.panel
+        .small-12.columns
+          %h4 Attachments
+          = f.simple_fields_for :weapon_attachments_weapons do |builder|
+            = render 'weapon_attachments_weapon_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Attachment</i>".html_safe, f, :weapon_attachments_weapons
+
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :skill_id, :class => 'inline right'
+        .small-9.columns
+          = f.input :skill_id, :as => :select, :collection => Skill.where("name IN ('Brawl', 'Gunnery', 'Melee', 'Ranged (Light)', 'Ranged (Heavy)')"), label: false
+      .row
+        .small-3.columns
+          = f.label :weapon_category_id, "Category", :class => 'inline right'
+        .small-9.columns
+          = f.input :weapon_category_id, :as => :select, :collection => WeaponCategory.where(:true), :label => false
+      .row
+        .small-3.columns
+          = f.label :damage, :class => 'inline right'
+        .small-9.columns
+          = f.input :damage, label: false
+      .row
+        .small-3.columns
+          = f.label :crit, :class => 'inline right'
+        .small-9.columns
+          = f.input :crit, label: false
+      .row
+        .small-3.columns
+          = f.label :range, :class => 'inline right'
+        .small-9.columns
+          = f.input :range, :as => :select, :collection => ['Short', 'Medium', 'Long', 'Extreme', 'Engaged'], label: false
+      .row
+        .small-3.columns
+          = f.label :encumbrance, :class => 'inline right'
+        .small-9.columns
+          = f.input :encumbrance, label: false
+      .row
+        .small-3.columns
+          = f.label :hard_points, :class => 'inline right'
+        .small-9.columns
+          = f.input :hard_points, label: false
+      .row
+        .small-3.columns
+          = f.label :price, :class => 'inline right'
+        .small-9.columns
+          = f.input :price, label: false
+      .row
+        .small-3.columns
+          = f.label :rarity, :class => 'inline right'
+        .small-9.columns
+          = f.input :rarity, label: false
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        - if @weapon.new_record?
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            weapons_path, :class => 'button secondary'                    |
+        - else
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            weapon_path, :class => 'button secondary'                    |

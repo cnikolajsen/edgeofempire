@@ -1,0 +1,90 @@
+.row
+  .small-12.columns
+    %h1
+      = t '.title', :default => @weapon.name
+      %small= @weapon.skill.name unless @weapon.skill.nil?
+.row
+  .small-9.columns
+    %table
+      %thead
+        %tr
+          %th Skill
+          %th Damage
+          %th Crit
+          %th Price
+          %th Special
+      %tbody
+        %tr
+          %td= @weapon.skill.name unless @weapon.skill.nil?
+          %td= @weapon.damage
+          %td= @weapon.crit
+          %td= @weapon.price
+          %td= render "weapon_qualities", :qualities => @weapon.weapon_quality_ranks
+    %p= simple_format(@weapon.description)
+    - if @weapon.weapon_models.any?
+      %h5 Models include
+      %ul
+        - @weapon.weapon_models.each do |model|
+          %li= model.name
+    %h5 Available Attachments
+    %ul#item-grid.small-block-grid-1.medium-block-grid-2.large-block-grid-3{"data-no-turbolink" => ""}
+      - @weapon.attachments.each do |attachment|
+        %li
+          %ul.pricing-table
+            %li.title= attachment.name
+            %li.price
+              = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+              = attachment.price
+            %li.description= text_replace_tokens(attachment.description).html_safe
+            %li.bullet-item
+              %strong Hard Point cost:
+              = attachment.hard_points
+            - unless attachment.weapon_attachment_quality_ranks.blank?
+              %li.title Base modification
+              - attachment.weapon_attachment_quality_ranks.each do |qual|
+                %li.bullet-item
+                  %strong= qual.weapon_quality.name
+                  %br/
+                  = qual.weapon_quality.description
+            - unless attachment.weapon_attachment_modification_options.blank?
+              %li.title Modification options
+              - attachment.weapon_attachment_modification_options.each do |aamo|
+                - unless aamo.talent_id.nil?
+                  - talent = Talent.find(aamo.talent_id)
+                  %li.bullet-item
+                    %strong Innate talent:
+                    = talent.name
+                - unless aamo.skill_id.nil?
+                  - skill = Skill.find(aamo.skill_id)
+                  %li.bullet-item
+                    %strong Skill:
+                    = skill.name
+                    +1
+                - unless aamo.weapon_quality_id.nil?
+                  - weapon_quality = WeaponQuality.find(aamo.weapon_quality_id)
+                  %li.bullet-item
+                    %strong Weapon Quality:
+                    = weapon_quality.name
+                    - if aamo.weapon_quality_rank > 0
+                      +#{aamo.weapon_quality_rank}
+                    - if aamo.weapon_quality_rank < 0
+                      = aamo.weapon_quality_rank
+                - unless aamo.damage_bonus.nil?
+                  %li.bullet-item
+                    %strong Damage Bonus:
+                    +#{aamo.damage_bonus}
+                - unless aamo.custom.blank?
+                  %li.bullet-item
+                    %strong= aamo.custom
+  .small-3.columns.panel
+    - unless @weapon.image_url.blank?
+      %img{src: @weapon.image_url}/
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            weapons_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @weapon
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_weapon_path(@weapon), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @weapon, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

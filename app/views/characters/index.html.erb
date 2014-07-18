@@ -49,9 +49,10 @@
         <% end %>
       </tbody>
     </table>
-
+    <% if can? :manage, Character %>
     <%= link_to t('.new', :default => t("helpers.links.new")),
             new_character_path,
             :class => 'button radius' %>
+    <% end -%>
   </div>
 </div>
