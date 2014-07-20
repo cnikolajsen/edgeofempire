@@ -36,6 +36,20 @@ class WeaponsController < ApplicationController
     end
   end
 
+  def create
+    @weapon = Weapon.new(weapon_params)
+
+    respond_to do |format|
+      if @weapon.save
+        format.html { redirect_to weapon_qualities_path, notice: '#{@weapon.name} was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @weapon }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @weapon.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def update
     respond_to do |format|
       if @weapon.update(weapon_params)
@@ -74,12 +88,7 @@ private
 
   def set_page
     @page = 'weapons'
+    @title = 'Weapons'
   end
-
-
-  #def set_up
-  #  @page = 'weapons'
-  #  @title = "Weapons"
-  #end
 
 end

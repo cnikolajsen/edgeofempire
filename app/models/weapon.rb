@@ -15,7 +15,7 @@ class Weapon < ActiveRecord::Base
   has_many :weapon_attachments_weapons
   accepts_nested_attributes_for :weapon_attachments_weapons, :reject_if => :all_blank, :allow_destroy => true
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   def attachments
     attachments = Array.new
