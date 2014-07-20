@@ -1,0 +1,58 @@
+= simple_form_for @weapon_attachment, html: { class: 'form-horizontal' } do |f|
+  - if @weapon_attachment.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@weapon_attachment.errors.count, "error")
+        prohibited this weapon from being saved:
+      %ul
+        - @weapon_attachment.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Weapon attachment name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Weapon attachment description', label: false
+      .row
+        .small-3.columns
+          = f.label :hard_points, :class => 'inline right'
+        .small-9.columns
+          = f.input :hard_points, label: false
+      .row
+        .small-3.columns
+          = f.label :price, :class => 'inline right'
+        .small-9.columns
+          = f.input :price, :label => false
+      .row
+        .small-3.columns
+          = f.label :damage_bonus, :class => 'inline right'
+        .small-9.columns
+          = f.input :damage_bonus, label: false
+
+    .medium-6.small-12.columns
+      .row.panel
+        .small-12.columns
+          %h4.subheader Weapon Attachment Qualities
+          = f.simple_fields_for :weapon_attachment_quality_ranks do |builder|
+            = render 'weapon_attachment_quality_rank_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Quality</i>".html_safe, f, :weapon_attachment_quality_ranks
+      .row.panel
+        .small-12.columns
+          %h4.subheader Attachments
+          = f.simple_fields_for :weapon_attachment_modification_options do |builder|
+            = render 'weapon_attachment_modification_option_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Attachment</i>".html_safe, f, :weapon_attachment_modification_options
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+          weapon_attachments_path, :class => 'button secondary'                    |
