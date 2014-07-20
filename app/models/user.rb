@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   include FriendlyId
   friendly_id :email, :use => :slugged
 
+  ROLES = %w[admin moderator player banned]
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -14,6 +16,20 @@ class User < ActiveRecord::Base
 
   has_many :characters, :dependent => :destroy
   has_many :campaigns
+
+  def roles=(roles)
+    self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)
+  end
+
+  def roles
+    ROLES.reject do |r|
+      ((roles_mask.to_i || 0) & 2**ROLES.index(r)).zero?
+    end
+  end
+
+  def is?(role)
+    roles.include?(role.to_s)
+  end
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.where(:provider => auth.provider, :uid => auth.uid).first

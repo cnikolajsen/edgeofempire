@@ -23,7 +23,10 @@ EdgeOfEmpire::Application.routes.draw do
   resources :equipment
   resources :adventures
   resources :campaigns
-  resources :weapons
+  resources :weapons do
+
+  end
+  resources :weapon_quality_ranks
   resources :weapon_qualities
   resources :weapon_attachments
   resources :armor

@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :enabled
+  permit_params :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :enabled, :role
 
   menu :label => "Frontend Users", :parent => "Users"
 
@@ -21,11 +21,18 @@ ActiveAdmin.register User do
       f.input :username
       f.input :email
       f.input :password
-      f.input :password_confirmation
+      #f.input :password_confirmation
       f.input :first_name
       f.input :last_name
       f.input :enabled
 
+      f.input :role, :as => :select, :collection => User::ROLES
+
+      #for role in User::ROLES
+        #f.check_box "user[roles][#{role}]", role, f.object.roles.include?(role), {:name => "user[roles][]"}
+        #f.label "user_roles_#{role}", role.humanize
+      #end
+      #f.hidden_field "user[roles][]", ""
     end
     f.actions
   end

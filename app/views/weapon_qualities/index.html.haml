@@ -1,0 +1,33 @@
+- content_for :title do
+  Weapon Qualities
+
+.row
+  .small-12.columns
+    %h1
+      Weapons Qualities
+      - if can? :create, @weapon
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_weapon_quality_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('weapons'))}
+        = link_to "Weapons", weapons_path
+      %dd{:class => ("active" if current_page('weapon_qualities'))}
+        = link_to "Qualities", weapon_qualities_path
+      %dd{:class => ("active" if current_page('weapon_attachments'))}
+        = link_to "Attachments", weapon_attachments_path
+
+.row
+  .large-12.columns{role: "content"}
+    - @qualities.each do |quality|
+      %article
+        %h3
+          = quality.name
+          - if can? :create, @weapon
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_quality_path(quality)
+              /= link_to "<i class='fi-trash'></i>".html_safe, edit_weapon_quality_path(quality)
+        %h6.subheader
+          = quality.trigger
+        = simple_format(text_replace_tokens(quality.description).html_safe)
+        = link_to "<i class='fi-trash'> Destroy</i>".html_safe, quality, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @weapon
+      %hr/

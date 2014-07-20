@@ -1,0 +1,92 @@
+- content_for :title do
+  Weapon Attachments
+
+.row
+  .small-12.columns
+    %h1
+      Weapons Attachments
+      - if can? :create, @weapon
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_weapon_attachment_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('weapons'))}
+        = link_to "Weapons", weapons_path
+      %dd{:class => ("active" if current_page('weapon_qualities'))}
+        = link_to "Qualities", weapon_qualities_path
+      %dd{:class => ("active" if current_page('weapon_attachments'))}
+        = link_to "Attachments", weapon_attachments_path
+
+.row
+  .small-12.columns
+    %ul#item-grid.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+      - @attachments.each do |attachment|
+        %li
+          %ul.pricing-table
+            %li.title= attachment.name
+            %li.price
+              = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+              = attachment.price
+            %li.description= text_replace_tokens(attachment.description).html_safe
+            %li.bullet-item
+              %strong Hard Point cost:
+              = attachment.hard_points
+            - unless attachment.weapon_attachment_quality_ranks.blank?
+              %li.title Base modification
+              - attachment.weapon_attachment_quality_ranks.each do |qual|
+                %li.bullet-item
+                  %a{"data-reveal-id" => "baseModQual-#{qual.id}", href: "#"}= qual.weapon_quality.name
+                  - if qual.ranks > 0
+                    +#{qual.ranks}
+                  - if qual.ranks < 0
+                    = qual.ranks
+                  .reveal-modal.small{"data-reveal" => "", id: "baseModQual-#{qual.id}"}
+                    %h2= qual.weapon_quality.name
+                    %p= text_replace_tokens(qual.weapon_quality.description).html_safe
+                    %a.close-reveal-modal ×
+            - unless attachment.weapon_attachment_modification_options.blank?
+              %li.title Modification options
+              - attachment.weapon_attachment_modification_options.each do |aamo|
+                - unless aamo.talent_id.nil?
+                  - talent = Talent.find(aamo.talent_id)
+                  %li.bullet-item
+                    %strong Innate talent:
+                    %a{"data-reveal-id" => "modOptTalent-#{aamo.id}", href: "#"}= talent.name
+                    .reveal-modal.small{"data-reveal" => "", id: "modOptTalent-#{aamo.id}"}
+                      %h2= talent.name
+                      %p= text_replace_tokens(talent.description).html_safe
+                      %a.close-reveal-modal ×
+                - unless aamo.skill_id.nil?
+                  - skill = Skill.find(aamo.skill_id)
+                  %li.bullet-item
+                    %strong Skill:
+                    %a{"data-reveal-id" => "modOptSkill-#{aamo.id}", href: "#"}= skill.name
+                    +1
+                    .reveal-modal.small{"data-reveal" => "", id: "modOptSkill-#{aamo.id}"}
+                      %h2= skill.name
+                      %p= text_replace_tokens(skill.description).html_safe
+                      %a.close-reveal-modal ×
+                - unless aamo.weapon_quality_id.nil?
+                  - weapon_quality = WeaponQuality.find(aamo.weapon_quality_id)
+                  %li.bullet-item
+                    %strong Weapon Quality:
+                    %a{"data-reveal-id" => "modOptQual-#{aamo.id}", href: "#"}= weapon_quality.name
+                    - if aamo.weapon_quality_rank > 0
+                      +#{aamo.weapon_quality_rank}
+                    - if aamo.weapon_quality_rank < 0
+                      = aamo.weapon_quality_rank
+                    .reveal-modal.small{"data-reveal" => "", id: "modOptQual-#{aamo.id}"}
+                      %h2= weapon_quality.name
+                      %p= text_replace_tokens(weapon_quality.description).html_safe
+                      %a.close-reveal-modal ×
+                - unless aamo.damage_bonus.nil?
+                  %li.bullet-item
+                    %strong Damage Bonus:
+                    +#{aamo.damage_bonus}
+                - unless aamo.custom.blank?
+                  %li.bullet-item
+                    %strong= aamo.custom
+            - if can? :edit, @weapon
+              %li
+                %small
+                  = link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_weapon_attachment_path(attachment), :class => 'left'
+                  = link_to "<i class='fi-trash' style='color:red;'> Destroy</i>".html_safe, attachment, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'right'

@@ -19,7 +19,7 @@
 // $base-line-height: 150%;
 
 // This is the default html and body font-size for the base rem value.
-$rem-base: 16px;
+//$rem-base: 16px;
 
 // We use this to control whether or not CSS classes come through in the gem files.
 // $include-html-classes: true;
@@ -1147,4 +1147,6 @@ $price-cta-padding: rem-calc(10 20 0);
   font-size: 0.675rem;
 }
 
-
+body {
+  //background: transparent url(isb-logo.png);
+}

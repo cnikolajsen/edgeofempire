@@ -1,0 +1,7 @@
+.fields
+  .row
+    .small-10.columns
+      = f.input :weapon_attachment_id, :as => :select, :collection => WeaponAttachment.all.map{|u| ["#{u.name}", u.id]}, label: false
+/    .small-1.columns
+/      = f.hidden_field :_destroy
+/      = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"

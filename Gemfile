@@ -13,6 +13,11 @@ gem 'inherited_resources', github: 'josevalim/inherited_resources'
 gem 'ransack',             github: 'ernie/ransack'
 gem 'activeadmin',         github: 'gregbell/active_admin'
 gem 'formtastic',          github: 'justinfrench/formtastic'
+#gem 'cancan', '~> 1.6.10'
+gem 'cancancan', '~> 1.8.4'
+
+gem 'haml-rails', '~> 0.5.3'
+gem 'simple_form', '~> 3.0.2'
 
 # OmniAuth together with Devise should make Facebook auth possible.
 gem 'omniauth'
