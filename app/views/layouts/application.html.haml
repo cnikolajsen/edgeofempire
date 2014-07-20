@@ -1,0 +1,123 @@
+!!!
+%html{lang: "en"}
+  %head
+    %meta{charset: "utf-8"}/
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    %title
+      = content_for?(:title) ? yield(:title) : ""
+      | ISB Control Center
+    = stylesheet_link_tag    "application"
+    = javascript_include_tag "vendor/modernizr"
+    = csrf_meta_tags
+  %body
+    %nav.top-bar{"data-topbar" => ""}
+      %ul.title-area
+        %li.name
+          %h1= link_to "#{image_tag("isb-logo.png", :size => '30')} ISBCC".html_safe, root_path
+        %li.toggle-topbar.menu-icon
+          %a{href: "#"}
+            %span Menu
+      %section.top-bar-section
+        / Right Nav Section
+        %ul.right
+          - if user_signed_in?
+            - if can? :read, :all
+              %li.has-dropdown{:class => ("active" if @parent_page == 'misc')}
+                %a{href: "#"} Misc.
+                %ul.dropdown
+                  %li.has-dropdown
+                    %a{href: "#"} Names
+                    %ul.dropdown
+                      %li{:class => ("active" if current_page('human_names'))}
+                        #{link_to "Human names", human_names_path}
+                      %li{:class => ("active" if current_page('bothan_names'))}
+                        #{link_to "Bothan names", bothan_names_path}
+                      %li{:class => ("active" if current_page('rodian_names'))}
+                        #{link_to "Rodian names", rodian_names_path}
+                      %li{:class => ("active" if current_page('trandoshan_names'))}
+                        #{link_to "Trandoshan names", trandoshan_names_path}
+                      %li{:class => ("active" if current_page('twilek_names'))}
+                        #{link_to "Twi'lek names", twilek_names_path}
+                      %li{:class => ("active" if current_page('droid_names'))}
+                        #{link_to "Droid names", droid_names_path}
+                  %li{:class => ("active" if current_page('rules_summary'))}
+                    #{link_to "Rules Summary", rules_path}
+              - if can? :manage, Character
+                %li.has-dropdown{:class => ("active" if ['characters', 'new_character'].include?(@page))}
+                  %a{href: "#"} Characters
+                  %ul.dropdown
+                    %li{:class => ("active" if current_page('characters'))}
+                      #{link_to "My characters", characters_path()}
+                    %li{:class => ("active" if current_page('new_character'))}
+                      #{link_to "Create character", new_character_path()}
+                %li.has-dropdown{:class => ("active" if current_page('user'))}
+                  %a{href: "#"} Account
+                  %ul.dropdown
+                    %li{:class => ("active" if current_page('user'))}
+                      = link_to "Edit profile", "/me"
+                    %li= link_to "Logout", "/logout"
+          - else
+            %li= link_to "Register", "/register" unless user_signed_in?
+            %li= link_to "Login", "/login" unless user_signed_in?
+
+        / Left Nav Section
+        %ul.left
+          - if can? :read, :all
+            %li{:class => ("active" if current_page('races'))}
+              #{link_to "Races", races_path}
+            %li{:class => ("active" if current_page('careers'))}
+              #{link_to "Careers", careers_path}
+            %li{:class => ("active" if current_page('skills'))}
+              #{link_to "Skills", skills_path}
+            %li{:class => ("active" if current_page('talents'))}
+              #{link_to "Talents", talents_path}
+            %li.has-dropdown{:class => ("active" if ['weapons', 'weapon_qualities', 'weapon_attachments', 'armor', 'armor_qualities', 'armor_attachments', 'gear'].include?(@page))}
+              #{link_to "Equipment", '#'}
+              %ul.dropdown
+                %li{:class => ("active" if ['weapons', 'weapon_qualities', 'weapon_attachments'].include?(@page))}
+                  #{link_to "Weapons", weapons_path}
+                %li{:class => ("active" if ['armor', 'armor_qualities', 'armor_attachments'].include?(@page))}
+                  #{link_to "Armor", '/armor'}
+                %li{:class => ("active" if current_page('gear'))}
+                  #{link_to "Gear", '/gear'}
+            %li{:class => ("active" if current_page('obligations'))}
+              = link_to "Obligations", obligations_path
+    #flash_messages
+      = render :partial => 'layouts/flash'
+    = yield
+    = javascript_include_tag "application"
+  - if user_signed_in?
+    :javascript
+      // Include the UserVoice JavaScript SDK (only needed once on a page)
+      UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/NV72jUBKzlNvfwtvTjwkfg.js';var s=    document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+
+      //
+      // UserVoice Javascript SDK developer documentation:
+      // https://www.uservoice.com/o/javascript-sdk
+      //
+
+      // Set colors
+      UserVoice.push(['set', {
+        accent_color: '#e2753a',
+        trigger_color: 'white',
+        trigger_background_color: '#6aba2e'
+      }]);
+
+      // Identify the user and pass traits
+      // To enable, replace sample data with actual user traits and uncomment the line
+      UserVoice.push(['identify', {
+        email:      '#{current_user.email}', // User’s email address
+        //name:       'John Doe', // User’s real name
+        created_at: '#{current_user.created_at}', // Unix timestamp for the date the user signed up
+        //id:         '#{current_user.id}', // Optional: Unique id of the user (if set, this should not change)
+        //type:       'Owner', // Optional: segment your users by type
+      }]);
+
+      // Add default trigger to the bottom-right corner of the window:
+      UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'bottom-right' }]);
+
+      // Or, use your own custom trigger:
+      //UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
+
+      // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+      UserVoice.push(['autoprompt', {}]);
