@@ -82,10 +82,9 @@
                   #{link_to "Gear", '/gear'}
             %li{:class => ("active" if current_page('obligations'))}
               = link_to "Obligations", obligations_path
-    .content-main
-      #flash_messages
-        = render :partial => 'layouts/flash'
-      = yield
+    #flash_messages
+      = render :partial => 'layouts/flash'
+    = yield
     = javascript_include_tag "application"
   - if user_signed_in?
     :javascript
