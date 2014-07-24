@@ -1119,6 +1119,9 @@ $price-cta-padding: rem-calc(10 20 0);
       background-color: #262235;
     }
   }
+  .panel.selected {
+    background-color: #c4f99a;
+  }
 
   li {
     padding-bottom: 0 !important;
