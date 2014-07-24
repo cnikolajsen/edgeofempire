@@ -1,0 +1,46 @@
+- content_for :title do
+  Talents
+
+.row
+  .small-12.columns
+    %h1
+      Talents
+      - if can? :create, @talent
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_talent_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @talents.each do |talent|
+        %li
+          %a{href: "#talent-#{talent.id}"}= talent.name
+  .small-12.medium-9.columns{role: "content"}
+    - @talents.each do |talent|
+
+      %article
+        %a{name: "talent-#{talent.id}"}
+        %h3
+          = talent.name
+          - if can? :create, @talent
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_talent_path(talent)
+        %strong Activation:
+        = talent.activation
+        %br/
+        %strong Ranked:
+        = talent.ranked? ? 'Yes' : 'No'
+        %br/
+        - trees = TalentTree.where('talent_1_1 = :talent OR talent_1_2 = :talent OR talent_1_3 = :talent   OR talent_1_4 = :talent OR talent_2_1 = :talent OR talent_2_2 = :talent OR talent_2_3 = :talent OR talent_2_4 = :talent OR talent_3_1 = :talent OR talent_3_2 = :talent OR talent_3_3 = :talent OR talent_3_4 = :talent OR  talent_4_1 = :talent OR talent_4_2 = :talent OR talent_4_3 = :talent OR talent_4_4 = :talent OR talent_5_1 =   :talent OR talent_5_2 = :talent OR talent_5_3 = :talent OR talent_5_4 = :talent', {:talent => "#{talent.id}"})
+        - used_in_trees = Array.new
+          - trees.each do |tree|
+            - unless tree.career_id.nil?
+            - career = Career.find_by_id(tree.career_id)
+            - unless career.nil?
+              - used_in_trees << link_to(tree.name, career_path(career.id, :anchor => tree.name))
+
+        %strong Trees:
+        = used_in_trees.join(', ').html_safe
+        = simple_format(text_replace_tokens(talent.description))
+        = link_to "<i class='fi-trash'> Destroy</i>".html_safe, talent, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @talent
+        %hr/
