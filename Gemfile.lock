@@ -206,6 +206,8 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.1.3)
       sprockets-rails (~> 2.0)
+    rails-asset-jqueryui (0.0.3)
+      jquery-rails
     rails_12factor (0.0.2)
       rails_serve_static_assets
       rails_stdout_logging
@@ -289,6 +291,7 @@ DEPENDENCIES
   prawn (= 1.0.0)
   quiet_assets
   rails (= 4.1.3)
+  rails-asset-jqueryui
   rails_12factor
   ransack!
   responders!

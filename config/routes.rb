@@ -69,9 +69,8 @@ EdgeOfEmpire::Application.routes.draw do
   # Character talent routes.
   get 'characters/:id/talents' => 'character_talents#show', :as => :character_talents
   get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
-  get 'characters/:id/talents/:talent_tree_id/:row/:column/learn' => 'character_talents#learn'#, :defaults => {:format => "js"}
+  get 'characters/:id/talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'#, :defaults => {:format => "js"}
   get 'characters/:id/talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'#, :defaults => {:format => "js"}
-
 
   # Character skill routes.
   get 'characters/:id/skills' => 'characters#skills', :as => :character_skills

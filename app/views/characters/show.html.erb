@@ -206,23 +206,27 @@
       <%= render :partial => 'character_experience_usage' %>
     </div>
     <div class="row">
-      <div class="medium-12 columns panel">
-        <h5>Credits</h5>
-        <%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @character.credits %>
+      <div class="medium-12 columns">
+        <div class="panel">
+          <h5>Credits</h5>
+          <%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= @character.credits %>
+        </div>
       </div>
     </div>
     <div class="row">
-      <div class="medium-12 columns panel">
-        <h4>Obligation <small>(<%= @character.character_obligations.sum(:magnitude) %>)</small></h4>
-        <% @character.character_obligations.each do |obl| %>
-          <% unless obl.obligation_id.nil? %>
-            <h5><%= obl.obligation.name %> <small>(<%= obl.magnitude %>)</small></h5>
-            <% unless obl.description.nil? %>
-              <%= text_replace_tokens(obl.description) %>
-            <% end -%>
-            <hr />
+      <div class="medium-12 columns">
+        <div class="panel">
+          <h4>Obligation <small>(<%= @character.character_obligations.sum(:magnitude) %>)</small></h4>
+          <% @character.character_obligations.each do |obl| %>
+            <% unless obl.obligation_id.nil? %>
+              <h5><%= obl.obligation.name %> <small>(<%= obl.magnitude %>)</small></h5>
+              <% unless obl.description.nil? %>
+                <%= text_replace_tokens(obl.description) %>
+              <% end -%>
+              <hr />
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
   </div>

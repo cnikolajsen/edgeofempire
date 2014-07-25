@@ -3,9 +3,9 @@ class CharactersController < ApplicationController
   include RacesHelper
   include CharactersHelper
 
+  before_action :find_character, except: [:index]
   before_filter :set_up
   before_filter :authenticate_user!, :except =>:show
-  before_action :find_character, except: [:index]
 
   # GET /characters
   # GET /characters.json

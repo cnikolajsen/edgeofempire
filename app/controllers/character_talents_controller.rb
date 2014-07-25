@@ -45,6 +45,10 @@ class CharacterTalentsController < ApplicationController
 
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}".to_sym, @tree["talent_#{@row}_#{@column}"])
     talent_options = Array.new
+    if params[:option]
+      logger.warn(params[:option_value])
+      talent_options << params[:option_value]
+    end
     #3.times do |o_key|
     #  unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
     #    talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
