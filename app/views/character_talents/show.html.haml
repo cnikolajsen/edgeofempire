@@ -1,0 +1,84 @@
+.row
+  .small-12.columns
+    %h1= t '.title', :default => "Edit talents for #{@character.name}"
+.row
+  .small-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .small-12.medium-6.columns
+    .panel
+      %h5 Select Specializations
+      %ul
+        - if @character.specialization_1
+          %li
+            = TalentTree.where(:id => @character.specialization_1).first.name
+            = link_to 'Untrain', "talents/specialization/1/#{@character.specialization_1}/untrain" if @character.specialization_2.nil? and @character.purchased_skills.count == 0
+            - if @character.purchased_skills.count > 0
+              %br/
+              %small You must first untrain all purchased skills before you can untrain the initial specialization.
+        - if @character.specialization_2
+          %li
+            = TalentTree.where(:id => @character.specialization_2).first.name
+            = link_to 'Untrain', "talents/specialization/2/#{@character.specialization_2}/untrain" if @character.specialization_3.nil?
+        - if @character.specialization_3
+          %li
+            = TalentTree.where(:id => @character.specialization_3).first.name
+            = link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain"
+      = form_for @character do |specializations_form|
+        = hidden_field_tag 'update_specializations', 'true'
+        - if @character.specialization_1.nil?
+          = select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level')
+        - if @character.specialization_2.nil? and !@character.specialization_1.nil?
+          = select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level')
+        - if @character.specialization_3.nil? and !@character.specialization_2.nil?
+          = select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Third  specialization", :include_blank => false}, :class => 'input-block-level')
+        = hidden_field_tag 'destination', 'talents'
+        = specializations_form.submit 'Save specializations', :class => 'button small'
+  .small-12.medium-6.columns
+    .panel{style: "background-color: #FFF;"}
+      %p{style: "font-size: 11px;"} Each character starts with a single specialization within his chosen career. However, he may purchase access to any additional specializations in any career.
+      %p{style: "font-size: 11px;"} The character gains a number of bonus class skills from each specialization, but only the first specialization chosen awards free ranks in a number of these bonus class skills.
+      %p{style: "font-size: 11px;"} Purchasing an additional specialization within a character’s career costs ten times the total number of specializations he would possess with this new specialization. So a character with one specialization  could purchase a second career specialization for 20 experience. If he wished to purchase a third career specialization, it would cost 30 experience.
+      %p{style: "font-size: 11px;"} Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new  specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third   specialization that was also a non-career specialization would cost 40 experience.
+.row
+  .small-12.medium-12.columns
+    = simple_form_for @character do |character_form|
+      = character_form.hidden_field :id
+      = hidden_field_tag 'update_talents', 'true'
+      - @talent_trees.each_with_index do |tree, i|
+        - @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", tree.id, @character.id)
+        .row
+          .small-12.columns
+            %strong= tree.name
+            %br/
+            = tree.description.html_safe
+            %br/
+            %br/
+        .row
+          .small-12.columns
+            %ul.small-block-grid-4.talent-tree
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 1} unless tree.talent_1_1.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 2} unless tree.talent_1_2.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 3} unless tree.talent_1_3.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 4} unless tree.talent_1_4.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 1} unless tree.talent_2_1.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 2} unless tree.talent_2_2.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 3} unless tree.talent_2_3.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 2, :column => 4} unless tree.talent_2_4.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 1} unless tree.talent_3_1.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 2} unless tree.talent_3_2.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 3} unless tree.talent_3_3.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 3, :column => 4} unless tree.talent_3_4.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 1} unless tree.talent_4_1.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 2} unless tree.talent_4_2.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 3} unless tree.talent_4_3.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 4, :column => 4} unless tree.talent_4_4.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 1} unless tree.talent_5_1.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 2} unless tree.talent_5_2.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 3} unless tree.talent_5_3.nil?
+              = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => 5, :column => 4} unless tree.talent_5_4.nil?
+      .row
+        .small-12.columns
+          - unless @character.specialization_1.nil?
+            = hidden_field_tag 'destination', 'talents'
+            = character_form.submit "Save talents", :class => 'button'
