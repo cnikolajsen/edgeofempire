@@ -86,3 +86,9 @@ $('#character_gears_gear_id').change(function(){
   })
 });
 
+function save_character_talent_option(character_id, element, tree, row, column, option) {
+  $.ajax({
+    url: "/characters/" + character_id + "/talents/" + tree + "/" + row + "/" + column + "/learn/" + option + "/" + element.value,
+    type: "GET",
+  });
+}

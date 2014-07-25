@@ -3,9 +3,9 @@ class CharactersController < ApplicationController
   include RacesHelper
   include CharactersHelper
 
+  before_action :find_character, except: [:index]
   before_filter :set_up
   before_filter :authenticate_user!, :except =>:show
-  before_action :find_character, except: [:index]
 
   # GET /characters
   # GET /characters.json
@@ -386,38 +386,6 @@ class CharactersController < ApplicationController
       end
       unless @character.specialization_3.nil?
         @talent_trees << TalentTree.find_by_id(@character.specialization_3)
-      end
-
-      @talent_trees.each do |tree|
-        @character_talent_tree = CharacterTalent.where(:character_id => @character.id, :talent_tree_id => tree.id).first_or_create
-        if @character_talent_tree.id.nil?
-          @character_talent_tree.character_id = @character.id
-          @character_talent_tree.talent_tree_id = tree.id
-        end
-
-        # Save data for 5 rows with 4 columns.
-        5.times do |r_key|
-          4.times do |c_key|
-            if !params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"].nil?
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = tree["talent_#{r_key + 1}_#{c_key + 1}"]
-              talent_options = Array.new
-              3.times do |o_key|
-                unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
-                  talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
-                end
-              end
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}_options"] = talent_options
-              # Save experience entry.
-              set_experience_cost('talent', params["tree_#{tree.id}-talent_#{r_key + 1 }_#{c_key + 1}"], r_key + 1, 'up', nil)
-            else
-              @character_talent_tree["talent_#{r_key + 1}_#{c_key + 1}"] = nil
-              # Save experience entry.
-              set_experience_cost('talent', tree["talent_#{r_key + 1}_#{c_key + 1}"], r_key + 1, 'down', nil)
-            end
-          end
-        end
-
-        @character_talent_tree.save
       end
     end
 

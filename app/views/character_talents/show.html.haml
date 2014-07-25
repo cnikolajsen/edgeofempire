@@ -42,26 +42,18 @@
       %p{style: "font-size: 11px;"} Characters may also purchase additional specializations outside of their career. Purchasing non-career specializations costs ten times the total number of specializations he would possess with this new  specialization, plus an additional 10 experience. So a character with one specialization could purchase a second–non-career–specialization for 30 experience. If he had two specializations already, a third   specialization that was also a non-career specialization would cost 40 experience.
 .row
   .small-12.medium-12.columns
-    = simple_form_for @character do |character_form|
-      = character_form.hidden_field :id
-      = hidden_field_tag 'update_talents', 'true'
-      - @talent_trees.each_with_index do |tree, i|
-        .row
-          .small-12.columns
+    - @talent_trees.each_with_index do |tree, i|
+      %dl.accordion{"data-accordion" => ""}
+        %dd.accordion-navigation
+          %a{href: "#panel#{i}"}
             %strong= tree.name
-            %br/
-            = tree.description.html_safe
-            %br/
-            %br/
-        .row
-          .small-12.columns
-            %ul.small-block-grid-4.talent-tree
-              - 5.times do |row|
-                - 4.times do |column|
-                  %li{id: ["talent-#{tree.id}-#{row + 1}-#{column + 1}"], class: [("link-right" if tree["talent_#{row + 1}_#{column + 1}_require_#{row + 1}_#{column + 2}"] == 1), ("link-left" if tree["talent_#{row + 1}_#{column}_require_#{row + 1}_#{column + 1}"] == 1)]}
-                    = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => row + 1, :column => column + 1} unless tree["talent_#{row + 1}_#{column + 1}"].nil?
-      .row
-        .small-12.columns
-          - unless @character.specialization_1.nil?
-            = hidden_field_tag 'destination', 'talents'
-            = character_form.submit "Save talents", :class => 'button'
+          .content{:id => "panel#{i}", :class => ('active' if i == 0)}
+            = simple_format tree.description.html_safe
+
+            .row
+              .small-12.columns
+                %ul.small-block-grid-4.talent-tree
+                  - 5.times do |row|
+                    - 4.times do |column|
+                      %li{id: ["talent-#{tree.id}-#{row + 1}-#{column + 1}"], class: [("link-right" if tree["talent_#{row + 1}_#{column + 1}_require_#{row + 1}_#{column + 2}"] == 1), ("link-left" if tree["talent_#{row + 1}_#{column}_require_#{row + 1}_#{column + 1}"] == 1)]}
+                        = render :partial => 'character_talent_tree_box', :locals => { :talent_tree => tree, :row => row + 1, :column => column + 1} unless tree["talent_#{row + 1}_#{column + 1}"].nil?

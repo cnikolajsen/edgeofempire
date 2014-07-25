@@ -1,0 +1,1 @@
+$('<%= "#talent-#{@tree.id}-#{@row}-#{@column}" %>').html("<%= escape_javascript(render(:partial => 'character_talent_tree_box', :locals => {:talent_tree => @tree, :row => @row, :column => @column})).html_safe %>").effect('highlight', {}, 3000);

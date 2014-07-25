@@ -20,10 +20,10 @@
         - talent_alterations[:on_purchase][:amount].times do |i|
           - if talent_alterations[:on_purchase][:type] == :select_characteristic
             - unless talent_alterations[:on_purchase][:select_options].nil?
-              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :disabled => !option_enabled
+              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :onchange=> "save_character_talent_option(#{@character.id}, this, #{talent_tree.id}, #{row}, #{column}, #{i});", :disabled => !option_enabled, :disabled => !option_enabled
           - elsif talent_alterations[:on_purchase][:type] == :select_skill
             - unless talent_alterations[:on_purchase][:select_options].nil?
-              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :disabled => !option_enabled
+              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :onchange => "save_character_talent_option(#{@character.id}, this, #{talent_tree.id}, #{row}, #{column}, #{i});", :disabled => !option_enabled
     %p.ribbon
       %span
         - if talent.activation.match(/^Active/)
