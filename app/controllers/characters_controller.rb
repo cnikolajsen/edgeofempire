@@ -120,7 +120,6 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @character }
     end
   end
 
@@ -583,19 +582,6 @@ class CharactersController < ApplicationController
     end
   end
 
-  def untrain_specialization
-    specialization = TalentTree.find(params[:spec_id])
-    set_experience_cost('specialization', specialization.id, params[:spec_num], direction = 'down')
-    @character["specialization_#{params[:spec_num]}".to_sym] = nil
-    @character.save
-    CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
-    if params[:spec_num].to_i == 1
-      CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
-      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
-    end
-    redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
-  end
-
   def career_selection
     @career = Career.find(params[:career_id])
 
@@ -643,7 +629,9 @@ class CharactersController < ApplicationController
   private
 
   def find_character
-    @character = Character.friendly.find(params[:id])
+    if params[:id]
+      @character = Character.friendly.find(params[:id])
+    end
   end
 
   def set_up
