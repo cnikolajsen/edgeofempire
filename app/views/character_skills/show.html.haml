@@ -1,0 +1,28 @@
+.row
+  .small-12.columns
+    %h1= t '.title', :default => "#{@character.name} - Skills"
+.row
+  .small-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .small-9.columns
+    .row
+      #free_skill_ranks_form.small-12.columns
+        = render :partial => 'free_skill_ranks_form', :locals => {:career_free_rank => @career_free_rank}
+    .row
+      .small-12.columns
+        %table.responsive{:style => "width: 100%"}
+          %tr
+            %th Skill
+            %th Characteristic
+            %th Ranks
+            %th Race
+            %th Class
+            %th Specialization
+            %th Equipment
+            %th Total
+          - @character.skills.each do |skill|
+            %tr{id: "skill-row-#{skill.id}"}= render :partial => 'character_skill_row', :locals => {:skill => skill}
+  .small-3.columns
+    #experience_usage_bar.row
+      = render :partial => 'characters/character_experience_usage'

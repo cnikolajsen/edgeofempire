@@ -1,0 +1,73 @@
+= simple_form_for :character_free_skill_ranks, :html => { :class => 'form-horizontal' } do |f|
+  - if @character.purchased_skills.count == 0
+    = f.hidden_field :id
+    = hidden_field_tag 'free_skill_ranks', 'true'
+
+    - if @character.creation?
+      .small-12.columns.panel
+        %h5= @character.career.name
+        - if @character.career
+          %label= "Select #{@character.race.name == 'Droid' ? 6 : 4} career skills to add a free rank to:"
+          - @character.career.skills.each do |class_skill|
+            %input{:name => "free_career_skill_rank[]", :id => ("free_skill_rank_#{class_skill.id}"), :value => class_skill.id, :checked => (career_free_rank.include? class_skill.id), :type => 'checkbox'}
+            %label{:for => "free_skill_rank_#{class_skill.id}"}
+              %small= class_skill.name
+
+    - if @character.race.respond_to?("#{@character.race.name.gsub(' ', '').downcase}_traits")
+      - traits = @character.race.send("#{@character.race.name.gsub(' ', '').downcase}_traits")
+      - if traits[:bonus_non_class_skill_ranks]
+        .small-12.columns.panel
+          %h5= "#{@character.race.name} trait"
+          %label= "Select #{traits[:bonus_non_class_skill_ranks]} non-career skills to add a free rank to:"
+          - @character.career.non_career_skills.each do |non_class_skill|
+            %input{:name => "free_non_career_skill_rank[]", :id => ("free_skill_rank_#{non_class_skill.id}"), :value => non_class_skill.id, :checked => (@racial_trait_free_rank.include? non_class_skill.id), :type => 'checkbox'}
+            %label{:for => "free_skill_rank_#{non_class_skill.id}"}
+              %small= non_class_skill.name
+
+    - if @initial_talent_tree
+      - @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", @initial_talent_tree.id, @character.id)
+      .small-12.columns.panel
+        %h5= @initial_talent_tree.name
+        %label= "Select #{@character.race.name == 'Droid' ? 3 : 2} career skills to add a free rank to:"
+        - @initial_talent_tree.skills.each do |class_skill|
+          %input{:name => "free_specialization_skill_rank[]", :id => ("free_skill_rank_#{class_skill.id}"), :value => class_skill.id, :checked => (@specialization_free_rank.include? class_skill.id), :type => 'checkbox'}
+          %label{:for => "free_skill_rank_#{class_skill.id}"}
+            %small= class_skill.name
+    .form-actions
+      =hidden_field_tag 'destination', 'skills'
+      = f.submit "Save free skill ranks", :class => 'button'
+  - else
+    .row
+      .small-12.columns
+        - if @character.race.respond_to?("#{@character.race.name.gsub(' ', '').downcase}_traits")
+          %h5
+            Free skill ranks from
+            %strong= @character.race.name
+            trait:
+          %table.small-12.columns
+            %tr
+              - @character.career.non_career_skills.each do |class_skill|
+                - if @racial_trait_free_rank.include? class_skill.id
+                  %th{:width => ("#{100/@racial_trait_free_rank.count}%")}
+                    = class_skill.name
+          %h5
+            Free skill ranks from
+            %strong= @character.career.name
+            career:
+          %table.small-12.columns
+            %tr
+              - @character.career.skills.each do |class_skill|
+                - if career_free_rank.include? class_skill.id
+                  %th{:width => ("#{100/career_free_rank.count}%")}
+                    = class_skill.name
+          %h5
+            Free skill ranks from
+            %strong= @initial_talent_tree.name
+            specialization:
+          %table.small-12.columns
+            %tr
+              - @initial_talent_tree.skills.each do |class_skill|
+                - if @specialization_free_rank.include? class_skill.id
+                  %th{:width => ("#{100/@specialization_free_rank.count}%")}
+                    = class_skill.name
+          %small To alter free skill ranks you must first untrain all purchased skills.
