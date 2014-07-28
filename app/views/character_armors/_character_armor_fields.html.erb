@@ -56,7 +56,6 @@
       end
     %>
     <%= f.select :armor_id, grouped_options_for_select(grouped_options), {:prompt => "Select Armor"} %>
-    <%= f.text_area :description, :placeholder => "Write your own description of your armor, such as make and model, color, or anything else that might make this armor personal." %>
     <%= f.check_box :equipped %>
     <%= f.label :equipped %>
     <%= f.check_box :carried, :checked => 'checked' %>
