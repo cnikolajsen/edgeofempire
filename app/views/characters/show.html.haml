@@ -1,0 +1,215 @@
+- content_for :title do
+  = "#{@character.name} - #{@character.race.name unless @character.race.nil?} #{@character.career.name unless @character.career.nil?}"
+
+.row
+  .medium-12.columns
+    %h1
+      = t '.title', :default => @character.name
+      %small
+        = @character.race.name unless @character.race.nil?
+        = @character.career.name unless @character.career.nil?
+- if current_user
+  .row
+    .medium-12.columns
+      = render :partial => 'character_edit_menu'
+
+- unless @character.bio.blank?
+  .row
+    .medium-12.columns
+      = simple_format(@character.bio)
+
+.row
+  .medium-9.columns
+    %table.small-12.columns.responsive
+      %tbody
+        %tr
+          %td
+            %strong
+              Brawn #{@character.brawn}
+          %td
+            %strong
+              Cunning #{@character.cunning}
+          %td
+            %strong
+              Presence #{@character.presence}
+        %tr
+          %td
+            %strong
+              Agility #{@character.agility}
+          %td
+            %strong
+              Intellect #{@character.intellect}
+          %td
+            %strong
+              Willpower #{@character.willpower}
+        %tr
+          %td{colspan: "3"}
+            %strong Skills:
+            - @character.character_skills.each_with_index do |character_skill, key|
+              - unless character_skill.skill.nil? or skill_total_ranks(character_skill) < 1
+                %span{style: "display: inline; white-space:nowrap;"}
+                  = character_skill.skill.name
+                  = skill_total_ranks(character_skill)
+                  = render :partial => "dice_pool", :locals => {:score => @character.send(character_skill.skill.characteristic.downcase), :ranks => skill_total_ranks(character_skill)}
+                  - if key+1 < @character.character_skills.count
+                    ,
+        %tr
+          %td
+            %strong Soak:
+            = @character.soak
+          %td
+          %td
+            %strong Defense:
+            = @character.defense
+        %tr
+          %td
+            %strong Wound Threshold:
+            = @character.wound_threshold
+          %td
+          %td
+            %strong Strain Threshold:
+            = @character.strain_threshold
+        %tr
+          %td{colspan: "3"}
+            %h5 Attacks
+            %table.responsive{style: "width:100%"}
+              %thead
+                %tr
+                  %th Weapon
+                  %th Skill
+                  %th Dice
+                  %th Dam
+                  %th Crit
+                  %th Range
+                  %th Misc
+              %tbody
+                - @character.attacks.each do |attack|
+                  %tr
+                    %td= attack[:weapon].name
+                    %td= attack[:skill].name
+                    %td= render :partial => 'dice_pool', :locals => {:score => @character.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
+                    %td= attack[:weapon].damage
+                    %td= attack[:weapon].crit
+                    %td= attack[:weapon].range
+                    %td
+                      - unless attack[:qualities].blank?
+                        %strong> Qualities:
+                        \ 
+                        - attack[:qualities].each_with_index do |q, key|
+                          = q[:name]
+                          = " #{q[:ranks]}" if q[:ranks] > 0
+                          - if key+1 < attack[:qualities].count
+                            ,
+                        %br/
+                      - if attack[:attachments].any?
+                        %strong> Attch:
+                        \ 
+                        - attack[:attachments].each_with_index do |q, key|
+                          = q[:name]
+                          = " #{q[:ranks]}" if q[:ranks]
+                          - if key+1 < attack[:attachments].count
+                            ,
+        %tr
+          %td{colspan: "3"}
+            %h5 Talents
+            %table.responsive{style: "width:100%"}
+              %tbody
+                - @character.talents.each_with_index do |element, index|
+                  - talent = Talent.find_by_id(element[0])
+                  - count = ''
+                  -  options = ''
+                  -  if element[1]['count'] > 1
+                    - unless element[1]['options'].empty?
+                      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+                    - else
+                      - options = "<span class='label success round'>#{element[1]['count']}</span>"
+                  - else
+                    - unless element[1]['options'].empty?
+                      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+
+                  %tr
+                    %td
+                      %strong= talent.name
+                    %td= options.html_safe
+                    %td= text_replace_tokens(talent.description)
+
+        - if @character.force_rating > 0
+          %tr
+            %td{colspan: "3"}
+              %h5
+                Force Powers
+                %small
+                  Force rating #{@character.force_rating}
+              - @character.force_power_upgrades_computed.each do |fp|
+                %table.responsive
+                  %thead
+                    %tr
+                      %th{colspan: "3"}= fp['name']
+                  %tbody
+                    %tr
+                      %td{colspan: "3"}= simple_format text_replace_tokens(fp['description'])
+                    - fp['upgrades'].each do |upg|
+                      %tr
+                        %td
+                          %strong= upg['name']
+                        %td
+                          - if upg['rank']
+                            %span.label.success.round= upg['rank']
+                        %td= text_replace_tokens(upg['description'])
+
+        %tr
+          %td{colspan: "3"}
+            %strong Equipment:
+            - @character.inventory.each_with_index do |item, delta|
+              - count = item[:quantity] > 1 ? " (#{item[:quantity]})" : ""
+              - delimiter = delta < @character.inventory.count - 1  ? ", " : ""
+              = "#{item[:name]}#{count}#{delimiter}"
+    - if current_user
+      .row
+        .medium-12.columns
+          .button-bar
+            %ul.button-group.round
+              %li= link_to "<i class='fi-rewind'> Back</i>".html_safe,
+                  characters_path,
+                  :class => 'button secondary'
+              %li= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe,
+                  character_path(@character, :format => 'pdf'),
+                  :class => 'button disabled',
+                  :target => "_blank"
+              %li= link_to "<i class='fi-skull'> Delete</i>".html_safe,
+                  character_path(@character),
+                  :method => 'delete',
+                  :data => { :confirm => t('.confirm',
+                  :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                  :class => 'button alert'
+              - if @character.may_set_create? && !@character.creation?
+                %li= link_to "<i class='icon-wrench'></i> Creation".html_safe, creation_character_path(@character), :class => 'button info'
+              - if @character.may_activate?
+                %li= link_to "<i class='icon-ok'></i> Activate".html_safe, activate_character_path(@character), :class => 'button  success'
+              - if @character.may_retire?
+                %li= link_to "<i class='icon-fire'></i> Retire".html_safe, retire_character_path(@character), :class => 'button alert'
+  .medium-3.columns
+    .row
+      = render :partial => 'character_experience_usage'
+    .row
+      .medium-12.columns
+        .panel
+          %h5 Credits
+          = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+          = @character.credits
+    .row
+      .medium-12.columns
+        .panel
+          %h4
+            Obligation
+            %small
+              (#{@character.character_obligations.sum(:magnitude)})
+          - @character.character_obligations.each do |obl|
+            - unless obl.obligation_id.nil?
+              %h5
+                = obl.obligation.name
+                %small
+                  (#{obl.magnitude})
+              - unless obl.description.nil?
+                = text_replace_tokens(obl.description)
+              %hr
