@@ -1,0 +1,33 @@
+- @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", talent_tree.id, @character.id)
+- talent = Talent.find_by_id(talent_tree["talent_#{row}_#{column}"])
+- if talent
+  .panel.radius.talent-box{class: [(talent.activation.match(/^Active/) ? "active" : "passive"), ("selected" if @character_tree_talents.any? && @character_tree_talents.first["talent_#{row}_#{column}"])]}
+    %strong= talent.name
+    %br
+    - if @character_tree_talents.any? && @character_tree_talents.first["talent_#{row}_#{column}"]
+      = link_to "Unlearn", "/characters/#{@character.id}/talents/#{talent_tree.id}/#{row}/#{column}/unlearn", remote: true
+    - else
+      = link_to "Learn", "/characters/#{@character.id}/talents/#{talent_tree.id}/#{row}/#{column}/learn", remote: true
+    = simple_format(text_replace_tokens(talent.description), {}, wrapper_tag: "div")
+    - parser_name = talent.name.gsub(' ', '').downcase
+    - if talent.respond_to?("#{parser_name}")
+      - talent_alterations = talent.send("#{parser_name}", 0, @character)
+    - option_enabled = false
+    - unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}"].nil?
+      -  option_enabled = true
+    - unless talent_alterations.nil?
+      - unless talent_alterations[:on_purchase].nil?
+        - talent_alterations[:on_purchase][:amount].times do |i|
+          - if talent_alterations[:on_purchase][:type] == :select_characteristic
+            - unless talent_alterations[:on_purchase][:select_options].nil?
+              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :onchange=> "save_character_talent_option(#{@character.id}, this, #{talent_tree.id}, #{row}, #{column}, #{i});", :disabled => !option_enabled, :disabled => !option_enabled
+          - elsif talent_alterations[:on_purchase][:type] == :select_skill
+            - unless talent_alterations[:on_purchase][:select_options].nil?
+              = select_tag "tree_#{talent_tree.id}-talent_#{row}_#{column}-option_#{i}", options_for_select(talent_alterations[:on_purchase][:select_options], (@character_tree_talents.first["talent_#{row}_#{column}_options".to_sym][i] unless @character_tree_talents.first.nil? or @character_tree_talents.first["talent_#{row}_#{column}_options".to_sym].nil?)), :class => 'input-block-level', :onchange => "save_character_talent_option(#{@character.id}, this, #{talent_tree.id}, #{row}, #{column}, #{i});", :disabled => !option_enabled
+    %p.ribbon
+      %span
+        - if talent.activation.match(/^Active/)
+          Active
+        - else
+          Passive
+  %div{:class => (talent_tree["talent_#{row + 1}_#{column}_require_#{row}_#{column}"] == 1 ? "link-down-active" : "link-down")}

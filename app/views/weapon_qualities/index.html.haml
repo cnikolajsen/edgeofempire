@@ -17,15 +17,20 @@
         = link_to "Attachments", weapon_attachments_path
 
 .row
-  .large-12.columns{role: "content"}
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @qualities.each do |quality|
+        %li
+          %a{href: "#quality-#{quality.id}"}= quality.name
+  .medium-9.small-12.columns{role: "content"}
     - @qualities.each do |quality|
       %article
+        %a{name: "quality-#{quality.id}"}
         %h3
           = quality.name
           - if can? :create, @weapon
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_quality_path(quality)
-              /= link_to "<i class='fi-trash'></i>".html_safe, edit_weapon_quality_path(quality)
         %h6.subheader
           = quality.trigger
         = simple_format(text_replace_tokens(quality.description).html_safe)

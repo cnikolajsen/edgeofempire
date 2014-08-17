@@ -41,7 +41,7 @@ class WeaponsController < ApplicationController
 
     respond_to do |format|
       if @weapon.save
-        format.html { redirect_to weapon_qualities_path, notice: '#{@weapon.name} was successfully created.' }
+        format.html { redirect_to weapons_path, notice: '#{@weapon.name} was successfully created.' }
         format.json { render action: 'show', status: :created, location: @weapon }
       else
         format.html { render action: 'new' }

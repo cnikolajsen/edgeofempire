@@ -232,7 +232,7 @@ class Character < ActiveRecord::Base
 
     # Add one rank for each Force Rating talent.
     CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'talent').each do |talent|
-      if Talent.find(talent.resource_id).name == "Force Rating"
+      if talent.resource_id && talent.resource_id > 0 && Talent.find(talent.resource_id).name == "Force Rating"
         rating += 1
       end
     end

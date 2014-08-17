@@ -16,6 +16,7 @@ EdgeOfEmpire::Application.routes.draw do
     resources :character_weapons
     resources :character_gears
     resources :character_force_powers
+    resources :character_skills
   end
   resources :skills
   resources :careers
@@ -67,13 +68,16 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
   # Character talent routes.
-  get 'characters/:id/talents' => 'characters#talents', :as => :character_talents
-  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'characters#untrain_specialization'
+  get 'characters/:id/talents' => 'character_talents#show', :as => :character_talents
+  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
+  get 'characters/:id/talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'#, :defaults => {:format => "js"}
+  get 'characters/:id/talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'#, :defaults => {:format => "js"}
 
   # Character skill routes.
-  get 'characters/:id/skills' => 'characters#skills', :as => :character_skills
-  get 'characters/:id/skills/:skill_id/rank_up' => 'characters#character_skill_rank_up'
-  get 'characters/:id/skills/:skill_id/rank_down' => 'characters#character_skill_rank_down'
+  get 'characters/:id/skills' => 'character_skills#show', :as => :character_skills
+  get 'characters/:id/skills/:skill_id/rank_up' => 'character_skills#rank_up'
+  get 'characters/:id/skills/:skill_id/rank_down' => 'character_skills#rank_down'
+  post 'characters/:id/skills' => 'character_skills#save_free_skill_ranks'
 
   # Character obligation routes.
   get 'characters/:id/obligation' => 'character_obligations#show', :as => :character_obligation

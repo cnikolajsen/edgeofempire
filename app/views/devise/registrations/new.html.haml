@@ -1,0 +1,20 @@
+- content_for :title do
+  Sign up
+
+.row
+  .small-12.columns
+    = devise_error_messages!
+.row
+  .medium-6.small-12.columns
+    %h2 Sign up
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+
+      = f.label :email
+      = f.email_field :email, :autofocus => true
+      = f.label :password
+      = f.password_field :password
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation
+      %br/
+      = f.submit "Sign up", :class => 'button radius'
+    = render "devise/shared/links"
