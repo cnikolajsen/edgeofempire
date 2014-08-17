@@ -37,7 +37,8 @@ gem 'foundation-icons-sass-rails', '~> 3.0.0'
 gem "therubyracer", "~> 0.12.0"
 gem 'thin'
 gem 'cocoon', "1.2.6"
-gem "prawn", "1.0.0"
+gem 'prawn', '1.2.1'
+gem 'prawn-table', '0.1.0'
 gem "aasm", "~> 3.2.0"
 gem "friendly_id", "~> 5.0.2"
 
@@ -83,6 +84,8 @@ end
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
+
+gem 'pry-rails', :group => :development
 
 # Use debugger
 gem "debugger", "~> 1.6.6", group: [:development, :test]
