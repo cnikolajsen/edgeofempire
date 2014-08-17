@@ -8,7 +8,7 @@
   <div class="row">
     <div class="small-12 columns panel">
       <h4><%= link_to career.name, career_path(career), :class => '' %></h4>
-      <p><%= career.description.html_safe %></p>
+      <%= simple_format(career.description).html_safe %>
     </div>
   </div>
 <% end -%>
