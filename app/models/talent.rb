@@ -79,8 +79,8 @@ class Talent < ActiveRecord::Base
     @return[:on_purchase][:amount] = 1
     @return[:on_purchase][:type] = :select_skill
 
-    options = Array.new(1)
-    Skill.where("name LIKE 'Knowledge%'").each do |skill|
+    options = Array.new
+    Skill.knowledges.each do |skill|
       options << [skill.name, skill.id]
     end
     @return[:on_purchase][:select_options] = options
