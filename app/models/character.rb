@@ -3,6 +3,13 @@ class Character < ActiveRecord::Base
   validates :race_id, presence: true
   validates :career_id, presence: true
 
+  #scope :public, -> { where(:public => true).order('created_at desc') }
+  #scope :private, -> { where(:public => false).order('created_at desc') }
+
+  after_create :log_starting_experience
+  after_create :set_species_stats
+  after_create :save_unarmed_combat_entry
+
   include AASM
   include FriendlyId
   friendly_id :slug_candidates, :use => :slugged
@@ -656,6 +663,67 @@ class Character < ActiveRecord::Base
       end
     end
     modification_bonuses
+  end
+
+  private
+
+  def log_starting_experience
+    species = Race.find(self.race_id)
+
+    # Add experience entry in the adventure log for species starting XP.
+    CharacterAdventureLog.where(:character_id => self.id, :experience => species.starting_experience, :date => self.created_at, :log => "#{species.name} starting experience").create
+  end
+
+  def set_species_stats
+    species = Race.find(self.race_id)
+
+    # Save species characteristics.
+    ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
+      self.update_attribute(stat.to_sym, species[stat])
+      # Save experience entries for species characteristics.
+      CharactersController.helpers.set_experience_cost(self.id, stat, 0, species[stat], 'up', 'race')
+    end
+
+    # Save species talents.
+    unless species.talents.nil?
+      species.talents.each do |talent|
+        character_bonus_talent = CharacterBonusTalent.new()
+        character_bonus_talent.character_id = self.id
+        character_bonus_talent.talent_id = talent.id
+        character_bonus_talent.bonus_type = 'racial'
+        character_bonus_talent.save
+
+        # Save experience entry.
+        CharactersController.helpers.set_experience_cost(self.id, 'talent', talent.id, 1, 'up', 'race')
+      end
+    end
+
+    # Save fixed free species skill ranks.
+    RaceSkill.where(:race_id => species.id).each do |race_skill|
+      character_skill = CharacterSkill.where(:character_id => self.id, :skill_id => race_skill.skill_id).first
+      unless character_skill.nil?
+        character_skill.free_ranks_race = race_skill.ranks
+        character_skill.save
+
+        # Save experience entry.
+        race_skill.ranks.times do |rank|
+          CharactersController.helpers.set_experience_cost(self.id, 'skill', race_skill.skill_id, rank + 1, 'up', 'race')
+        end
+        CharacterStartingSkillRank.where(:character_id => self.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
+      end
+    end
+  end
+
+  def save_unarmed_combat_entry
+    # Save a weapon entry for unarmed combat.
+    unarmed_weapon = Weapon.where(:name => 'Unarmed').first
+    character_unarmed = CharacterWeapon.where(:character_id => self.id, :weapon_id => unarmed_weapon.id).first_or_create
+    character_unarmed = CharacterWeapon.new()
+    character_unarmed.character_id = self.id
+    character_unarmed.weapon_id = unarmed_weapon.id
+    character_unarmed.carried = true
+    character_unarmed.equipped = true
+    character_unarmed.save
   end
 
 end

@@ -43,7 +43,7 @@ class CharacterSkillsController < ApplicationController
     character_skill.ranks += 1
     character_skill.save
 
-    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
+    set_experience_cost(@character.id, 'skill', character_skill.skill_id, skill_total_ranks(character_skill), 'up')
 
     @skill = Skill.find(params[:skill_id])
     @skill_select_enabled = true
@@ -57,7 +57,7 @@ class CharacterSkillsController < ApplicationController
 
   def rank_down
     character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_id]).first
-    set_experience_cost('skill', character_skill.skill_id, skill_total_ranks(character_skill), 'down')
+    set_experience_cost(@character.id, 'skill', character_skill.skill_id, skill_total_ranks(character_skill), 'down')
     character_skill.ranks -= 1 unless character_skill.ranks == 0
     character_skill.save
 
@@ -94,9 +94,9 @@ class CharacterSkillsController < ApplicationController
                 # Save experience entry.
                 experience_cost = get_experience_cost('skill', skill.id)
                 if experience_cost.nil? or experience_cost.blank?
-                  set_experience_cost('skill', skill.id, 1, 'up', 'specialization')
+                  set_experience_cost(@character.id, 'skill', skill.id, 1, 'up', 'specialization')
                 else
-                  set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'specialization')
+                  set_experience_cost(@character.id, 'skill', skill.id, experience_cost.last.rank + 1, 'up', 'specialization')
                 end
               end
             else
@@ -129,9 +129,9 @@ class CharacterSkillsController < ApplicationController
                 # Save experience entry.
                 experience_cost = get_experience_cost('skill', skill.id)
                 if experience_cost.nil? or experience_cost.blank?
-                  set_experience_cost('skill', skill.id, 1, 'up', 'career')
+                  set_experience_cost(@character.id, 'skill', skill.id, 1, 'up', 'career')
                 else
-                  set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'career')
+                  set_experience_cost(@character.id, 'skill', skill.id, experience_cost.last.rank + 1, 'up', 'career')
                 end
               end
             else
@@ -164,9 +164,9 @@ class CharacterSkillsController < ApplicationController
                 # Save experience entry.
                 experience_cost = get_experience_cost('skill', skill.id)
                 if experience_cost.nil? or experience_cost.blank?
-                  set_experience_cost('skill', skill.id, 1, 'up', 'racial_trait')
+                  set_experience_cost(@character.id, 'skill', skill.id, 1, 'up', 'racial_trait')
                 else
-                  set_experience_cost('skill', skill.id, experience_cost.last.rank + 1, 'up', 'racial_trait')
+                  set_experience_cost(@character.id, 'skill', skill.id, experience_cost.last.rank + 1, 'up', 'racial_trait')
                 end
               end
             else

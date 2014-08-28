@@ -25,7 +25,7 @@ class CharacterForcePowersController < ApplicationController
 
     if force_power
       CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:character_force_power][:force_power_id]).first_or_create
-      set_experience_cost('force_power', force_power.id, 10, 'up')
+      set_experience_cost(@character.id, 'force_power', force_power.id, 10, 'up')
       flash[:success] = "Force Power added"
     else
       flash[:error] = "Force Power not found."
@@ -36,7 +36,7 @@ class CharacterForcePowersController < ApplicationController
   def remove_force_power
     CharacterForcePower.where(:character_id => @character.id, :force_power_id => params[:force_power_id]).delete_all
     CharacterForcePowerUpgrade.where(:character_id => @character.id, :force_power_id => params[:force_power_id]).delete_all
-    set_experience_cost('force_power', params[:force_power_id], 1, 'down')
+    set_experience_cost(@character.id, 'force_power', params[:force_power_id], 1, 'down')
     flash[:success] = "Force Power removed"
     redirect_to :back
   end
@@ -47,7 +47,7 @@ class CharacterForcePowersController < ApplicationController
     @force_powers = CharacterForcePower.where(:character_id => @character.id).order(:id)
     upgrade = ForcePowerUpgrade.where(:id => params[:force_power_upgrade_id]).first
     flash[:success] = "Added <strong>'#{upgrade.name}'</strong> upgrade to the <strong>'#{upgrade.force_power.name}'</strong> Force Power ."
-    set_experience_cost('force_power_upgrade', params[:force_power_id], upgrade.cost, 'up')
+    set_experience_cost(@character.id, 'force_power_upgrade', params[:force_power_id], upgrade.cost, 'up')
 
     respond_to do |format|
       format.js  {}
@@ -60,7 +60,7 @@ class CharacterForcePowersController < ApplicationController
     @force_powers = CharacterForcePower.where(:character_id => @character.id).order(:id)
     upgrade = ForcePowerUpgrade.where(:id => params[:force_power_upgrade_id]).first
     flash[:success] = "Removed <strong>'#{upgrade.name}'</strong> upgrade from the <strong>'#{upgrade.force_power.name}'</strong> Force Power ."
-    set_experience_cost('force_power_upgrade', params[:force_power_id], upgrade.cost, 'down')
+    set_experience_cost(@character.id, 'force_power_upgrade', params[:force_power_id], upgrade.cost, 'down')
 
     respond_to do |format|
       format.js  {}

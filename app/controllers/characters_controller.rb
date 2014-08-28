@@ -156,16 +156,6 @@ class CharactersController < ApplicationController
 
         species = Race.find(@character.race_id)
 
-        # Add experience entry in the adventure log for species starting XP.
-        CharacterAdventureLog.where(:character_id => @character.id, :experience => species.starting_experience, :date => @character.created_at, :log => "#{species.name} starting experience").create
-
-        # Save species characteristics.
-        ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
-          @character.update_attribute(stat.to_sym, species[stat])
-          # Save experience entries for species characteristics.
-          set_experience_cost(stat, 0, species[stat], 'up', 'race')
-        end
-
         # Save subspecies.
         if params[:sub_species]
           if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits")
@@ -178,34 +168,6 @@ class CharactersController < ApplicationController
           end
         end
 
-        # Save species talents.
-        unless species.talents.nil?
-          species.talents.each do |talent|
-            character_bonus_talent = CharacterBonusTalent.new()
-            character_bonus_talent.character_id = @character.id
-            character_bonus_talent.talent_id = talent.id
-            character_bonus_talent.bonus_type = 'racial'
-            character_bonus_talent.save
-
-            # Save experience entry.
-            set_experience_cost('talent', talent.id, 1, 'up', 'race')
-          end
-        end
-
-        # Save fixed free species skill ranks.
-        RaceSkill.where(:race_id => species.id).each do |race_skill|
-          @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => race_skill.skill_id).first
-          unless @character_skill.nil?
-            @character_skill.free_ranks_race = race_skill.ranks
-            @character_skill.save
-
-            # Save experience entry.
-            race_skill.ranks.times do |rank|
-              set_experience_cost('skill', race_skill.skill_id, rank + 1, 'up', 'race')
-            end
-            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => race_skill.id, :granted_by => 'race', :ranks => race_skill.ranks).first_or_create
-          end
-        end
         # Save selectable free species skill ranks.
         if params[:skill_rank_choice]
           @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice]).first
@@ -214,20 +176,10 @@ class CharactersController < ApplicationController
             @character_skill.save
 
             # Save experience entry.
-            set_experience_cost('skill', params[:skill_rank_choice], 1, 'up', 'race')
+            set_experience_cost(@character.id, 'skill', params[:skill_rank_choice], 1, 'up', 'race')
             CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice], :granted_by => 'race', :ranks => 1).first_or_create
           end
         end
-
-        # Save a weapon entry for unarmed combat.
-        unarmed_weapon = Weapon.where(:name => 'Unarmed').first
-        character_unarmed = CharacterWeapon.where(:character_id => @character.id, :weapon_id => unarmed_weapon.id).first_or_create
-        character_unarmed = CharacterWeapon.new()
-        character_unarmed.character_id = @character.id
-        character_unarmed.weapon_id = unarmed_weapon.id
-        character_unarmed.carried = true
-        character_unarmed.equipped = true
-        character_unarmed.save
 
         format.html { redirect_to character_url(@character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
@@ -257,13 +209,13 @@ class CharactersController < ApplicationController
 
     if params[:update_specializations]
       if params[:character][:specialization_1] && !params[:character][:specialization_1].blank?
-        set_experience_cost('specialization', params[:character][:specialization_1], 1, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_1], 1, direction = 'up')
       end
       if params[:character][:specialization_2] && !params[:character][:specialization_2].blank?
-        set_experience_cost('specialization', params[:character][:specialization_2], 2, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_2], 2, direction = 'up')
       end
       if params[:character][:specialization_3] && !params[:character][:specialization_3].blank?
-        set_experience_cost('specialization', params[:character][:specialization_3], 3, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_3], 3, direction = 'up')
       end
     end
 
@@ -299,9 +251,9 @@ class CharactersController < ApplicationController
     if !params[:character_characteristics].nil?
       ['brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'].each do |stat|
         if params[:character][stat.to_sym].to_i > @character.race[stat]
-          set_experience_cost(stat, 0, params[:character][stat.to_sym].to_i, 'up')
+          set_experience_cost(@character.id, stat, 0, params[:character][stat.to_sym].to_i, 'up')
         elsif params[:character][stat.to_sym].to_i < @character[stat]
-          set_experience_cost(stat, 0, (@character[stat] - params[:character][stat.to_sym].to_i), 'down')
+          set_experience_cost(@character.id, stat, 0, (@character[stat] - params[:character][stat.to_sym].to_i), 'down')
         end
       end
     end

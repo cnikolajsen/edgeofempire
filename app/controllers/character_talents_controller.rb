@@ -26,7 +26,7 @@ class CharacterTalentsController < ApplicationController
 
   def untrain_specialization
     specialization = TalentTree.find(params[:spec_id])
-    set_experience_cost('specialization', specialization.id, params[:spec_num], direction = 'down')
+    set_experience_cost(@character.id, 'specialization', specialization.id, params[:spec_num], direction = 'down')
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
     CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
@@ -57,7 +57,7 @@ class CharacterTalentsController < ApplicationController
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}_options".to_sym, talent_options)
 
     # Save experience entry.
-    set_experience_cost('talent', @tree["talent_#{@row}_#{@column}"], @row, 'up', nil)
+    set_experience_cost(@character.id, 'talent', @tree["talent_#{@row}_#{@column}"], @row, 'up', nil)
 
     respond_to do |format|
       format.js  {}
@@ -73,7 +73,7 @@ class CharacterTalentsController < ApplicationController
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}_options".to_sym, nil)
 
     # Save experience entry.
-    set_experience_cost('talent', @tree["talent_#{@row}_#{@column}"], @row, 'down', nil)
+    set_experience_cost(@character.id, 'talent', @tree["talent_#{@row}_#{@column}"], @row, 'down', nil)
 
     respond_to do |format|
       format.js  {}

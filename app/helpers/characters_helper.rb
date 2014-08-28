@@ -104,12 +104,12 @@ module CharactersHelper
     career_skill_ids.include?(skill_id)
   end
 
-  def set_experience_cost(type, resource_id, ranks, direction = 'up', granted_by = '')
+  def set_experience_cost(character_id, type, resource_id, ranks, direction = 'up', granted_by = '')
     case type
     when 'brawn', 'agility', 'intellect', 'willpower', 'cunning', 'presence'
       if direction == 'up'
         1.upto(ranks) do |rank|
-          experience = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => rank).first_or_create
+          experience = CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => rank).first_or_create
 
           if granted_by == 'race' or experience.granted_by == 'race'
             experience.granted_by = 'race'
@@ -120,9 +120,9 @@ module CharactersHelper
           experience.save
         end
       else
-        experience = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type).order("rank DESC").first
+        experience = CharacterExperienceCost.where(:character_id => character_id, :resource_type => type).order("rank DESC").first
         experience.rank.downto((experience.rank - ranks + 1)) do |rank|
-          CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :rank => rank).delete_all
+          CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :rank => rank).delete_all
         end
       end
 
@@ -133,9 +133,9 @@ module CharactersHelper
         experience_cost = ranks * 5
       end
       if direction == 'up'
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
       else
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
       end
 
     when 'specialization'
@@ -152,9 +152,9 @@ module CharactersHelper
             experience_cost = (10 * ranks) + 10
           end
         end
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
       else
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
       end
 
     when 'skill'
@@ -167,22 +167,22 @@ module CharactersHelper
             experience_cost += 5
           end
         end
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
       else
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks.to_i).delete_all
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks.to_i).delete_all
       end
 
     when 'force_power'
       if direction == 'up'
         experience_cost = ranks
         ranks = 1
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks, :cost => experience_cost, :granted_by => granted_by).first_or_create
       else
-        CharacterExperienceCost.where(:character_id => @character.id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
+        CharacterExperienceCost.where(:character_id => character_id, :resource_type => type, :resource_id => resource_id, :rank => ranks).delete_all
       end
 
     when 'force_power_upgrade'
-      force_power_cost = CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'force_power', :resource_id => resource_id).first
+      force_power_cost = CharacterExperienceCost.where(:character_id => character_id, :resource_type => 'force_power', :resource_id => resource_id).first
       if direction == 'up'
         force_power_cost.cost += ranks
       else
