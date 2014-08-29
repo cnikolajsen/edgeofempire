@@ -7,7 +7,7 @@ class WeaponsController < ApplicationController
   def index
     #authorize! :index, @weapon
     @weapon_categories = WeaponCategory.where(:true).order(:name)
-    @weapons = Weapon.where(:true).order(:name)
+    @weapons = Weapon.where(:true).order(:name).includes(:weapon_qualities).includes(:skills)
 
     respond_to do |format|
       format.html # index.html.erb

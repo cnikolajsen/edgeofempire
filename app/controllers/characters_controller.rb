@@ -10,7 +10,7 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.where(:user_id => current_user.id)
+    @characters = Character.where(:user_id => current_user.id).includes(:race).includes(:career)
 
     respond_to do |format|
       format.html # index.html.erb

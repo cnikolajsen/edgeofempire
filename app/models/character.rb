@@ -80,7 +80,7 @@ class Character < ActiveRecord::Base
 
   has_many :character_adventure_logs, :dependent => :destroy
 
-  has_many :character_experience_costs
+  has_many :character_experience_costs, :dependent => :destroy
 
   belongs_to :race
   belongs_to :career
