@@ -1,0 +1,56 @@
+- content_for :title do
+  = @race.name
+
+.row
+  .small-12.columns
+    %h1= t '.title', :default => @race.name
+.row
+  .small-6.columns
+    %p= @race.description.gsub("\n", "<br />").html_safe
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-rewind'> Back</i>".html_safe, races_path, :class => 'tiny button secondary'
+        - if can? :create, @race
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_race_path(@race), :class => 'tiny button info'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @race, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @race
+
+  .small-6.columns
+    %table.table.table-striped{style: "width:100%"}
+      %thead
+        %tr
+          %th Brawn
+          %th Cunning
+          %th Presence
+          %th Agility
+          %th Intellect
+          %th Willpower
+      %tbody
+        %tr
+          %td= @race.brawn
+          %td= @race.cunning
+          %td= @race.presence
+          %td= @race.agility
+          %td= @race.intellect
+          %td= @race.willpower
+    %table.table.table-striped{style: "width:100%"}
+      %thead
+        %tr
+          %th Wound Threshold
+          %th Strain Threshold
+          %th Starting Experience
+      %tbody
+        %tr
+          %td= @race.wound_threshold
+          %td= @race.strain_threshold
+          %td= @race.starting_experience
+    %h4 Special Abilities
+    %ul
+      - unless @race.skills.nil?
+        - @race.race_skills.each do |race_skill|
+          %li
+            Add #{pluralize(race_skill.ranks, 'rank')} in #{race_skill.skill.name} skill.
+      - unless @race.talents.nil?
+        - @race.race_talents.each do |race_talent|
+          %li
+            Add #{pluralize(race_talent.ranks, 'rank')} in #{race_talent.talent.name} talent.
+      %li= text_replace_tokens(@race.special_ability.gsub("\n", "</li><li>")).html_safe

@@ -1,0 +1,29 @@
+- content_for :title do
+  Species
+
+.row
+  .small-12.columns
+    %h1
+      Species
+      - if can? :create, @race
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_race_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @races.each do |race|
+        %li
+          %a{href: "#race-#{race.id}"}= race.name
+  .small-12.medium-9.columns{role: "content"}
+    - @races.each do |race|
+
+      %article
+        %a{name: "race-#{race.id}"}
+        %h3
+          = link_to race.name, race_path(race)
+          - if can? :create, @race
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_race_path(race)
+        = simple_format(text_replace_tokens(race.description))
+        %hr/

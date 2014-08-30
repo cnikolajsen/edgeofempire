@@ -64,7 +64,7 @@
         %ul.left
           - if can? :read, :all
             %li{:class => ("active" if current_page('races'))}
-              #{link_to "Races", races_path}
+              #{link_to "Species", races_path}
             %li{:class => ("active" if current_page('careers'))}
               #{link_to "Careers", careers_path}
             %li{:class => ("active" if current_page('skills'))}
