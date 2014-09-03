@@ -993,6 +993,15 @@ $price-cta-padding: rem-calc(10 20 0);
 
 @import 'foundation';
 
+.top-bar {
+    .dropdown {
+      .active a {
+        color: white !important;
+        background: #008cba !important;
+      }
+    }
+}
+
 .row {
   max-width: 85rem;
 }
@@ -1023,7 +1032,19 @@ $price-cta-padding: rem-calc(10 20 0);
     }
   }
 }
+ul.talent-edit {
+  li {
+    text-align:center;
+    background-color: #008cba;
+    padding:0;
+    margin:0;
+    height: 36px;
+  }
+  li.inactive {
+    background-color: #ffffff;
+  }
 
+}
 .talent-tree {
   .link-down {
     height: 20px;
@@ -1151,4 +1172,8 @@ $price-cta-padding: rem-calc(10 20 0);
 }
 .panel.experience-cost table td {
   font-size: 0.675rem;
+}
+
+textarea {
+  height: auto;
 }

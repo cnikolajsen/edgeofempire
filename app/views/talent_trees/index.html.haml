@@ -1,0 +1,34 @@
+- content_for :title do
+  Talent Trees
+
+.row
+  .small-12.columns
+    %h1
+      Talent Trees
+      - if can? :create, @talent_tree
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_talent_tree_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @talent_trees.each do |tree|
+        %li
+          %a{href: "#tree-#{tree.id}"}= tree.name
+  .small-12.medium-9.columns{role: "content"}
+    - @talent_trees.includes(:career).each do |tree|
+
+      %article
+        %a{name: "tree-#{tree.id}"}
+        %h3
+          = link_to tree.name, talent_tree_path(tree)
+          %small
+            - if tree.career
+              = "[#{tree.career.name}]"
+            - else
+              [Universal]
+          - if can? :create, @talent_tree
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_talent_tree_path(tree)
+        = simple_format(text_replace_tokens(tree.description))
+        %hr/

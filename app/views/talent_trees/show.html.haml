@@ -1,0 +1,46 @@
+- content_for :title do
+  = @talent_tree.name
+
+.row
+  .small-12.columns
+    %h1
+      = @talent_tree.name
+      %small
+        - if @talent_tree.career
+          = "[#{@talent_tree.career.name}]"
+        - else
+          [Universal]
+.row
+  .small-12.columns
+    %p= simple_format(@talent_tree.description)
+    %ul.small-block-grid-4.talent-tree
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 1} unless @talent_tree.talent_1_1.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 2} unless @talent_tree.talent_1_2.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 3} unless @talent_tree.talent_1_3.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 4} unless @talent_tree.talent_1_4.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 2, :column => 1} unless @talent_tree.talent_2_1.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 2, :column => 2} unless @talent_tree.talent_2_2.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 2, :column => 3} unless @talent_tree.talent_2_3.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 2, :column => 4} unless @talent_tree.talent_2_4.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 3, :column => 1} unless @talent_tree.talent_3_1.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 3, :column => 2} unless @talent_tree.talent_3_2.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 3, :column => 3} unless @talent_tree.talent_3_3.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 3, :column => 4} unless @talent_tree.talent_3_4.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 4, :column => 1} unless @talent_tree.talent_4_1.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 4, :column => 2} unless @talent_tree.talent_4_2.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 4, :column => 3} unless @talent_tree.talent_4_3.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 4, :column => 4} unless @talent_tree.talent_4_4.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 5, :column => 1} unless @talent_tree.talent_5_1.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 5, :column => 2} unless @talent_tree.talent_5_2.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 5, :column => 3} unless @talent_tree.talent_5_3.nil?
+      = render :partial => 'careers/career_talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 5, :column => 4} unless @talent_tree.talent_5_4.nil?
+
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            talent_trees_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @talent_tree
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_talent_tree_path(@talent_tree), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @talent_tree, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

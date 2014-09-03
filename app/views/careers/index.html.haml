@@ -1,0 +1,29 @@
+- content_for :title do
+  Careers
+
+.row
+  .small-12.columns
+    %h1
+      Careers
+      - if can? :create, @career
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_career_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @careers.each do |career|
+        %li
+          %a{href: "#career-#{career.id}"}= career.name
+  .small-12.medium-9.columns{role: "content"}
+    - @careers.each do |career|
+
+      %article
+        %a{name: "career-#{career.id}"}
+        %h3
+          = link_to career.name, career_path(career)
+          - if can? :create, @career
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_career_path(career)
+        = simple_format(text_replace_tokens(career.description))
+        %hr/

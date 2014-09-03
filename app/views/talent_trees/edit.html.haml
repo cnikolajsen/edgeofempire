@@ -1,0 +1,10 @@
+- content_for :title do
+  Edit #{@talent_tree.name}
+
+.row
+  .small-12.columns
+    %h1
+      Edit #{@talent_tree.name}
+.row
+  .small-12.columns
+    = render :partial => 'form'

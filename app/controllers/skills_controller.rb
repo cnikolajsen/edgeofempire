@@ -21,6 +21,7 @@ class SkillsController < ApplicationController
   end
 
   def set_up
+    @top_page = 'careers'
     @page = 'skills'
     @title = "Skills"
   end

@@ -72,6 +72,7 @@ private
   end
 
   def set_page
+    @top_page = 'careers'
     @page = 'talents'
   end
 

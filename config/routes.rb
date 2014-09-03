@@ -24,9 +24,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :equipment
   resources :adventures
   resources :campaigns
-  resources :weapons do
-
-  end
+  resources :weapons
   resources :weapon_quality_ranks
   resources :weapon_qualities
   resources :weapon_attachments
@@ -35,6 +33,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :armor_attachments
   resources :gear
   resources :talents
+  resources :talent_trees
   resources :obligations
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
