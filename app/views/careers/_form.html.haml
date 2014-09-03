@@ -1,12 +1,12 @@
-= simple_form_for @race, html: { class: 'form-horizontal' } do |f|
+= simple_form_for @career, html: { class: 'form-horizontal' } do |f|
   = hidden_field_tag 'character_basics', 'true'
-  - if @race.errors.any?
+  - if @career.errors.any?
     .alert-box.warning.radius{"data-alert" => ""}
       %p
-        = pluralize(@race.errors.count, "error")
+        = pluralize(@career.errors.count, "error")
         prohibited this species from being saved:
       %ul
-        - @race.errors.full_messages.each do |msg|
+        - @career.errors.full_messages.each do |msg|
           %li= msg
 
   .row
@@ -20,55 +20,22 @@
         .small-3.columns
           = f.label :description, :class => 'inline right'
         .small-9.columns
-          = f.input :description, :placeholder => 'Species description', label: false
+          = f.input :description, :placeholder => 'Species description', label: false, as: :text, :input_html => { :rows => 10 }
       .row
         .small-3.columns
           = f.label :image_url, :class => 'inline right'
         .small-9.columns
           = f.input :image_url, :placeholder => 'External image URL', label: false
       .row
-        .small-3.columns
-          = f.label :special_ability, :class => 'inline right'
-        .small-9.columns
-          = f.input :special_ability, label: false
-      .row
         .small-12.columns
-          %h4.subheader Species skill ranks
-          = f.simple_fields_for :race_skills do |builder|
-            = render 'race_skill_fields', :f => builder
-          = link_to_add_fields "<i class='fi-plus'> Add Skill</i>".html_safe, f, :race_skills
-      .row
-        .small-12.columns
-          %h4.subheader Species talent ranks
-          = f.simple_fields_for :race_talents do |builder|
-            = render 'race_talent_fields', :f => builder
-          = link_to_add_fields "<i class='fi-plus'> Add Talent</i>".html_safe, f, :race_talents
-
-    .medium-6.small-12.columns
-      .row
-        .small-2.columns
-          = f.input :brawn
-        .small-2.columns
-          = f.input :agility
-        .small-2.columns
-          = f.input :cunning
-        .small-2.columns
-          = f.input :presence
-        .small-2.columns
-          = f.input :intellect
-        .small-2.columns
-          = f.input :willpower
-      .row
-        .small-4.columns
-          = f.input :wound_threshold
-        .small-4.columns
-          = f.input :strain_threshold
-        .small-4.columns
-          = f.input :starting_experience
+          %h4.subheader Career skill ranks
+          = f.simple_fields_for :career_skills do |builder|
+            = render 'career_skill_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Skill</i>".html_safe, f, :career_skills
 
   .row
     %p
     .small-12.columns
       .form-actions
         = f.submit nil, :class => 'button'
-        = link_to t('.cancel', :default => t("helpers.links.cancel")), races_path, :class => 'button secondary'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), careers_path, :class => 'button secondary'
