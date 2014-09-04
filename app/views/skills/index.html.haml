@@ -1,0 +1,30 @@
+- content_for :title do
+  Skills
+
+.row
+  .small-12.columns
+    %h1
+      Skills
+      - if can? :create, @skill
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_skill_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @skills.each do |skill|
+        %li
+          %a{href: "#skill-#{skill.id}"}= skill.name
+  .small-12.medium-9.columns{role: "content"}
+    - @skills.each do |skill|
+
+      %article
+        %a{name: "skill-#{skill.id}"}
+        %h3
+          = link_to skill.name, skill_path(skill)
+          - if can? :create, @skill
+            %small
+              = "[#{skill.characteristic}]"
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_skill_path(skill)
+        = simple_format(text_replace_tokens(skill.description).lines[0])
+        %hr/
