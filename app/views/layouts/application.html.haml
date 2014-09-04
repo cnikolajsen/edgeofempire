@@ -64,13 +64,18 @@
         %ul.left
           - if can? :read, :all
             %li{:class => ("active" if current_page('races'))}
-              #{link_to "Races", races_path}
-            %li{:class => ("active" if current_page('careers'))}
+              #{link_to "Species", races_path}
+            %li.has-dropdown{:class => ("active" if ['careers'].include?(@top_page))}
               #{link_to "Careers", careers_path}
-            %li{:class => ("active" if current_page('skills'))}
-              #{link_to "Skills", skills_path}
-            %li{:class => ("active" if current_page('talents'))}
-              #{link_to "Talents", talents_path}
+              %ul.dropdown
+                %li{:class => ("active" if current_page('skills'))}
+                  #{link_to "Skills", skills_path}
+                %li{:class => ("active" if current_page('talents_trees'))}
+                  #{link_to "Talent trees", talent_trees_path}
+                %li{:class => ("active" if current_page('talents'))}
+                  #{link_to "Talents", talents_path}
+            /%li{:class => ("active" if current_page('careers'))}
+            /  #{link_to "Careers", careers_path}
             %li.has-dropdown{:class => ("active" if ['weapons', 'weapon_qualities', 'weapon_attachments', 'armor', 'armor_qualities', 'armor_attachments', 'gear'].include?(@page))}
               #{link_to "Equipment", '#'}
               %ul.dropdown

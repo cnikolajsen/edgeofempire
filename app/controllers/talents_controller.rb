@@ -6,7 +6,6 @@ class TalentsController < ApplicationController
 
   def index
     @talents = Talent.where(:true).order(:name)
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @talents }
@@ -73,6 +72,7 @@ private
   end
 
   def set_page
+    @top_page = 'careers'
     @page = 'talents'
   end
 

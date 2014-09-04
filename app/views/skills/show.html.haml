@@ -1,0 +1,22 @@
+- content_for :title do
+  = @skill.name
+
+.row
+  .small-12.columns
+    %h1
+      = @skill.name
+      %small
+        = "[#{@skill.characteristic}]"
+.row
+  .small-12.columns
+    = simple_format(text_replace_tokens(@skill.description))
+
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            skills_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @skill
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_skill_path(@skill), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @skill, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

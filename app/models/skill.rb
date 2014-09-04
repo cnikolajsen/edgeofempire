@@ -2,6 +2,8 @@ class Skill < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, :use => :slugged
 
+  scope :knowledges, -> { where("name LIKE 'Knowledge%'") }
+
   default_scope { order('name ASC') }
 
   belongs_to :career

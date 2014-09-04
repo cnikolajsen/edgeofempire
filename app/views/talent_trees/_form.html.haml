@@ -1,0 +1,154 @@
+= simple_form_for @talent_tree, html: { class: 'form-horizontal' } do |f|
+  - if @talent_tree.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@talent_tree.errors.count, "error")
+        prohibited this talent tree from being saved:
+      %ul
+        - @talent_tree.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Talent name', label: false
+      .row
+        .small-3.columns
+          = f.label :career_id, :class => 'inline right'
+        .small-9.columns
+          = f.input :career_id, :as => :select, :collection => Career.where(:true), label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Talent description', label: false, as: :text, :input_html => { :rows => 10 }
+      .row
+        .small-12.columns
+          %h4.subheader Bonus career skills
+          = f.simple_fields_for :talent_tree_career_skills do |builder|
+            = render 'talent_tree_career_skill_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Skill</i>".html_safe, f, :talent_tree_career_skills
+
+  .row
+    .small-12.columns
+      %hr
+      %ul.small-block-grid-7.talent-tree.talent-edit
+        // Row 1
+        %li=f.input :talent_1_1, :as => :select, :collection => Talent.where(:true), label: false
+        %li.inactive &nbsp;
+        %li=f.input :talent_1_2, :as => :select, :collection => Talent.where(:true), label: false
+        %li.inactive &nbsp;
+        %li=f.input :talent_1_3, :as => :select, :collection => Talent.where(:true), label: false
+        %li.inactive &nbsp;
+        %li=f.input :talent_1_4, :as => :select, :collection => Talent.where(:true), label: false
+
+        // Row 1 - 2 links
+        %li{:class => ("inactive" if @talent_tree.talent_2_1_require_1_1 == 0)}
+          =f.input :talent_2_1_require_1_1, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_2_2_require_1_2 == 0)}
+          =f.input :talent_2_2_require_1_2, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_2_3_require_1_3 == 0)}
+          =f.input :talent_2_3_require_1_3, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_2_4_require_1_4 == 0)}
+          =f.input :talent_2_4_require_1_4, :as => :boolean, label: false
+
+        // Row 2
+        %li=f.input :talent_2_1, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_2_1_require_2_2 == 0)}
+          =f.input :talent_2_1_require_2_2, :as => :boolean, label: false
+        %li=f.input :talent_2_2, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_2_2_require_2_3 == 0)}
+          =f.input :talent_2_2_require_2_3, :as => :boolean, label: false
+        %li=f.input :talent_2_3, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_2_3_require_2_4 == 0)}
+          =f.input :talent_2_3_require_2_4, :as => :boolean, label: false
+        %li=f.input :talent_2_4, :as => :select, :collection => Talent.where(:true), label: false
+
+        // Row 2 - 3 links
+        %li{:class => ("inactive" if @talent_tree.talent_3_1_require_2_1 == 0)}
+          =f.input :talent_3_1_require_2_1, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_3_2_require_2_2 == 0)}
+          =f.input :talent_3_2_require_2_2, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_3_3_require_2_3 == 0)}
+          =f.input :talent_3_3_require_2_3, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_3_4_require_2_4 == 0)}
+          =f.input :talent_3_4_require_2_4, :as => :boolean, label: false
+
+        // Row 3
+        %li=f.input :talent_3_1, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_3_1_require_3_2 == 0)}
+          =f.input :talent_3_1_require_3_2, :as => :boolean, label: false
+        %li=f.input :talent_3_2, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_3_2_require_3_3 == 0)}
+          =f.input :talent_3_2_require_3_3, :as => :boolean, label: false
+        %li=f.input :talent_3_3, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_3_3_require_3_4 == 0)}
+          =f.input :talent_3_3_require_3_4, :as => :boolean, label: false
+        %li=f.input :talent_3_4, :as => :select, :collection => Talent.where(:true), label: false
+
+        // Row 3 - 4 links
+        %li{:class => ("inactive" if @talent_tree.talent_4_1_require_3_1 == 0)}
+          =f.input :talent_4_1_require_3_1, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_4_2_require_3_2 == 0)}
+          =f.input :talent_4_2_require_3_2, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_4_3_require_3_3 == 0)}
+          =f.input :talent_4_3_require_3_3, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_4_4_require_3_4 == 0)}
+          =f.input :talent_4_4_require_3_4, :as => :boolean, label: false
+
+        // Row 4
+        %li=f.input :talent_4_1, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_4_1_require_4_2 == 0)}
+          =f.input :talent_4_1_require_4_2, :as => :boolean, label: false
+        %li=f.input :talent_4_2, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_4_2_require_4_3 == 0)}
+          =f.input :talent_4_2_require_4_3, :as => :boolean, label: false
+        %li=f.input :talent_4_3, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_4_3_require_4_4 == 0)}
+          =f.input :talent_4_3_require_4_4, :as => :boolean, label: false
+        %li=f.input :talent_4_4, :as => :select, :collection => Talent.where(:true), label: false
+
+        // Row 4 - 5 links
+        %li{:class => ("inactive" if @talent_tree.talent_5_1_require_4_1 == 0)}
+          =f.input :talent_5_1_require_4_1, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_5_2_require_4_2 == 0)}
+          =f.input :talent_5_2_require_4_2, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_5_3_require_4_3 == 0)}
+          =f.input :talent_5_3_require_4_3, :as => :boolean, label: false
+        %li.inactive &nbsp;
+        %li{:class => ("inactive" if @talent_tree.talent_5_4_require_4_4 == 0)}
+          =f.input :talent_5_4_require_4_4, :as => :boolean, label: false
+
+        // Row 5
+        %li=f.input :talent_5_1, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_5_1_require_5_2 == 0)}
+          =f.input :talent_5_1_require_5_2, :as => :boolean, label: false
+        %li=f.input :talent_5_2, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_5_2_require_5_3 == 0)}
+          =f.input :talent_5_2_require_5_3, :as => :boolean, label: false
+        %li=f.input :talent_5_3, :as => :select, :collection => Talent.where(:true), label: false
+        %li{:class => ("inactive" if @talent_tree.talent_5_3_require_5_4 == 0)}
+          =f.input :talent_5_3_require_5_4, :as => :boolean, label: false
+        %li=f.input :talent_5_4, :as => :select, :collection => Talent.where(:true), label: false
+
+      %hr
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), talents_path, :class => 'button secondary'

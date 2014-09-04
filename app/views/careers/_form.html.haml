@@ -1,0 +1,41 @@
+= simple_form_for @career, html: { class: 'form-horizontal' } do |f|
+  = hidden_field_tag 'character_basics', 'true'
+  - if @career.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@career.errors.count, "error")
+        prohibited this species from being saved:
+      %ul
+        - @career.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Species name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Species description', label: false, as: :text, :input_html => { :rows => 10 }
+      .row
+        .small-3.columns
+          = f.label :image_url, :class => 'inline right'
+        .small-9.columns
+          = f.input :image_url, :placeholder => 'External image URL', label: false
+      .row
+        .small-12.columns
+          %h4.subheader Career skill ranks
+          = f.simple_fields_for :career_skills do |builder|
+            = render 'career_skill_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Skill</i>".html_safe, f, :career_skills
+
+  .row
+    %p
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), careers_path, :class => 'button secondary'

@@ -1,0 +1,13 @@
+.fields
+  .row
+    .small-3.columns
+      = f.label :talent_id, :class => 'inline right'
+    .small-4.columns
+      = f.input :talent_id, :as => :select, :collection => Talent.all, label: false
+    .small-2.columns
+      = f.label :ranks, "Rank", :class => 'inline right'
+    .small-2.columns
+      = f.input :ranks, label: false
+    .small-1.columns
+      = f.hidden_field :_destroy
+      = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"
