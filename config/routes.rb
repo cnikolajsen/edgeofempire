@@ -28,7 +28,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :weapon_quality_ranks
   resources :weapon_qualities
   resources :weapon_attachments
-  resources :armor
+  resources :armors
   resources :armor_qualities
   resources :armor_attachments
   resources :gear
