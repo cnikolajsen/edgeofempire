@@ -1,0 +1,34 @@
+= simple_form_for @armor_quality, html: { class: 'form-horizontal' } do |f|
+  - if @armor_quality.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@armor_quality.errors.count, "error")
+        prohibited this armor from being saved:
+      %ul
+        - @armor_quality.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Armor quality name', label: false
+      .row
+        .small-3.columns
+          = f.label :trigger, :class => 'inline right'
+        .small-9.columns
+          = f.input :trigger, :placeholder => 'Armor quality trigger', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Armor quality description', label: false
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+          armor_qualities_path, :class => 'button secondary'
