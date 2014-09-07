@@ -1,0 +1,78 @@
+- content_for :title do
+  Armor Attachments
+
+.row
+  .small-12.columns
+    %h1
+      Armors Attachments
+      - if can? :create, @armor
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_armor_attachment_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('armors'))}
+        = link_to "Armors", armors_path
+      %dd{:class => ("active" if current_page('armor_qualities'))}
+        = link_to "Qualities", armor_qualities_path
+      %dd{:class => ("active" if current_page('armor_attachments'))}
+        = link_to "Attachments", armor_attachments_path
+
+.row
+  .small-12.columns
+    %ul#item-grid.small-block-grid-1.medium-block-grid-2.large-block-grid-3
+      - @attachments.each do |attachment|
+        %li
+          %ul.pricing-table
+            %li.title= attachment.name
+            %li.price
+              = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+              = attachment.price
+            %li.description= text_replace_tokens(attachment.description).html_safe
+            %li.bullet-item
+              %strong Hard Point cost:
+              = attachment.hard_points
+            - unless attachment.armor_quality_ranks.blank?
+              %li.title Base modification
+              - attachment.armor_quality_ranks.each do |qual|
+                %li.bullet-item
+                  %a{"data-reveal-id" => "baseModQual-#{qual.id}", href: "#"}= qual.armor_quality.name
+                  - if qual.ranks > 0
+                    +#{qual.ranks}
+                  - if qual.ranks < 0
+                    = qual.ranks
+                  .reveal-modal.small{"data-reveal" => "", id: "baseModQual-#{qual.id}"}
+                    %h2= qual.armor_quality.name
+                    %p= text_replace_tokens(qual.armor_quality.description).html_safe
+                    %a.close-reveal-modal ×
+              - unless attachment.stat_bonus.nil?
+                %li.bullet-item
+                  %strong Stat Bonus:
+                  +1 #{attachment.stat_bonus}
+
+            - unless attachment.armor_attachment_modification_options.blank?
+              %li.title Modification options
+              - attachment.armor_attachment_modification_options.each do |aamo|
+                - unless aamo.talent_id.nil?
+                  - talent = Talent.find(aamo.talent_id)
+                  %li.bullet-item
+                    %strong Innate talent:
+                    %a{"data-reveal-id" => "modOptTalent-#{aamo.id}", href: "#"}= talent.name
+                    .reveal-modal.small{"data-reveal" => "", id: "modOptTalent-#{aamo.id}"}
+                      %h2= talent.name
+                      %p= text_replace_tokens(talent.description).html_safe
+                      %a.close-reveal-modal ×
+                - unless aamo.skill_id.nil?
+                  - skill = Skill.find(aamo.skill_id)
+                  %li.bullet-item
+                    %strong Skill:
+                    %a{"data-reveal-id" => "modOptSkill-#{aamo.id}", href: "#"}= skill.name
+                    +1
+                    .reveal-modal.small{"data-reveal" => "", id: "modOptSkill-#{aamo.id}"}
+                      %h2= skill.name
+                      %p= text_replace_tokens(skill.description).html_safe
+                      %a.close-reveal-modal ×
+
+            - if can? :edit, @armor
+              %li
+                %small
+                  = link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_armor_attachment_path(attachment), :class => 'left'
+                  = link_to "<i class='fi-trash' style='color:red;'> Destroy</i>".html_safe, attachment, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'right'

@@ -1,0 +1,13 @@
+.fields
+  .row
+    .small-2.columns
+      = f.label :armor_quality_id, "Quality", :class => 'inline right'
+    .small-5.columns
+      = f.input :armor_quality_id, :as => :select, :collection => ArmorQuality.all, label: false
+    .small-2.columns
+      = f.label :ranks, "Rank", :class => 'inline right'
+    .small-2.columns
+      = f.input :ranks, label: false
+    .small-1.columns
+      = f.hidden_field :_destroy
+      = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"
