@@ -26,7 +26,7 @@
             %li.price
               = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
               = attachment.price
-            %li.description= text_replace_tokens(attachment.description).html_safe
+            %li.description= markdown(text_replace_tokens(attachment.description).html_safe)
             %li.bullet-item
               %strong Hard Point cost:
               = attachment.hard_points

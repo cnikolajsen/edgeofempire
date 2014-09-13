@@ -36,8 +36,28 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
       render(association.to_s.singularize + "_fields", :f => builder)
     end
-    #link_to_function(name, h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"))
     link_to name, '', :onclick => h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\");return false;")
+  end
+
+  def markdown(text)
+    options = {
+      filter_html: false,
+      hard_wrap: true,
+      #link_attributes: { rel: 'nofollow', target: "_blank" },
+      space_after_headers: true,
+      fenced_code_blocks: true
+    }
+
+    extensions = {
+      autolink: true,
+      superscript: true,
+      disable_indented_code_blocks: true
+    }
+
+    renderer = Redcarpet::Render::HTML.new(options)
+    markdown = Redcarpet::Markdown.new(renderer, extensions = {})
+
+    markdown.render(text).html_safe
   end
 
 end

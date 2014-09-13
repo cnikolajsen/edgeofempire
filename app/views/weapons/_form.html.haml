@@ -21,6 +21,10 @@
           = f.label :description, :class => 'inline right'
         .small-9.columns
           = f.input :description, :placeholder => 'Weapon description', label: false, as: :text, :input_html => { :rows => 10 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
       .row
         .small-3.columns
           = f.label :image_url, :class => 'inline right'

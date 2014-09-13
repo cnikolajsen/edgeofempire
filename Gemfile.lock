@@ -230,6 +230,7 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    redcarpet (3.1.2)
     ref (1.0.5)
     sass (3.2.19)
     sass-rails (4.0.3)
@@ -306,6 +307,7 @@ DEPENDENCIES
   rails-asset-jqueryui
   rails_12factor
   ransack!
+  redcarpet (~> 3.1.2)
   responders!
   sass-rails (~> 4.0.3)
   sdoc

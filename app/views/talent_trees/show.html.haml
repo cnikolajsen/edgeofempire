@@ -12,7 +12,7 @@
           [Universal]
 .row
   .small-12.columns
-    %p= simple_format(@talent_tree.description)
+    %p= markdown(@talent_tree.description)
     %ul.small-block-grid-4.talent-tree
       = render :partial => 'talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 1} unless @talent_tree.talent_1_1.nil?
       = render :partial => 'talent_tree_box', :locals => { :talent_tree => @talent_tree, :row => 1, :column => 2} unless @talent_tree.talent_1_2.nil?

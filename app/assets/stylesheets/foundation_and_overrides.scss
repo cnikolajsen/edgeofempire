@@ -1177,3 +1177,26 @@ ul.talent-edit {
 textarea {
   height: auto;
 }
+
+#markup-syntax {
+  pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px;
+    margin: 15px 0;
+    color: #444;
+
+    code {
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      color: #444;
+      white-space: pre;
+    }
+  }
+}
