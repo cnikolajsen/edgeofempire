@@ -1,0 +1,91 @@
+= simple_form_for @armor, html: { class: 'form-horizontal' } do |f|
+  - if @armor.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@armor.errors.count, "error")
+        prohibited this armor from being saved:
+      %ul
+        - @armor.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Armor name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Armor description', label: false, as: :text, :input_html => { :rows => 10 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+      .row
+        .small-3.columns
+          = f.label :image_url, :class => 'inline right'
+        .small-9.columns
+          = f.input :image_url, :placeholder => 'URL to external image source', label: false
+      .row.panel
+        .small-12.columns
+          %h4 Armor Models
+          = f.simple_fields_for :armor_models do |builder|
+            = render 'armor_model_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Model</i>".html_safe, f, :armor_models
+      .row.panel
+        .small-12.columns
+          %h4 Attachments
+          = f.simple_fields_for :armor_attachments_armors do |builder|
+            = render 'armor_attachments_armor_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Attachment</i>".html_safe, f, :armor_attachments_armors
+
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :armor_category_id, "Category", :class => 'inline right'
+        .small-9.columns
+          = f.input :armor_category_id, :as => :select, :collection => ArmorCategory.where(:true), :label => false
+      .row
+        .small-3.columns
+          = f.label :soak, :class => 'inline right'
+        .small-9.columns
+          = f.input :soak, label: false
+      .row
+        .small-3.columns
+          = f.label :defense, :class => 'inline right'
+        .small-9.columns
+          = f.input :defense, label: false
+      .row
+        .small-3.columns
+          = f.label :encumbrance, :class => 'inline right'
+        .small-9.columns
+          = f.input :encumbrance, label: false
+      .row
+        .small-3.columns
+          = f.label :hard_points, :class => 'inline right'
+        .small-9.columns
+          = f.input :hard_points, label: false
+      .row
+        .small-3.columns
+          = f.label :price, :class => 'inline right'
+        .small-9.columns
+          = f.input :price, label: false
+      .row
+        .small-3.columns
+          = f.label :rarity, :class => 'inline right'
+        .small-9.columns
+          = f.input :rarity, label: false
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        - if @armor.new_record?
+          = link_to t('.back', :default => t("helpers.links.back")),
+            armors_path, :class => 'button'
+        - else
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            armor_path, :class => 'button secondary'                    |

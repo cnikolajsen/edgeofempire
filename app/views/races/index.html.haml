@@ -25,5 +25,5 @@
           - if can? :create, @race
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_race_path(race)
-        = simple_format(text_replace_tokens(race.description))
+        = markdown(text_replace_tokens(race.description))
         %hr/

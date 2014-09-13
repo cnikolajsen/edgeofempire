@@ -1,0 +1,62 @@
+= simple_form_for @armor_attachment, html: { class: 'form-horizontal' } do |f|
+  - if @armor_attachment.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@armor_attachment.errors.count, "error")
+        prohibited this armor from being saved:
+      %ul
+        - @armor_attachment.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Armor attachment name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Armor attachment description', label: false
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+      .row
+        .small-3.columns
+          = f.label :hard_points, :class => 'inline right'
+        .small-9.columns
+          = f.input :hard_points, label: false
+      .row
+        .small-3.columns
+          = f.label :price, :class => 'inline right'
+        .small-9.columns
+          = f.input :price, :label => false
+      .row
+        .small-3.columns
+          = f.label :stat_bonus, :class => 'inline right'
+        .small-9.columns
+          = f.input :stat_bonus, :as => :select, :collection => ['Agility', 'Brawn', 'Cunning', 'Intellect', 'Presence', 'Willpower'], label: false
+
+    .medium-6.small-12.columns
+      .row.panel
+        .small-12.columns
+          %h4.subheader Armor Attachment Qualities
+          = f.simple_fields_for :armor_quality_ranks do |builder|
+            = render 'armor_quality_rank_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Quality</i>".html_safe, f, :armor_quality_ranks
+      .row.panel
+        .small-12.columns
+          %h4.subheader Attachments
+          = f.simple_fields_for :armor_attachment_modification_options do |builder|
+            = render 'armor_attachment_modification_option_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Attachment</i>".html_safe, f, :armor_attachment_modification_options
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+          armor_attachments_path, :class => 'button secondary'                    |

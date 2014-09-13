@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <p><%= @armor.description %></p>
+    <p><%= markdown(@armor.description) %></p>
 
     <dl class="dl-horizontal">
       <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
@@ -25,12 +25,12 @@
     <ul class="pricing-table">
       <li class="title"><%= attachment.name %></li>
       <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= attachment.price %></li>
-      <li class="description"><%= text_replace_tokens(attachment.description).html_safe %></li>
+      <li class="description"><%= markdown(text_replace_tokens(attachment.description).html_safe) %></li>
       <li class="bullet-item"><strong>Hard Point cost:</strong> <%= attachment.hard_points %></li>
       <% unless attachment.armor_quality_ranks.blank? %>
         <li class="title">Base modification</li>
         <% attachment.armor_quality_ranks.each do |qual| %>
-          <li class="bullet-item"><strong><%= qual.armor_quality.name %></strong><br /><%= qual.armor_quality.description %></li>
+          <li class="bullet-item"><strong><%= qual.armor_quality.name %></strong><br /><%= markdown(qual.armor_quality.description) %></li>
         <% end -%>
       <% end -%>
       <% unless attachment.armor_attachment_modification_options.blank? %>
@@ -57,6 +57,6 @@
 <% end %>
 </ul>
     <%= link_to t('.back', :default => t("helpers.links.back")),
-                  "/armor", :class => 'button'  %>
+                  armors_path, :class => 'button'  %>
   </div>
 </div>

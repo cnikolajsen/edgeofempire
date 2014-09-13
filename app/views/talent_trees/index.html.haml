@@ -30,5 +30,5 @@
           - if can? :create, @talent_tree
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_talent_tree_path(tree)
-        = simple_format(text_replace_tokens(tree.description))
+        = markdown(text_replace_tokens(tree.description))
         %hr/

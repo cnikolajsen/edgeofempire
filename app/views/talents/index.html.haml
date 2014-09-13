@@ -41,6 +41,6 @@
 
         %strong Trees:
         = used_in_trees.join(', ').html_safe
-        = simple_format(text_replace_tokens(talent.description))
+        = markdown(text_replace_tokens(talent.description))
         = link_to "<i class='fi-trash'> Destroy</i>".html_safe, talent, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @talent
         %hr/

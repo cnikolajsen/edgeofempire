@@ -6,7 +6,7 @@
     %h1= t '.title', :default => @race.name
 .row
   .small-6.columns
-    %p= @race.description.gsub("\n", "<br />").html_safe
+    %p= markdown(@race.description.gsub("\n", "<br />").html_safe)
     .button-bar
       %ul.button-group.round
         %li= link_to "<i class='fi-rewind'> Back</i>".html_safe, races_path, :class => 'tiny button secondary'

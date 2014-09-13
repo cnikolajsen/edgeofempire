@@ -1,0 +1,21 @@
+.fields
+  - if (f.object.skill_id.nil? and f.object.created_at.nil?) or !f.object.skill_id.nil?
+    .row
+      .small-2.columns
+        = f.label :skill_id, :class => 'inline left'
+      .small-9.columns
+        = f.input :skill_id, :as => :select, :collection => Skill.all, label: false
+      .small-1.columns
+        = f.hidden_field :_destroy
+        = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"
+
+  - if (f.object.talent_id.nil? and f.object.created_at.nil?) or !f.object.talent_id.nil?
+    .row
+      .small-2.columns
+        = f.label :talent_id, :class => 'inline left'
+      .small-9.columns
+        = f.input :talent_id, :as => :select, :collection => Talent.all, label: false
+      .small-1.columns
+        = f.hidden_field :_destroy
+        = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"
+  %hr

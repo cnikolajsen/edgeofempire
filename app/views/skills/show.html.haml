@@ -9,8 +9,7 @@
         = "[#{@skill.characteristic}]"
 .row
   .small-12.columns
-    = simple_format(text_replace_tokens(@skill.description))
-
+    = markdown(text_replace_tokens(@skill.description))
 .row
   .small-12.columns
     .button-bar

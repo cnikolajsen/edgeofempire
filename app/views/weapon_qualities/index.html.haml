@@ -33,6 +33,6 @@
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_quality_path(quality)
         %h6.subheader
           = quality.trigger
-        = simple_format(text_replace_tokens(quality.description).html_safe)
+        = markdown(text_replace_tokens(quality.description).html_safe)
         = link_to "<i class='fi-trash'> Destroy</i>".html_safe, quality, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @weapon
       %hr/

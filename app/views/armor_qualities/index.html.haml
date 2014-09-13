@@ -1,0 +1,38 @@
+- content_for :title do
+  Armor Qualities
+
+.row
+  .small-12.columns
+    %h1
+      Armors Qualities
+      - if can? :create, @armor
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_armor_quality_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('armors'))}
+        = link_to "Armors", armors_path
+      %dd{:class => ("active" if current_page('armor_qualities'))}
+        = link_to "Qualities", armor_qualities_path
+      %dd{:class => ("active" if current_page('armor_attachments'))}
+        = link_to "Attachments", armor_attachments_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @qualities.each do |quality|
+        %li
+          %a{href: "#quality-#{quality.id}"}= quality.name
+  .medium-9.small-12.columns{role: "content"}
+    - @qualities.each do |quality|
+      %article
+        %a{name: "quality-#{quality.id}"}
+        %h3
+          = quality.name
+          - if can? :create, @armor
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_quality_path(quality)
+        %h6.subheader
+          = quality.trigger
+        = markdown(text_replace_tokens(quality.description).html_safe)
+        = link_to "<i class='fi-trash'> Destroy</i>".html_safe, quality, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' if can? :create, @armor
+      %hr/

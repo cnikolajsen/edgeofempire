@@ -1,0 +1,83 @@
+/<%- model_class = Armor -%>
+/<div class="row">
+/  <div class="small-12 columns">
+/    <h1>Armor</h1>
+/    <dl class="sub-nav">
+/      <dd<% if current_page('armor') %> class="active"<% end %>><%= link_to "Armor", "/armor" %></dd>
+/      <dd<% if current_page('armor_qualities') %> class="active"<% end %>><%= link_to "Qualities", armor_qualities_path %></dd>
+/      <dd<% if current_page('armor_attachments') %> class="active"<% end %>><%= link_to "Attachments", armor_attachments_path %></dd>
+/    </dl>
+/  </div>
+/</div>
+/<div class="row">
+/  <div class="small-12 columns">
+/    <table>
+/      <thead>
+/        <tr>
+/          <th><%= model_class.human_attribute_name(:name) %></th>
+/          <th><%= model_class.human_attribute_name(:defense) %></th>
+/          <th><%= model_class.human_attribute_name(:soak) %></th>
+/          <th><%= model_class.human_attribute_name(:price) %></th>
+/        </tr>
+/      </thead>
+/      <tbody>
+/        <% @armor.each do |armor| %>
+/          <tr>
+/            <td><%= link_to armor.name, armor_path(armor) %></td>
+/            <td><%= armor.defense %></td>
+/            <td><%= armor.soak %></td>
+/            <td><%= armor.price %></td>
+/          </tr>
+/        <% end %>
+/    </tbody>
+/    </table>
+/  </div>
+/</div>
+- content_for :title do
+  Armor
+
+.row
+  .small-12.columns
+    %h1
+      Armor
+      - if can? :create, @armor
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_armor_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('armor'))}
+        = link_to "Armor", "/armor"
+      %dd{:class => ("active" if current_page('armor_qualities'))}
+        = link_to "Qualities", armor_qualities_path
+      %dd{:class => ("active" if current_page('armor_attachments'))}
+        = link_to "Attachments", armor_attachments_path
+
+.row
+  .small-12.columns
+    %table.responsive
+      %thead
+        %tr
+          %th Name
+          %th Defense
+          %th Soak
+          %th Price
+          %th Encum
+          %th HP
+          %th Rarity
+      - @armor_categories.each do |category|
+        - if category.armors.any?
+          %tr
+            %td{colspan: "1", style: "background-color: #000; color: #fff;"}= category.name.pluralize
+            %td{colspan: "9", style: "background-color: #000; color: #fff;"} &nbsp;
+          - category.armors.each do |armor|
+            %tr
+              %td
+                = link_to armor.name, armor_path(armor)
+                - if can? :edit, @armor
+                  %small
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
+              %td= armor.defense
+              %td= armor.soak
+              %td= armor.price
+              %td= armor.encumbrance
+              %td= armor.hard_points
+              %td= armor.rarity
