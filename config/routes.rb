@@ -35,6 +35,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :talents
   resources :talent_trees
   resources :obligations
+  resources :sidebars
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   devise_scope :user do

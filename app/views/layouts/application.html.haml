@@ -42,6 +42,8 @@
                         #{link_to "Droid names", droid_names_path}
                   %li{:class => ("active" if current_page('rules_summary'))}
                     #{link_to "Rules Summary", rules_path}
+                  %li{:class => ("active" if current_page('sidebars'))}
+                    #{link_to "Sidebars", sidebars_path}
               - if can? :manage, Character
                 %li.has-dropdown{:class => ("active" if ['characters', 'new_character'].include?(@page))}
                   %a{href: "#"} Characters
