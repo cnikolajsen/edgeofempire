@@ -1,0 +1,18 @@
+- content_for :title do
+  = @sidebar.title
+
+.row
+  .small-12.columns
+    %h1= t '.title', :default => @sidebar.title
+.row
+  .small-12.columns
+    = markdown(text_replace_tokens(@sidebar.content).html_safe)
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            sidebars_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @sidebar
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_sidebar_path(@sidebar), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @sidebar, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

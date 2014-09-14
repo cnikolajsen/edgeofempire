@@ -51,11 +51,15 @@ module ApplicationHelper
     extensions = {
       autolink: true,
       superscript: true,
+      tables: true,
       disable_indented_code_blocks: true
     }
 
-    renderer = Redcarpet::Render::HTML.new(options)
-    markdown = Redcarpet::Markdown.new(renderer, extensions = {})
+    #renderer = Redcarpet::Render::HTML.new(options)
+    #markdown = Redcarpet::Markdown.new(renderer, extensions = {})
+
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+
 
     markdown.render(text).html_safe
   end

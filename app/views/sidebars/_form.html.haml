@@ -1,0 +1,32 @@
+= simple_form_for(@sidebar) do |f|
+  - if @sidebar.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@sidebar.errors.count, "error")
+        prohibited this sidebar from being saved:
+      %ul
+        - @sidebar.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :title, :class => 'inline right'
+        .small-9.columns
+          = f.input :title, :placeholder => 'Sidebar title', label: false
+      .row
+        .small-3.columns
+          = f.label :content, :class => 'inline right'
+        .small-9.columns
+          = f.input :content, :placeholder => 'Sidebar content', label: false, as: :text, :input_html => { :rows => 20 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+  .row
+    %p
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), sidebars_path, :class => 'button secondary'
