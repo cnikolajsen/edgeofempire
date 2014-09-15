@@ -1166,6 +1166,9 @@ ul.talent-edit {
 .panel.experience-cost {
   padding: 0.5em;
 }
+.panel.experience-cost.exceeded {
+  background-color: #FFB2B2;
+}
 .panel.experience-cost table {
   font-size: 0.675rem;
   border-spacing: 0;
@@ -1189,29 +1192,36 @@ article.sidebar {
       color: #c9cbcd;
     }
   }
+}
 
-  table {
-    //border: solid 1px #939598 !important;
-    border-spacing: 0px;
-    border-collapse: collapse;
-    th {
-      background-color: #344456;
-      color: #fff;
-      font-weight: normal;
-      font-size: 1.2em;
-      border: solid 1px #939598;
-    }
+table {
+  border-spacing: 0px;
+  border-collapse: collapse;
 
-    td {
-      border: solid 1px #939598;
-    }
+  th,
+  thead tr th {
+    background-color: #344456;
+    color: #fff;
+    font-weight: normal;
+    font-size: 1.1em;
+    border: solid 1px #939598;
   }
 
-  table tr:nth-of-type(odd) {
-    background: #c7dee4;
+  td {
+    border: solid 1px #939598;
   }
-  table tr:nth-of-type(even) {
-    background: #ffffff;
+}
+
+table tr:nth-of-type(odd) {
+  background: #c7dee4;
+}
+table tr:nth-of-type(even) {
+  background: #ffffff;
+}
+
+table.character-list {
+  .button-bar a {
+    margin-bottom: 0;
   }
 }
 
