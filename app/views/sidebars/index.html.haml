@@ -18,12 +18,13 @@
   .small-12.medium-9.columns{role: "content"}
     - @sidebars.each do |sidebar|
 
-      %article
+      %article.sidebar
         %a{name: "sidebar-#{sidebar.id}"}
         %h3
           = link_to sidebar.title, sidebar_path(sidebar)
           - if can? :create, @sidebar
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_sidebar_path(sidebar)
-        = markdown(text_replace_tokens(sidebar.content.lines[0].to_s))
-        %hr/
+        .content
+          = markdown(text_replace_tokens(sidebar.content))
+      %hr/
