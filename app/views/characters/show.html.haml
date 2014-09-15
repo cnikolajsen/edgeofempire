@@ -69,101 +69,96 @@
           %td
             %strong Strain Threshold:
             = @character.strain_threshold
-        %tr
-          %td{colspan: "3"}
-            %h5 Attacks
-            %table.responsive{style: "width:100%"}
-              %thead
-                %tr
-                  %th Weapon
-                  %th Skill
-                  %th Dice
-                  %th Dam
-                  %th Crit
-                  %th Range
-                  %th Misc
-              %tbody
-                - @character.attacks.each do |attack|
-                  %tr
-                    %td= attack[:weapon].name
-                    %td= attack[:skill].name
-                    %td= render :partial => 'dice_pool', :locals => {:score => @character.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
-                    %td= attack[:weapon].damage
-                    %td= attack[:weapon].crit
-                    %td= attack[:weapon].range
-                    %td
-                      - unless attack[:qualities].blank?
-                        %strong> Qualities:
-                        \ 
-                        - attack[:qualities].each_with_index do |q, key|
-                          = q[:name]
-                          = " #{q[:ranks]}" if q[:ranks] > 0
-                          - if key+1 < attack[:qualities].count
-                            ,
-                        %br/
-                      - if attack[:attachments].any?
-                        %strong> Attch:
-                        \ 
-                        - attack[:attachments].each_with_index do |q, key|
-                          = q[:name]
-                          = " #{q[:ranks]}" if q[:ranks]
-                          - if key+1 < attack[:attachments].count
-                            ,
-        %tr
-          %td{colspan: "3"}
-            %h5 Talents
-            %table.responsive{style: "width:100%"}
-              %tbody
-                - @character.talents.each_with_index do |element, index|
-                  - talent = Talent.find_by_id(element[0])
-                  - count = ''
-                  -  options = ''
-                  -  if element[1]['count'] > 1
-                    - unless element[1]['options'].empty?
-                      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
-                    - else
-                      - options = "<span class='label success round'>#{element[1]['count']}</span>"
-                  - else
-                    - unless element[1]['options'].empty?
-                      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
 
-                  %tr
-                    %td
-                      %strong= talent.name
-                    %td= options.html_safe
-                    %td= text_replace_tokens(talent.description)
-
-        - if @character.force_rating > 0
+    %h4 Attacks
+    %table.responsive{style: "width:100%"}
+      %thead
+        %tr
+          %th Weapon
+          %th Skill
+          %th Dice
+          %th Dam
+          %th Crit
+          %th Range
+          %th Misc
+      %tbody
+        - @character.attacks.each do |attack|
           %tr
-            %td{colspan: "3"}
-              %h5
-                Force Powers
-                %small
-                  Force rating #{@character.force_rating}
-              - @character.force_power_upgrades_computed.each do |fp|
-                %table.responsive
-                  %thead
-                    %tr
-                      %th{colspan: "3"}= fp['name']
-                  %tbody
-                    %tr
-                      %td{colspan: "3"}= simple_format text_replace_tokens(fp['description'])
-                    - fp['upgrades'].each do |upg|
-                      %tr
-                        %td
-                          %strong= upg['name']
-                        %td
-                          - if upg['rank']
-                            %span.label.success.round= upg['rank']
-                        %td= text_replace_tokens(upg['description'])
+            %td= attack[:weapon].name
+            %td= attack[:skill].name
+            %td= render :partial => 'dice_pool', :locals => {:score => @character.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
+            %td= attack[:weapon].damage
+            %td= attack[:weapon].crit
+            %td= attack[:weapon].range
+            %td
+              - unless attack[:qualities].blank?
+                %strong> Qualities:
+                \ 
+                - attack[:qualities].each_with_index do |q, key|
+                  = q[:name]
+                  = " #{q[:ranks]}" if q[:ranks] > 0
+                  - if key+1 < attack[:qualities].count
+                    ,
+                %br/
+              - if attack[:attachments].any?
+                %strong> Attch:
+                \ 
+                - attack[:attachments].each_with_index do |q, key|
+                  = q[:name]
+                  = " #{q[:ranks]}" if q[:ranks]
+                  - if key+1 < attack[:attachments].count
+                    ,
 
-        %tr
-          %td{colspan: "3"}
-            %strong Equipment:
-            - @character.inventory.each_with_index do |item, delta|
-              - count = item[:quantity] > 1 ? " (#{item[:quantity]})" : ""
-              - delimiter = delta < @character.inventory.count - 1  ? ", " : ""
-              = "#{item[:name]}#{count}#{delimiter}"
+    %h4 Talents
+    %table.responsive{style: "width:100%"}
+      %tbody
+        - @character.talents.each_with_index do |element, index|
+          - talent = Talent.find_by_id(element[0])
+          - count = ''
+          -  options = ''
+          -  if element[1]['count'] > 1
+            - unless element[1]['options'].empty?
+              - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+            - else
+              - options = "<span class='label success round'>#{element[1]['count']}</span>"
+          - else
+            - unless element[1]['options'].empty?
+              - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+
+          %tr
+            %td
+              %strong= talent.name
+            %td= options.html_safe
+            %td= text_replace_tokens(talent.description)
+
+    - if @character.force_rating > 0
+      %h4
+        Force Powers
+        %small
+          Force rating #{@character.force_rating}
+      - @character.force_power_upgrades_computed.each do |fp|
+        %table.responsive{style: "width:100%"}
+          %thead
+            %tr
+              %th{colspan: "3"}= fp['name']
+          %tbody
+            %tr
+              %td{colspan: "3"}= simple_format text_replace_tokens(fp['description'])
+            - fp['upgrades'].each do |upg|
+              %tr
+                %td
+                  %strong= upg['name']
+                %td
+                  - if upg['rank']
+                    %span.label.success.round= upg['rank']
+                %td= text_replace_tokens(upg['description'])
+
+    %h4 Equipment:
+    - @character.inventory.each_with_index do |item, delta|
+      - count = item[:quantity] > 1 ? " (#{item[:quantity]})" : ""
+      - delimiter = delta < @character.inventory.count - 1  ? ", " : ""
+      = "#{item[:name]}#{count}#{delimiter}"
+    %hr
     - if current_user
       .row
         .medium-12.columns

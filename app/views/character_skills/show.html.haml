@@ -12,15 +12,17 @@
     .row
       .small-12.columns
         %table.responsive{:style => "width: 100%"}
-          %tr
-            %th Skill
-            %th Characteristic
-            %th Ranks
-            %th Race
-            %th Class
-            %th Specialization
-            %th Equipment
-            %th Total
+          %thead
+            %tr
+              %th Skill
+              %th Characteristic
+              %th Ranks
+              %th Race
+              %th Class
+              %th Specialization
+              %th Equipment
+              %th Total
+          %tbody
           - @character.skills.each do |skill|
             %tr{id: "skill-row-#{skill.id}"}= render :partial => 'character_skill_row', :locals => {:skill => skill}
   .small-3.columns
