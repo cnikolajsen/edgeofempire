@@ -3,7 +3,7 @@
 
 .row
   .small-12.columns
-    %h1= t '.title', :default => @sidebar.title
+    %h1= t '.title', :default => text_replace_tokens(@sidebar.title)
 .row
   .small-12.columns
     = markdown(text_replace_tokens(@sidebar.content).html_safe)

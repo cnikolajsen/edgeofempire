@@ -21,7 +21,7 @@
       %article.sidebar
         %a{name: "sidebar-#{sidebar.id}"}
         %h3
-          = link_to sidebar.title, sidebar_path(sidebar)
+          = link_to text_replace_tokens(sidebar.title), sidebar_path(sidebar)
           - if can? :create, @sidebar
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_sidebar_path(sidebar)
