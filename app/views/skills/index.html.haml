@@ -26,5 +26,6 @@
             %small
               = "[#{skill.characteristic}]"
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_skill_path(skill)
-        = markdown(text_replace_tokens(skill.description).lines[0].to_s)
+        /= markdown(text_replace_tokens(skill.description).lines[0].to_s)
+        = markdown(text_replace_tokens(skill.description))
         %hr/
