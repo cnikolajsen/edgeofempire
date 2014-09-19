@@ -1,0 +1,35 @@
+- content_for :title do
+  Gear
+
+.row
+  .small-12.columns
+    %h1
+      Gear
+      - if can? :create, @gear
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_gear_path
+
+.row
+  .small-12.columns
+    %table.responsive
+      %thead
+        %tr
+          %th Name
+          %th Price
+          %th Encum
+          %th Rarity
+      - @gear_categories.each do |category|
+        - if category.gears.any?
+          %tr
+            %td{colspan: "1", style: "background-color: #000; color: #fff;"}= category.name.pluralize
+            %td{colspan: "3", style: "background-color: #000; color: #fff;"} &nbsp;
+          - category.gears.each do |gear|
+            %tr
+              %td
+                = link_to gear.name, gear_path(gear)
+                - if can? :edit, @gear
+                  %small
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_gear_path(gear)
+              %td= gear.price
+              %td= gear.encumbrance
+              %td= gear.rarity

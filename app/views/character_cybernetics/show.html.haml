@@ -1,0 +1,31 @@
+.row
+  .medium-12.columns
+    %h1 Manage cybernetics for #{@character.name}
+.row
+  .medium-12.columns
+    = render :partial => 'characters/character_edit_menu'
+
+= simple_form_for :character_cybernetics do |f|
+  .row
+    .small-12.columns
+      = f.input :head, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:head]
+      = f.input :eyes, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:eyes]
+  .row
+    .small-12.columns
+      = f.input :upper_chest, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:upper_chest]
+      = f.input :lower_chest, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:lower_chest]
+  .row
+    .small-6.columns
+      = f.input :right_arm, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_arm]
+      = f.input :right_hand, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_hand]
+    .small-6.columns
+      = f.input :left_arm, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_arm]
+      = f.input :left_hand, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_hand]
+  .row
+    .small-6.columns
+      = f.input :left_leg, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_leg]
+    .small-6.columns
+      = f.input :right_leg, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_leg]
+  .row
+    .small-12.columns
+      = f.submit nil, :class => 'button'

@@ -1,0 +1,9 @@
+.row
+  .medium-12.columns
+    %h1= "Edit #{@character.name} Log"
+.row
+  .medium-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .medium-12.columns
+    = render :partial => 'form'

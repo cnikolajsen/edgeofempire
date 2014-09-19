@@ -28,15 +28,15 @@
           <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></li>
           <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></li>
           <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></li>
+          <li<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", character_cybernetics_url(@character) %></li>
         </ul>
       </li>
-      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", log_url(@character) %></li>
+      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", character_adventure_logs_url(@character) %></li>
     </ul>
   </section>
 </nav>
 <% if @character_menu == 'basics' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dt>Basics:</dt>
     <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></dd>
     <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></dd>
     <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></dd>
@@ -45,10 +45,10 @@
   </dl>
 <% elsif @character_menu == 'equipment' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dt>Equipment:</dt>
     <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></dd>
     <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></dd>
     <dd<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></dd>
+    <dd<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", character_cybernetics_url(@character) %></dd>
   </dl>
 <% else %>
 <br />

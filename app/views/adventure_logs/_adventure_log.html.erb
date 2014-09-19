@@ -1,0 +1,18 @@
+<% if adventure_log.id %>
+<tr>
+  <td style="vertical-align:top;"><strong><%= adventure_log.date.strftime("%m/%d/%Y") unless adventure_log.date.nil?  %></strong></td>
+  <td><%= adventure_log.log %></td>
+  <td style="vertical-align:top;"><strong><%= adventure_log.experience %></strong></td>
+  <td style="vertical-align:top;">
+    <%= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_weapon_path(@weapon), :class => 'tiny success button' %>
+    <%= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @weapon, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' %>
+
+    <%#= link_to "<i class='fi-pencil'></i>".html_safe, edit_character_adventure_log_path([character_adventure_log, character_adventure_log.character]), :class => 'tiny success button' %>
+    <%#= link_to "<i class='fi-pencil'></i>".html_safe, "character_adventure_logs/#{character_adventure_log.id}/edit", :class => 'tiny success button' %>
+    <%#= link_to "<i class='fi-trash'></i>".html_safe, character_adventure_log, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' %>
+    <%#= link_to "<i class='fi-trash'></i>".html_safe, [character_adventure_log.character, character_adventure_log],
+               method: :delete,
+               data: { confirm: 'Are you sure?' }, :class => 'tiny alert button' %>
+  </td>
+</tr>
+<% end %>

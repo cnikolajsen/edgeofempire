@@ -11,13 +11,14 @@ EdgeOfEmpire::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
 
   resources :characters do
-    resources :character_adventure_logs
+    resources :adventure_logs
     resources :character_armors
     resources :character_weapons
     resources :character_gears
     resources :character_force_powers
     resources :character_skills
   end
+  resources :character_adventure_logs
   resources :skills
   resources :careers
   resources :races
@@ -60,7 +61,12 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/background' => 'characters#background', :as => :character_background
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
-  get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
+  #get 'characters/:id/log' => 'character_adventure_logs#show'
+  #get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
+  #get 'characters/:id/log/:log_id/edit' => 'character_adventure_logs#edit'
+  #get 'characters/:id/log/:log_id/edit' => 'character_adventure_logs#edit'
+  #get 'characters/:id/character_adventure_logs' => 'character_adventure_logs#show'
+  #get 'characters/:id/character_adventure_logs/:log_id/edit' => 'character_adventure_logs#edit'
 
   # Character state routes.
   get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
@@ -119,6 +125,10 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/equipment/:character_gear_id/increase(/:custom)' => 'character_gears#increase_equipment_qty', :as => :increase_item_qty
   get 'characters/:id/equipment/:character_gear_id/decrease(/:custom)' => 'character_gears#decrease_equipment_qty', :as => :decrease_item_qty
   get 'character/find/equipment_selection' => 'character_gears#equipment_selection'
+
+  # Character Cybernetics routes.
+  get 'characters/:id/cybernetics' => 'character_cybernetics#show', :as => :character_cybernetics
+  post 'characters/:id/cybernetics' => 'character_cybernetics#update'
 
   # Character Force Power routes.
   get 'characters/:id/force-powers' => 'character_force_powers#show', :as => :character_force_powers

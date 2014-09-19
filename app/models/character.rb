@@ -71,6 +71,9 @@ class Character < ActiveRecord::Base
   has_many :motivations, :through => :character_motivations
   has_many :character_force_powers, :dependent => :destroy
   has_many :force_powers, :through => :character_force_powers
+  has_many :character_cybernetics, :dependent => :destroy
+  has_many :gears, :through => :character_cybernetics
+
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents
@@ -78,7 +81,7 @@ class Character < ActiveRecord::Base
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
 
-  has_many :character_adventure_logs, :dependent => :destroy
+  has_many :adventure_logs, :dependent => :destroy
 
   has_many :character_experience_costs, :dependent => :destroy
 
@@ -95,7 +98,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
-  accepts_nested_attributes_for :character_adventure_logs, :allow_destroy => true
+  accepts_nested_attributes_for :adventure_logs, :allow_destroy => true
 
   default_scope { order('name ASC') }
 

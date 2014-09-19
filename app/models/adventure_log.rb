@@ -1,4 +1,4 @@
-class CharacterAdventureLog < ActiveRecord::Base
+class AdventureLog < ActiveRecord::Base
   belongs_to :character
 
   default_scope { order('date DESC') }
