@@ -6,6 +6,7 @@
     = render :partial => 'characters/character_edit_menu'
 .row
   .small-12.columns
+    %p= link_to "<i class='fi-plus'>New entry</i>".html_safe, new_character_adventure_log_path
     %table
       %thead
         %th Date
@@ -13,8 +14,6 @@
         %th Exp. earned
         %th
       %tbody
-        %tr
-          %td= link_to "<i class='fi-plus'>New entry</i>".html_safe, new_character_adventure_log_path
         - @character.adventure_logs.each do |log|
           %tr
             %td
@@ -23,5 +22,4 @@
             %td= log.experience
             %td
               = link_to "<i class='fi-pencil'></i>".html_safe, [:edit, @character, log]
-              /= link_to "<i class='fi-pencil'></i>".html_safe, edit_character_adventure_log_path(log), :class => 'tiny success button'
-              = link_to "Delete", character_adventure_log_path(@character, log), :method => :delete, data: { confirm: 'Are you sure?' }
+              = link_to "<i class='fi-trash'></i>".html_safe, character_adventure_log_path(@character, log), :method => :delete, data: { confirm: 'Are you sure?' }, :style => 'color: #FF0000;'
