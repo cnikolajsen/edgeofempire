@@ -43,7 +43,7 @@ class Character < ActiveRecord::Base
     @character = Character.find(id)
 
     character_experience_cost = @character.character_experience_costs.sum(:cost)
-    available_experience = @character.character_adventure_logs.sum(:experience)
+    available_experience = @character.adventure_logs.sum(:experience)
 
     if @character.race.nil? or @character.career.nil?
       false

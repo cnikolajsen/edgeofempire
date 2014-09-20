@@ -61,12 +61,6 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/background' => 'characters#background', :as => :character_background
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
-  #get 'characters/:id/log' => 'character_adventure_logs#show'
-  #get 'characters/:id/log' => 'character_adventure_logs#show', :as => :log
-  #get 'characters/:id/log/:log_id/edit' => 'character_adventure_logs#edit'
-  #get 'characters/:id/log/:log_id/edit' => 'character_adventure_logs#edit'
-  #get 'characters/:id/character_adventure_logs' => 'character_adventure_logs#show'
-  #get 'characters/:id/character_adventure_logs/:log_id/edit' => 'character_adventure_logs#edit'
 
   # Character state routes.
   get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
