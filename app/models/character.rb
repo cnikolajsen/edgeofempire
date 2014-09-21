@@ -155,6 +155,12 @@ class Character < ActiveRecord::Base
       end
     end
 
+    self.cybernetics[:bonuses].each do |cb|
+      if cb[0] == :soak
+        soak += cb[1]
+      end
+    end
+
     soak
   end
 
@@ -469,6 +475,68 @@ class Character < ActiveRecord::Base
         end
       end
       talents
+    end
+
+    # Build the character cybernetics selection.
+    def cybernetics
+      cybernetics = Array.new
+      items = Array.new
+      bonus_arms = nil
+      bonus_legs = nil
+      left_leg_active = false
+      right_leg_active = false
+      bonus_head = nil
+      bonus_soak = 0
+
+      if self.character_cybernetics
+        self.character_cybernetics.each do |cyb|
+          bonus = nil
+          unless cyb.gear_id.nil?
+            if cyb.respond_to?("#{cyb.gear.name.gsub(' ', '').downcase}")
+              bonus = cyb.send("#{cyb.gear.name.gsub(' ', '').downcase}")
+              if bonus
+                if bonus_arms.nil? && (cyb.location == 'left_arm' || cyb.location == 'right_arm')
+                  bonus_arms = bonus
+                end
+                if cyb.location == 'left_leg'
+                  left_leg_active = cyb.gear.id
+                end
+                if cyb.location == 'right_leg'
+                  right_leg_active = cyb.gear.id
+                end
+                if left_leg_active == right_leg_active
+                  bonus_legs = bonus
+                end
+                if cyb.location == 'head'
+                  bonus_head = bonus
+                end
+                if bonus[:soak]
+                  bonus_soak = bonus[:soak]
+                end
+              end
+            end
+
+            items << {
+              :name => cyb.gear.name,
+              :location => cyb.location,
+              :bonus => bonus
+            }
+          end
+        end
+      end
+
+      cybernetics = {
+        :items => items,
+        :bonuses => {
+          :agility => (bonus_arms[:agility] ? bonus_arms[:agility] : 0) + (bonus_legs[:agility] ? bonus_legs[:agility] : 0),
+          :brawn => (bonus_arms[:brawn] ? bonus_arms[:brawn] : 0) + (bonus_legs[:brawn] ? bonus_legs[:brawn] : 0),
+          :intellect => (bonus_head[:intellect] ? bonus_head[:intellect] : 0),
+          :soak => bonus_soak,
+        },
+        :legs => left_leg_active == right_leg_active
+      }
+
+      cybernetics
     end
 
     character_bonus_talents = CharacterBonusTalent.where(:character_id => self.id)

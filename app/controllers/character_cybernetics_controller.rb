@@ -25,8 +25,6 @@ class CharacterCyberneticsController < ApplicationController
   end
 
   def update
-    logger.debug(params.inspect)
-
     if params[:character_cybernetics][:head]
       cybernetic = CharacterCybernetic.where(:character_id => @character.id, :location => 'head').first_or_create
       cybernetic.update_attribute(:gear_id, params[:character_cybernetics][:head])

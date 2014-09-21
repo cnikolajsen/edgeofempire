@@ -1218,6 +1218,16 @@ table {
   td {
     border: solid 1px #939598;
   }
+
+  td.green {
+    background-color: #43ac6a;
+    color: #ffffff;
+  }
+  td.red {
+    background-color: #f04124;
+    color: #ffffff;
+  }
+
 }
 
 table tr:nth-of-type(odd) {
