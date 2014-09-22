@@ -58,7 +58,7 @@ module ApplicationHelper
     #renderer = Redcarpet::Render::HTML.new(options)
     #markdown = Redcarpet::Markdown.new(renderer, extensions = {})
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions)
 
 
     markdown.render(text).html_safe

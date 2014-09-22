@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140914060541) do
+ActiveRecord::Schema.define(version: 20140919125030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(version: 20140914060541) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "adventure_logs", force: true do |t|
+    t.datetime "date"
+    t.text     "log"
+    t.integer  "experience"
+    t.integer  "character_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "adventure_logs", ["character_id"], name: "index_adventure_logs_on_character_id", using: :btree
 
   create_table "adventures", force: true do |t|
     t.string   "name"
@@ -178,17 +189,6 @@ ActiveRecord::Schema.define(version: 20140914060541) do
 
   add_index "careers", ["slug"], name: "index_careers_on_slug", unique: true, using: :btree
 
-  create_table "character_adventure_logs", force: true do |t|
-    t.datetime "date"
-    t.text     "log"
-    t.integer  "experience"
-    t.integer  "character_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "character_adventure_logs", ["character_id"], name: "index_character_adventure_logs_on_character_id", using: :btree
-
   create_table "character_armor_attachments", force: true do |t|
     t.integer  "character_armor_id"
     t.integer  "armor_attachment_id"
@@ -222,6 +222,14 @@ ActiveRecord::Schema.define(version: 20140914060541) do
     t.integer  "encumbrance"
     t.integer  "qty"
     t.boolean  "carried"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "character_cybernetics", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "gear_id"
+    t.string   "location"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

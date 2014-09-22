@@ -205,7 +205,7 @@ module CharactersHelper
   end
 
   def character_available_experience
-    @character.character_adventure_logs.sum(:experience)
+    @character.adventure_logs.sum(:experience)
   end
 
   def skill_total_ranks(character_skill)

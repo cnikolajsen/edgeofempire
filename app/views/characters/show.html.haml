@@ -111,6 +111,11 @@
 
     %h4 Talents
     %table.responsive{style: "width:100%"}
+      %thead
+        %tr
+          %th Name
+          %th Rank
+          %th Description
       %tbody
         - @character.talents.each_with_index do |element, index|
           - talent = Talent.find_by_id(element[0])
@@ -152,6 +157,39 @@
                   - if upg['rank']
                     %span.label.success.round= upg['rank']
                 %td= text_replace_tokens(upg['description'])
+    - if @character.cybernetics[:items].any?
+      %h4
+        Cybernetics/Prosthetics
+      %table.responsive{style: "width:100%"}
+        %thead
+          %tr
+            %th Make/model
+            %th Location
+            %th Bonus
+        %tbody
+          - arm_bonus_set = nil
+          - leg_bonus_set = nil
+          - @character.cybernetics[:items].each do |c|
+            - bonus_class = 'red'
+            - if arm_bonus_set.nil? && (c[:location] == 'left_arm' || c[:location] == 'right_arm')
+              - arm_bonus_set = true
+              - bonus_class = 'green'
+            - elsif leg_bonus_set.nil? && (c[:location] == 'left_leg' || c[:location] == 'right_leg') && @character.cybernetics[:legs]
+              - leg_bonus_set = true
+              - bonus_class = 'green'
+            - unless c[:location] =~ /(_leg)|(_arm)/
+              - bonus_class = 'green'
+            %tr
+              %td= c[:name]
+              %td= c[:location].humanize
+              %td
+                = c[:bonus].map{|k,v| "#{k.to_s.humanize} +#{v}"}.join(' & ') unless bonus_class == 'red'
+          /%tr{style: "background-color:transparent;border:none"}
+          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          /    %small
+          /      Green: Cybernetic limb bonus granted, Red: Cybernetic limb bonus requirements not met or not applicable.
 
     %h4 Equipment:
     - @character.inventory.each_with_index do |item, delta|

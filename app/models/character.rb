@@ -43,7 +43,7 @@ class Character < ActiveRecord::Base
     @character = Character.find(id)
 
     character_experience_cost = @character.character_experience_costs.sum(:cost)
-    available_experience = @character.character_adventure_logs.sum(:experience)
+    available_experience = @character.adventure_logs.sum(:experience)
 
     if @character.race.nil? or @character.career.nil?
       false
@@ -71,6 +71,9 @@ class Character < ActiveRecord::Base
   has_many :motivations, :through => :character_motivations
   has_many :character_force_powers, :dependent => :destroy
   has_many :force_powers, :through => :character_force_powers
+  has_many :character_cybernetics, :dependent => :destroy
+  has_many :gears, :through => :character_cybernetics
+
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents
@@ -78,7 +81,7 @@ class Character < ActiveRecord::Base
   has_many :character_bonus_talents, :dependent => :destroy
   has_many :character_starting_skill_ranks, :dependent => :destroy
 
-  has_many :character_adventure_logs, :dependent => :destroy
+  has_many :adventure_logs, :dependent => :destroy
 
   has_many :character_experience_costs, :dependent => :destroy
 
@@ -95,7 +98,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_motivations, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
-  accepts_nested_attributes_for :character_adventure_logs, :allow_destroy => true
+  accepts_nested_attributes_for :adventure_logs, :allow_destroy => true
 
   default_scope { order('name ASC') }
 
@@ -149,6 +152,12 @@ class Character < ActiveRecord::Base
         if type == :soak
           soak += value['count']
         end
+      end
+    end
+
+    self.cybernetics[:bonuses].each do |cb|
+      if cb[0] == :soak
+        soak += cb[1]
       end
     end
 
@@ -466,6 +475,68 @@ class Character < ActiveRecord::Base
         end
       end
       talents
+    end
+
+    # Build the character cybernetics selection.
+    def cybernetics
+      cybernetics = Array.new
+      items = Array.new
+      bonus_arms = nil
+      bonus_legs = nil
+      left_leg_active = false
+      right_leg_active = false
+      bonus_head = nil
+      bonus_soak = 0
+
+      if self.character_cybernetics
+        self.character_cybernetics.each do |cyb|
+          bonus = nil
+          unless cyb.gear_id.nil?
+            if cyb.respond_to?("#{cyb.gear.name.gsub(' ', '').downcase}")
+              bonus = cyb.send("#{cyb.gear.name.gsub(' ', '').downcase}")
+              if bonus
+                if bonus_arms.nil? && (cyb.location == 'left_arm' || cyb.location == 'right_arm')
+                  bonus_arms = bonus
+                end
+                if cyb.location == 'left_leg'
+                  left_leg_active = cyb.gear.id
+                end
+                if cyb.location == 'right_leg'
+                  right_leg_active = cyb.gear.id
+                end
+                if left_leg_active == right_leg_active
+                  bonus_legs = bonus
+                end
+                if cyb.location == 'head'
+                  bonus_head = bonus
+                end
+                if bonus[:soak]
+                  bonus_soak = bonus[:soak]
+                end
+              end
+            end
+
+            items << {
+              :name => cyb.gear.name,
+              :location => cyb.location,
+              :bonus => bonus
+            }
+          end
+        end
+      end
+
+      cybernetics = {
+        :items => items,
+        :bonuses => {
+          :agility => (bonus_arms[:agility] ? bonus_arms[:agility] : 0) + (bonus_legs[:agility] ? bonus_legs[:agility] : 0),
+          :brawn => (bonus_arms[:brawn] ? bonus_arms[:brawn] : 0) + (bonus_legs[:brawn] ? bonus_legs[:brawn] : 0),
+          :intellect => (bonus_head[:intellect] ? bonus_head[:intellect] : 0),
+          :soak => bonus_soak,
+        },
+        :legs => left_leg_active == right_leg_active
+      }
+
+      cybernetics
     end
 
     character_bonus_talents = CharacterBonusTalent.where(:character_id => self.id)

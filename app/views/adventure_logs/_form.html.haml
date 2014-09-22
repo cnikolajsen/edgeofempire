@@ -1,0 +1,23 @@
+= simple_form_for([@character, @adventure_log]) do |f|
+  .row.collapse
+    .small-2.columns
+      = f.label :date, :class=> 'inline'
+    .small-4.columns
+      = f.date_field :date, :value => Date.today
+    .small-2.columns
+      = f.label :experience, :class=> 'inline right'
+    .small-4.columns
+      = f.input :experience, label: false
+  .row
+    .small-12.columns
+      = f.input :log, :placeholder => 'Skill description', label: false, as: :text, :input_html => { :rows => 20 }
+      %small
+        %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+      .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+        = find_and_preserve render :partial => 'layouts/markdown'
+        %a.close-reveal-modal ×
+      %hr
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit 'Save', :class => 'button tiny'
