@@ -53,24 +53,26 @@ class CharactersController < ApplicationController
     end
 
     # Determine characteristic increases from cybernetics.
-    @character.cybernetics[:bonuses].each do |cb|
-      if cb[0] == :brawn && @character.brawn < 6
-        @character.brawn += cb[1]
-      end
-      if cb[0] == :agility && @character.agility < 6
-        @character.agility += cb[1]
-      end
-      if cb[0] == :cunning && @character.cunning < 6
-        @character.cunning += cb[1]
-      end
-      if cb[0] == :intellect && @character.intellect < 6
-        @character.intellect += cb[1]
-      end
-      if cb[0] == :presence && @character.presence < 6
-        @character.presence += cb[1]
-      end
-      if cb[0] == :willpower && @character.willpower < 6
-        @character.willpower += cb[1]
+    if @character.cybernetics[:items].any?
+      @character.cybernetics[:bonuses].each do |cb|
+        if cb[0] == :brawn && @character.brawn < 6
+          @character.brawn += cb[1]
+        end
+        if cb[0] == :agility && @character.agility < 6
+          @character.agility += cb[1]
+        end
+        if cb[0] == :cunning && @character.cunning < 6
+          @character.cunning += cb[1]
+        end
+        if cb[0] == :intellect && @character.intellect < 6
+          @character.intellect += cb[1]
+        end
+        if cb[0] == :presence && @character.presence < 6
+          @character.presence += cb[1]
+        end
+        if cb[0] == :willpower && @character.willpower < 6
+          @character.willpower += cb[1]
+        end
       end
     end
 

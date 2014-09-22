@@ -481,11 +481,21 @@ class Character < ActiveRecord::Base
     def cybernetics
       cybernetics = Array.new
       items = Array.new
-      bonus_arms = nil
-      bonus_legs = nil
+      bonus_arms = {
+        :agility => nil,
+        :brawn => nil
+      }
+      bonus_legs = {
+        :agility => nil,
+        :brawn => nil
+      }
+      bonus_head = {
+        :intellect => nil
+      }
       left_leg_active = false
       right_leg_active = false
-      bonus_head = nil
+      arms_active = false
+      head_active = false
       bonus_soak = 0
 
       if self.character_cybernetics
@@ -495,8 +505,9 @@ class Character < ActiveRecord::Base
             if cyb.respond_to?("#{cyb.gear.name.gsub(' ', '').downcase}")
               bonus = cyb.send("#{cyb.gear.name.gsub(' ', '').downcase}")
               if bonus
-                if bonus_arms.nil? && (cyb.location == 'left_arm' || cyb.location == 'right_arm')
+                if !arms_active && (cyb.location == 'left_arm' || cyb.location == 'right_arm')
                   bonus_arms = bonus
+                  arms_active = true
                 end
                 if cyb.location == 'left_leg'
                   left_leg_active = cyb.gear.id
@@ -507,8 +518,9 @@ class Character < ActiveRecord::Base
                 if left_leg_active == right_leg_active
                   bonus_legs = bonus
                 end
-                if cyb.location == 'head'
+                if !head_active && cyb.location == 'head'
                   bonus_head = bonus
+                  head_active = true
                 end
                 if bonus[:soak]
                   bonus_soak = bonus[:soak]
