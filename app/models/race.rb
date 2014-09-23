@@ -47,4 +47,11 @@ class Race < ActiveRecord::Base
       },
     }
   end
+
+  def gran_traits
+    traits = {
+      :skill_rank_choice => [['Charm', 4], ['Negotiation', 17]]
+    }
+  end
+
 end

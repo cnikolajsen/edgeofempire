@@ -25,5 +25,10 @@
           - if can? :create, @race
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_race_path(race)
-        = markdown(text_replace_tokens(race.description))
+        .row{style: "max-height: 150px;overflow:hidden;"}
+          .small-9.columns
+            = markdown(text_replace_tokens(race.description))
+          .small-3.columns
+            - unless race.image_url.blank?
+              %img{src: race.image_url}
         %hr/
