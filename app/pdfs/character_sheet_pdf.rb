@@ -1695,7 +1695,54 @@ class CharacterSheetPdf < Prawn::Document
     text_box "CYBERNETICS", :width => bounds.width, :height => 15, :overflow => :shrink_to_fit, :size => 7, :style => :bold, :align => :center, :valign => :center
     fill_color "000000"
 
-     text_box "TODO!", :width => bounds.width, :height => bounds.height, :size => 20, :style => :bold, :align => :center, :valign => :center
+    bounding_box([(bounds.left + 5), (bounds.top - 10)], :width => (bounds.width - 10)) do
+      table [
+       ['MAKE/MODEL', 'LOCATION', 'BONUS']
+      ],
+      :cell_style => {
+        :height => 10,
+        :padding => [2, 3],
+        :size => 5,
+        :align => :left,
+        :border_width => 0,
+      },
+      :width => bounds.width,
+      :column_widths => {0 => 150, 1 => 100}
+
+      cybernetics = Array.new
+      arm_bonus_set = nil
+      leg_bonus_set = nil
+
+      @character.cybernetics[:items].each do |cyb|
+        bonus_active = false
+        if arm_bonus_set.nil? && (cyb[:location] == 'left_arm' || cyb[:location] == 'right_arm')
+          arm_bonus_set = true
+          bonus_active = true
+        elsif leg_bonus_set.nil? && (cyb[:location] == 'left_leg' || cyb[:location] == 'right_leg') && @character.cybernetics[:legs]
+          leg_bonus_set = true
+          bonus_active = true
+        end
+        unless cyb[:location] =~ /(_leg)|(_arm)/
+          bonus_active = true
+        end
+
+        cybernetics << [cyb[:name], cyb[:location].humanize, (cyb[:bonus].map{|k,v| "#{k.to_s.humanize} +#{v}"}.join(' & ') if bonus_active)]
+      end
+
+      if cybernetics.any?
+        table cybernetics,
+        :cell_style => {
+          #:background_color => "FFFFFF",
+          :height => 12,
+          :padding => [2, 3],
+          :size => 6,
+          :border_width => 1,
+          },
+          :width => bounds.width,
+          :column_widths => {0 => 150, 1 => 100},
+          :row_colors => ['FFFFFF', 'C0C0C0']
+      end
+    end
   end
   #===== /CYBERNETICS =====
 
