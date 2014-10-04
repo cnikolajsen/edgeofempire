@@ -2,7 +2,8 @@ class TalentTree < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, :use => :slugged
 
-  belongs_to :career
+  has_many :career_talent_trees
+  has_many :careers, :through => :career_talent_trees
   has_many :talent_tree_career_skills
   has_many :skills, :through => :talent_tree_career_skills
   accepts_nested_attributes_for :talent_tree_career_skills

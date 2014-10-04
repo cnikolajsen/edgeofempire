@@ -6,8 +6,9 @@
     %h1
       = @talent_tree.name
       %small
-        - if @talent_tree.career
-          = "[#{@talent_tree.career.name}]"
+        - if @talent_tree.careers.any?
+          - @talent_tree.careers.each do |career|
+            = "[#{career.name}]"
         - else
           [Universal]
 .row

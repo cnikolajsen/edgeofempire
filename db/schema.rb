@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919125030) do
+ActiveRecord::Schema.define(version: 20141004170319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,13 @@ ActiveRecord::Schema.define(version: 20140919125030) do
     t.integer  "skill_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "career_talent_trees", force: true do |t|
+    t.integer  "career_id"
+    t.integer  "talent_tree_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "careers", force: true do |t|
@@ -587,7 +594,6 @@ ActiveRecord::Schema.define(version: 20140919125030) do
     t.datetime "updated_at",             null: false
     t.integer  "talent_2_3"
     t.integer  "talent_2_4"
-    t.integer  "career_id"
     t.integer  "talent_2_1_require_1_1"
     t.integer  "talent_2_1_require_2_2"
     t.integer  "talent_2_2_require_1_2"

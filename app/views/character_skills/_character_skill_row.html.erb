@@ -2,8 +2,8 @@
 <td><% if( is_career_skill(skill.id, false, @character)) %><strong><% end %><%= skill.name %><% if( is_career_skill(skill.id, false, @character)) %> *</strong><% end %></td>
 <td><%= skill.characteristic.truncate(3, :omission => '') %></td>
 <%
-  total_ranks_free = character_skill.free_ranks_race + character_skill.free_ranks_career + character_skill.free_ranks_specialization + character_skill.free_ranks_equipment
-  total_ranks = character_skill.ranks + total_ranks_free
+  total_ranks_free = skill_total_free_ranks(character_skill)
+  total_ranks = skill_total_ranks(character_skill)
 
   rank_options = Array.new
   rank_options << 0

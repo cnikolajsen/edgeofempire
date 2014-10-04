@@ -144,9 +144,9 @@ module CharactersHelper
         if ranks == 1
           experience_cost = 0
         else
-          if specialization.career_id.blank?
+          if specialization.careers.blank?
             experience_cost = 10 * ranks
-          elsif specialization.career_id == @character.career_id
+          elsif specialization.careers.map{|a| a.id}.include? @character.career_id
             experience_cost = 10 * ranks
           else
             experience_cost = (10 * ranks) + 10
@@ -208,8 +208,15 @@ module CharactersHelper
     @character.adventure_logs.sum(:experience)
   end
 
-  def skill_total_ranks(character_skill)
-    character_skill.ranks + character_skill.free_ranks_race + character_skill.free_ranks_specialization + character_skill.free_ranks_career + character_skill.free_ranks_equipment
+  def skill_total_free_ranks(character_skill)
+    character_skill.free_ranks_race ||= 0
+    character_skill.free_ranks_specialization ||= 0
+    character_skill.free_ranks_career ||= 0.to_i
+    character_skill.free_ranks_equipment ||= 0
+    character_skill.free_ranks_race + character_skill.free_ranks_specialization + character_skill.free_ranks_career + character_skill.free_ranks_equipment
   end
 
+  def skill_total_ranks(character_skill)
+    character_skill.ranks + skill_total_free_ranks(character_skill)
+  end
 end

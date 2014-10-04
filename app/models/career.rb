@@ -2,7 +2,9 @@ class Career < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, :use => :slugged
 
-  has_many :talent_trees
+  has_many :career_talent_trees
+  has_many :talent_trees, :through => :career_talent_trees
+  accepts_nested_attributes_for :career_talent_trees, :reject_if => :all_blank, :allow_destroy => true
   has_many :career_skills
   has_many :skills, :through => :career_skills
   accepts_nested_attributes_for :career_skills, :reject_if => :all_blank, :allow_destroy => true
