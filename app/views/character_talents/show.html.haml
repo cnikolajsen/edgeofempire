@@ -29,9 +29,9 @@
         - if @character.specialization_1.nil?
           = select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level')
         - if @character.specialization_2.nil? and !@character.specialization_1.nil?
-          = select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level')
+          = select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.careers.blank? then "#{tree.name} (Universal)" elsif (tree.careers.map{|a| a.id}.include? @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level')
         - if @character.specialization_3.nil? and !@character.specialization_2.nil?
-          = select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [if tree.career_id.blank? then "#{tree.name} (Universal)" elsif (tree.career_id.to_i == @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Third  specialization", :include_blank => false}, :class => 'input-block-level')
+          = select('character', 'specialization_3', TalentTree.where('id not in (?)', [@character.specialization_1, @character.specialization_2]).collect {|tree| [if tree.careers.blank? then "#{tree.name} (Universal)" elsif (tree.careers.map{|a| a.id}.include? @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Third  specialization", :include_blank => false}, :class => 'input-block-level')
         = hidden_field_tag 'destination', 'talents'
         = specializations_form.submit 'Save specializations', :class => 'button small'
   .small-12.medium-6.columns

@@ -217,9 +217,7 @@ class CharactersController < ApplicationController
   # PUT /characters/1
   # PUT /characters/1.json
   def update
-    if @character.aasm_state.nil?
-      @character.aasm_state = 'creation'
-    end
+    @character.aasm_state = 'creation' if @character.aasm_state.nil?
 
     # Remove equipment with 0 quantity.
     if !@character.character_gears.nil?
@@ -233,13 +231,13 @@ class CharactersController < ApplicationController
 
     if params[:update_specializations]
       if params[:character][:specialization_1] && !params[:character][:specialization_1].blank?
-        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_1], 1, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_1], 1, 'up')
       end
       if params[:character][:specialization_2] && !params[:character][:specialization_2].blank?
-        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_2], 2, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_2], 2, 'up')
       end
       if params[:character][:specialization_3] && !params[:character][:specialization_3].blank?
-        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_3], 3, direction = 'up')
+        set_experience_cost(@character.id, 'specialization', params[:character][:specialization_3], 3, 'up')
       end
     end
 

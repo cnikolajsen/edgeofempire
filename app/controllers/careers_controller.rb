@@ -70,7 +70,8 @@ private
   # Never trust parameters from the scary internet, only allow the white list through.
   def career_params
     params.require(:career).permit(:name, :description, :image_url,
-    career_skills_attributes: [ :id, :career_id, :skill_id, :_destroy ])
+    career_skills_attributes: [ :id, :career_id, :skill_id, :_destroy ],
+    career_talent_trees_attributes: [ :id, :career_id, :talent_tree_id, :_destroy ])
 
   end
 

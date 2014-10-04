@@ -36,6 +36,12 @@
           = f.simple_fields_for :career_skills do |builder|
             = render 'career_skill_fields', :f => builder
           = link_to_add_fields "<i class='fi-plus'> Add Skill</i>".html_safe, f, :career_skills
+      .row
+        .small-12.columns
+          %h4.subheader Career specializations
+          = f.simple_fields_for :career_talent_trees do |builder|
+            = render 'career_talent_tree_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Specialization</i>".html_safe, f, :career_talent_trees
 
   .row
     %p

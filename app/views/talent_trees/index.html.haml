@@ -16,15 +16,16 @@
         %li
           %a{href: "#tree-#{tree.id}"}= tree.name
   .small-12.medium-9.columns{role: "content"}
-    - @talent_trees.includes(:career).each do |tree|
+    - @talent_trees.each do |tree|
 
       %article
         %a{name: "tree-#{tree.id}"}
         %h3
           = link_to tree.name, talent_tree_path(tree)
           %small
-            - if tree.career
-              = "[#{tree.career.name}]"
+            - if tree.careers.any?
+              - tree.careers.each do |career|
+                = "[#{career.name}]"
             - else
               [Universal]
           - if can? :create, @talent_tree
