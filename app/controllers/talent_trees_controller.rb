@@ -5,7 +5,7 @@ class TalentTreesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @talent_trees = TalentTree.where(:true).order(:name)
+    @talent_trees = TalentTree.order(:name)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @talent_trees }
