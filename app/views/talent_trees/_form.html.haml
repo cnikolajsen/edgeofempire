@@ -17,11 +17,6 @@
           = f.input :name, :placeholder => 'Talent name', label: false
       .row
         .small-3.columns
-          = f.label :career_id, :class => 'inline right'
-        .small-9.columns
-          = f.input :career_id, :as => :select, :collection => Career.where(:true), label: false
-      .row
-        .small-3.columns
           = f.label :description, :class => 'inline right'
         .small-9.columns
           = f.input :description, :placeholder => 'Talent description', label: false, as: :text, :input_html => { :rows => 10 }
