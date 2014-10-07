@@ -45,7 +45,7 @@ class Character < ActiveRecord::Base
     character_experience_cost = @character.character_experience_costs.sum(:cost)
     available_experience = @character.adventure_logs.sum(:experience)
 
-    if @character.race.nil? or @character.career.nil?
+    if @character.race.nil? || @character.career.nil?
       false
     elsif character_experience_cost > available_experience
       false
@@ -67,8 +67,10 @@ class Character < ActiveRecord::Base
   has_many :character_custom_gears, :dependent => :destroy
   has_many :character_obligations, :dependent => :destroy
   has_many :obligations, :through => :character_obligations
-  has_many :character_motivations, :dependent => :destroy
-  has_many :motivations, :through => :character_motivations
+  has_many :character_duties, dependent: :destroy
+  has_many :duties, through: :character_duties
+  has_many :character_motivations, dependent: :destroy
+  has_many :motivations, through: :character_motivations
   has_many :character_force_powers, :dependent => :destroy
   has_many :force_powers, :through => :character_force_powers
   has_many :character_cybernetics, :dependent => :destroy

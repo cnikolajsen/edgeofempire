@@ -14,6 +14,7 @@
           <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></li>
           <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></li>
           <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></li>
+          <li<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", character_duty_url(@character) %></li>
           <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></li>
         </ul>
       </li>
@@ -41,6 +42,7 @@
     <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></dd>
     <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></dd>
     <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></dd>
+    <dd<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", character_duty_url(@character) %></dd>
     <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></dd>
   </dl>
 <% elsif @character_menu == 'equipment' %>

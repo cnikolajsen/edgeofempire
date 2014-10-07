@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "#{@character.name} - Duty" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'characters/character_edit_menu' %>
+  </div>
+</div>
+<div class="row" data-no-turbolink>
+  <div class="small-4 columns" data-no-turbolink>
+    <%= form_for :character_duty, :url => url_for(:action => 'add_duty') do |form| %>
+      <%
+        generic_duties = Duty.where("career_id IS NULL").order(:name).collect {|obl| [obl.name, obl.id]}
+        career_duties = Duty.where("career_id = ?", @character.career_id).order(:name).collect {|obl| [obl.name, obl.id]}
+
+        grouped_options = [
+          ['Generic duties',
+            generic_duties],
+          [@character.career.name,
+            career_duties]
+        ]
+      %>
+      <%= form.select :duty_id, grouped_options_for_select(grouped_options), {:prompt => "Select Duty"} %>
+      <%= form.submit 'Add duty', :class => 'button tiny' %>
+    <% end -%>
+    <br />
+    <div class="row">
+      <div id="duty-info" class="small-12 columns"></div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= link_to "Back", character_armor_url(@character), :class => "button secondary tiny" %>
+      </div>
+    </div>
+  </div>
+  <div class="small-8 columns" data-no-turbolink>
+    <% unless @character.character_duties.blank? %>
+      <% @character.character_duties.each do |o| %>
+        <% unless o.duty_id.nil? %>
+          <%= render :partial => "duty_info", :locals => { :duty => nil, :character_duty => o, :active => true } %>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<% if active %>
+  <% unless character_duty.duty.nil? %>
+    <h4><%= character_duty.duty.name %><%= " <small>[#{character_duty.duty.career.name}]</small>".html_safe unless character_duty.duty.career.nil? %></h4>
+    <%= form_for :character_duty, :url => { :action => 'update_duty'} do |form| %>
+      <%= form.hidden_field :character_duty_id, :value => character_duty.id %>
+      <%= form.text_area :description, :value => character_duty.description %>
+      <%= form.number_field :magnitude, :value => character_duty.magnitude, :min => 0, :step => 1 %>
+      <%= form.submit 'Update duty', :class => 'button tiny' %>
+      <%= link_to "Remove", "/characters/#{@character.id}/duty/#{character_duty.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete duty?' } %>
+    <% end -%>
+    <hr />
+  <% end -%>
+<% else %>
+  <h4><%= duty.name %></h4>
+  <p><%= text_replace_tokens(duty.description) %></p>
+<% end -%>
