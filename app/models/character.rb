@@ -756,7 +756,7 @@ class Character < ActiveRecord::Base
     species = Race.find(self.race_id)
 
     # Add experience entry in the adventure log for species starting XP.
-    CharacterAdventureLog.where(:character_id => self.id, :experience => species.starting_experience, :date => self.created_at, :log => "#{species.name} starting experience").create
+    AdventureLog.where(character_id: self.id, experience: species.starting_experience, date: self.created_at, log: "#{species.name} starting experience", user_id: 0).create
   end
 
   def set_species_stats

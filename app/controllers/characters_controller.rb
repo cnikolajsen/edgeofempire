@@ -186,7 +186,7 @@ class CharactersController < ApplicationController
             traits = species.send("#{species.name.gsub(' ', '').downcase}_traits")
             if traits[:sub_species][params[:sub_species]]
               # Add experience entry in the adventure log for species bonus XP.
-              CharacterAdventureLog.where(:character_id => @character.id, :experience => traits[:sub_species][params[:sub_species]][:exp_bonus], :date => @character.created_at, :log => "Subspecies bonus experience").create
+              AdventureLog.where(character_id: @character.id, experience: traits[:sub_species][params[:sub_species]][:exp_bonus], date: @character.created_at, log: 'Subspecies bonus experience', user_id: 0).create
               @character.update_attribute(:subspecies, params[:sub_species])
             end
           end
