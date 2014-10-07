@@ -1,4 +1,6 @@
 EdgeOfEmpire::Application.routes.draw do
+  resources :duties
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -85,6 +87,13 @@ EdgeOfEmpire::Application.routes.draw do
   post 'characters/:id/obligation' => 'character_obligations#add_obligation'
   post 'characters/:id/obligation/update' => 'character_obligations#update_obligation'
   get 'characters/:id/obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
+
+  # Character duty routes.
+  get 'characters/:id/duty' => 'character_duties#show', :as => :character_duty
+  get 'character/find/duty_selection' => 'character_duties#duty_selection'
+  post 'characters/:id/duty' => 'character_duties#add_duty'
+  post 'characters/:id/duty/update' => 'character_duties#update_duty'
+  get 'characters/:id/duty/:duty_id/remove' => 'character_duties#remove_duty'
 
   # Character motivation routes.
   get 'characters/:id/motivation' => 'character_motivations#show', :as => :character_motivation

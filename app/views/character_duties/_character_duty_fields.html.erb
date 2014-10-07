@@ -1,0 +1,10 @@
+<li class="control-group nested-fields">
+  <% unless f.object.duty_id.nil? %>
+    <% @duty = Duty.find_by_id(f.object.duty_id) %>
+    <h4><%= @duty.name %></h4>
+     <%= text_replace_tokens(@duty.description) %><br />
+     <%= link_to_remove_association "remove", f, :class => 'btn btn-danger' %>
+  <% else %>
+      <%= f.select :duty_id, Duty.where(:true).collect  {|duty| ["#{duty.range} | #{duty.name}", duty.id]}, {:prompt => "Select Duty"} %>
+  <% end %>
+</li>

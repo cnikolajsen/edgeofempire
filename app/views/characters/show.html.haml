@@ -230,19 +230,37 @@
           %h5 Credits
           = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
           = @character.credits
-    .row
-      .medium-12.columns
-        .panel
-          %h4
-            Obligation
-            %small
-              (#{@character.character_obligations.sum(:magnitude)})
-          - @character.character_obligations.each do |obl|
-            - unless obl.obligation_id.nil?
-              %h5
-                = obl.obligation.name
-                %small
-                  (#{obl.magnitude})
-              - unless obl.description.nil?
-                = text_replace_tokens(obl.description)
-              %hr
+    - if @character.character_obligations.any?
+      .row
+        .medium-12.columns
+          .panel
+            %h4
+              Obligation
+              %small
+                (#{@character.character_obligations.sum(:magnitude)})
+            - @character.character_obligations.each do |obl|
+              - unless obl.obligation_id.nil?
+                %h5
+                  = obl.obligation.name
+                  %small
+                    (#{obl.magnitude})
+                - unless obl.description.nil?
+                  = text_replace_tokens(obl.description)
+                %hr
+    - if @character.character_duties.any?
+      .row
+        .medium-12.columns
+          .panel
+            %h4
+              Duty
+              %small
+                (#{@character.character_duties.sum(:magnitude)})
+            - @character.character_duties.each do |d|
+              - unless d.duty_id.nil?
+                %h5
+                  = d.duty.name
+                  %small
+                    (#{d.magnitude})
+                - unless d.description.nil?
+                  = text_replace_tokens(d.description)
+                %hr

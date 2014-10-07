@@ -1,0 +1,25 @@
+- content_for :title do
+  Duties
+
+.row
+  .small-12.columns
+    %h1
+      Duties
+      - if can? :create, @duty
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_duty_path
+
+.row
+  .small-12.columns
+    %table
+      %thead
+        %tr
+          %th Duty Type
+      %tbody
+        - @duties.each do |duty|
+          %tr
+            %td
+              %strong= "#{duty.name}: #{text_replace_tokens(duty.description)}"
+              - if can? :create, @duty
+                = link_to "<i class='fi-pencil'></i>".html_safe, edit_duty_path(duty)
+

@@ -31,7 +31,7 @@ class TalentsController < ApplicationController
 
     respond_to do |format|
       if @talent.save
-        format.html { redirect_to talents_path, notice: '#{@talent.name} was successfully created.' }
+        format.html { redirect_to talents_path, notice: "#{@talent.name} was successfully created." }
         format.json { render action: 'show', status: :created, location: @talent }
       else
         format.html { render action: 'new' }

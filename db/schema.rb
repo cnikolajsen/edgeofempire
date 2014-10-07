@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141004170319) do
+ActiveRecord::Schema.define(version: 20141006133908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,15 @@ ActiveRecord::Schema.define(version: 20141004170319) do
     t.datetime "updated_at"
   end
 
+  create_table "character_duties", force: true do |t|
+    t.integer  "character_id"
+    t.integer  "duty_id"
+    t.text     "description"
+    t.integer  "magnitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "character_experience_costs", force: true do |t|
     t.integer  "character_id"
     t.string   "resource_type"
@@ -414,6 +423,14 @@ ActiveRecord::Schema.define(version: 20141004170319) do
   end
 
   add_index "characters", ["slug"], name: "index_characters_on_slug", unique: true, using: :btree
+
+  create_table "duties", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "career_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "force_power_upgrades", force: true do |t|
     t.string   "name"
