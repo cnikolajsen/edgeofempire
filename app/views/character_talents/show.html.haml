@@ -27,7 +27,11 @@
       = form_for @character do |specializations_form|
         = hidden_field_tag 'update_specializations', 'true'
         - if @character.specialization_1.nil?
-          = select('character', 'specialization_1', TalentTree.where(career_id: @character.career_id).collect {|tree| [tree.name, tree.id]}, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level')
+          - first_spec_options = []
+          - TalentTree.where(:true).each do |spec|
+            - if spec.careers.map{|a| a.id}.include? @character.career_id.to_i
+              - first_spec_options << [spec.name, spec.id]
+          = select('character', 'specialization_1', first_spec_options, {:prompt => "First specialization", :include_blank => false}, :class => 'input-block-level')
         - if @character.specialization_2.nil? and !@character.specialization_1.nil?
           = select('character', 'specialization_2', TalentTree.where('id not in (?)', @character.specialization_1).collect {|tree| [if tree.careers.blank? then "#{tree.name} (Universal)" elsif (tree.careers.map{|a| a.id}.include? @character.career_id.to_i) then "* #{tree.name} (Class)" else "#{tree.name}" end, tree.id]}, {:prompt => "Second specialization", :include_blank => false}, :class => 'input-block-level')
         - if @character.specialization_3.nil? and !@character.specialization_2.nil?
