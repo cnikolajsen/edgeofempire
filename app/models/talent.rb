@@ -2,49 +2,56 @@ class Talent < ActiveRecord::Base
   include CharactersHelper
 
   has_many :character_talents
-  has_many :characters, :through => :character_talents
-  has_many :races, :through => :race_talents
+  has_many :characters, through: :character_talents
+  has_many :races, through: :race_talents
 
   validates :name, presence: true, uniqueness: true
   validates :activation, presence: true
 
   default_scope { order('name ASC') }
 
-  def armormaster(count, character)
+  def armormaster(count, _character)
     @return = {}
     @return[:soak] = count
 
     @return
   end
 
-  def deadlyaccuracy(count, character)
+  def basiccombattraining(_count, _character)
+    @return = {}
+    @return[:career_skill] = ['Brawl', 'Ranged (Light)']
+
+    @return
+  end
+
+  def deadlyaccuracy(_count, _character)
     @return = {}
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 1
     @return[:on_purchase][:type] = :select_skill
-    @return[:on_purchase][:select_options] = [["Choose a combat skill", ""], 'Brawl', 'Gunnery', 'Melee', 'Ranged (Heavy)', 'Ranged (Light)']
+    @return[:on_purchase][:select_options] = [['Choose a combat skill', ''], 'Brawl', 'Gunnery', 'Melee', 'Ranged (Heavy)', 'Ranged (Light)']
 
     @return
   end
 
-  def dedication(count, character)
+  def dedication(_count, _character)
     @return = {}
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 1
     @return[:on_purchase][:type] = :select_characteristic
-    @return[:on_purchase][:select_options] = [["Select characteristic", ""], ["Brawn", "brawn"], ["Agility", "agility"], ["Intellect", "intellect"], ["Cunning", "cunning"], ["Willpower", "willpower"], ["Presence", "presence"]]
+    @return[:on_purchase][:select_options] = [['Select characteristic', ''], %w(Brawn brawn), %w(Agility agility), %w(Intellect intellect), %w(Cunning cunning), %w(Willpower willpower), %w(Presence presence)]
 
     @return
   end
 
-  def enduring(count, character)
+  def enduring(count, _character)
     @return = {}
     @return[:soak] = count
 
     @return
   end
 
-  def feralstrength(count, character)
+  def feralstrength(count, _character)
     @return = {}
     @return[:melee_damage_bonus] = count
     @return[:brawl_damage_bonus] = count
@@ -52,34 +59,34 @@ class Talent < ActiveRecord::Base
     @return
   end
 
-  def forcerating(count, character)
+  def forcerating(count, _character)
     @return = {}
     @return[:force_rating] = count
 
     @return
   end
 
-  def grit(count, character)
+  def grit(count, _character)
     @return = {}
     @return[:strain] = count
 
     @return
   end
 
-  def insight(count, character)
+  def insight(_count, _character)
     @return = {}
-    @return[:career_skill] = ['perception', 'vigilance']
+    @return[:career_skill] = %w(Perception Vigilance)
 
     @return
   end
 
-  def knowledgespecialization(count, character)
+  def knowledgespecialization(_count, _character)
     @return = {}
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 1
     @return[:on_purchase][:type] = :select_skill
 
-    options = Array.new
+    options = []
     Skill.knowledges.each do |skill|
       options << [skill.name, skill.id]
     end
@@ -88,14 +95,14 @@ class Talent < ActiveRecord::Base
     @return
   end
 
-  def sixthsense(count, character)
+  def sixthsense(count, _character)
     @return = {}
     @return[:ranged_defense] = count
 
     @return
   end
 
-  def smoothtalker(count, character)
+  def smoothtalker(_count, _character)
     @return = {}
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 1
@@ -105,24 +112,20 @@ class Talent < ActiveRecord::Base
     @return
   end
 
-  def superiorreflexes(count, character)
+  def superiorreflexes(count, _character)
     @return = {}
     @return[:melee_defense] = count
 
     @return
   end
 
-  def toughened(count, character)
+  def toughened(count, _character)
     @return = {}
-
-    unless count == 0
-      @return[:wound] = count["count"] * 2
-    end
-
+    @return[:wound] = count['count'] * 2 unless count == 0
     @return
   end
 
-  def wellrounded(count, character)
+  def wellrounded(_count, character)
     @return = {}
     @return[:on_purchase] = {}
     @return[:on_purchase][:amount] = 2

@@ -80,21 +80,29 @@ module CharactersHelper
 
     # And finally add career skill ids granted by talents.
     if !talent_select
+
+      @character.talent_alterations.each do |talent_id, stat|
+        stat.each do |type, value|
+          if type == :career_skill
+            value.each do |val|
+              skill = Skill.where(:name => val).first
+              career_skill_ids << skill.id unless skill.nil?
+            end
+          end
+        end
+      end
+
       @character.character_talents.each do |character_talent|
-        # Check if the ids for the talents Insight or Well Rounded is selected
+        # Check if the ids for the talent Well Rounded is selected
         # on the character.
         character_talent.attributes.each do |key, value|
           if key.match(/talent_[\d]_[\d]$/) and !value.nil?
             if value == 80
               unless character_talent["#{key}_options"].nil?
-                character_talent["#{key}_options"].each do |skill_id|
-                  career_skill_ids << skill_id.to_i
+                character_talent["#{key}_options"].each do |sid|
+                  career_skill_ids << sid.to_i
                 end
               end
-            end
-            if value == 111
-              career_skill_ids << 18
-              career_skill_ids << 27
             end
           end
         end
