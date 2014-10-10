@@ -1,16 +1,16 @@
 ActiveAdmin.register Motivation do
   permit_params :description, :name, :category, :career_id
 
-  menu :label => "Motivation", :parent => "Character Backgrounds"
+  menu label: 'Motivation', parent: 'Character Backgrounds'
 
-  config.sort_order = "category_asc"
+  config.sort_order = 'category_asc'
 
   config.per_page = 50
 
-  filter :category, :as => :select
-  filter :name, :as => :string
+  filter :category, as: :select
+  filter :name, as: :string
 
-  index do |motivation|
+  index do
     column :category
     column :name
     column :career
@@ -20,21 +20,21 @@ ActiveAdmin.register Motivation do
     actions
   end
 
-form do |f|
-    f.inputs "Motivation Details" do
+  form do |f|
+    f.inputs 'Motivation Details' do
       f.input :career
       f.input :name
       f.input :description
-      f.input :category, :as => :select, :collection => ["Ambition", "Cause", "Relationship", "Discovery"]
+      f.input :category, as: :select, collection: %w(Ambition Cause Relationship Discovery Conflict)
     end
     f.actions
   end
 
   controller do
-     def create
-       create! do |format|
-          format.html { redirect_to admin_motivations_url }
-       end
-     end
-   end
+    def create
+      create! do |format|
+        format.html { redirect_to admin_motivations_url }
+      end
+    end
+  end
 end

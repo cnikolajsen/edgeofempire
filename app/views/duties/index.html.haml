@@ -8,18 +8,22 @@
       - if can? :create, @duty
         %small
           = link_to "<i class='fi-plus'></i>".html_safe, new_duty_path
-
 .row
   .small-12.columns
-    %table
-      %thead
-        %tr
-          %th Duty Type
-      %tbody
-        - @duties.each do |duty|
-          %tr
-            %td
-              %strong= "#{duty.name}: #{text_replace_tokens(duty.description)}"
-              - if can? :create, @duty
-                = link_to "<i class='fi-pencil'></i>".html_safe, edit_duty_path(duty)
-
+    - @duties.each do |duty_career|
+      - if duty_career[1].any?
+        %h3= "#{duty_career[0]} Duties"
+        %table{width: '100%'}
+          %thead
+            %tr
+              %th Name
+              %th Description
+          %tbody
+            - duty_career[1].each do |duty|
+              %tr
+                %td{valign: 'top'}
+                  %strong= duty[1]
+                %td
+                  = markdown(text_replace_tokens(duty[2]))
+                  - if can? :create, @duty
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_duty_path(duty[0])

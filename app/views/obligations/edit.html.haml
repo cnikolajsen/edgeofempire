@@ -1,0 +1,10 @@
+- content_for :title do
+  Edit #{@obligation.name}
+
+.row
+  .small-12.columns
+    %h1
+      Edit #{@obligation.name}
+.row
+  .small-12.columns
+    = render :partial => 'form'
