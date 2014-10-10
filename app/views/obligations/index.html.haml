@@ -1,0 +1,30 @@
+- content_for :title do
+  Obligations
+
+.row
+  .small-12.columns
+    %h1
+      Obligations
+      - if can? :create, @obligation
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_obligation_path
+
+.row
+  .small-12.columns
+    - @obligations.each do |obligation_career|
+      - if obligation_career[1].any?
+        %h3= "#{obligation_career[0]} Obligations"
+        %table{width: '100%'}
+          %thead
+            %tr
+              %th Name
+              %th Description
+          %tbody
+            - obligation_career[1].each do |obligation|
+              %tr
+                %td{valign: 'top'}
+                  %strong= obligation[1]
+                %td
+                  = markdown(text_replace_tokens(obligation[2]))
+                  - if can? :create, @obligation
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_obligation_path(obligation[0])

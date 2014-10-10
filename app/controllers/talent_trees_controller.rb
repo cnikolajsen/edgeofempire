@@ -31,7 +31,7 @@ class TalentTreesController < ApplicationController
 
     respond_to do |format|
       if @talent_tree.save
-        format.html { redirect_to talent_trees_path, notice: '#{@talent_tree.name} was successfully created.' }
+        format.html { redirect_to talent_trees_path, notice: "#{@talent_tree.name} was successfully created." }
         format.json { render action: 'show', status: :created, location: @talent_tree }
       else
         format.html { render action: 'new' }

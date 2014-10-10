@@ -1,0 +1,36 @@
+= simple_form_for(@obligation) do |f|
+  - if @obligation.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@obligation.errors.count, "error")
+        prohibited this obligation from being saved:
+      %ul
+        - @obligation.errors.full_messages.each do |msg|
+          %li= msg
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Obligation name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Obligation description', label: false
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+      .row
+        .small-3.columns
+          = f.label :career_id, :class => 'inline right'
+        .small-9.columns
+          = f.input :career_id, as: :select, label: false, :collection => Career.where(:true)
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), obligations_path, :class => 'button secondary'

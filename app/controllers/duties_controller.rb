@@ -5,7 +5,14 @@ class DutiesController < InheritedResources::Base
   load_and_authorize_resource
 
   def index
-    @duties = Duty.where(:true).order(:name)
+    @duties = {}
+
+    @duties.merge!('Universal' => Duty.where('career_id IS NULL').order(:name).map { |duty| [duty.id, duty.name, duty.description] })
+
+    Career.where(:true).each do |career|
+      @duties.merge!(career.name => Duty.where('career_id = ?', career.id).order(:name).map { |duty| [duty.id, duty.name, duty.description] })
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @duties }
