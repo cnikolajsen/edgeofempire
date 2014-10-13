@@ -35,7 +35,7 @@ class ArmorsController < ApplicationController
 
     respond_to do |format|
       if @armor.save
-        format.html { redirect_to armors_path, notice: '#{@armor.name} was successfully created.' }
+        format.html { redirect_to armors_path, notice: "#{@armor.name} was successfully created." }
         format.json { render action: 'show', status: :created, location: @armor }
       else
         format.html { render action: 'new' }
