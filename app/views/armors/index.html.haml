@@ -63,21 +63,16 @@
           %th Encum
           %th HP
           %th Rarity
-      - @armor_categories.each do |category|
-        - if category.armors.any?
-          %tr
-            %td{colspan: "1", style: "background-color: #000; color: #fff;"}= category.name.pluralize
-            %td{colspan: "9", style: "background-color: #000; color: #fff;"} &nbsp;
-          - category.armors.each do |armor|
-            %tr
-              %td
-                = link_to armor.name, armor_path(armor)
-                - if can? :edit, @armor
-                  %small
-                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
-              %td= armor.defense
-              %td= armor.soak
-              %td= armor.price
-              %td= armor.encumbrance
-              %td= armor.hard_points
-              %td= armor.rarity
+      - @armors.each do |armor|
+        %tr
+          %td
+            = link_to armor.name, armor_path(armor)
+            - if can? :edit, @armor
+              %small
+                = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
+          %td= armor.defense
+          %td= armor.soak
+          %td= armor.price
+          %td= armor.encumbrance
+          %td= armor.hard_points
+          %td= armor.rarity
