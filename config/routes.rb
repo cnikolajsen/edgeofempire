@@ -34,7 +34,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :armors
   resources :armor_qualities
   resources :armor_attachments
-  resources :gear
+  resources :gears
   resources :talents
   resources :talent_trees
   resources :obligations

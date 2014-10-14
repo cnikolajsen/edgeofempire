@@ -1,4 +1,5 @@
-class GearController < ApplicationController
+# General equipment.
+class GearsController < ApplicationController
   before_filter :set_gear
   before_action :set_gear, only: [:show, :edit, :update, :destroy]
   before_filter :set_page
@@ -64,7 +65,8 @@ class GearController < ApplicationController
     end
   end
 
-private
+  private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_gear
     @gear = Gear.friendly.find(params[:id])
@@ -72,16 +74,15 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def gear_params
-    params.require(:gear).permit(:crit, :damage, :description, :name, :price, :skill_id, :range,
-    :encumbrance, :rarity, :hard_points, :image_url, :weapon_category_id,
-    weapon_quality_ranks_attributes: [ :id, :ranks, :weapon_id, :weapon_quality_id, :_destroy ],
-    weapon_models_attributes: [ :id, :weapon_id, :name, :_destroy ],
-    weapon_attachments_weapons_attributes: [ :id, :weapon_id, :weapon_attachment_id, :_destroy ])
+    params.require(
+      :gear).permit(:description, :name, :price, :encumbrance,
+                    :rarity, :image_url, :gear_category_id,
+                    gear_models_attributes: [:id, :gear_id, :name]
+    )
   end
 
   def set_page
     @page = 'gears'
     @title = 'Gear'
   end
-
 end
