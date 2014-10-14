@@ -86,7 +86,7 @@
                 %li{:class => ("active" if ['armor', 'armor_qualities', 'armor_attachments'].include?(@page))}
                   #{link_to "Armor", armors_path}
                 %li{:class => ("active" if current_page('gear'))}
-                  #{link_to "Gear", '/gear'}
+                  #{link_to "Gear", gears_path}
             %li{:class => ("active" if current_page('obligations'))}
               = link_to "Obligations", obligations_path
             %li{:class => ("active" if current_page('duties'))}
