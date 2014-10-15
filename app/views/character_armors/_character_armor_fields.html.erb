@@ -50,7 +50,6 @@
 <% else %>
   <li>
     <%= f.select :armor_id, Armor.where(:true).order(:name).collect { |armor| ["#{armor.name} - #{armor.price}", armor.id]} %>
-    <%= f.select :armor_id, ArmorAttachment.where("hard_points <= ?", @armor.hard_points).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
     <%= f.check_box :equipped %>
     <%= f.label :equipped %>
     <%= f.check_box :carried, :checked => 'checked' %>
