@@ -1,0 +1,39 @@
+- content_for :title do
+  Books
+
+.row
+  .small-12.columns
+    %h1
+      Books
+      - if can? :create, @books
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_book_path
+
+- @books.each do |book|
+  .row
+    .small-12.columns.medium-2.columns
+      - unless book.cover_art_url.blank?
+        .row
+          .small-12.columns
+            %img{src: book.cover_art_url}
+      .row
+        .small-12.columns
+          .panel
+            = book.ffg_sku
+      .row
+        .small-12.columns
+          .panel
+            = book.isbn
+      - if can? :edit, @book
+        .row
+          .small-12.columns
+            .panel
+              = link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_book_path(book)
+              %br
+              = link_to "<i class='fi-trash'> Delete</i>".html_safe, book, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+    .small-12.columns.medium-10.columns
+      %h2= book.title
+      %h5= "#{book.system} - #{book.category}"
+      =markdown(book.description)
+    %hr

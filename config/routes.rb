@@ -1,4 +1,6 @@
 EdgeOfEmpire::Application.routes.draw do
+  resources :books
+
   resources :duties
 
   # The priority is based upon order of creation: first created -> highest priority.

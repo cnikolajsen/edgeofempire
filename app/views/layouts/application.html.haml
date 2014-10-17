@@ -44,6 +44,8 @@
                     #{link_to "Rules Summary", rules_path}
                   %li{:class => ("active" if current_page('sidebars'))}
                     #{link_to "Sidebars", sidebars_path}
+                  %li{:class => ("active" if current_page('books'))}
+                    #{link_to "Books", books_path}
               - if can? :manage, Character
                 %li.has-dropdown{:class => ("active" if ['characters', 'new_character'].include?(@page))}
                   %a{href: "#"} Characters
