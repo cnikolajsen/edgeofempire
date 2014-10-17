@@ -1,0 +1,56 @@
+= simple_form_for(@book) do |f|
+  - if @book.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@book.errors.count, "error")
+        prohibited this book from being saved:
+      %ul
+        - @book.errors.full_messages.each do |msg|
+          %li= msg
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :title, :class => 'inline right'
+        .small-9.columns
+          = f.input :title, :placeholder => 'Book title', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Book description', label: false
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+      .row
+        .small-3.columns
+          = f.label :category, :class => 'inline right'
+        .small-9.columns
+          = f.input :category, as: :select, label: false, :collection => ['Core Rule Book', 'Accessory', 'Adventure', 'Rules Supplements']
+      .row
+        .small-3.columns
+          = f.label :system, :class => 'inline right'
+        .small-9.columns
+          = f.input :system, as: :select, label: false, :collection => ['Edge of the Empire', 'Age of Rebellion', 'Force & Destiny']
+      .row
+        .small-3.columns
+          = f.label :cover_art_url, :class => 'inline right'
+        .small-9.columns
+          = f.input :cover_art_url, :placeholder => 'Cover art image url', label: false
+      .row
+        .small-3.columns
+          = f.label :isbn, 'ISBN', :class => 'inline right'
+        .small-9.columns
+          = f.input :isbn, :placeholder => 'ISBN', label: false
+      .row
+        .small-3.columns
+          = f.label :ffg_sku, 'SKU', :class => 'inline right'
+        .small-9.columns
+          = f.input :ffg_sku, :placeholder => 'Fantasy Flight Games SKU', label: false
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), duties_path, :class => 'button secondary'

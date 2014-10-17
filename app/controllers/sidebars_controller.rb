@@ -75,6 +75,7 @@ private
   def set_page
     @page = 'sidebars'
     @title = 'Sidebars'
+    @parent_page = 'misc'
   end
 
 end

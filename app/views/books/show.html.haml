@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @book.title
+%p
+  %b Description:
+  = @book.description
+%p
+  %b System:
+  = @book.system
+%p
+  %b Isbn:
+  = @book.isbn
+%p
+  %b Category:
+  = @book.category
+%p
+  %b Ffg sku:
+  = @book.ffg_sku
+%p
+  %b Slug:
+  = @book.slug
+
+= link_to 'Edit', edit_book_path(@book)
+\|
+= link_to 'Back', books_path
