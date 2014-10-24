@@ -1,0 +1,37 @@
+<nav class="top-bar" data-topbar data-options="is_hover: false" data-no-turbolink>
+  <ul class="title-area">
+    <li class="name"><!-- Leave this empty --></li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
+  <section class="top-bar-section">
+    <!-- Left Nav Section -->
+    <ul class="left">
+      <li<% if @adversary_page == 'view' %> class="active"<% end %>><%= link_to "View", adversary_path(@adversary) %></li>
+      <li<%# if @adversary_page == 'talents' %> class="active"<%# end %>><%#= link_to "Specializations", adversary_talents_url(@adversary) %></li>
+      <li<%# if @adversary_page == 'skills' %> class="active"<%# end %>><%#= link_to "Skills", adversary_skills_url(@adversary) %></li>
+      <%# if @adversary.force_rating > 0 %>
+        <li<%# if @adversary_page == 'forcepowers' %> class="active"<%# end %>><%#= link_to "Force Powers", adversary_force_powers_url(@adversary) %></li>
+      <%# end %>
+      <li class="<% if @adversary_menu == 'equipment' %>active<% end %> has-dropdown">
+        <a href="#">Equipment</a>
+        <ul class="dropdown">
+          <li<% if @adversary_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", adversary_armor_url(@adversary) %></li>
+          <li<% if @adversary_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", adversary_weapons_url(@adversary) %></li>
+          <li<%# if @adversary_page == 'gear' %> class="active"<%# end %>><%#= link_to "Gear", adversary_gear_url(@adversary) %></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+</nav>
+<% if @adversary_menu == 'equipment' %>
+  <dl class="sub-nav" data-no-turbolink>
+    <dd<% if @adversary_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", adversary_armor_url(@adversary) %></dd>
+    <dd<% if @adversary_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", adversary_weapons_url(@adversary) %></dd>
+    <dd<%# if @adversary_page == 'gear' %> class="active"<%# end %>><%#= link_to "Gear", adversary_gear_url(@adversary) %></dd>
+  </dl>
+<% else %>
+<br />
+<% end -%>
+<div id="flash_messages">
+  <%#= render :partial => 'layouts/flash' %>
+</div>

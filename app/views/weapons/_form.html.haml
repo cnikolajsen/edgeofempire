@@ -1,5 +1,4 @@
 = simple_form_for @weapon, html: { class: 'form-horizontal' } do |f|
-  = hidden_field_tag 'character_basics', 'true'
   - if @weapon.errors.any?
     .alert-box.warning.radius{"data-alert" => ""}
       %p

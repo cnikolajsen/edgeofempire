@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "Modifying #{@armor.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'adversaries/adversary_edit_menu' %>
+  </div>
+</div>
+<div class="row" data-no-turbolink>
+  <% if @armor.hard_points.blank? %>
+    <div class="small-12 columns">
+      <div data-alert class="alert-box warning round">
+        This piece of armor does not have any hard points and can not be modified.
+      </div>
+    </div>
+  <% else %>
+    <div class="small-3 columns" data-no-turbolink>
+      <%= form_for :adversary_armor_attachment do |f| %>
+        <% if @armor.attachments.any? %>
+          <%= f.select :armor_attachment_id, @armor.attachments.collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <% else %>
+          <%= f.select :armor_attachment_id, ArmorAttachment.where("hard_points <= ?", @armor.hard_points).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
+        <% end %>
+        <%= f.submit 'Add attachment', :class => 'button tiny' %>
+      <% end -%>
+      <div class="row">
+        <div class="small-12 columns">
+          <h5>Available hard points</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="progress round small-12 <%= @hard_point_meter_class %>">
+          <span class="meter" style="width: <%=  @hard_point_meter %>%"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-6 columns">
+          Total: <%= @armor.hard_points %>
+        </div>
+        <div class="small-6 columns">
+          Used: <%= @hard_points_used %>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div id="attachment-info" class="small-12 columns"></div>
+      </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <%= link_to "Back", adversary_armor_url(@adversary), :class => "button secondary tiny" %>
+        </div>
+      </div>
+    </div>
+    <div class="small-9 columns" data-no-turbolink>
+      <h4>Attachments on item</h4>
+      <% unless @armor_attachments.blank? %>
+        <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2" id="item-grid" data-no-turbolink>
+          <% @armor_attachments.each do |aa| %>
+            <% attachment = ArmorAttachment.find(aa.armor_attachment_id) %>
+            <li><%= render :partial => "armor_attachment_info", :locals => { :attachment => attachment, :adversary_attachment_id => aa.id, :active => :true, :armor_attachment_options => aa } %></li>
+          <% end -%>
+        </ul>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>

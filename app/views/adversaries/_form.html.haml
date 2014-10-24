@@ -1,0 +1,145 @@
+= simple_form_for @adversary, html: { class: 'form-horizontal' } do |f|
+  - if @adversary.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@adversary.errors.count, "error")
+        prohibited this adversary from being saved:
+      %ul
+        - @adversary.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Adversary name', label: false
+      .row
+        .small-3.columns
+          = f.label :adversary_type, :class => 'inline right'
+        .small-9.columns
+          = f.input :adversary_type, as: :select, label: false, collection: ['Minion', 'Rival', 'Nemesis']
+      .row
+        .small-3.columns
+          = f.label :image_url, :class => 'inline right'
+        .small-9.columns
+          = f.input :image_url, :placeholder => 'URL to external image source', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Adversary description', label: false, as: :text, :input_html => { :rows => 10 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+      .row
+        .small-3.columns
+          = f.label :abilities, :class => 'inline right'
+        .small-9.columns
+          = f.input :abilities, :placeholder => 'Adversary description', label: false, as: :text, :input_html => { :rows => 10 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+
+    .medium-6.small-12.columns
+      .row
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :brawn, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :brawn
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :agility, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :agility
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :intellect, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :intellect
+      .row
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :cunning, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :cunning
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :willpower, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :willpower
+        .small-4.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :presence, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :presence
+      .row
+        .small-6.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :soak, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :soak
+        .small-6.columns
+          .row.collapse
+            .small-5.columns
+              %span.prefix.radius= f.label :race_id, :class=> 'inline'
+            .small-7.columns
+              = f.input :race_id, as: :select, label: false, :collection => Race.where(:true)
+      .row
+        .small-6.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :defense_ranged, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :defense_ranged
+        .small-6.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :defense_melee, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :defense_melee
+      .row
+        .small-6.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :wounds, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :wounds
+        .small-6.columns
+          .row.collapse
+            .small-6.columns
+              %span.prefix.radius= f.label :strain, :class=> 'inline'
+            .small-6.columns
+              = f.number_field :strain
+      .row
+        .small-12.columns
+          .row.collapse
+            .small-2.columns
+              %span.prefix.radius= f.label :book_id, :class=> 'inline'
+            .small-6.columns
+              = f.input :book_id, as: :select, label: false, :collection => Book.where(:true)
+            .small-4.columns
+              = f.number_field :page, placeholder: 'Page no.'
+
+  .row
+    .small-12.columns
+      .form-actions
+        %br
+        = f.submit nil, :class => 'button'
+        - if @adversary.new_record?
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            adversaries_path, :class => 'button secondary'                    |
+        - else
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            adversary_path, :class => 'button secondary'                    |

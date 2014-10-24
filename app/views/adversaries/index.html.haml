@@ -1,0 +1,62 @@
+- content_for :title do
+  Adversaries
+
+.row
+  .small-12.columns
+    %h1
+      Adversaries
+      - if can? :create, @adversary
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_adversary_path
+.row
+  .small-12.columns
+
+    %table
+      %tr
+        %th Name
+        %th Description
+        %th Brawn
+        %th Agility
+        %th Intellect
+        %th Cunning
+        %th Willpower
+        %th Presence
+        %th Soak
+        %th Defense ranged
+        %th Defense melee
+        %th Wounds
+        %th Strain
+        %th Race
+        %th Abilities
+        %th Image
+        %th Book
+        %th
+        %th
+        %th
+
+      - @adversaries.each do |adversary|
+        %tr
+          %td= adversary.name
+          %td= adversary.description
+          %td= adversary.brawn
+          %td= adversary.agility
+          %td= adversary.intellect
+          %td= adversary.cunning
+          %td= adversary.willpower
+          %td= adversary.presence
+          %td= adversary.soak
+          %td= adversary.defense_ranged
+          %td= adversary.defense_melee
+          %td= adversary.wounds
+          %td= adversary.strain
+          %td= adversary.race_id
+          %td= adversary.abilities
+          %td= adversary.image_url
+          %td= "#{adversary.book.title} (p. #{adversary.page})"
+          %td= link_to 'Show', adversary
+          %td= link_to 'Edit', edit_adversary_path(adversary)
+          %td= link_to 'Destroy', adversary, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+    %br
+
+    = link_to 'New Adversary', new_adversary_path

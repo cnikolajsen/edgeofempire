@@ -1,0 +1,196 @@
+- content_for :title do
+  = "#{@adversary.name} - #{@adversary.adversary_type unless @adversary.adversary_type.nil?}"
+
+.row
+  .medium-12.columns
+    %h1
+      = t '.title', :default => @adversary.name
+      %small
+        = @adversary.race.name unless @adversary.race.nil?
+        = @adversary.adversary_type unless @adversary.adversary_type.nil?
+.row
+  .medium-12.columns
+    = render :partial => 'adversary_edit_menu'
+
+- unless @adversary.description.blank?
+  .row
+    .medium-12.columns
+      = markdown(@adversary.description)
+
+.row
+  .medium-9.columns
+    %table.small-12.columns
+      %tbody
+        %tr
+          %td
+            %strong
+              Brawn #{@adversary.brawn}
+          %td
+            %strong
+              Cunning #{@adversary.cunning}
+          %td
+            %strong
+              Presence #{@adversary.presence}
+        %tr
+          %td
+            %strong
+              Agility #{@adversary.agility}
+          %td
+            %strong
+              Intellect #{@adversary.intellect}
+          %td
+            %strong
+              Willpower #{@adversary.willpower}
+        %tr
+          %td{colspan: "3"}
+            %strong Skills:
+            /- @adversary.adversary_skills.each_with_index do |adversary_skill, key|
+            /  - unless adversary_skill.skill.nil? or skill_total_ranks(adversary_skill) < 1
+            /    %span{style: "display: inline; white-space:nowrap;"}
+            /      = adversary_skill.skill.name
+            /      = skill_total_ranks(adversary_skill)
+            /      = render :partial => "dice_pool", :locals => {:score => @adversary.send(adversary_skill.skill.characteristic.downcase), :ranks => skill_total_ranks(adversary_skill)}
+            /      - if key+1 < @adversary.adversary_skills.count
+            /        ,
+        %tr
+          %td
+            %strong Soak:
+            = @adversary.soak
+          %td
+          %td
+            %strong M/R Defense:
+            = "#{@adversary.defense_melee}/#{@adversary.defense_ranged}"
+        %tr
+          %td
+            %strong Wound Threshold:
+            = @adversary.wounds
+          %td
+          %td
+            %strong Strain Threshold:
+            = @adversary.strain
+
+    %h4 Attacks
+    %table.responsive{style: "width:100%"}
+      %thead
+        %tr
+          %th Weapon
+          %th Skill
+          %th Dice
+          %th Dam
+          %th Crit
+          %th Range
+          %th Misc
+      %tbody
+        - @adversary.attacks.each do |attack|
+          %tr
+            %td= attack[:weapon].name
+            %td= attack[:skill].name
+            %td= render :partial => 'characters/dice_pool', :locals => {:score => @adversary.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
+            %td= attack[:weapon].damage
+            %td= attack[:weapon].crit
+            %td= attack[:weapon].range
+            %td
+              - unless attack[:qualities].blank?
+                %strong> Qualities:
+                \ 
+                - attack[:qualities].each_with_index do |q, key|
+                  = q[:name]
+                  = " #{q[:ranks]}" if q[:ranks] > 0
+                  - if key+1 < attack[:qualities].count
+                    ,
+                %br/
+              - if attack[:attachments].any?
+                %strong> Attch:
+                \ 
+                - attack[:attachments].each_with_index do |q, key|
+                  = q[:name]
+                  = " #{q[:ranks]}" if q[:ranks]
+                  - if key+1 < attack[:attachments].count
+                    ,
+
+    %h4 Talents
+    %table.responsive{style: "width:100%"}
+      %thead
+        %tr
+          %th Name
+          %th Rank
+          %th Description
+      %tbody
+        /- @adversary.talents.each_with_index do |element, index|
+        /  - talent = Talent.find_by_id(element[0])
+        /  - count = ''
+        /  -  options = ''
+        /  -  if element[1]['count'] > 1
+        /    - unless element[1]['options'].empty?
+        /      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+        /    - else
+        /      - options = "<span class='label success round'>#{element[1]['count']}</span>"
+        /  - else
+        /    - unless element[1]['options'].empty?
+        /      - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+        /  %tr
+        /    %td
+        /      %strong= talent.name
+        /    %td= options.html_safe
+        /    %td= text_replace_tokens(talent.description)
+
+    /- if @adversary.force_rating > 0
+    /  %h4
+    /    Force Powers
+    /    %small
+    /      Force rating #{@adversary.force_rating}
+    /  - @adversary.force_power_upgrades_computed.each do |fp|
+    /    %table.responsive{style: "width:100%"}
+    /      %thead
+    /        %tr
+    /          %th{colspan: "3"}= fp['name']
+    /      %tbody
+    /        %tr
+    /          %td{colspan: "3"}= simple_format text_replace_tokens(fp['description'])
+    /        - fp['upgrades'].each do |upg|
+    /          %tr
+    /            %td
+    /              %strong= upg['name']
+    /            %td
+    /              - if upg['rank']
+    /                %span.label.success.round= upg['rank']
+    /            %td= text_replace_tokens(upg['description'])
+
+
+    - unless @adversary.description.blank?
+      %h4 Abilities
+      = markdown(@adversary.abilities)
+
+    %h4 Equipment:
+    - @adversary.inventory.each_with_index do |item, delta|
+      - count = item[:quantity] > 1 ? " (#{item[:quantity]})" : ""
+      - delimiter = delta < @adversary.inventory.count - 1  ? ", " : ""
+      = "#{item[:name]}#{count}#{delimiter}"
+    %hr
+
+  .medium-3.columns
+    - unless @adversary.image_url.blank?
+      %img{src: @adversary.image_url}
+
+- if current_user
+  .row
+    .medium-12.columns
+      .button-bar
+        %ul.button-group.round
+          %li= link_to "<i class='fi-rewind'> Back</i>".html_safe,
+              adversaries_path,
+              :class => 'button secondary'
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe,
+              edit_adversary_path(@adversary),
+              :class => 'button success'
+          /%li= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe,
+          /    adversary_path(@adversary, :format => 'pdf'),
+          /    :class => 'button disabled',
+          /    :target => "_blank"
+          %li= link_to "<i class='fi-skull'> Delete</i>".html_safe,
+              adversary_path(@adversary),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm',
+              :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'button alert'
+
