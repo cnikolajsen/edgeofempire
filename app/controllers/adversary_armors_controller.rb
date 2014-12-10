@@ -1,5 +1,4 @@
 class AdversaryArmorsController < ApplicationController
-  include AdversariesHelper
   before_action :find_adversary
 
   def show
