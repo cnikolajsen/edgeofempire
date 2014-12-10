@@ -1,8 +1,4 @@
 EdgeOfEmpire::Application.routes.draw do
-  resources :books
-
-  resources :duties
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -22,6 +18,12 @@ EdgeOfEmpire::Application.routes.draw do
     resources :character_force_powers
     resources :character_skills
   end
+  resources :adversaries do
+    resources :adversary_armors
+    resources :adversary_weapons
+    resources :adversary_gears
+    resources :adversary_skills
+  end
   resources :character_adventure_logs
   resources :skills
   resources :careers
@@ -40,7 +42,9 @@ EdgeOfEmpire::Application.routes.draw do
   resources :talents
   resources :talent_trees
   resources :obligations
+  resources :duties
   resources :sidebars
+  resources :books
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   devise_scope :user do
@@ -142,5 +146,23 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/force-power/:force_power_id/remove' => 'character_force_powers#remove_force_power'
   get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => {:format => "js"}
   get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => {:format => "js"}
+
+  # Adversary Armor routes.
+  get 'adversaries/:id/armor' => 'adversary_armors#show' , :as => :adversary_armor
+  get 'adversaries/:id/armor/:adversary_armor_id/attachments' => 'adversary_armors#armor_attachment'
+  post 'adversaries/:id/armor/:adversary_armor_id/attachments' => 'adversary_armors#add_armor_attachment'
+  get 'adversaries/:id/armor/attachment/:attachment_id/remove' => 'adversary_armors#remove_armor_attachment'
+  get 'adversaries/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'adversary_armors#add_armor_attachment_option'
+  get 'adversaries/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'adversary_armors#remove_armor_attachment_option'
+  get 'adversaries/find/armor_attachment_selection' => 'adversaries#armor_attachment_selection'
+
+  # Adversary Weapon routes.
+  get 'adversaries/:id/weapons' => 'adversary_weapons#show', :as => :adversary_weapons
+  get 'adversaries/:id/weapon/:adversary_weapon_id/attachments' => 'adversary_weapons#weapon_attachment'
+  post 'adversaries/:id/weapon/:adversary_weapon_id/attachments' => 'adversary_weapons#add_weapon_attachment'
+  get 'adversaries/:id/weapon/attachment/:attachment_id/remove' => 'adversary_weapons#remove_weapon_attachment'
+  get 'adversaries/:id/weapon/attachment/:attachment_id/option/:option_id/add' => 'adversary_weapons#add_weapon_attachment_option'
+  get 'adversaries/:id/weapon/attachment/:attachment_id/option/:option_id/remove' => 'adversary_weapons#remove_weapon_attachment_option'
+  get 'adversaries/find/weapon_attachment_selection' => 'adversary_weapons#weapon_attachment_selection'
 
 end

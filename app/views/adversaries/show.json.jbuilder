@@ -1,0 +1,1 @@
+json.extract! @adversary, :id, :name, :description, :brawn, :agility, :intellect, :cunning, :willpower, :presence, :soak, :defense_ranged, :defense_melee, :wounds, :strain, :race_id, :abilities, :slug, :created_at, :updated_at

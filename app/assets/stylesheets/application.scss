@@ -10,9 +10,11 @@
  *
  *= require_self
  *= require foundation_and_overrides
- *= require responsive-tables
  *= require character_force_powers
  *= require jquery.ui.all
+ *= require footable.core.min
+ *= require footable.zurb
+
 
  */
 @import 'foundation-icons';

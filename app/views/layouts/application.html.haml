@@ -93,6 +93,8 @@
               = link_to "Obligations", obligations_path
             %li{:class => ("active" if current_page('duties'))}
               = link_to "Duties", duties_path
+            %li{:class => ("active" if current_page('adversaries'))}
+              = link_to "Adversaries", adversaries_path
     #flash_messages
       = render :partial => 'layouts/flash'
     = yield

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141017093705) do
+ActiveRecord::Schema.define(version: 20141024083027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,65 @@ ActiveRecord::Schema.define(version: 20141017093705) do
     t.integer  "campaign_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "adversaries", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "brawn"
+    t.integer  "agility"
+    t.integer  "intellect"
+    t.integer  "cunning"
+    t.integer  "willpower"
+    t.integer  "presence"
+    t.integer  "soak"
+    t.integer  "defense_ranged"
+    t.integer  "defense_melee"
+    t.integer  "wounds"
+    t.integer  "strain"
+    t.integer  "race_id"
+    t.text     "abilities"
+    t.string   "image_url"
+    t.integer  "book_id"
+    t.integer  "page"
+    t.string   "adversary_type"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "adversaries", ["slug"], name: "index_adversaries_on_slug", unique: true, using: :btree
+
+  create_table "adversary_armor_attachments", force: true do |t|
+    t.integer  "adversary_armor_id"
+    t.integer  "armor_attachment_id"
+    t.string   "armor_attachment_modification_options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "adversary_armors", force: true do |t|
+    t.integer  "adversary_id"
+    t.integer  "armor_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "adversary_weapon_attachments", force: true do |t|
+    t.integer  "adversary_weapon_id"
+    t.integer  "weapon_attachment_id"
+    t.string   "weapon_attachment_modification_options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "adversary_weapons", force: true do |t|
+    t.integer  "adversary_id"
+    t.integer  "weapon_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "armor_attachment_attachments_groups", force: true do |t|

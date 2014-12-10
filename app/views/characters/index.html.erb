@@ -6,15 +6,15 @@
 </div>
 <div class="row">
   <div class="medium-12 columns">
-    <table class="medium-12 columns character-list">
+    <table class="character-list footable" data-page-size="10">
       <thead>
         <tr>
-          <th><%= model_class.human_attribute_name(:name) %></th>
-          <th></th>
+          <th data-toggle='true' data-sort-initial="true"><%= model_class.human_attribute_name(:name) %></th>
+          <th data-hide="phone">Status</th>
           <th><%= model_class.human_attribute_name(:race_id) %></th>
           <th><%= model_class.human_attribute_name(:career_id) %></th>
-          <th><%= model_class.human_attribute_name(:created_at) %></th>
-          <th><%=t '.actions', :default => t("helpers.actions") %></th>
+          <th data-hide="phone,tablet" data-type="numeric"><%= model_class.human_attribute_name(:created_at) %></th>
+          <th data-hide="phone,tablet" data-sort-ignore="true"></th>
         </tr>
       </thead>
       <tbody>
@@ -32,7 +32,7 @@
             </td>
             <td><%= character.race.name unless character.race.nil? %></td>
             <td><%= character.career.name unless character.career.nil? %></td>
-            <td><%=l character.created_at, :format => :short %></td>
+            <td data-value="<%= character.created_at.to_time.to_i %>"><%=l character.created_at, :format => :short %></td>
             <td>
               <div class="button-bar">
                 <ul class="button-group round">
@@ -49,6 +49,9 @@
         <% end %>
       </tbody>
     </table>
+    <div class="footable-pagination hide-if-no-paging">
+      <div class="pagination pagination-centered"></div>
+    </div>
     <% if can? :manage, Character %>
     <%= link_to t('.new', :default => t("helpers.links.new")),
             new_character_path,

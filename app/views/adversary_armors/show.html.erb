@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1><%=t '.title', :default => "Manage equipped armor for #{@adversary.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <%= render :partial => 'adversaries/adversary_edit_menu' %>
+  </div>
+</div>
+<%= form_for @adversary do |adversary_form| %>
+  <%= adversary_form.hidden_field :id %>
+   <div id="adversary-armors" class="row">
+    <div class="small-12 columns">
+      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3" id="item-grid">
+        <%= adversary_form.fields_for :adversary_armor do |armor| %>
+          <%= render 'adversary_armor_fields', :f => armor %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= link_to_add_association 'Add new armor', adversary_form, :adversary_armor, 'data-association-insertion-node' => "#item-grid", 'data-association-insertion-method' => "append", :wrap_object => Proc.new {|armor| armor.build_armor; armor }, :class => 'button success small' %>
+      <%= hidden_field_tag 'destination', 'armor' %>
+      <%= adversary_form.submit 'Save armor', :class => 'button small' %>
+    </div>
+  </div>
+<% end %>
+
