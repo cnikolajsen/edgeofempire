@@ -30,4 +30,6 @@ EdgeOfEmpire::Application.configure do
   # Set log level to warn to make the log very quit. Use logger.warn() for debug
   # output instead of logger.debug.
   config.log_level = :warn
+
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end

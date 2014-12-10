@@ -17,9 +17,13 @@
 //= require foundation
 //= require cocoon
 //= require character
-//= require responsive-tables
+//= require lib/footable.all.min
 
 $(function(){ $(document).foundation(); });
+
+$(function () {
+  $('.footable').footable();
+});
 
 function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
@@ -29,5 +33,5 @@ function remove_fields(link) {
 function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g");
-  $(link).after(content.replace(regexp, new_id));
+  $(link).before(content.replace(regexp, new_id));
 }

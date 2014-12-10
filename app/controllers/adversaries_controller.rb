@@ -6,7 +6,6 @@ class AdversariesController < InheritedResources::Base
   load_and_authorize_resource
 
   def update
-
     respond_to do |format|
       if @adversary.update_attributes(adversary_params)
         if !params[:destination].nil?
@@ -29,6 +28,17 @@ class AdversariesController < InheritedResources::Base
       else
         format.html { render action: "edit" }
         format.json { render json: @adversary.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html # show.html.erb
+      #format.json { render json: @adversary, :methods => [:soak, :defense, :strain_threshold, :wound_threshold, :attacks, :inventory, :talents, :force_rating] }
+      format.pdf do
+        pdf = AdversaryCardPdf.new(@adversary, view_context)
+        send_data pdf.render, filename: "Adversary_Card#{@adversary.name}-#{@adversary.adversary_type}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
       end
     end
   end

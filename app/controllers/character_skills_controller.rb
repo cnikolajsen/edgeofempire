@@ -72,8 +72,6 @@ class CharacterSkillsController < ApplicationController
   end
 
   def save_free_skill_ranks
-    logger.warn(params)
-
     if params[:action] == 'save_free_skill_ranks'
 
       if params[:free_skill_ranks]

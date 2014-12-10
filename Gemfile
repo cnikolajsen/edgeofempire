@@ -89,4 +89,4 @@ end
 gem 'pry-rails', :group => :development
 
 # Use debugger
-gem "debugger", "~> 1.6.6", group: [:development, :test]
+gem 'byebug', '~> 3.5.1', group: [:development, :test]

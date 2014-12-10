@@ -81,32 +81,33 @@
           %th Range
           %th Misc
       %tbody
-        - @adversary.attacks.each do |attack|
-          %tr
-            %td= attack[:weapon].name
-            %td= attack[:skill].name
-            %td= render :partial => 'characters/dice_pool', :locals => {:score => @adversary.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
-            %td= attack[:weapon].damage
-            %td= attack[:weapon].crit
-            %td= attack[:weapon].range
-            %td
-              - unless attack[:qualities].blank?
-                %strong> Qualities:
-                \ 
-                - attack[:qualities].each_with_index do |q, key|
-                  = q[:name]
-                  = " #{q[:ranks]}" if q[:ranks] > 0
-                  - if key+1 < attack[:qualities].count
-                    ,
-                %br/
-              - if attack[:attachments].any?
-                %strong> Attch:
-                \ 
-                - attack[:attachments].each_with_index do |q, key|
-                  = q[:name]
-                  = " #{q[:ranks]}" if q[:ranks]
-                  - if key+1 < attack[:attachments].count
-                    ,
+        - unless @adversary.attacks.nil?
+          - @adversary.attacks.each do |attack|
+            %tr
+              %td= attack[:weapon].name
+              %td= attack[:skill].name
+              %td= render :partial => 'characters/dice_pool', :locals => {:score => @adversary.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
+              %td= attack[:weapon].damage
+              %td= attack[:weapon].crit
+              %td= attack[:weapon].range
+              %td
+                - unless attack[:qualities].blank?
+                  %strong> Qualities:
+                  \ 
+                  - attack[:qualities].each_with_index do |q, key|
+                    = q[:name]
+                    = " #{q[:ranks]}" if q[:ranks] > 0
+                    - if key+1 < attack[:qualities].count
+                      ,
+                  %br/
+                - if attack[:attachments].any?
+                  %strong> Attch:
+                  \ 
+                  - attack[:attachments].each_with_index do |q, key|
+                    = q[:name]
+                    = " #{q[:ranks]}" if q[:ranks]
+                    - if key+1 < attack[:attachments].count
+                      ,
 
     %h4 Talents
     %table.responsive{style: "width:100%"}
