@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   include FriendlyId
-  friendly_id :email, :use => :slugged
+  friendly_id :username, :use => :slugged
 
   ROLES = %w[admin moderator player banned]
 
