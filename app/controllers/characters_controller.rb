@@ -205,7 +205,7 @@ class CharactersController < ApplicationController
           end
         end
 
-        format.html { redirect_to character_url(@character), notice: 'Character was successfully created.' }
+        format.html { redirect_to user_character_url(current_user, @character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
         format.html { render action: "new" }
@@ -304,7 +304,7 @@ class CharactersController < ApplicationController
           end
           format.html { redirect_to "character_#{params[:destination]}".to_sym, notice: message }
         else
-          format.html { redirect_to @character, notice: 'Character was successfully updated.' }
+          format.html { redirect_to user_character_path(current_user, @character), notice: 'Character was successfully updated.' }
         end
         format.json { head :no_content }
       else
@@ -320,7 +320,7 @@ class CharactersController < ApplicationController
     @character.destroy
 
     respond_to do |format|
-      format.html { redirect_to characters_url, notice: 'Character was successfully deleted.'  }
+      format.html { redirect_to user_characters_url(current_user), notice: 'Character was successfully deleted.'  }
       format.json { head :no_content }
     end
   end
@@ -376,25 +376,27 @@ class CharactersController < ApplicationController
   def set_activate
     @character.activate
     @character.save
-    redirect_to @character, notice: 'Character activated. Character creation rules no longer apply.'
+    redirect_to user_character_path(current_user, @character), notice: 'Character activated. Character creation rules no longer apply.'
   end
 
   def set_retired
     @character.retire
     @character.save
-    redirect_to @character, notice: 'Character taken off duty. Character is now read only.'
+    redirect_to user_character_path(current_user, @character), notice: 'Character taken off duty. Character is now read only.'
   end
 
   def set_creation
     @character.set_create
     @character.save
-    redirect_to @character, notice: 'Character put into creation mode. Special rules apply.'
+    redirect_to user_character_path(current_user, @character), notice: 'Character put into creation mode. Special rules apply.'
   end
 
   private
 
   def find_character
-    if params[:id]
+    if params[:character_id]
+      @character = Character.friendly.find(params[:character_id])
+    elsif params[:id]
       @character = Character.friendly.find(params[:id])
     end
   end

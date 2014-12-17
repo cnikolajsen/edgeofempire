@@ -6,7 +6,7 @@
     = render :partial => 'characters/character_edit_menu'
 .row
   .small-12.columns
-    %p= link_to "<i class='fi-plus'>New entry</i>".html_safe, new_character_adventure_log_path
+    %p= link_to "<i class='fi-plus'>New entry</i>".html_safe, new_user_character_adventure_log_path(current_user, @character)
     %table
       %thead
         %th Date
@@ -21,5 +21,5 @@
             %td= markdown(log.log)
             %td= log.experience
             %td
-              = link_to "<i class='fi-pencil'></i>".html_safe, [:edit, @character, log] if log.user_id == @character.user_id
-              = link_to "<i class='fi-trash'></i>".html_safe, character_adventure_log_path(@character, log), :method => :delete, data: { confirm: 'Are you sure?' }, :style => 'color: #FF0000;' if log.user_id == @character.user_id
+              = link_to "<i class='fi-pencil'></i>".html_safe, [:edit, current_user, @character, log] if log.user_id == @character.user_id
+              = link_to "<i class='fi-trash'></i>".html_safe, user_character_adventure_log_path(current_user, @character, log), :method => :delete, data: { confirm: 'Are you sure?' }, :style => 'color: #FF0000;' if log.user_id == @character.user_id

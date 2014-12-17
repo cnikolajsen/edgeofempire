@@ -20,7 +20,7 @@
       <tbody>
         <% @characters.each do |character| %>
           <tr>
-            <td><%= link_to character.name, character_path(character) %></td>
+            <td><%= link_to character.name, user_character_path(current_user, character) %></td>
             <td>
               <% if character.creation? %>
                   <i class='fi-wrench' title='Character creation mode'></i>
@@ -36,9 +36,9 @@
             <td>
               <div class="button-bar">
                 <ul class="button-group round">
-                  <li><%= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe, character_path(character, :format => 'pdf'), :class => 'button tiny success', :target => "_blank" %></li>
-                  <li><%= link_to "<i class='fi-pencil'> Edit</i>".html_safe, character_path(character), :class => 'button tiny' %></li>
-                  <li><%= link_to "<i class='fi-skull'> Delete</i>".html_safe, character_path(character),
+                  <li><%= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe, user_character_path(current_user, character, :format => 'pdf'), :class => 'button tiny success', :target => "_blank" %></li>
+                  <li><%= link_to "<i class='fi-pencil'> Edit</i>".html_safe, user_character_path(current_user, character), :class => 'button tiny' %></li>
+                  <li><%= link_to "<i class='fi-skull'> Delete</i>".html_safe, user_character_path(current_user, character),
                                         :method => :delete,
                                         :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                                         :class => 'button alert tiny' %></li>
@@ -54,7 +54,7 @@
     </div>
     <% if can? :manage, Character %>
     <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_character_path,
+            new_user_character_path(current_user),
             :class => 'button radius' %>
     <% end -%>
   </div>

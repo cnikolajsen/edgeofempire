@@ -6,7 +6,7 @@
   <section class="top-bar-section">
     <!-- Left Nav Section -->
     <ul class="left">
-      <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", character_path(@character) %></li>
+      <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", user_character_path(current_user, @character) %></li>
       <li class="<% if @character_menu == 'basics' %>active<% end %> has-dropdown">
         <a href="#">Basics</a>
         <ul class="dropdown">
@@ -32,7 +32,7 @@
           <li<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", character_cybernetics_url(@character) %></li>
         </ul>
       </li>
-      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", character_adventure_logs_url(@character) %></li>
+      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", user_character_adventure_logs_path(current_user, @character) %></li>
     </ul>
   </section>
 </nav>

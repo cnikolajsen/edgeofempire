@@ -10,7 +10,7 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
+    <%= simple_form_for [current_user, @character], :html => { :class => 'form-horizontal' } do |f| %>
       <%= hidden_field_tag 'character_background', 'true' %>
       <% if @character.errors.any? %>
         <div data-alert class="alert-box warning radius">
@@ -29,7 +29,7 @@
         <%= hidden_field_tag 'destination', 'background' %>
         <%= f.submit "Save background", :class => 'button' %>
         <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
+                user_characters_path(current_user), :class => 'button secondary' %>
       </div>
     <% end %>
   </div>

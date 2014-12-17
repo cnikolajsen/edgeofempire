@@ -1,4 +1,4 @@
-= simple_form_for([@character, @adventure_log]) do |f|
+= simple_form_for([current_user, @character, @adventure_log]) do |f|
   .row.collapse
     .small-2.columns
       = f.label :date, :class=> 'inline'

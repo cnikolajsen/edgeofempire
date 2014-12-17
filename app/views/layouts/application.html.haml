@@ -51,9 +51,9 @@
                   %a{href: "#"} Characters
                   %ul.dropdown
                     %li{:class => ("active" if current_page('characters'))}
-                      #{link_to "My characters", characters_path()}
+                      #{link_to "My characters", user_characters_path(current_user)}
                     %li{:class => ("active" if current_page('new_character'))}
-                      #{link_to "Create character", new_character_path()}
+                      #{link_to "Create character", new_user_character_path(current_user)}
                 %li.has-dropdown{:class => ("active" if current_page('user'))}
                   %a{href: "#"} Account
                   %ul.dropdown

@@ -16,14 +16,14 @@ class AdventureLogsController < ApplicationController
     if @log.date.nil?
       @log.update_attribute('date', @log.created_at)
     end
-    redirect_to character_adventure_logs_url(@character)
+    redirect_to user_character_adventure_logs_url(current_user, @character)
   end
 
   def update
     @adventure_log = @character.adventure_logs.find(params[:id])
     respond_to do |format|
       if @adventure_log.update(adventure_log_params)
-        format.html { redirect_to character_adventure_logs_url(@character), notice:  "Entry was successfully updated." }
+        format.html { redirect_to user_character_adventure_logs_url(current_user, @character), notice:  "Entry was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

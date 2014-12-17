@@ -1,4 +1,4 @@
-<%= form_for @character, :html => { :class => 'form-horizontal' } do |f| %>
+<%= simple_form_for [current_user, @character], html: { class: 'form-horizontal' } do |f| %>
   <%= hidden_field_tag 'character_basics', 'true' %>
   <% if @character.errors.any? %>
     <div data-alert class="alert-box warning radius">
@@ -91,6 +91,6 @@
   <div class="form-actions">
     <%= f.submit nil, :class => 'button' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                characters_path, :class => 'button secondary' %>
+                user_characters_path(current_user), :class => 'button secondary' %>
   </div>
 <% end %>

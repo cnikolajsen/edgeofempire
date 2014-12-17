@@ -10,13 +10,18 @@ EdgeOfEmpire::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  resources :characters do
-    resources :adventure_logs
-    resources :character_armors
-    resources :character_weapons
-    resources :character_gears
-    resources :character_force_powers
-    resources :character_skills
+  resources :users do
+    resources :characters do
+      resources :adventure_logs
+      resources :character_armors
+      resources :character_weapons
+      resources :character_gears
+      resources :character_force_powers
+      resources :character_skills
+      get 'creation' => 'characters#set_creation'
+      get 'activate' => 'characters#set_activate'
+      get 'retire' => 'characters#set_retired'
+    end
   end
   resources :adversaries do
     resources :adversary_armors
@@ -24,20 +29,22 @@ EdgeOfEmpire::Application.routes.draw do
     resources :adversary_gears
     resources :adversary_skills
   end
-  resources :character_adventure_logs
+  #resources :character_adventure_logs
   resources :skills
   resources :careers
   resources :races
   resources :equipment
   resources :adventures
   resources :campaigns
-  resources :weapons
-  resources :weapon_quality_ranks
-  resources :weapon_qualities
-  resources :weapon_attachments
-  resources :armors
-  resources :armor_qualities
-  resources :armor_attachments
+  resources :weapons do
+    resources :weapon_quality_ranks
+    resources :weapon_qualities
+    resources :weapon_attachments
+  end
+  resources :armors do
+    resources :armor_qualities
+    resources :armor_attachments
+  end
   resources :gears
   resources :talents
   resources :talent_trees
@@ -69,11 +76,6 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/background' => 'characters#background', :as => :character_background
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
-
-  # Character state routes.
-  get 'characters/:id/creation' => 'characters#set_creation', :as => :creation_character
-  get 'characters/:id/activate' => 'characters#set_activate', :as => :activate_character
-  get 'characters/:id/retire' => 'characters#set_retired', :as => :retire_character
 
   # Character talent routes.
   get 'characters/:id/talents' => 'character_talents#show', :as => :character_talents
