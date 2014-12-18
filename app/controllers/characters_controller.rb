@@ -287,8 +287,10 @@ class CharactersController < ApplicationController
             message = 'Character equipment updated.'
           elsif params[:destination] == 'weapons'
             message = 'Character weapons updated.'
+            format.html { redirect_to user_character_weapon_url(current_user, @character), notice: message }
           elsif params[:destination] == 'armor'
             message = 'Character armor updated.'
+            format.html { redirect_to user_character_armor_url(current_user, @character), notice: message }
           elsif params[:destination] == 'talents'
             message = 'Character talents updated.'
           elsif params[:destination] == 'skills'
@@ -302,7 +304,7 @@ class CharactersController < ApplicationController
           elsif params[:destination] == 'motivation'
             message = 'Character motivation saved.'
           end
-          format.html { redirect_to "character_#{params[:destination]}".to_sym, notice: message }
+          #format.html { redirect_to "user_character_#{params[:destination]}".to_sym [current_user, @character], notice: message }
         else
           format.html { redirect_to user_character_path(current_user, @character), notice: 'Character was successfully updated.' }
         end

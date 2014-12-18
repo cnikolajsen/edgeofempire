@@ -26,7 +26,7 @@
       <li class="<% if @character_menu == 'equipment' %>active<% end %> has-dropdown">
         <a href="#">Equipment</a>
         <ul class="dropdown">
-          <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></li>
+          <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_url(current_user, @character) %></li>
           <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></li>
           <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></li>
           <li<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", character_cybernetics_url(@character) %></li>
@@ -47,7 +47,7 @@
   </dl>
 <% elsif @character_menu == 'equipment' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", character_armor_url(@character) %></dd>
+    <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_url(current_user, @character) %></dd>
     <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", character_weapons_url(@character) %></dd>
     <dd<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", character_gear_url(@character) %></dd>
     <dd<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", character_cybernetics_url(@character) %></dd>

@@ -13,14 +13,23 @@ EdgeOfEmpire::Application.routes.draw do
   resources :users do
     resources :characters do
       resources :adventure_logs
-      resources :character_armors
+      #resources :character_armors
       resources :character_weapons
       resources :character_gears
       resources :character_force_powers
       resources :character_skills
+      # States
       get 'creation' => 'characters#set_creation'
       get 'activate' => 'characters#set_activate'
       get 'retire' => 'characters#set_retired'
+      # Armor
+      get 'armor' => 'character_armors#show'# , :as => :character_armor
+      get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
+      post 'armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
+      get 'armor/:armor_id/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
+      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
+      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
+      get '/character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
     end
   end
   resources :adversaries do
@@ -36,15 +45,13 @@ EdgeOfEmpire::Application.routes.draw do
   resources :equipment
   resources :adventures
   resources :campaigns
-  resources :weapons do
-    resources :weapon_quality_ranks
-    resources :weapon_qualities
-    resources :weapon_attachments
-  end
-  resources :armors do
-    resources :armor_qualities
-    resources :armor_attachments
-  end
+  resources :weapons
+  resources :weapon_quality_ranks
+  resources :weapon_qualities
+  resources :weapon_attachments
+  resources :armors
+  resources :armor_qualities
+  resources :armor_attachments
   resources :gears
   resources :talents
   resources :talent_trees
@@ -109,15 +116,6 @@ EdgeOfEmpire::Application.routes.draw do
   post 'characters/:id/motivation' => 'character_motivations#add_motivation'
   post 'characters/:id/motivation/update' => 'character_motivations#update_motivation'
   get 'characters/:id/motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
-
-  # Character Armor routes.
-  get 'characters/:id/armor' => 'character_armors#show' , :as => :character_armor
-  get 'characters/:id/armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
-  post 'characters/:id/armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
-  get 'characters/:id/armor/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
-  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
-  get 'characters/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
-  get 'character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
 
   # Character Weapon routes.
   get 'characters/:id/weapons' => 'character_weapons#show', :as => :character_weapons

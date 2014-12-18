@@ -42,7 +42,7 @@
           <% end %>
         <% end %>
         <% if @armor.hard_points > 0 %>
-        <li class="cta-button"><%= link_to "Manage attachment", "/characters/#{@character.id}/armor/#{f.object.id}/attachments", :class => "button tiny" %></li>
+        <li class="cta-button"><%= link_to "Manage attachment", "armor/#{f.object.id}/attachments", :class => "button tiny" %></li>
         <% end -%>
         <li class="cta-button"><%= link_to_remove_association "remove", f, :class => 'button tiny alert' %></li>
       </ul>
