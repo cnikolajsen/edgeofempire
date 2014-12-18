@@ -2,6 +2,10 @@ class TalentTree < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, :use => :slugged
 
+  def should_generate_new_friendly_id?
+    name_changed?
+  end
+
   has_many :career_talent_trees
   has_many :careers, :through => :career_talent_trees
   has_many :talent_tree_career_skills

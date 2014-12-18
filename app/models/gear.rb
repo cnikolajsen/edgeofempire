@@ -3,6 +3,10 @@ class Gear < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, use: :slugged
 
+  def should_generate_new_friendly_id?
+    name_changed?
+  end
+
   validates :name, presence: true, uniqueness: true
   validates :gear_category_id, presence: true
 

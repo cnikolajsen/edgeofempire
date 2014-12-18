@@ -88,7 +88,7 @@
             <% if cost.resource_id && cost.resource_id > 0 %>
               <tr>
                 <td><%= cost.rank %></td>
-                <td><%= link_to Talent.find(cost.resource_id).name, character_talents_url(@character) %></td>
+                <td><%= Talent.find(cost.resource_id).name %></td>
                 <td align="center"><%= cost.cost %></td>
               </tr>
             <% end %>
@@ -106,7 +106,7 @@
           <tbody>
           <% CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'force_power').where("cost > 0").order('rank asc, resource_id asc').each do |cost| %>
             <tr>
-              <td><%= link_to ForcePower.find(cost.resource_id).name, character_force_powers_url(@character) %></td>
+              <td><%= ForcePower.find(cost.resource_id).name %></td>
               <td align="center"><%= cost.cost %></td>
             </tr>
           <% end %>

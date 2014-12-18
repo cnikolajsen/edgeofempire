@@ -3,6 +3,10 @@ class Weapon < ActiveRecord::Base
   include FriendlyId
   friendly_id :name, use: :slugged
 
+  def should_generate_new_friendly_id?
+    name_changed?
+  end
+
   belongs_to :skill
   has_many :weapon_qualities, through: :weapon_quality_ranks
   has_many :weapon_quality_ranks, dependent: :destroy

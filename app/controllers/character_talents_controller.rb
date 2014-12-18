@@ -34,7 +34,7 @@ class CharacterTalentsController < ApplicationController
       CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
       CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
     end
-    redirect_to character_talents_url(:id => @character.id), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
+    redirect_to user_character_talents_path(current_user, @character), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
 
   def learn

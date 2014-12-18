@@ -14,10 +14,16 @@ class Character < ActiveRecord::Base
   include FriendlyId
   friendly_id :slug_candidates, :use => :slugged
 
+  def should_generate_new_friendly_id?
+    name_changed?
+  end
+
   def slug_candidates
     [
       :name,
+      [:name, :career_id],
       [:name, :race_id],
+      [:name, :career_id, :race_id],
     ]
   end
 

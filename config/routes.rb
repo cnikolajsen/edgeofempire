@@ -30,6 +30,12 @@ EdgeOfEmpire::Application.routes.draw do
       get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
       get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
       get '/character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
+      # Character talent routes.
+      get 'talents' => 'character_talents#show'#, :as => :character_talents
+      get 'talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
+      get 'talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'#, :defaults => {:format => "js"}
+      get 'talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'#, :defaults => {:format => "js"}
+
     end
   end
   resources :adversaries do
@@ -83,12 +89,6 @@ EdgeOfEmpire::Application.routes.draw do
   get 'characters/:id/background' => 'characters#background', :as => :character_background
   get 'character/find/species_selection' => 'characters#species_selection'
   get 'character/find/career_selection' => 'characters#career_selection'
-
-  # Character talent routes.
-  get 'characters/:id/talents' => 'character_talents#show', :as => :character_talents
-  get 'characters/:id/talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
-  get 'characters/:id/talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'#, :defaults => {:format => "js"}
-  get 'characters/:id/talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'#, :defaults => {:format => "js"}
 
   # Character skill routes.
   get 'characters/:id/skills' => 'character_skills#show', :as => :character_skills

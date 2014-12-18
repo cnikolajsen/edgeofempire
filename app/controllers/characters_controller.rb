@@ -293,6 +293,7 @@ class CharactersController < ApplicationController
             format.html { redirect_to user_character_armor_url(current_user, @character), notice: message }
           elsif params[:destination] == 'talents'
             message = 'Character talents updated.'
+            format.html { redirect_to user_character_talents_url(current_user, @character), notice: message }
           elsif params[:destination] == 'skills'
             message = 'Character career free skill ranks saved.'
           elsif params[:destination] == 'characteristics'

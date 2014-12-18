@@ -24,7 +24,7 @@
           %li
             = TalentTree.where(:id => @character.specialization_3).first.name
             = link_to 'Untrain', "talents/specialization/3/#{@character.specialization_3}/untrain"
-      = form_for @character do |specializations_form|
+      = simple_form_for [current_user, @character] do |specializations_form|
         = hidden_field_tag 'update_specializations', 'true'
         - if @character.specialization_1.nil?
           - first_spec_options = []

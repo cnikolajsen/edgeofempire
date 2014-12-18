@@ -2,6 +2,10 @@ class Book < ActiveRecord::Base
   include FriendlyId
   friendly_id :title, :use => :slugged
 
+  def should_generate_new_friendly_id?
+    title_changed?
+  end
+
   has_many :weapons
   has_many :armors
   has_many :gears
