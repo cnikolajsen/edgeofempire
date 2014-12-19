@@ -11,7 +11,7 @@ $('#character_armor_attachment_armor_attachment_id').change(function(){
 
 $('#character_career_id').change(function(){
   $.ajax({
-    url: "/character/find/career_selection",
+    url: "/find/career_selection",
     type: "GET",
     data: "career_id="+$('#character_career_id').val(),
     success: function(data) {
@@ -22,7 +22,7 @@ $('#character_career_id').change(function(){
 
 $('#character_race_id').change(function(){
   $.ajax({
-    url: "/character/find/species_selection",
+    url: "/find/species_selection",
     type: "GET",
     data: "species_id="+$('#character_race_id').val(),
     success: function(data) {
@@ -33,7 +33,7 @@ $('#character_race_id').change(function(){
 
 $('#character_weapon_attachment_weapon_attachment_id').change(function(){
   $.ajax({
-    url: "/character/find/weapon_attachment_selection",
+    url: "/find/weapon_attachment_selection",
     type: "GET",
     data: "attachment_id="+$('#character_weapon_attachment_weapon_attachment_id').val(),
     success: function(data) {
@@ -44,7 +44,7 @@ $('#character_weapon_attachment_weapon_attachment_id').change(function(){
 
 $('#character_obligation_obligation_id').change(function(){
   $.ajax({
-    url: "/character/find/obligation_selection",
+    url: "/find/obligation_selection",
     type: "GET",
     data: "obligation_id="+$('#character_obligation_obligation_id').val(),
     success: function(data) {
@@ -55,7 +55,7 @@ $('#character_obligation_obligation_id').change(function(){
 
 $('#character_motivation_motivation_id').change(function(){
   $.ajax({
-    url: "/character/find/motivation_selection",
+    url: "/find/motivation_selection",
     type: "GET",
     data: "motivation_id="+$('#character_motivation_motivation_id').val(),
     success: function(data) {
@@ -66,7 +66,7 @@ $('#character_motivation_motivation_id').change(function(){
 
 $('#character_force_power_force_power_id').change(function(){
   $.ajax({
-    url: "/character/find/force_power_selection",
+    url: "/find/force_power_selection",
     type: "GET",
     data: "force_power_id="+$('#character_force_power_force_power_id').val(),
     success: function(data) {
@@ -77,7 +77,7 @@ $('#character_force_power_force_power_id').change(function(){
 
 $('#character_gears_gear_id').change(function(){
   $.ajax({
-    url: "/character/find/equipment_selection",
+    url: "/find/equipment_selection",
     type: "GET",
     data: "gear_id="+$('#character_gears_gear_id').val(),
     success: function(data) {

@@ -6,7 +6,7 @@
       <%= form.text_area :description, :value => character_duty.description %>
       <%= form.number_field :magnitude, :value => character_duty.magnitude, :min => 0, :step => 1 %>
       <%= form.submit 'Update duty', :class => 'button tiny' %>
-      <%= link_to "Remove", "/characters/#{@character.id}/duty/#{character_duty.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete duty?' } %>
+      <%= link_to "Remove", "duty/#{character_duty.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete duty?' } %>
     <% end -%>
     <hr />
   <% end -%>

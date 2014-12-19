@@ -5,7 +5,7 @@
       <%= form.hidden_field :character_motivation_id, :value => character_motivation.id %>
       <%= form.text_area :description, :value => character_motivation.description %>
       <%= form.submit 'Update motivation', :class => 'button tiny' %>
-      <%= link_to "Remove", "/characters/#{@character.id}/motivation/#{character_motivation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete motivation?' } %>
+      <%= link_to "Remove", "motivation/#{character_motivation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete motivation?' } %>
     <% end -%>
     <hr />
   <% end -%>

@@ -63,6 +63,6 @@
     <p>Add <%= pluralize(race_talent.ranks, 'rank') %> in <%= race_talent.talent.name %> talent.</p>
   <% end %>
 <% end %>
-<p><%= text_replace_tokens(species.special_ability.gsub("\n", "<br />")).html_safe %></p>
+<p><%= markdown(text_replace_tokens(species.special_ability)) %></p>
 
-<p><%= species.description.gsub("\n", "<br />").html_safe %></p>
+<p><%= markdown(species.description) %></p>

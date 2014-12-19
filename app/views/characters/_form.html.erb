@@ -90,7 +90,12 @@
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'button' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+    <% if @character.new_record? %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 user_characters_path(current_user), :class => 'button secondary' %>
+    <% else %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                user_character_path(current_user, @character), :class => 'button secondary' %>
+    <% end %>
   </div>
 <% end %>

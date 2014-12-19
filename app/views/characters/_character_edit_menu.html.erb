@@ -10,12 +10,12 @@
       <li class="<% if @character_menu == 'basics' %>active<% end %> has-dropdown">
         <a href="#">Basics</a>
         <ul class="dropdown">
-          <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></li>
-          <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></li>
-          <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></li>
-          <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></li>
-          <li<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", character_duty_url(@character) %></li>
-          <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></li>
+          <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(current_user, @character) %></li>
+          <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(current_user, @character) %></li>
+          <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(current_user, @character) %></li>
+          <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(current_user, @character) %></li>
+          <li<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(current_user, @character) %></li>
+          <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(current_user, @character) %></li>
         </ul>
       </li>
       <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", user_character_talents_path(current_user, @character) %></li>
@@ -38,12 +38,12 @@
 </nav>
 <% if @character_menu == 'basics' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", character_description_path(@character) %></dd>
-    <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", character_characteristics_url(@character) %></dd>
-    <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", character_background_url(@character) %></dd>
-    <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", character_obligation_url(@character) %></dd>
-    <dd<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", character_duty_url(@character) %></dd>
-    <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", character_motivation_url(@character) %></dd>
+    <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(current_user, @character) %></dd>
   </dl>
 <% elsif @character_menu == 'equipment' %>
   <dl class="sub-nav" data-no-turbolink>

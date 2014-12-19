@@ -1,9 +1,9 @@
 <h4><%= career.name %></h4>
 <p><%= career.description.html_safe %></p>
-<h5>The <%= career.name %> career has the following specializations <small>One of these can be selected for free</small></h5>
+<h5>The <%= career.name %> career has the following specializations<br /><small>One of these can be selected for free</small></h5>
 <% career.talent_trees.each do |spec| %>
 <ul>
-<li><strong><%= spec.name %></strong><br /><%= spec.description.html_safe %></li>
+<li><strong><%= spec.name %></strong><br /><%= markdown(spec.description) %></li>
 </ul>
 <% end -%>
 

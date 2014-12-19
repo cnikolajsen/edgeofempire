@@ -18,12 +18,31 @@ EdgeOfEmpire::Application.routes.draw do
       resources :character_gears
       resources :character_force_powers
       resources :character_skills
+      # Character routes.
+      get 'description' => 'characters#edit', :as => :description
+      get 'characteristics' => 'characters#characteristics', :as => :characteristics
+      get 'background' => 'characters#background', :as => :background
+      # Character obligation routes.
+      get 'obligation' => 'character_obligations#show'
+      post 'obligation' => 'character_obligations#add_obligation'
+      post 'obligation/update' => 'character_obligations#update_obligation'
+      get 'obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
+      # Character duty routes.
+      get 'duty' => 'character_duties#show'
+      post 'duty' => 'character_duties#add_duty'
+      post 'duty/update' => 'character_duties#update_duty'
+      get 'duty/:duty_id/remove' => 'character_duties#remove_duty'
+      # Character motivation routes.
+      get 'motivation' => 'character_motivations#show'
+      post 'motivation' => 'character_motivations#add_motivation'
+      post 'motivation/update' => 'character_motivations#update_motivation'
+      get 'motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
       # States
       get 'creation' => 'characters#set_creation'
       get 'activate' => 'characters#set_activate'
       get 'retire' => 'characters#set_retired'
       # Armor
-      get 'armor' => 'character_armors#show'# , :as => :character_armor
+      get 'armor' => 'character_armors#show'
       get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
       post 'armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
       get 'armor/:armor_id/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
@@ -31,10 +50,10 @@ EdgeOfEmpire::Application.routes.draw do
       get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
       get '/character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
       # Character talent routes.
-      get 'talents' => 'character_talents#show'#, :as => :character_talents
+      get 'talents' => 'character_talents#show'
       get 'talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
-      get 'talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'#, :defaults => {:format => "js"}
-      get 'talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'#, :defaults => {:format => "js"}
+      get 'talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'
+      get 'talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'
 
     end
   end
@@ -74,6 +93,13 @@ EdgeOfEmpire::Application.routes.draw do
     get "me", :to => "devise/registrations#edit"
   end
 
+  # Ajax callbacks
+  get 'find/species_selection' => 'characters#species_selection'
+  get 'find/career_selection' => 'characters#career_selection'
+  get 'find/obligation_selection' => 'character_obligations#obligation_selection'
+  get 'find/duty_selection' => 'character_duties#duty_selection'
+  get 'find/motivation_selection' => 'character_motivations#motivation_selection'
+
   # General pages.
   get "names/human", :to => "pages#human_naming_tables", :as => :human_names
   get "names/bothan", :to => "pages#bothan_naming_tables", :as => :bothan_names
@@ -83,39 +109,11 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
   get "rules", :to => "pages#rules_summary", :as => :rules
 
-  # Character routes.
-  get 'characters/:id/description' => 'characters#edit', :as => :character_description
-  get 'characters/:id/characteristics' => 'characters#characteristics', :as => :character_characteristics
-  get 'characters/:id/background' => 'characters#background', :as => :character_background
-  get 'character/find/species_selection' => 'characters#species_selection'
-  get 'character/find/career_selection' => 'characters#career_selection'
-
   # Character skill routes.
   get 'characters/:id/skills' => 'character_skills#show', :as => :character_skills
   get 'characters/:id/skills/:skill_id/rank_up' => 'character_skills#rank_up'
   get 'characters/:id/skills/:skill_id/rank_down' => 'character_skills#rank_down'
   post 'characters/:id/skills' => 'character_skills#save_free_skill_ranks'
-
-  # Character obligation routes.
-  get 'characters/:id/obligation' => 'character_obligations#show', :as => :character_obligation
-  get 'character/find/obligation_selection' => 'character_obligations#obligation_selection'
-  post 'characters/:id/obligation' => 'character_obligations#add_obligation'
-  post 'characters/:id/obligation/update' => 'character_obligations#update_obligation'
-  get 'characters/:id/obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
-
-  # Character duty routes.
-  get 'characters/:id/duty' => 'character_duties#show', :as => :character_duty
-  get 'character/find/duty_selection' => 'character_duties#duty_selection'
-  post 'characters/:id/duty' => 'character_duties#add_duty'
-  post 'characters/:id/duty/update' => 'character_duties#update_duty'
-  get 'characters/:id/duty/:duty_id/remove' => 'character_duties#remove_duty'
-
-  # Character motivation routes.
-  get 'characters/:id/motivation' => 'character_motivations#show', :as => :character_motivation
-  get 'character/find/motivation_selection' => 'character_motivations#motivation_selection'
-  post 'characters/:id/motivation' => 'character_motivations#add_motivation'
-  post 'characters/:id/motivation/update' => 'character_motivations#update_motivation'
-  get 'characters/:id/motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
 
   # Character Weapon routes.
   get 'characters/:id/weapons' => 'character_weapons#show', :as => :character_weapons

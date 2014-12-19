@@ -93,7 +93,7 @@
         <%= hidden_field_tag 'destination', 'characteristics' %>
         <%= f.submit "Save characteristics", :class => 'button' %>
         <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                user_characters_path(current_user), :class => 'button secondary' %>
+                user_character_path(current_user, @character), :class => 'button secondary' %>
       </div>
 
     <% end %>
