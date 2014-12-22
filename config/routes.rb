@@ -10,53 +10,7 @@ EdgeOfEmpire::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  resources :users do
-    resources :characters do
-      resources :adventure_logs
-      #resources :character_armors
-      resources :character_weapons
-      resources :character_gears
-      resources :character_force_powers
-      resources :character_skills
-      # Character routes.
-      get 'description' => 'characters#edit', :as => :description
-      get 'characteristics' => 'characters#characteristics', :as => :characteristics
-      get 'background' => 'characters#background', :as => :background
-      # Character obligation routes.
-      get 'obligation' => 'character_obligations#show'
-      post 'obligation' => 'character_obligations#add_obligation'
-      post 'obligation/update' => 'character_obligations#update_obligation'
-      get 'obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
-      # Character duty routes.
-      get 'duty' => 'character_duties#show'
-      post 'duty' => 'character_duties#add_duty'
-      post 'duty/update' => 'character_duties#update_duty'
-      get 'duty/:duty_id/remove' => 'character_duties#remove_duty'
-      # Character motivation routes.
-      get 'motivation' => 'character_motivations#show'
-      post 'motivation' => 'character_motivations#add_motivation'
-      post 'motivation/update' => 'character_motivations#update_motivation'
-      get 'motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
-      # States
-      get 'creation' => 'characters#set_creation'
-      get 'activate' => 'characters#set_activate'
-      get 'retire' => 'characters#set_retired'
-      # Armor
-      get 'armor' => 'character_armors#show'
-      get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
-      post 'armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
-      get 'armor/:armor_id/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
-      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
-      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
-      get '/character/find/armor_attachment_selection' => 'characters#armor_attachment_selection'
-      # Character talent routes.
-      get 'talents' => 'character_talents#show'
-      get 'talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
-      get 'talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'
-      get 'talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'
 
-    end
-  end
   resources :adversaries do
     resources :adversary_armors
     resources :adversary_weapons
@@ -93,12 +47,103 @@ EdgeOfEmpire::Application.routes.draw do
     get "me", :to => "devise/registrations#edit"
   end
 
+  resources :users do
+    resources :characters do
+      resources :adventure_logs
+      #resources :character_armors
+      #resources :character_weapons
+      #resources :character_gears
+      #resources :character_force_powers
+      #resources :character_skills
+
+      # Character routes.
+      get 'description' => 'characters#edit', :as => :description
+      get 'characteristics' => 'characters#characteristics', :as => :characteristics
+      get 'background' => 'characters#background', :as => :background
+
+      # Character obligation routes.
+      get 'obligation' => 'character_obligations#show'
+      post 'obligation' => 'character_obligations#add_obligation'
+      post 'obligation/update' => 'character_obligations#update_obligation'
+      get 'obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
+
+      # Character duty routes.
+      get 'duty' => 'character_duties#show'
+      post 'duty' => 'character_duties#add_duty'
+      post 'duty/update' => 'character_duties#update_duty'
+      get 'duty/:duty_id/remove' => 'character_duties#remove_duty'
+
+      # Character motivation routes.
+      get 'motivation' => 'character_motivations#show'
+      post 'motivation' => 'character_motivations#add_motivation'
+      post 'motivation/update' => 'character_motivations#update_motivation'
+      get 'motivation/:motivation_id/remove' => 'character_motivations#remove_motivation'
+
+      # States
+      get 'creation' => 'characters#set_creation'
+      get 'activate' => 'characters#set_activate'
+      get 'retire' => 'characters#set_retired'
+
+      # Armor
+      get 'armor' => 'character_armors#show'
+      get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
+      post 'armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
+      get 'armor/:armor_id/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
+      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
+      get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/remove' => 'character_armors#remove_armor_attachment_option'
+
+      # Character talent routes.
+      get 'talents' => 'character_talents#show'
+      get 'talents/specialization/:spec_num/:spec_id/untrain' => 'character_talents#untrain_specialization'
+      get 'talents/:talent_tree_id/:row/:column/learn(/:option/:option_value)' => 'character_talents#learn'
+      get 'talents/:talent_tree_id/:row/:column/unlearn' => 'character_talents#unlearn'
+
+      # Character skill routes.
+      get 'skills' => 'character_skills#show'
+      get 'skills/:skill_id/rank_up' => 'character_skills#rank_up'
+      get 'skills/:skill_id/rank_down' => 'character_skills#rank_down'
+      post 'skills' => 'character_skills#save_free_skill_ranks'
+
+      # Character Weapon routes.
+      get 'weapons' => 'character_weapons#show'
+      get 'weapon/:character_weapon_id/attachments' => 'character_weapons#weapon_attachment'
+      post 'weapon/:character_weapon_id/attachments' => 'character_weapons#add_weapon_attachment'
+      get 'weapon/attachment/:attachment_id/remove' => 'character_weapons#remove_weapon_attachment'
+      get 'weapon/attachment/:attachment_id/option/:option_id/add' => 'character_weapons#add_weapon_attachment_option'
+      get 'weapon/attachment/:attachment_id/option/:option_id/remove' => 'character_weapons#remove_weapon_attachment_option'
+
+      # Character Gear routes.
+      get 'equipment' => 'character_gears#show', :as => :gear
+      post 'equipment' => 'character_gears#add_equipment'
+      get 'equipment/:character_gear_id/remove(/:custom)' => 'character_gears#remove_equipment', :as => :remove_item
+      get 'equipment/:character_gear_id/move/:action_id(/:custom)' => 'character_gears#place_equipment', :as => :place_item
+      get 'equipment/:character_gear_id/increase(/:custom)' => 'character_gears#increase_equipment_qty', :as => :increase_item_qty
+      get 'equipment/:character_gear_id/decrease(/:custom)' => 'character_gears#decrease_equipment_qty', :as => :decrease_item_qty
+
+      # Character Cybernetics routes.
+      get 'cybernetics' => 'character_cybernetics#show'
+      post 'cybernetics' => 'character_cybernetics#update'
+
+      # Character Force Power routes.
+      get 'force-powers' => 'character_force_powers#show'
+      post 'force-powers' => 'character_force_powers#add_force_power'
+      get 'force-power/:force_power_id/remove' => 'character_force_powers#remove_force_power'
+      get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => { format: 'js' }
+      get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => { format: 'js' }
+
+    end
+  end
+
   # Ajax callbacks
   get 'find/species_selection' => 'characters#species_selection'
   get 'find/career_selection' => 'characters#career_selection'
   get 'find/obligation_selection' => 'character_obligations#obligation_selection'
   get 'find/duty_selection' => 'character_duties#duty_selection'
   get 'find/motivation_selection' => 'character_motivations#motivation_selection'
+  get 'find/armor_attachment_selection' => 'characters#armor_attachment_selection'
+  get 'find/force_power_selection' => 'character_force_powers#force_power_selection'
+  get 'find/weapon_attachment_selection' => 'character_weapons#weapon_attachment_selection'
+  get 'find/equipment_selection' => 'character_gears#equipment_selection'
 
   # General pages.
   get "names/human", :to => "pages#human_naming_tables", :as => :human_names
@@ -108,42 +153,6 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/twilek", :to => "pages#twilek_naming_tables", :as => :twilek_names
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
   get "rules", :to => "pages#rules_summary", :as => :rules
-
-  # Character skill routes.
-  get 'characters/:id/skills' => 'character_skills#show', :as => :character_skills
-  get 'characters/:id/skills/:skill_id/rank_up' => 'character_skills#rank_up'
-  get 'characters/:id/skills/:skill_id/rank_down' => 'character_skills#rank_down'
-  post 'characters/:id/skills' => 'character_skills#save_free_skill_ranks'
-
-  # Character Weapon routes.
-  get 'characters/:id/weapons' => 'character_weapons#show', :as => :character_weapons
-  get 'characters/:id/weapon/:character_weapon_id/attachments' => 'character_weapons#weapon_attachment'
-  post 'characters/:id/weapon/:character_weapon_id/attachments' => 'character_weapons#add_weapon_attachment'
-  get 'characters/:id/weapon/attachment/:attachment_id/remove' => 'character_weapons#remove_weapon_attachment'
-  get 'characters/:id/weapon/attachment/:attachment_id/option/:option_id/add' => 'character_weapons#add_weapon_attachment_option'
-  get 'characters/:id/weapon/attachment/:attachment_id/option/:option_id/remove' => 'character_weapons#remove_weapon_attachment_option'
-  get 'character/find/weapon_attachment_selection' => 'character_weapons#weapon_attachment_selection'
-
-  # Character Gear routes.
-  get 'characters/:id/equipment' => 'character_gears#show', :as => :character_gear
-  post 'characters/:id/equipment' => 'character_gears#add_equipment'
-  get 'characters/:id/equipment/:character_gear_id/remove(/:custom)' => 'character_gears#remove_equipment', :as => :remove_item
-  get 'characters/:id/equipment/:character_gear_id/move/:action_id(/:custom)' => 'character_gears#place_equipment', :as => :place_item
-  get 'characters/:id/equipment/:character_gear_id/increase(/:custom)' => 'character_gears#increase_equipment_qty', :as => :increase_item_qty
-  get 'characters/:id/equipment/:character_gear_id/decrease(/:custom)' => 'character_gears#decrease_equipment_qty', :as => :decrease_item_qty
-  get 'character/find/equipment_selection' => 'character_gears#equipment_selection'
-
-  # Character Cybernetics routes.
-  get 'characters/:id/cybernetics' => 'character_cybernetics#show', :as => :character_cybernetics
-  post 'characters/:id/cybernetics' => 'character_cybernetics#update'
-
-  # Character Force Power routes.
-  get 'characters/:id/force-powers' => 'character_force_powers#show', :as => :character_force_powers
-  get 'character/find/force_power_selection' => 'character_force_powers#force_power_selection'
-  post 'characters/:id/force-powers' => 'character_force_powers#add_force_power'
-  get 'characters/:id/force-power/:force_power_id/remove' => 'character_force_powers#remove_force_power'
-  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => {:format => "js"}
-  get 'characters/:id/force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => {:format => "js"}
 
   # Adversary Armor routes.
   get 'adversaries/:id/armor' => 'adversary_armors#show' , :as => :adversary_armor

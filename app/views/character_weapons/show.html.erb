@@ -16,7 +16,7 @@
     </div>
   </div>
 </div>
-<%= form_for @character do |character_form| %>
+<%= form_for [current_user, @character] do |character_form| %>
   <%= character_form.hidden_field :id %>
    <div id="character-weapons" class="row">
     <div class="small-12 columns">
