@@ -1,0 +1,27 @@
+%ul.pricing-table
+  %li.title= armor.name
+  %li.price
+    = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+    = armor.price
+  %li.description= markdown(text_replace_tokens(armor.description))
+  %li.bullet-item
+    Enc: #{armor.encumbrance}
+  %li.bullet-item
+    Rarity: #{armor.rarity}
+  %li.bullet-item
+    Soak/Defense: #{armor.soak}/#{armor.defense}
+  - unless armor.attachments.blank?
+    %li.title Attachments
+    - armor.attachments.each do |attachment|
+      %li.bullet-item
+        = attachment.name
+        - unless attachment.armor_attachment_modification_options.blank?
+          %ul{:style => "font-size: 10px;"}
+            - attachment.armor_attachment_modification_options.each do |option|
+              - modification_option = ArmorAttachmentModificationOption.find(option)
+              - unless modification_option.talent_id.nil?
+                %li
+                  Innate talent: #{Talent.find(modification_option.talent_id).name}
+              - unless modification_option.skill_id.nil?
+                %li
+                  Skill bonus: #{Skill.find(modification_option.skill_id).name}

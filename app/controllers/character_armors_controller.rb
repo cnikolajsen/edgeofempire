@@ -9,6 +9,51 @@ class CharacterArmorsController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def add_armor
+    if params[:character_armors]
+      item = Armor.find(params[:character_armors][:armor_id]) unless params[:character_armors][:armor_id].blank?
+
+      if item
+        character_gear = CharacterArmor.where(:character_id => @character.id, :armor => params[:character_armors][:armor_id]).create
+        character_gear.update_attribute(:carried, params[:character_armors][:carried])
+        character_gear.update_attribute(:equipped, params[:character_armors][:equipped])
+        flash[:success] = "#{item.name} added"
+      else
+        flash[:error] = "Item not found."
+      end
+    end
+    redirect_to :back
+  end
+
+  def remove_armor
+    item = CharacterArmor.where(:character_id => @character.id, :id => params[:character_armor_id]).first
+    name = item.armor.name
+    item.delete
+    flash[:success] = "'#{name}' removed"
+    redirect_to :back
+  end
+
+  def place_armor
+    item = CharacterArmor.where(:character_id => @character.id, :id => params[:character_armor_id]).first
+
+    if params[:action_id] == 'storage'
+      item.update_attribute(:carried, false)
+      item.update_attribute(:equipped, false)
+      flash[:success] = "'#{item.armor.name}' moved to storage."
+    elsif params[:action_id] == 'inventory'
+      item.update_attribute(:carried, true)
+      flash[:success] = "'#{item.armor.name}' moved to inventory."
+    elsif params[:action_id] == 'equip'
+      item.update_attribute(:equipped, true)
+      flash[:success] = "'#{item.armor.name}' is now equipped."
+    elsif params[:action_id] == 'unequip'
+      item.update_attribute(:equipped, false)
+      flash[:success] = "'#{item.armor.name}' is no longer equipped."
+    end
+
+    redirect_to :back
+  end
+
   def armor_attachment
     @character_armor = CharacterArmor.find(params[:character_armor_id])
     @armor = Armor.find(@character_armor.armor_id)
@@ -35,19 +80,17 @@ class CharacterArmorsController < ApplicationController
     end
   end
 
-  def armor_attachment_selection
-    unless params[:attachment_id].blank?
-      @attachment = ArmorAttachment.find(params[:attachment_id])
-
-      render :partial => "armor_attachment_info", :locals => { :attachment => @attachment, :character_attachment_id => nil, :active => nil, :armor_attachment_options => nil}
-    else
-      render :partial => "armor_attachment_info", :locals => { :attachment => nil, :character_attachment_id => nil, :active => nil, :armor_attachment_options => nil}
-    end
-  end
-
   def add_armor_attachment
-    @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
-    flash[:success] = "Attachment added"
+    unless params[:character_armor_attachment][:armor_attachment_id].blank?
+      @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
+      flash[:success] = "Attachment added"
+    end
+    if params[:character_armor_attachment][:description] || params[:character_armor_attachment][:armor_model_id]
+      armor = CharacterArmor.find(params[:character_armor_id])
+      armor.update_attribute(:description, params[:character_armor_attachment][:description])
+      armor.update_attribute(:armor_model_id, params[:character_armor_attachment][:armor_model_id])
+      flash[:success] = 'Character armor updated.'
+    end
     redirect_to :back
   end
 

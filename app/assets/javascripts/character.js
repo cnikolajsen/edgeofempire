@@ -1,6 +1,17 @@
+$('#character_armors_armor_id').change(function(){
+  $.ajax({
+    url: "/find/armor_selection",
+    type: "GET",
+    data: "armor_id="+$('#character_armors_armor_id').val(),
+    success: function(data) {
+      jQuery("#item-info").html(data);
+    }
+  })
+});
+
 $('#character_armor_attachment_armor_attachment_id').change(function(){
   $.ajax({
-    url: "/character/find/armor_attachment_selection",
+    url: "/find/armor_attachment_selection",
     type: "GET",
     data: "attachment_id="+$('#character_armor_attachment_armor_attachment_id').val(),
     success: function(data) {

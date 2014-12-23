@@ -64,6 +64,16 @@ class ArmorsController < ApplicationController
     end
   end
 
+  def armor_selection
+    if params[:armor_id]
+      item = Armor.find(params[:armor_id])
+      render :partial => "armor_info", :locals => { :armor => item}
+    else
+      render :partial => "armor_info", :locals => { :armor => nil}
+    end
+  end
+
+
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_armor

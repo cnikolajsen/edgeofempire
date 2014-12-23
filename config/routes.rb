@@ -86,7 +86,11 @@ EdgeOfEmpire::Application.routes.draw do
 
       # Armor
       get 'armor' => 'character_armors#show'
-      get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment'
+      post 'armor' => 'character_armors#add_armor'
+      get 'armor/:character_armor_id/remove' => 'character_armors#remove_armor', :as => :remove_armor
+      get 'armor/:character_armor_id/move/:action_id' => 'character_armors#place_armor', :as => :place_armor
+
+      get 'armor/:character_armor_id/attachments' => 'character_armors#armor_attachment', :as => :modify_armor
       post 'armor/:character_armor_id/attachments' => 'character_armors#add_armor_attachment'
       get 'armor/:armor_id/attachment/:attachment_id/remove' => 'character_armors#remove_armor_attachment'
       get 'armor/:armor_id/attachment/:attachment_id/option/:option_id/add' => 'character_armors#add_armor_attachment_option'
@@ -140,7 +144,9 @@ EdgeOfEmpire::Application.routes.draw do
   get 'find/obligation_selection' => 'character_obligations#obligation_selection'
   get 'find/duty_selection' => 'character_duties#duty_selection'
   get 'find/motivation_selection' => 'character_motivations#motivation_selection'
-  get 'find/armor_attachment_selection' => 'characters#armor_attachment_selection'
+  get 'find/armor_selection' => 'armors#armor_selection'
+  get 'find/weapon_selection' => 'weapons#weapons_selection'
+  get 'find/armor_attachment_selection' => 'armor_attachments#armor_attachment_selection'
   get 'find/force_power_selection' => 'character_force_powers#force_power_selection'
   get 'find/weapon_attachment_selection' => 'character_weapons#weapon_attachment_selection'
   get 'find/equipment_selection' => 'character_gears#equipment_selection'
@@ -161,7 +167,7 @@ EdgeOfEmpire::Application.routes.draw do
   get 'adversaries/:id/armor/attachment/:attachment_id/remove' => 'adversary_armors#remove_armor_attachment'
   get 'adversaries/:id/armor/attachment/:attachment_id/option/:option_id/add' => 'adversary_armors#add_armor_attachment_option'
   get 'adversaries/:id/armor/attachment/:attachment_id/option/:option_id/remove' => 'adversary_armors#remove_armor_attachment_option'
-  get 'adversaries/find/armor_attachment_selection' => 'adversaries#armor_attachment_selection'
+  #get 'adversaries/find/armor_attachment_selection' => 'adversaries#armor_attachment_selection'
 
   # Adversary Weapon routes.
   get 'adversaries/:id/weapons' => 'adversary_weapons#show', :as => :adversary_weapons
