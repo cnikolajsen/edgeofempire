@@ -108,9 +108,9 @@ EdgeOfEmpire::Application.routes.draw do
       get 'weapons' => 'character_weapons#show'
       get 'weapon/:character_weapon_id/attachments' => 'character_weapons#weapon_attachment'
       post 'weapon/:character_weapon_id/attachments' => 'character_weapons#add_weapon_attachment'
-      get 'weapon/attachment/:attachment_id/remove' => 'character_weapons#remove_weapon_attachment'
-      get 'weapon/attachment/:attachment_id/option/:option_id/add' => 'character_weapons#add_weapon_attachment_option'
-      get 'weapon/attachment/:attachment_id/option/:option_id/remove' => 'character_weapons#remove_weapon_attachment_option'
+      get 'weapon/:weapon_id/attachment/:attachment_id/remove' => 'character_weapons#remove_weapon_attachment'
+      get 'weapon/:weapon_id/attachment/:attachment_id/option/:option_id/add' => 'character_weapons#add_weapon_attachment_option'
+      get 'weapon/:weapon_id/attachment/:attachment_id/option/:option_id/remove' => 'character_weapons#remove_weapon_attachment_option'
 
       # Character Gear routes.
       get 'equipment' => 'character_gears#show', :as => :gear

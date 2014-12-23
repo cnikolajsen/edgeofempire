@@ -36,11 +36,11 @@
 %>
 <td style="text-align: center;">
 <% if character_skill.ranks != 0 and @skill_select_enabled %>
-  <%= link_to "-", "/characters/#{@character.id}/skills/#{skill.id}/rank_down", :remote => :true %>
+  <%= link_to "-", "skills/#{skill.id}/rank_down", :remote => :true %>
 <% end %>
 <%= character_skill.ranks %>
 <% if total_ranks < max_ranks and @skill_select_enabled %>
-  <%= link_to "+", "/characters/#{@character.id}/skills/#{skill.id}/rank_up", :remote => :true %>
+  <%= link_to "+", "skills/#{skill.id}/rank_up", :remote => :true %>
 <% end %>
 </td>
 <td style="text-align: center;"><%= "+#{character_skill.free_ranks_race}" unless character_skill.free_ranks_race == 0 %></td>

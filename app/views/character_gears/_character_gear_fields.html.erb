@@ -4,16 +4,16 @@
   </td>
   <td><%= item[:total_encumbrance] %></td>
   <td>
-    <%= link_to "- ", decrease_item_qty_path(@character, item[:id], item[:custom] ? 'custom' : '') unless item[:quantity] == 1 %>
+    <%= link_to "- ", user_character_decrease_item_qty_path(current_user, @character, item[:id], item[:custom] ? 'custom' : '') unless item[:quantity] == 1 %>
     <%= item[:quantity] %>
-    <%= link_to " +", increase_item_qty_path(@character, item[:id], item[:custom] ? 'custom' : '') %>
+    <%= link_to " +", user_character_increase_item_qty_path(current_user, @character, item[:id], item[:custom] ? 'custom' : '') %>
   </td>
   <td>
     <% if item[:carried] %>
-      <%= link_to "Carried", place_item_path(@character, item[:id], 'storage', item[:custom] ? 'custom' : ''), :class => 'label success' %>
+      <%= link_to "Carried", user_character_place_item_path(current_user, @character, item[:id], 'storage', item[:custom] ? 'custom' : ''), :class => 'label success' %>
     <% else %>
-      <%= link_to "Stored", place_item_path(@character, item[:id], 'inventory', item[:custom] ? 'custom' : ''), :class => 'label secondary' %>
+      <%= link_to "Stored", user_character_place_item_path(current_user, @character, item[:id], 'inventory', item[:custom] ? 'custom' : ''), :class => 'label secondary' %>
     <% end %>
-    <%= link_to "Remove", remove_item_path(@character, item[:id], item[:custom] ? 'custom' : ''), :class => 'label alert' %>
+    <%= link_to "Remove", user_character_remove_item_path(current_user, @character, item[:id], item[:custom] ? 'custom' : ''), :class => 'label alert' %>
   </td>
 </tr>

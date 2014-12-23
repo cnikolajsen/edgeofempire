@@ -284,34 +284,35 @@ class CharactersController < ApplicationController
       if @character.update_attributes(character_params)
         if !params[:destination].nil?
           if params[:destination] == 'gear'
-            message = 'Character equipment updated.'
+            flash[:success] = 'Character equipment updated'
           elsif params[:destination] == 'weapons'
-            message = 'Character weapons updated.'
-            format.html { redirect_to user_character_weapon_url(current_user, @character), notice: message }
+            flash[:success] = 'Character weapons updated'
+            format.html { redirect_to user_character_weapons_path(current_user, @character) }
           elsif params[:destination] == 'armor'
-            message = 'Character armor updated.'
-            format.html { redirect_to user_character_armor_url(current_user, @character), notice: message }
+            flash[:success] = 'Character armor updated'
+            format.html { redirect_to user_character_armor_path(current_user, @character) }
           elsif params[:destination] == 'talents'
-            message = 'Character talents updated.'
-            format.html { redirect_to user_character_talents_url(current_user, @character), notice: message }
+            flash[:success] = 'Character talents updated'
+            format.html { redirect_to user_character_talents_path(current_user, @character) }
           elsif params[:destination] == 'skills'
-            message = 'Character career free skill ranks saved.'
+            flash[:success] = 'Character career free skill ranks saved.'
           elsif params[:destination] == 'characteristics'
-            message = 'Character characteristics saved.'
+            flash[:success] = 'Characteristics updated'
+            format.html { redirect_to user_character_path(current_user, @character) }
           elsif params[:destination] == 'background'
-            message = 'Character background saved.'
+            flash[:success] = 'Background saved'
+            format.html { redirect_to user_character_background_path(current_user, @character)}
           elsif params[:destination] == 'obligation'
-            message = 'Character obligation saved.'
+            format.html { redirect_to user_character_obligation_path(current_user, @character) }
           elsif params[:destination] == 'motivation'
-            message = 'Character motivation saved.'
+            format.html { redirect_to user_character_motivation_path(current_user, @character) }
           end
-          #format.html { redirect_to "user_character_#{params[:destination]}".to_sym [current_user, @character], notice: message }
         else
           format.html { redirect_to user_character_path(current_user, @character), notice: 'Character was successfully updated.' }
         end
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @character.errors, status: :unprocessable_entity }
       end
     end
@@ -331,7 +332,7 @@ class CharactersController < ApplicationController
   def talents
     @character_page = 'talents'
     @character_state = character_state(@character)
-    @title = "#{@character.name} | Talents"
+    @title = '#{@character.name} | Talents'
 
     @talent_trees = Array.new
     unless @character.specialization_1.nil?
@@ -353,13 +354,13 @@ class CharactersController < ApplicationController
   def career_selection
     @career = Career.find(params[:career_id])
 
-    render :partial => "career_info", :locals => { :career => @career, :changed => :true }
+    render :partial => 'career_info', :locals => { :career => @career, :changed => :true }
   end
 
   def species_selection
     @species = Race.find(params[:species_id])
 
-    render :partial => "species_info", :locals => { :species => @species, :character => @character, :changed => :true }
+    render :partial => 'species_info', :locals => { :species => @species, :character => @character, :changed => :true }
   end
 
   def characteristics

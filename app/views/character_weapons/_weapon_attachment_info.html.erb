@@ -20,9 +20,9 @@
           <%= talent.name %>
           <% unless active.nil? %>
             <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -34,9 +34,9 @@
           <%= skill.name %> +1
           <% unless active.nil? %>
             <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -48,9 +48,9 @@
           <%= weapon_quality.name %> <% if aamo.weapon_quality_rank > 0 %>+<%= aamo.weapon_quality_rank %><% end %><% if aamo.weapon_quality_rank < 0 %><%= aamo.weapon_quality_rank %><% end %>
           <% unless active.nil? %>
             <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -60,9 +60,9 @@
           <strong>Damage Bonus:</strong> +<%= aamo.damage_bonus %>
           <% unless active.nil? %>
             <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -72,9 +72,9 @@
           <strong><%= aamo.custom %></strong>
           <% unless active.nil? %>
             <% if !weapon_attachment_options.weapon_attachment_modification_options.nil? and weapon_attachment_options.weapon_attachment_modification_options.include?(aamo.id.to_s) %>
-              <%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
+              <%= link_to "Remove", "attachment/#{character_attachment_id}/option/#{aamo.id}/remove" %>
             <% else %>
-              <%= link_to "Add", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
+              <%= link_to "Add", "attachment/#{character_attachment_id}/option/#{aamo.id}/add" %>
             <% end %>
           <% end %>
         </li>
@@ -82,7 +82,7 @@
     <% end -%>
   <% end -%>
   <% unless active.nil? %>
-    <li class="cta-button"><%= link_to "Remove", "/characters/#{@character.id}/weapon/attachment/#{character_attachment_id}/remove", :class => 'button tiny alert' %></li>
+    <li class="cta-button"><%= link_to "Remove", "attachment/#{character_attachment_id}/remove", :class => 'button tiny alert' %></li>
   <% end -%>
 </ul>
 <% end -%>
