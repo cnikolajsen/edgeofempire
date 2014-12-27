@@ -1,0 +1,49 @@
+%tr.nested-fields
+  %td
+    = character_weapon.weapon.name
+  %td
+    = character_weapon.weapon_model.name if character_weapon.weapon_model
+  %td
+    = character_weapon.description
+  %td
+    /= character_weapon.weapon.soak
+  %td
+    /= character_weapon.weapon.defense
+  %td
+    = character_weapon.weapon.encumbrance
+  %td
+    = character_weapon.weapon.rarity
+  %td
+    - if character_weapon.equipped
+      = link_to "Equipped", user_character_place_weapon_path(current_user, @character, character_weapon.id, 'unequip'), :class => 'label success'
+    - elsif character_weapon.carried
+      = link_to "Unequipped", user_character_place_weapon_path(current_user, @character, character_weapon.id, 'equip'), :class => 'label secondary'
+  %td
+    - if character_weapon.carried
+      = link_to "Carried", user_character_place_weapon_path(current_user, @character, character_weapon.id, 'storage'), :class => 'label success'
+    - else
+      = link_to "Stored", user_character_place_weapon_path(current_user, @character, character_weapon.id, 'inventory'), :class => 'label secondary'
+  %td
+    - unless character_weapon.character_weapon_attachments.blank?
+      %ul
+        - character_weapon.character_weapon_attachments.each do |caa|
+          - unless caa.weapon_attachment_id.blank?
+            - attachment = WeaponAttachment.find(caa.weapon_attachment_id)
+            %li
+              = attachment.name
+              - unless caa.weapon_attachment_modification_options.blank?
+                %ul
+                  - caa.weapon_attachment_modification_options.each do |option|
+                    - modification_option = WeaponAttachmentModificationOption.find(option)
+                    - unless modification_option.talent_id.nil?
+                      %li
+                        Innate talent:
+                        = Talent.find(modification_option.talent_id).name
+                    - unless modification_option.skill_id.nil?
+                      %li
+                        Skill bonus:
+                        = Skill.find(modification_option.skill_id).name
+  %td
+    = link_to "Modify", user_character_modify_weapon_path(current_user, @character, character_weapon.id), :class => 'label info'
+  %td
+    = link_to "Remove", user_character_remove_weapon_path(current_user, @character, character_weapon.id), :class => 'label alert', :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }

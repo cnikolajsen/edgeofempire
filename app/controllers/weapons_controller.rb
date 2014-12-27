@@ -68,6 +68,15 @@ class WeaponsController < ApplicationController
     end
   end
 
+  def weapon_selection
+    if params[:weapon_id]
+      item = Weapon.find(params[:weapon_id])
+      render :partial => "weapon_info", :locals => { :weapon => item}
+    else
+      render :partial => "weapon_info", :locals => { :weapon => nil}
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

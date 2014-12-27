@@ -54,6 +54,17 @@ class WeaponAttachmentsController < ApplicationController
     end
   end
 
+  def weapon_attachment_selection
+    unless params[:attachment_id].blank?
+      @attachment = WeaponAttachment.find(params[:attachment_id])
+
+      render :partial => "weapon_attachment_info", :locals => { :attachment => @attachment, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
+    else
+      render :partial => "weapon_attachment_info", :locals => { :attachment => nil, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
+    end
+  end
+
+
 private
   # Use callbacks to share common setup or constraints between actions.
   def set_weapon_attachment

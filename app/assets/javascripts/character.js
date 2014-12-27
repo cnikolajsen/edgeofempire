@@ -20,6 +20,28 @@ $('#character_armor_attachment_armor_attachment_id').change(function(){
   })
 });
 
+$('#character_weapon_attachment_weapon_attachment_id').change(function(){
+  $.ajax({
+    url: "/find/weapon_attachment_selection",
+    type: "GET",
+    data: "attachment_id="+$('#character_weapon_attachment_weapon_attachment_id').val(),
+    success: function(data) {
+      jQuery("#attachment-info").html(data);
+    }
+  })
+});
+
+$('#character_weapons_weapon_id').change(function(){
+  $.ajax({
+    url: "/find/weapon_selection",
+    type: "GET",
+    data: "weapon_id="+$('#character_weapons_weapon_id').val(),
+    success: function(data) {
+      jQuery("#item-info").html(data);
+    }
+  })
+});
+
 $('#character_career_id').change(function(){
   $.ajax({
     url: "/find/career_selection",
@@ -38,17 +60,6 @@ $('#character_race_id').change(function(){
     data: "species_id="+$('#character_race_id').val(),
     success: function(data) {
       jQuery("#species-info").html(data);
-    }
-  })
-});
-
-$('#character_weapon_attachment_weapon_attachment_id').change(function(){
-  $.ajax({
-    url: "/find/weapon_attachment_selection",
-    type: "GET",
-    data: "attachment_id="+$('#character_weapon_attachment_weapon_attachment_id').val(),
-    success: function(data) {
-      jQuery("#attachment-info").html(data);
     }
   })
 });

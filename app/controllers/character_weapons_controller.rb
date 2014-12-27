@@ -9,6 +9,51 @@ class CharacterWeaponsController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def add_weapon
+    if params[:character_weapons]
+      item = Weapon.find(params[:character_weapons][:weapon_id]) unless params[:character_weapons][:weapon_id].blank?
+
+      if item
+        character_gear = CharacterWeapon.where(:character_id => @character.id, :weapon => params[:character_weapons][:weapon_id]).create
+        character_gear.update_attribute(:carried, params[:character_weapons][:carried])
+        character_gear.update_attribute(:equipped, params[:character_weapons][:equipped])
+        flash[:success] = "#{item.name} added"
+      else
+        flash[:error] = "Item not found."
+      end
+    end
+    redirect_to :back
+  end
+
+  def remove_weapon
+    item = CharacterWeapon.where(:character_id => @character.id, :id => params[:character_weapon_id]).first
+    name = item.weapon.name
+    item.delete
+    flash[:success] = "'#{name}' removed"
+    redirect_to :back
+  end
+
+  def place_weapon
+    item = CharacterWeapon.where(:character_id => @character.id, :id => params[:character_weapon_id]).first
+
+    if params[:action_id] == 'storage'
+      item.update_attribute(:carried, false)
+      item.update_attribute(:equipped, false)
+      flash[:success] = "'#{item.weapon.name}' moved to storage."
+    elsif params[:action_id] == 'inventory'
+      item.update_attribute(:carried, true)
+      flash[:success] = "'#{item.weapon.name}' moved to inventory."
+    elsif params[:action_id] == 'equip'
+      item.update_attribute(:equipped, true)
+      flash[:success] = "'#{item.weapon.name}' is now equipped."
+    elsif params[:action_id] == 'unequip'
+      item.update_attribute(:equipped, false)
+      flash[:success] = "'#{item.weapon.name}' is no longer equipped."
+    end
+
+    redirect_to :back
+  end
+
   def weapon_attachment
     @character_weapon = CharacterWeapon.find(params[:character_weapon_id])
     @weapon = Weapon.find(@character_weapon.weapon_id)
@@ -32,19 +77,29 @@ class CharacterWeaponsController < ApplicationController
     end
   end
 
-  def weapon_attachment_selection
-    unless params[:attachment_id].blank?
-      @attachment = WeaponAttachment.find(params[:attachment_id])
-
-      render :partial => "weapon_attachment_info", :locals => { :attachment => @attachment, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
-    else
-      render :partial => "weapon_attachment_info", :locals => { :attachment => nil, :character_attachment_id => nil, :active => nil, :weapon_attachment_options => nil}
-    end
-  end
-
   def add_weapon_attachment
-    @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
-    flash[:success] = "Attachment added"
+    character_weapon = CharacterWeapon.find(params[:character_weapon_id])
+    unless params[:character_weapon_attachment][:weapon_attachment_id].blank?
+      # Check if there are any available hard points left.
+      hard_points_used = 0
+      CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id]).order(:id).each do |attachment|
+        hard_points_used += WeaponAttachment.where(:id => attachment.weapon_attachment_id).first.hard_points
+      end
+      weapon = Weapon.find(character_weapon.weapon_id)
+      logger.warn(hard_points_used)
+      logger.warn(weapon.hard_points)
+      if hard_points_used < weapon.hard_points
+        @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
+        flash[:success] = "Attachment added"
+      else
+        flash[:error] = "No hard points left on item."
+      end
+    end
+    if params[:character_weapon_attachment][:description] || params[:character_weapon_attachment][:weapon_model_id]
+      character_weapon.update_attribute(:description, params[:character_weapon_attachment][:description])
+      character_weapon.update_attribute(:weapon_model_id, params[:character_weapon_attachment][:weapon_model_id])
+      flash[:success] = 'Character weapon updated.'
+    end
     redirect_to :back
   end
 

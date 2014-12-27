@@ -110,7 +110,11 @@ EdgeOfEmpire::Application.routes.draw do
 
       # Character Weapon routes.
       get 'weapons' => 'character_weapons#show'
-      get 'weapon/:character_weapon_id/attachments' => 'character_weapons#weapon_attachment'
+      post 'weapons' => 'character_weapons#add_weapon'
+      get 'weapons/:character_weapon_id/remove' => 'character_weapons#remove_weapon', :as => :remove_weapon
+      get 'weapons/:character_weapon_id/move/:action_id' => 'character_weapons#place_weapon', :as => :place_weapon
+
+      get 'weapon/:character_weapon_id/attachments' => 'character_weapons#weapon_attachment', :as => :modify_weapon
       post 'weapon/:character_weapon_id/attachments' => 'character_weapons#add_weapon_attachment'
       get 'weapon/:weapon_id/attachment/:attachment_id/remove' => 'character_weapons#remove_weapon_attachment'
       get 'weapon/:weapon_id/attachment/:attachment_id/option/:option_id/add' => 'character_weapons#add_weapon_attachment_option'
@@ -145,10 +149,10 @@ EdgeOfEmpire::Application.routes.draw do
   get 'find/duty_selection' => 'character_duties#duty_selection'
   get 'find/motivation_selection' => 'character_motivations#motivation_selection'
   get 'find/armor_selection' => 'armors#armor_selection'
-  get 'find/weapon_selection' => 'weapons#weapons_selection'
+  get 'find/weapon_selection' => 'weapons#weapon_selection'
   get 'find/armor_attachment_selection' => 'armor_attachments#armor_attachment_selection'
   get 'find/force_power_selection' => 'character_force_powers#force_power_selection'
-  get 'find/weapon_attachment_selection' => 'character_weapons#weapon_attachment_selection'
+  get 'find/weapon_attachment_selection' => 'weapon_attachments#weapon_attachment_selection'
   get 'find/equipment_selection' => 'character_gears#equipment_selection'
 
   # General pages.

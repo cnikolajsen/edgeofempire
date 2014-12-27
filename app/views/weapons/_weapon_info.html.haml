@@ -1,0 +1,45 @@
+%ul.pricing-table
+  %li.title= weapon.name
+  %li.price
+    = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+    = weapon.price
+  %li.description= text_replace_tokens(weapon.description).html_safe
+  %li.bullet-item= weapon.skill.name unless weapon.skill.nil?
+  %li.bullet-item
+    Range: #{weapon.range}
+  %li.bullet-item
+    Damage: #{weapon.damage}
+  %li.bullet-item
+    Crit rating: #{weapon.crit}
+  %li.bullet-item
+    Enc: #{weapon.encumbrance}
+  %li.bullet-item
+    Rarity: #{weapon.rarity}
+  %li.bullet-item= render "weapons/weapon_qualities", :qualities => weapon.weapon_quality_ranks
+  - unless weapon.attachments.blank?
+    %li.title Attachments
+    - weapon.attachments.each do |caa|
+      %li.bullet-item
+        = caa.weapon_attachment.name
+        - unless caa.weapon_attachment_modification_options.blank?
+          %ul{:style => "font-size: 10px;"}
+            - caa.weapon_attachment_modification_options.each do |option|
+              - modification_option = WeaponAttachmentModificationOption.find(option)
+              - unless modification_option.talent_id.nil?
+                %li
+                  Innate talent: #{Talent.find(modification_option.talent_id).name}
+              - unless modification_option.skill_id.nil?
+                %li
+                  Skill bonus: #{Skill.find(modification_option.skill_id).name}
+              - unless modification_option.weapon_quality_id.nil?
+                %li
+                  Weapon Quality: #{WeaponQuality.find(modification_option.weapon_quality_id).name}
+                  - if modification_option.weapon_quality_rank > 0
+                    +#{modification_option.weapon_quality_rank}
+                  - if modification_option.weapon_quality_rank < 0
+                    = modification_option.weapon_quality_rank
+              - unless modification_option.damage_bonus.nil?
+                %li
+                  Damage bonus: +#{modification_option.damage_bonus}
+              - unless modification_option.custom.blank?
+                %li= modification_option.custom

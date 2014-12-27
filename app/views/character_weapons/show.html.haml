@@ -1,0 +1,53 @@
+.row
+  .small-12.columns
+    %h1= t '.title', :default => "Manage equipped weapons for #{@character.name}"
+.row
+  .small-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .small-12.medium-3.columns
+    = form_for :character_weapons do |f|
+      - grouped_options = Array.new
+      - WeaponCategory.where(:true).order(:name).each do |cat|
+        - grouped_options << [cat.name, Weapon.where(:weapon_category_id => cat.id).order(:name).collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
+      = f.select :weapon_id, grouped_options_for_select(grouped_options), {:prompt => "Select weapon"}
+      .row
+        .small-12.columns
+          #item-info
+      .row
+        .small-6.columns
+          = f.check_box :carried, {checked: true}
+          = f.label :carried
+        .small-6.columns
+          = f.check_box :equipped, {checked: false}
+          = f.label :equipped
+      .row
+        .small-12.columns
+          = f.submit 'Add Weapon', :class => 'button tiny'
+  .small-12.medium-9.columns
+    .row
+      .small-12.columns
+        %table.footable
+          %thead
+            %th{data: {toggle: 'true'}} Item
+            %th{data: {hide: 'all'}} Model
+            %th{data: {hide: 'all'}} Notes
+            %th{data: {hide: 'phone'}} Soak
+            %th{data: {hide: 'phone'}} Defense
+            %th{data: {hide: 'phone'}} Encumbrance
+            %th{data: {hide: 'phone'}} Rarity
+            %th{data: {hide: 'phone', sort: {ignore: 'true'}}} Equipped
+            %th{data: {hide: 'phone', sort: {ignore: 'true'}}} Carried
+            %th{data: {hide: 'all', sort: {ignore: 'true'}}} Attachments
+            %th{data: {hide: 'phone', sort: {ignore: 'true'}}}
+            %th{data: {hide: 'phone', sort: {ignore: 'true'}}}
+          %tbody#item-grid
+            - @character.character_weapons.each do |character_weapon|
+              - unless character_weapon.weapon.name == 'Unarmed'
+                = render :partial => 'character_weapon_row', :locals => { :character_weapon => character_weapon }
+        %caption
+          Weapons marked <span class="label success">Equipped</span> is carried by the character, ready to be drawn in combat. Equipped weapons will be shown with combat details on the character sheet.
+          %br/
+          Weapons marked as <span class="label success">Carried</span> is placed on the character's person and account for in calculating encumbrance.
+          %br/
+          Weapons marked as <span class="label secondary">Stored</span> is owned by the character but located somewhere else such as on the group's ship and is not included in character encumbrance.
