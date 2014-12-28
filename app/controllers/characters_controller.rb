@@ -205,6 +205,11 @@ class CharactersController < ApplicationController
           end
         end
 
+        # Create a placeholder character name if no name was given.
+        if @character.name.blank?
+          @character.update_attribute(:name, "#{@character.race.name} #{@character.career.name} #(#{@character.id})")
+        end
+
         format.html { redirect_to user_character_url(current_user, @character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
