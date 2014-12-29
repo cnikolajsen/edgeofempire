@@ -16,7 +16,7 @@ class TalentTree < ActiveRecord::Base
 
   # Check if a talent tree is a force tree.
   def force_tree
-    force_trees = [ "Force Sensitive Exile" ]
+    force_trees = [ "Force Sensitive Exile", "Force Sensitive Emergent" ]
 
     if force_trees.include? self.name
       true
