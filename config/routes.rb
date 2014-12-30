@@ -10,7 +10,6 @@ EdgeOfEmpire::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-
   resources :adversaries do
     resources :adversary_armors
     resources :adversary_weapons
@@ -38,6 +37,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :duties
   resources :sidebars
   resources :books
+  resources :force_powers
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   devise_scope :user do

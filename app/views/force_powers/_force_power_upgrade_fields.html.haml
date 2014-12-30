@@ -1,0 +1,28 @@
+.small-12.medium-3.columns.panel{:style => 'float: left;'}
+  .row
+    .small-12.columns= f.input :name, :placeholder => 'Upgrade name', label: false
+  .row
+    .small-12.columns= f.input :description, label: false, as: :text, :input_html => { :rows => 10 }
+  .row.collapse
+    .small-12.columns
+      = f.input :ranked
+  .row.collapse
+    .small-6.columns
+      %span.prefix.radius= f.label :cost, :class=> 'inline'
+    .small-6.columns
+      = f.input :cost, label: false
+  .row.collapse
+    .small-6.columns
+      %span.prefix.radius= f.label :row, :class=> 'inline'
+    .small-6.columns
+      = f.input :row, label: false
+  .row.collapse
+    .small-6.columns
+      %span.prefix.radius= f.label :column, :class=> 'inline'
+    .small-6.columns
+      = f.input :column, label: false
+  .row.collapse
+    .small-6.columns
+      %span.prefix.radius= f.label :colspan, :class=> 'inline'
+    .small-6.columns
+      = f.input :colspan, label: false

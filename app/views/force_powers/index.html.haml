@@ -1,0 +1,29 @@
+- content_for :title do
+  Force Powers
+
+.row
+  .small-12.columns
+    %h1
+      Force Powers
+      - if can? :create, @force_power
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_force_power_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @force_powers.each do |tree|
+        %li
+          %a{href: "#tree-#{tree.id}"}= tree.name
+  .small-12.medium-9.columns{role: "content"}
+    - @force_powers.each do |tree|
+
+      %article
+        %a{name: "tree-#{tree.id}"}
+        %h3
+          = link_to tree.name, force_power_path(tree)
+          - if can? :create, @force_power
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_force_power_path(tree)
+        = markdown(text_replace_tokens(tree.description))
+        %hr/

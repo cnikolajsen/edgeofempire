@@ -1,0 +1,37 @@
+= simple_form_for @force_power, html: { class: 'form-horizontal' } do |f|
+  - if @force_power.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@force_power.errors.count, "error")
+        prohibited this talent tree from being saved:
+      %ul
+        - @force_power.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, :class => 'inline right'
+        .small-9.columns
+          = f.input :name, :placeholder => 'Force power name', label: false
+      .row
+        .small-3.columns
+          = f.label :description, :class => 'inline right'
+        .small-9.columns
+          = f.input :description, :placeholder => 'Force power description', label: false, as: :text, :input_html => { :rows => 10 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+
+  .row#force-power-upgrades
+    = f.simple_fields_for :force_power_upgrades do |upgrade|
+      = render 'force_power_upgrade_fields', :f => upgrade
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to_add_association 'Add upgrade', f, :force_power_upgrades, 'data-association-insertion-method' => "append", 'data-association-insertion-node' => "#force-power-upgrades", :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), force_powers_path, :class => 'button secondary'

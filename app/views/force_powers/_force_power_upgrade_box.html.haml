@@ -1,0 +1,35 @@
+- case upgrade.colspan
+  - when 1
+    - columns = 3
+  - when 2
+    - columns = 4
+  - when 3
+    - columns = 6
+  - when 5
+    - columns = 9
+
+- case upgrade.column
+  - when 1
+    - link_left = 0
+    - link_right = 1
+  - when 2
+    - link_left = 2
+    - link_right = 3
+  - when 3
+    - link_left = 4
+    - link_right = 5
+  - when 4
+    - link_left = 6
+    - link_right = 7
+- link_right_class = ''
+- link_left_class = ''
+
+- if power.upgrade_links_horizontal && power.upgrade_links_horizontal[upgrade.row-1][link_right] == 1
+  - link_right_class = 'link-right'
+-if power.upgrade_links_horizontal && power.upgrade_links_horizontal[upgrade.row-1][link_left] == 1
+  - link_left_class = 'link-left'
+
+%div{:class => "small-#{columns} columns #{link_right_class} #{link_left_class}"}
+  .panel.radius.talent-box
+    %strong= upgrade.name
+    = simple_format text_replace_tokens(upgrade.description)

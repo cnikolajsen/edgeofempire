@@ -1,0 +1,60 @@
+- content_for :title do
+  = @force_power.name
+
+.row
+  .small-12.columns
+    %h1
+      = @force_power.name
+.row
+  .small-12.columns
+    %ul.small-block-grid-1.medium-block-grid-1.large-block-grid-1{:id => 'item-grid'}
+      %li.description.talent-tree
+        .row
+          .small-12.columns
+            .small-12.columns.panel{:style => "height:auto;"}
+              = simple_format text_replace_tokens(@force_power.description).html_safe
+        .row
+          - unless @force_power.upgrade_links_vertical.nil?
+            - @force_power.upgrade_links_vertical[0].each do |link|
+              .small-1.columns{:class => ('link-down-active' if link == 1)}
+                &nbsp;
+        .row
+          .small-12.columns
+            - @upgrades_row_1.each_with_index do |upg, i|
+              = render :partial => 'force_power_upgrade_box', :locals => { :power => @force_power, :upgrade => upg, :row => 1, :column => 1}
+        .row
+          - unless @force_power.upgrade_links_vertical.nil?
+            - @force_power.upgrade_links_vertical[1].each do |link|
+              .small-1.columns{:class => ('link-down-active' if link == 1)}
+                &nbsp;
+        .row
+          .small-12.columns
+            - @upgrades_row_2.each_with_index do |upg, i|
+              = render :partial => 'force_power_upgrade_box', :locals => { :power => @force_power, :upgrade => upg, :row => 1, :column => 1}
+        .row
+          - unless @force_power.upgrade_links_vertical.nil?
+            - @force_power.upgrade_links_vertical[2].each do |link|
+              .small-1.columns{:class => ('link-down-active' if link == 1)}
+                &nbsp;
+        .row
+          .small-12.columns
+            - @upgrades_row_3.each_with_index do |upg, i|
+              = render :partial => 'force_power_upgrade_box', :locals => { :power => @force_power, :upgrade => upg, :row => 1, :column => 1}
+        .row
+          - unless @force_power.upgrade_links_vertical.nil?
+            - @force_power.upgrade_links_vertical[3].each do |link|
+              .small-1.columns{:class => ('link-down-active' if link == 1)}
+                &nbsp;
+        .row
+          .small-12.columns
+            - @upgrades_row_4.each_with_index do |upg, i|
+              = render :partial => 'force_power_upgrade_box', :locals => { :power => @force_power, :upgrade => upg, :row => 1, :column => 1}
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            force_powers_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @force_power
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_force_power_path(@force_power), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @force_power, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

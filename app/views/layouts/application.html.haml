@@ -46,6 +46,9 @@
                     #{link_to "Sidebars", sidebars_path}
                   %li{:class => ("active" if current_page('books'))}
                     #{link_to "Books", books_path}
+                  %li{:class => ("active" if current_page('adversaries'))}
+                    = link_to "Adversaries", adversaries_path
+
               - if can? :manage, Character
                 %li.has-dropdown{:class => ("active" if ['characters', 'new_character'].include?(@page))}
                   %a{href: "#"} Characters
@@ -78,8 +81,6 @@
                   #{link_to "Talent trees", talent_trees_path}
                 %li{:class => ("active" if current_page('talents'))}
                   #{link_to "Talents", talents_path}
-            /%li{:class => ("active" if current_page('careers'))}
-            /  #{link_to "Careers", careers_path}
             %li.has-dropdown{:class => ("active" if ['weapons', 'weapon_qualities', 'weapon_attachments', 'armor', 'armor_qualities', 'armor_attachments', 'gear'].include?(@page))}
               #{link_to "Equipment", '#'}
               %ul.dropdown
@@ -89,12 +90,15 @@
                   #{link_to "Armor", armors_path}
                 %li{:class => ("active" if current_page('gear'))}
                   #{link_to "Gear", gears_path}
-            %li{:class => ("active" if current_page('obligations'))}
-              = link_to "Obligations", obligations_path
-            %li{:class => ("active" if current_page('duties'))}
-              = link_to "Duties", duties_path
-            %li{:class => ("active" if current_page('adversaries'))}
-              = link_to "Adversaries", adversaries_path
+            %li.has-dropdown{:class => ("active" if ['obligations', 'duties'].include?(@page))}
+              #{link_to "Backgrounds", '#'}
+              %ul.dropdown
+                %li{:class => ("active" if current_page('obligations'))}
+                  = link_to "Obligations", obligations_path
+                %li{:class => ("active" if current_page(''))}
+                  = link_to "Duties", duties_path
+            %li{:class => ("active" if current_page('force_powers'))}
+              = link_to "Force Powers", force_powers_path
     #flash_messages
       = render :partial => 'layouts/flash'
     = yield
