@@ -23,7 +23,7 @@
           %td= @weapon.crit
           %td= @weapon.price
           %td= render "weapon_qualities", :qualities => @weapon.weapon_quality_ranks
-    %p= simple_format(@weapon.description)
+    %p= simple_format(text_replace_tokens(@weapon.description))
     - if @weapon.weapon_models.any?
       %h5 Models include
       %ul
