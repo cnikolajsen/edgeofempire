@@ -16,7 +16,7 @@ ActiveAdmin.register_page "Dashboard" do
       column do
         panel "Recent Characters" do
           ul do
-            Character.where(:true).order("id desc").limit(5).map do |character|
+            Character.where(:true).order("id desc").map do |character|
               unless character.user.nil?
                 li do
                   link_to(character.name, user_character_path(character.user, character)) + ' by ' +  character.user.email
