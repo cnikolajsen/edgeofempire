@@ -59,8 +59,13 @@ class CharacterTalentsController < ApplicationController
 
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}".to_sym, @tree["talent_#{@row}_#{@column}"])
     talent_options = Array.new
+    if talent_options.any?
+      @character_talent_tree["talent_#{@row}_#{@column}_options"].each_with_index do |option, index|
+        talent_options[index] = option
+      end
+    end
     if params[:option]
-      talent_options << params[:option_value]
+      talent_options[params[:option].to_i] = params[:option_value]
     end
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}_options".to_sym, talent_options)
 
