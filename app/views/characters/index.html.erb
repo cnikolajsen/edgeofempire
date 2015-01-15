@@ -1,4 +1,11 @@
 <%- model_class = Character -%>
+<% unless can? :manage, Character %>
+  <div class="row">
+    <div class="medium-12 columns panel warning">
+      You have not yet been granted access to the functionality of this site. Please await help from the site admin.
+    </div>
+  </div>
+<% end %>
 <div class="row">
   <div class="medium-12 columns">
     <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
