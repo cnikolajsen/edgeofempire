@@ -19,7 +19,7 @@ ActiveAdmin.register_page "Dashboard" do
             Character.where(:true).order("id desc").limit(5).map do |character|
               unless character.user.nil?
                 li do
-                  #link_to(character.name, character_path(character)) + ' by ' +  character.user.email
+                  link_to(character.name, user_character_path(character.user, character)) + ' by ' +  character.user.email
                 end
               end
             end
