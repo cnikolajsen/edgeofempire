@@ -114,21 +114,21 @@
       %thead
         %tr
           %th Name
-          %th Rank
+          %th Rank/Option
           %th Description
       %tbody
         - @character.talents.each_with_index do |element, index|
           - talent = Talent.find_by_id(element[0])
           - count = ''
           -  options = ''
-          -  if element[1]['count'] > 1
-            - unless element[1]['options'].empty?
-              - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
-            - else
-              - options = "<span class='label success round'>#{element[1]['count']}</span>"
+          /-  if element[1]['count'] > 1
+          - unless element[1]['options'].empty?
+            - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
           - else
-            - unless element[1]['options'].empty?
-              - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
+            - options = "<span class='label success round'>#{element[1]['count']}</span>"
+          /- else
+          /  - unless element[1]['options'].empty?
+          /    - options = "<span class='label success round'>#{element[1]['options'].join(', ')}</span>"
 
           %tr
             %td
