@@ -1,6 +1,6 @@
 class CharacterTalentsController < ApplicationController
   include CharactersHelper
-  before_action :find_character#, :except => [:weapon_attachment_selection]
+  before_action :find_character
 
   def show
     @character_page = 'talents'
@@ -26,14 +26,28 @@ class CharacterTalentsController < ApplicationController
 
   def untrain_specialization
     specialization = TalentTree.find(params[:spec_id])
-    set_experience_cost(@character.id, 'specialization', specialization.id, params[:spec_num], direction = 'down')
+    set_experience_cost(@character.id, 'specialization', specialization.id, params[:spec_num], 'down')
     @character["specialization_#{params[:spec_num]}".to_sym] = nil
     @character.save
-    CharacterTalent.where(:character_id => @character.id, :talent_tree_id => params[:spec_id]).delete_all
+    CharacterTalent.where(character_id: @character.id, talent_tree_id: params[:spec_id]).delete_all
     if params[:spec_num].to_i == 1
-      CharacterStartingSkillRank.where(:character_id => @character.id, :granted_by => 'specialization').delete_all
-      CharacterExperienceCost.where(:character_id => @character.id, :resource_type => 'skill', :granted_by => 'specialization').delete_all
+      CharacterStartingSkillRank.where(character_id: @character.id, granted_by: 'specialization').delete_all
+      CharacterExperienceCost.where(character_id: @character.id, resource_type: 'skill', granted_by: 'specialization').delete_all
     end
+
+    # Delete all talent experience entries and recalculate.
+    CharacterExperienceCost.where(character_id: @character.id, resource_type: 'talent').delete_all
+    unless @character.character_talents.empty?
+      @character.character_talents.each do |talent_tree|
+        talent_tree.attributes.each do |key, talent_id|
+          if key.match(/talent_[\d]_[\d]$/) && !talent_id.nil?
+            row = key.scan(/\d/)[0].to_i
+            set_experience_cost(@character.id, 'talent', talent_id, row, 'up', nil)
+          end
+        end
+      end
+    end
+
     redirect_to user_character_talents_path(current_user, @character), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
 
@@ -48,11 +62,6 @@ class CharacterTalentsController < ApplicationController
     if params[:option]
       talent_options << params[:option_value]
     end
-    #3.times do |o_key|
-    #  unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key +1}-option_#{o_key}"].nil?
-    #    talent_options << params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"] unless params["tree_#{tree.id}-talent_#{r_key + 1}_#{c_key + 1}-option_#{o_key}"].empty?
-    #  end
-    #end
     @character_talent_tree.update_attribute("talent_#{@row}_#{@column}_options".to_sym, talent_options)
 
     # Save experience entry.
