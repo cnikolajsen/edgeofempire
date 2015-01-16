@@ -25,7 +25,7 @@ ActiveAdmin.register Motivation do
       f.input :career
       f.input :name
       f.input :description
-      f.input :category, as: :select, collection: %w(Ambition Cause Relationship Discovery Conflict)
+      f.input :category, as: :select, collection: %w(Ambition Cause Conflict Creation Discovery Relationship)
     end
     f.actions
   end
