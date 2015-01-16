@@ -6,51 +6,51 @@
   <section class="top-bar-section">
     <!-- Left Nav Section -->
     <ul class="left">
-      <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", user_character_path(current_user, @character) %></li>
+      <li<% if @character_page == 'view' %> class="active"<% end %>><%= link_to "View", user_character_path(@character.user, @character) %></li>
       <li class="<% if @character_menu == 'basics' %>active<% end %> has-dropdown">
         <a href="#">Basics</a>
         <ul class="dropdown">
-          <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(current_user, @character) %></li>
-          <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(current_user, @character) %></li>
-          <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(current_user, @character) %></li>
-          <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(current_user, @character) %></li>
-          <li<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(current_user, @character) %></li>
-          <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(current_user, @character) %></li>
+          <li<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(@character.user, @character) %></li>
         </ul>
       </li>
-      <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", user_character_talents_path(current_user, @character) %></li>
-      <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", user_character_skills_path(current_user, @character) %></li>
+      <li<% if @character_page == 'talents' %> class="active"<% end %>><%= link_to "Specializations", user_character_talents_path(@character.user, @character) %></li>
+      <li<% if @character_page == 'skills' %> class="active"<% end %>><%= link_to "Skills", user_character_skills_path(@character.user, @character) %></li>
       <% if @character.force_rating > 0 %>
-        <li<% if @character_page == 'forcepowers' %> class="active"<% end %>><%= link_to "Force Powers", user_character_force_powers_path(current_user, @character) %></li>
+        <li<% if @character_page == 'forcepowers' %> class="active"<% end %>><%= link_to "Force Powers", user_character_force_powers_path(@character.user, @character) %></li>
       <% end %>
       <li class="<% if @character_menu == 'equipment' %>active<% end %> has-dropdown">
         <a href="#">Equipment</a>
         <ul class="dropdown">
-          <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_path(current_user, @character) %></li>
-          <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", user_character_weapons_path(current_user, @character) %></li>
-          <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", user_character_gear_path(current_user, @character) %></li>
-          <li<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", user_character_cybernetics_path(current_user, @character) %></li>
+          <li<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", user_character_weapons_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", user_character_gear_path(@character.user, @character) %></li>
+          <li<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", user_character_cybernetics_path(@character.user, @character) %></li>
         </ul>
       </li>
-      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", user_character_adventure_logs_path(current_user, @character) %></li>
+      <li<% if @character_page == 'log' %> class="active"<% end %>><%= link_to "Log", user_character_adventure_logs_path(@character.user, @character) %></li>
     </ul>
   </section>
 </nav>
 <% if @character_menu == 'basics' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'basics' %> class="active"<% end %>><%= link_to "Description", user_character_description_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'characteristics' %> class="active"<% end %>><%= link_to "Characteristics", user_character_characteristics_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'background' %> class="active"<% end %>><%= link_to "Background", user_character_background_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'obligation' %> class="active"<% end %>><%= link_to "Obligation", user_character_obligation_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'duty' %> class="active"<% end %>><%= link_to "Duty", user_character_duty_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'motivation' %> class="active"<% end %>><%= link_to "Motivation", user_character_motivation_path(@character.user, @character) %></dd>
   </dl>
 <% elsif @character_menu == 'equipment' %>
   <dl class="sub-nav" data-no-turbolink>
-    <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", user_character_weapons_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", user_character_gear_path(current_user, @character) %></dd>
-    <dd<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", user_character_cybernetics_path(current_user, @character) %></dd>
+    <dd<% if @character_page == 'armor' %> class="active"<% end %>><%= link_to "Armor", user_character_armor_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'weapons' %> class="active"<% end %>><%= link_to "Weapons", user_character_weapons_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'gear' %> class="active"<% end %>><%= link_to "Gear", user_character_gear_path(@character.user, @character) %></dd>
+    <dd<% if @character_page == 'cybernetics' %> class="active"<% end %>><%= link_to "Cybernetics", user_character_cybernetics_path(@character.user, @character) %></dd>
   </dl>
 <% else %>
 <br />

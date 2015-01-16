@@ -1,6 +1,8 @@
 class CharacterMotivationsController < ApplicationController
   include CharactersHelper
   before_action :find_character, :except => [:motivation_selection]
+  before_filter :authenticate_user!
+  before_filter :authenticate_owner
 
   def show
     @character_menu = 'basics'
@@ -52,4 +54,7 @@ private
     @character = Character.friendly.find(character_id)
   end
 
+  def authenticate_owner
+    redirect_to user_character_path(@character.user, @character) unless current_user == @character.user
+  end
 end

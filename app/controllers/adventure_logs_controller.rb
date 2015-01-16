@@ -1,5 +1,7 @@
 class AdventureLogsController < ApplicationController
   before_action :find_character
+  before_filter :authenticate_user!
+  before_filter :authenticate_owner
 
   def new
     @adventure_log = AdventureLog.new
@@ -60,12 +62,17 @@ class AdventureLogsController < ApplicationController
   end
 
   private
-    def find_character
-      character_id = params[:character_id] || params[:id]
-      @character = Character.friendly.find(character_id)
-    end
 
-    def adventure_log_params
-      params.require(:adventure_log).permit(:date, :log, :experience)
-    end
+  def find_character
+    character_id = params[:character_id] || params[:id]
+    @character = Character.friendly.find(character_id)
+  end
+
+  def adventure_log_params
+    params.require(:adventure_log).permit(:date, :log, :experience)
+  end
+
+  def authenticate_owner
+    redirect_to user_character_path(@character.user, @character) unless current_user == @character.user
+  end
 end
