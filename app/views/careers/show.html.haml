@@ -7,7 +7,7 @@
 
 .row
   .small-12.columns
-    %p= @career.description.html_safe
+    %p= markdown @career.description
 
     %h2 Specializations
     - @career.talent_trees.each_with_index do |tree, i|
@@ -15,7 +15,7 @@
         .small-12.columns
           %a{:name => tree.name}
           %h4= tree.name
-          %p= tree.description.html_safe
+          %p= markdown tree.description
 
           %ul.small-block-grid-4.talent-tree
             = render :partial => 'talent_trees/talent_tree_box', :locals => { :talent_tree => tree, :row => 1, :column => 1} unless tree.talent_1_1.nil?
