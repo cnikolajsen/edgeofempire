@@ -1,8 +1,8 @@
 class CharacterMotivationsController < ApplicationController
   include CharactersHelper
-  before_action :find_character, :except => [:motivation_selection]
+  before_action :find_character, except: [:motivation_selection]
   before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_filter :authenticate_owner, except: [:motivation_selection]
 
   def show
     @character_menu = 'basics'

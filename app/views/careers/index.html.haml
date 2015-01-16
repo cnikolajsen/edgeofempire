@@ -25,5 +25,5 @@
           - if can? :create, @career
             %small
               = link_to "<i class='fi-pencil'></i>".html_safe, edit_career_path(career)
-        = simple_format(text_replace_tokens(career.description))
+        = markdown(text_replace_tokens(career.description))
         %hr/

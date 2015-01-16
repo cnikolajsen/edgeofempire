@@ -3,6 +3,7 @@ class WeaponsController < ApplicationController
   before_action :set_weapon, only: [:show, :edit, :update, :destroy]
   before_filter :set_page
   load_and_authorize_resource
+  skip_authorize_resource :only => :weapon_selection
 
   def index
     @weapon_categories = WeaponCategory.where(:true).order(:name)

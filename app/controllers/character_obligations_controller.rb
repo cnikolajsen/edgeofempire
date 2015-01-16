@@ -1,8 +1,8 @@
 class CharacterObligationsController < ApplicationController
   include CharactersHelper
-  before_action :find_character, :except => [:obligation_selection]
+  before_action :find_character, except: [:obligation_selection]
   before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_filter :authenticate_owner, except: [:obligation_selection]
 
   def show
     @character_menu = 'basics'

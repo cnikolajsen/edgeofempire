@@ -3,7 +3,6 @@ class ArmorQualitiesController < ApplicationController
   before_action :set_armor_quality, only: [:show, :edit, :update, :destroy]
   before_filter :set_page
   load_and_authorize_resource
-  #load_and_authorize_resource param_method: 'permitted_params.armor_quality'
 
   def index
     @qualities = ArmorQuality.where(:true).order(:name)

@@ -3,6 +3,7 @@ class WeaponAttachmentsController < ApplicationController
   before_action :set_weapon_attachment, only: [:show, :edit, :update, :destroy]
   before_filter :set_page
   load_and_authorize_resource
+  skip_authorize_resource :only => :weapon_attachment_selection
 
   def index
     @attachments = WeaponAttachment.where(:true).order(:name)

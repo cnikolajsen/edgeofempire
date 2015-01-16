@@ -1,8 +1,8 @@
 class CharacterForcePowersController < ApplicationController
   include CharactersHelper
-  before_action :find_character, :except => [:force_power_selection]
+  before_action :find_character, except: [:force_power_selection]
   before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_filter :authenticate_owner, except: [:force_power_selection]
 
   def show
     @character_page = 'forcepowers'

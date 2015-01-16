@@ -1,8 +1,8 @@
 class CharacterDutiesController < ApplicationController
   include CharactersHelper
-  before_action :find_character, :except => [:duty_selection]
+  before_action :find_character, except: [:duty_selection]
   before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_filter :authenticate_owner, except: [:duty_selection]
 
   def show
     @character_menu = 'basics'

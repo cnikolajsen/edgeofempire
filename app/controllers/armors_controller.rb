@@ -3,6 +3,7 @@ class ArmorsController < ApplicationController
   before_action :set_armor, only: [:show, :edit, :update, :destroy]
   before_filter :set_page
   load_and_authorize_resource
+  skip_authorize_resource :only => :armor_selection
 
   def index
     @armor_categories = ArmorCategory.where(:true).order(:name)
