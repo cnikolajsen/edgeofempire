@@ -22,10 +22,12 @@ class CharacterMotivationsController < ApplicationController
   end
 
   def add_motivation
-    unless params[:character_motivation][:motivation_id].nil?
+    unless params[:character_motivation][:motivation_id].blank?
       @motivation = CharacterMotivation.where(:character_id => @character.id, :motivation_id => params[:character_motivation][:motivation_id], :magnitude => 0).create
+      flash[:success] = "Motivation added"
+    else
+      flash[:error] = "Select Motivation"
     end
-    flash[:success] = "Motivation added"
     redirect_to :back
   end
 

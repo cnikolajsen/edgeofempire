@@ -22,10 +22,13 @@ class CharacterObligationsController < ApplicationController
   end
 
   def add_obligation
-    unless params[:character_obligation][:obligation_id].nil?
+    CharacterObligation.where(:character_id => @character.id, :obligation_id => nil).delete_all
+    unless params[:character_obligation][:obligation_id].blank?
       @obligation = CharacterObligation.where(:character_id => @character.id, :obligation_id => params[:character_obligation][:obligation_id], :magnitude => 0).create
+      flash[:success] = "Obligation added"
+    else
+      flash[:error] = "Select Obligation"
     end
-    flash[:success] = "Obligation added"
     redirect_to :back
   end
 

@@ -22,10 +22,12 @@ class CharacterDutiesController < ApplicationController
   end
 
   def add_duty
-    unless params[:character_duty][:duty_id].nil?
+    unless params[:character_duty][:duty_id].blank?
       @duty = CharacterDuty.where(:character_id => @character.id, :duty_id => params[:character_duty][:duty_id], :magnitude => 0).create
+      flash[:success] = "Duty added"
+    else
+      flash[:error] = "Select Duty"
     end
-    flash[:success] = "Duty added"
     redirect_to :back
   end
 
