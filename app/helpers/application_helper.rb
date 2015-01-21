@@ -64,4 +64,7 @@ module ApplicationHelper
     markdown.render(text).html_safe
   end
 
+  def one_line(&block)
+    haml_concat capture_haml(&block).gsub("\n", '').gsub('\\n', "\n").html_safe
+  end
 end
