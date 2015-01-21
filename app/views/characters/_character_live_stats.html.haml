@@ -1,0 +1,47 @@
+.small-12.columns
+  .panel.live-stats
+    %h5 Life
+    = simple_form_for [@character.user, @character] do |f|
+      .row
+        .small-3.columns
+          = f.label :strain
+        .small-6.columns
+          = f.number_field :strain, min: 0
+        .small-3.columns
+      /.row
+      /  .progress.small-12.alert.round
+      /    %span.meter{style: "width: 50%"}
+      .row
+        .small-3.columns
+          = f.label :wounds
+        .small-6.columns
+          = f.number_field :wounds, min: 0
+        .small-3.columns
+      %h5 Ongoing Effects
+      .row
+        .small-3.columns
+        .small-9.columns
+          = f.input :staggered
+          = f.input :immobilized
+          = f.input :disoriented
+
+      %h5
+        Criticals
+        = "(+#{@character.character_criticals.count * 10})"
+      .reveal-modal#criticalModal{ :'data-reveal' => '' }
+      - if  @character.character_criticals.any?
+        %table{width: '100%'}
+          - @character.character_criticals.each do |crit|
+            %tr
+              %td
+                %strong= crit.effect
+                - one_line do
+                  - crit.severity.times do
+                    = image_tag("dice/difficulty.png", :alt => "difficulty", :title => "Difficulty Dice", :size => '10')
+                  %br
+                  %small= crit.description
+              %td
+                = link_to 'Heal', user_character_heal_critical_path(@character.user, @character, crit.id)
+      = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'criticalModal', :'data-reveal-ajax' => 'true'
+
+

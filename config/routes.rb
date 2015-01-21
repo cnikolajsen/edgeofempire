@@ -50,11 +50,6 @@ EdgeOfEmpire::Application.routes.draw do
   resources :users do
     resources :characters do
       resources :adventure_logs
-      #resources :character_armors
-      #resources :character_weapons
-      #resources :character_gears
-      #resources :character_force_powers
-      #resources :character_skills
 
       # Character routes.
       get 'description' => 'characters#edit', :as => :description
@@ -66,6 +61,11 @@ EdgeOfEmpire::Application.routes.draw do
       post 'obligation' => 'character_obligations#add_obligation'
       post 'obligation/update' => 'character_obligations#update_obligation'
       get 'obligation/:obligation_id/remove' => 'character_obligations#remove_obligation'
+
+      # Character criticals routes.
+      get 'criticals' => 'character_criticals#new'
+      post 'criticals' => 'character_criticals#add'
+      get 'critical/:critical_id/heal' => 'character_criticals#heal', :as => :heal_critical
 
       # Character duty routes.
       get 'duty' => 'character_duties#show'
@@ -138,7 +138,6 @@ EdgeOfEmpire::Application.routes.draw do
       get 'force-power/:force_power_id/remove' => 'character_force_powers#remove_force_power'
       get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => { format: 'js' }
       get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => { format: 'js' }
-
     end
   end
 

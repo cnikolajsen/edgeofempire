@@ -81,7 +81,7 @@ class Character < ActiveRecord::Base
   has_many :force_powers, :through => :character_force_powers
   has_many :character_cybernetics, :dependent => :destroy
   has_many :gears, :through => :character_cybernetics
-
+  has_many :character_criticals, :dependent => :destroy
 
   has_many :character_talents, :dependent => :destroy
   has_many :talents, :through => :character_talents
@@ -107,6 +107,7 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :character_talents, :allow_destroy => true
   accepts_nested_attributes_for :character_starting_skill_ranks, :allow_destroy => true
   accepts_nested_attributes_for :adventure_logs, :allow_destroy => true
+  accepts_nested_attributes_for :character_criticals, :reject_if => proc { |a| a['effect'].blank? }, :allow_destroy => true
 
   default_scope { order('name ASC') }
 

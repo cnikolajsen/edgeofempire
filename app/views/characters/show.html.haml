@@ -229,6 +229,9 @@
                     :target => "_blank"
 
   .medium-3.columns
+    - if @character.active?
+      .row
+        = render :partial => 'character_live_stats'
     .row
       = render :partial => 'character_experience_usage'
     .row

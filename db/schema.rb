@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024083027) do
+ActiveRecord::Schema.define(version: 20150120103533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,17 @@ ActiveRecord::Schema.define(version: 20141024083027) do
     t.datetime "updated_at"
   end
 
+  create_table "character_criticals", force: true do |t|
+    t.integer  "character_id"
+    t.string   "effect"
+    t.text     "description"
+    t.integer  "severity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "character_criticals", ["character_id"], name: "index_character_criticals_on_character_id", using: :btree
+
   create_table "character_custom_gears", force: true do |t|
     t.integer  "character_id"
     t.string   "description"
@@ -476,8 +487,8 @@ ActiveRecord::Schema.define(version: 20141024083027) do
     t.integer  "cunning"
     t.integer  "willpower"
     t.integer  "presence"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "user_id"
     t.text     "bio"
     t.integer  "credits"
@@ -495,6 +506,12 @@ ActiveRecord::Schema.define(version: 20141024083027) do
     t.string   "image_url"
     t.string   "slug"
     t.string   "subspecies"
+    t.integer  "campaign_id"
+    t.integer  "strain",           default: 0
+    t.integer  "wounds",           default: 0
+    t.boolean  "staggered",        default: false
+    t.boolean  "immobilized",      default: false
+    t.boolean  "disoriented",      default: false
   end
 
   add_index "characters", ["slug"], name: "index_characters_on_slug", unique: true, using: :btree

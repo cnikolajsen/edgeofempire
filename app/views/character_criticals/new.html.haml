@@ -1,0 +1,10 @@
+= simple_form_for :character_criticals do |f|
+  = f.input :effect
+  = f.input :description, as: :text
+  = f.input :severity
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit 'Save critical', :class => 'button'
+        /= link_to t('.cancel', :default => t("helpers.links.cancel")), |
+        /  armor_path, :class => 'button secondary'                    |
