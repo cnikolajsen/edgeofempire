@@ -153,6 +153,7 @@ EdgeOfEmpire::Application.routes.draw do
   get 'find/force_power_selection' => 'character_force_powers#force_power_selection'
   get 'find/weapon_attachment_selection' => 'weapon_attachments#weapon_attachment_selection'
   get 'find/equipment_selection' => 'character_gears#equipment_selection'
+  get 'ajax/criticals(/:effect)' => 'character_criticals#criticals_ajax'
 
   # General pages.
   get "names/human", :to => "pages#human_naming_tables", :as => :human_names

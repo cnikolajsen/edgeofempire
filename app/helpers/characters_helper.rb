@@ -227,4 +227,188 @@ module CharactersHelper
   def skill_total_ranks(character_skill)
     character_skill.ranks + skill_total_free_ranks(character_skill)
   end
+
+  def character_critical_types(name = nil)
+    criticals = []
+    criticals << {
+      name: 'Minor Nick',
+      description: 'The target suffers 1 strain.',
+      severity: 1,
+      range: '01 - 05'
+    }
+    criticals << {
+      name: 'Slowed Down',
+      description: 'The target can only act during the last allied Initiative slot on his next turn.',
+      severity: 1,
+      range: '06 - 10'
+    }
+    criticals << {
+      name: 'Sudden Jolt',
+      description: 'The target drops whatever is in hand.',
+      severity: 1,
+      range: '11 - 15'
+    }
+    criticals << {
+      name: 'Distracted',
+      description: 'The target cannot perform a free maneuver during his next turn.',
+      severity: 1,
+      range: '16 - 20'
+    }
+    criticals << {
+      name: 'Off-Balance',
+      description: 'Add [setback] to his next skill check.',
+      severity: 1,
+      range: '21 - 25'
+    }
+    criticals << {
+      name: 'Discouraging Wound',
+      description: 'Flip one light side Destiny point to a dark side Destiny Point (reverse if NPC).',
+      severity: 1,
+      range: '26 - 30'
+    }
+    criticals << {
+      name: 'Stunned',
+      description: 'The target is staggered until the end of his next turn.',
+      severity: 1,
+      range: '31 - 35'
+    }
+    criticals << {
+      name: 'Stinger',
+      description: 'Increase difficulty of next check by one.',
+      severity: 1,
+      range: '36 - 40'
+    }
+    criticals << {
+      name: 'Bowled Over',
+      description: 'The target is knocked prone and suffers 1 strain.',
+      severity: 2,
+      range: '41 - 45'
+    }
+    criticals << {
+      name: 'Head Ringer',
+      description: '',
+      severity: 2,
+      range: '46 - 50'
+    }
+    criticals << {
+      name: 'Fearsome Wound',
+      description: '',
+      severity: 2,
+      range: '51 - 55'
+    }
+    criticals << {
+      name: 'Agonizing Wound',
+      description: '',
+      severity: 2,
+      range: '56 - 60'
+    }
+    criticals << {
+      name: 'Slightly Dazed',
+      description: '',
+      severity: 2,
+      range: '61 - 65'
+    }
+    criticals << {
+      name: 'Scattered Senses',
+      description: '',
+      severity: 2,
+      range: '66 - 70'
+    }
+    criticals << {
+      name: 'Hamstrung',
+      description: '',
+      severity: 2,
+      range: '71 - 75'
+    }
+    criticals << {
+      name: 'Overpowered',
+      description: '',
+      severity: 2,
+      range: '76 - 80'
+    }
+    criticals << {
+      name: 'Winded',
+      description: '',
+      severity: 2,
+      range: '81 - 85'
+    }
+    criticals << {
+      name: 'Compromised',
+      description: '',
+      severity: 2,
+      range: '86 - 90'
+    }
+    criticals << {
+      name: 'At the Brink',
+      description: '',
+      severity: 3,
+      range: '91 - 95'
+    }
+    criticals << {
+      name: 'Crippled',
+      description: '',
+      severity: 3,
+      range: '96 - 100'
+    }
+    criticals << {
+      name: 'Maimed',
+      description: '',
+      severity: 3,
+      range: '101 - 105'
+    }
+    criticals << {
+      name: 'Horrific Injury',
+      description: '',
+      severity: 3,
+      range: '106 - 110'
+    }
+    criticals << {
+      name: 'Temporary Lame',
+      description: '',
+      severity: 3,
+      range: '111 - 115'
+    }
+    criticals << {
+      name: 'Blinded',
+      description: '',
+      severity: 3,
+      range: '116 - 120'
+    }
+    criticals << {
+      name: 'Knocked Senseless',
+      description: '',
+      severity: 3,
+      range: '121 - 125'
+    }
+    criticals << {
+      name: 'Gruesome Injury',
+      description: '',
+      severity: 4,
+      range: '126 - 130'
+    }
+    criticals << {
+      name: 'Bleeding Out',
+      description: '',
+      severity: 4,
+      range: '131 - 140'
+    }
+    criticals << {
+      name: 'The end is Nigh',
+      description: '',
+      severity: 4,
+      range: '141 - 150'
+    }
+    criticals << {
+      name: 'Dead',
+      description: '',
+      severity: nil,
+      range: '151 +'
+    }
+
+    if name
+      criticals = criticals.select {|crit| crit[:name] == name }
+    end
+
+    criticals
+  end
 end

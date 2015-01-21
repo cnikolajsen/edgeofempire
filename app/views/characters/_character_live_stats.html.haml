@@ -35,11 +35,12 @@
             %tr
               %td
                 %strong= crit.effect
-                - one_line do
-                  - crit.severity.times do
-                    = image_tag("dice/difficulty.png", :alt => "difficulty", :title => "Difficulty Dice", :size => '10')
-                  %br
-                  %small= crit.description
+                - if crit.severity
+                  - one_line do
+                    - crit.severity.times do
+                      = image_tag("dice/difficulty.png", :alt => "difficulty", :title => "Difficulty Dice", :size => '10')
+                    %br
+                    %small= crit.description
               %td
                 = link_to 'Heal', user_character_heal_critical_path(@character.user, @character, crit.id)
       = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'criticalModal', :'data-reveal-ajax' => 'true'

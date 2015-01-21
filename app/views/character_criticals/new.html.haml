@@ -1,10 +1,23 @@
 = simple_form_for :character_criticals do |f|
-  = f.input :effect
-  = f.input :description, as: :text
-  = f.input :severity
+  .row
+    .small-3.columns
+      = f.label :effect
+    .small-9.columns
+      = f.input :effect, as: :select, label: false, collection: @critical_effects
+  .row
+    .small-3.columns
+      = f.label :description
+    .small-9.columns
+      = f.input :description, as: :text, label: false
+  .row
+    .small-3.columns
+      = f.label :severity
+    .small-9.columns
+      = f.input :severity, as: :select, label: false, collection: [['Easy', 1], ['Average', 2], ['Hard', 3], ['Daunting', 4]]
   .row
     .small-12.columns
       .form-actions
         = f.submit 'Save critical', :class => 'button'
+        = link_to '&#215;'.html_safe, '', class: "close-reveal-modal"
         /= link_to t('.cancel', :default => t("helpers.links.cancel")), |
         /  armor_path, :class => 'button secondary'                    |

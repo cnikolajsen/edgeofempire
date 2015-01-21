@@ -1,10 +1,15 @@
 class CharacterCriticalsController < ApplicationController
   layout 'modal'
-  before_action :find_character
+  before_action :find_character, except: :criticals_ajax
   before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_filter :authenticate_owner, except: :criticals_ajax
+  include CharactersHelper
 
   def new
+    @critical_effects = []
+    character_critical_types.each do |crit|
+      @critical_effects << ["[#{crit[:range]}] #{crit[:name]}", crit[:name]]
+    end
   end
 
   def add
@@ -21,6 +26,19 @@ class CharacterCriticalsController < ApplicationController
     CharacterCritical.find(params[:critical_id]).destroy
     flash[:success] = 'Critical healed'
     redirect_to :back
+  end
+
+  def criticals_ajax
+    if params[:effect]
+      critical = character_critical_types(params[:effect])
+      respond_to do |format|
+        format.json { render :json => {:message => "Success", :criticals => critical} }
+      end
+    else
+      respond_to do |format|
+        format.json { render :json => {:message => "Success", :criticals => character_critical_types} }
+      end
+    end
   end
 
   private
