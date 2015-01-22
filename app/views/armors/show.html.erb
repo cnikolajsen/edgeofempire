@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <p><%= markdown(@armor.description) %></p>
+    <p><%= markdown(text_replace_tokens(@armor.description)) %></p>
 
     <dl class="dl-horizontal">
       <dt><strong><%= model_class.human_attribute_name(:defense) %>:</strong></dt>
@@ -30,7 +30,7 @@
       <% unless attachment.armor_quality_ranks.blank? %>
         <li class="title">Base modification</li>
         <% attachment.armor_quality_ranks.each do |qual| %>
-          <li class="bullet-item"><strong><%= qual.armor_quality.name %></strong><br /><%= markdown(qual.armor_quality.description) %></li>
+          <li class="bullet-item"><strong><%= qual.armor_quality.name %></strong><br /><%= markdown(text_replace_tokens(qual.armor_quality.description)) %></li>
         <% end -%>
       <% end -%>
       <% unless attachment.armor_attachment_modification_options.blank? %>

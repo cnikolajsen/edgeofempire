@@ -23,7 +23,7 @@
           %td= @weapon.crit
           %td= @weapon.price
           %td= render "weapon_qualities", :qualities => @weapon.weapon_quality_ranks
-    %p= simple_format(text_replace_tokens(@weapon.description))
+    %p= markdown(text_replace_tokens(@weapon.description))
     - if @weapon.weapon_models.any?
       %h5 Models include
       %ul
@@ -38,7 +38,7 @@
             %li.price
               = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
               = attachment.price
-            %li.description= text_replace_tokens(attachment.description).html_safe
+            %li.description= markdown(text_replace_tokens(attachment.description))
             %li.bullet-item
               %strong Hard Point cost:
               = attachment.hard_points

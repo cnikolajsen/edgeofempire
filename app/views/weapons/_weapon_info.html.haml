@@ -3,7 +3,7 @@
   %li.price
     = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
     = weapon.price
-  %li.description= text_replace_tokens(weapon.description).html_safe
+  %li.description= markdown(text_replace_tokens(weapon.description))
   %li.bullet-item= weapon.skill.name unless weapon.skill.nil?
   %li.bullet-item
     Range: #{weapon.range}
