@@ -382,6 +382,41 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
   end
 
+  def stagger_ajax
+    @character.update_attribute(:staggered, params[:state])
+    respond_to do |format|
+      format.json  { render json: { message: 'Success' } }
+    end
+  end
+
+  def immobilize_ajax
+    @character.update_attribute(:immobilized, params[:state])
+    respond_to do |format|
+      format.json  { render json: { message: 'Success' } }
+    end
+  end
+
+  def disorient_ajax
+    @character.update_attribute(:disoriented, params[:state])
+    respond_to do |format|
+      format.json  { render json: { message: 'Success' } }
+    end
+  end
+
+  def strain_ajax
+    @character.update_attribute(:strain, params[:value])
+    respond_to do |format|
+      format.json  { render json: { message: 'Success' } }
+    end
+  end
+
+  def wound_ajax
+    @character.update_attribute(:wounds, params[:value])
+    respond_to do |format|
+      format.json  { render json: { message: 'Success' } }
+    end
+  end
+
   def set_activate
     @character.activate
     @character.save

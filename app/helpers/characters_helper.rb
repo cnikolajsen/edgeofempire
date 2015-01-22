@@ -286,121 +286,121 @@ module CharactersHelper
     }
     criticals << {
       name: 'Head Ringer',
-      description: '',
+      description: 'The target increases the difficulty of all Intellect and Cunning checks by one until the end of the encounter.',
       severity: 2,
       range: '46 - 50'
     }
     criticals << {
       name: 'Fearsome Wound',
-      description: '',
+      description: 'The target increases the difficulty of all Presence and Willpower checks by one until the end of the encounter.',
       severity: 2,
       range: '51 - 55'
     }
     criticals << {
       name: 'Agonizing Wound',
-      description: '',
+      description: 'The target increases the difficulty of all Brawn and Agility checks by one until the end of the encounter.',
       severity: 2,
       range: '56 - 60'
     }
     criticals << {
       name: 'Slightly Dazed',
-      description: '',
+      description: 'The target is disoriented until the end of the encounter.',
       severity: 2,
       range: '61 - 65'
     }
     criticals << {
       name: 'Scattered Senses',
-      description: '',
+      description: 'The target removes all [boost] from skill checks until the end of the encounter.',
       severity: 2,
       range: '66 - 70'
     }
     criticals << {
       name: 'Hamstrung',
-      description: '',
+      description: 'The target loses his free maneuver until the end of the encounter.',
       severity: 2,
       range: '71 - 75'
     }
     criticals << {
       name: 'Overpowered',
-      description: '',
+      description: 'The target leaves himself open, and the attacker may immediately attempt another free attack against him, using the exact same pool as the original attack.',
       severity: 2,
       range: '76 - 80'
     }
     criticals << {
       name: 'Winded',
-      description: '',
+      description: 'Until the end of the encounter, the target cannot voluntarily suffer strain to activate any abilities or gain additional maneuvers.',
       severity: 2,
       range: '81 - 85'
     }
     criticals << {
       name: 'Compromised',
-      description: '',
+      description: 'Increase difficulty of all skill checks by one until the end of the encounter.',
       severity: 2,
       range: '86 - 90'
     }
     criticals << {
       name: 'At the Brink',
-      description: '',
+      description: 'The target suffers 1 strain each time he performs an action.',
       severity: 3,
       range: '91 - 95'
     }
     criticals << {
       name: 'Crippled',
-      description: '',
+      description: 'One of the target\'s limbs (selected by the GM) is crippled until healed or replaced. Increase difficulty of all checks that require use of that limb by one.',
       severity: 3,
       range: '96 - 100'
     }
     criticals << {
       name: 'Maimed',
-      description: '',
+      description: 'One of the target\'s limbs (selected by the CM) is permanently lost. Unless the target has a cybernetic replacement, the target cannot perform actions that would require the use of that limb. All other actions gain [setback].',
       severity: 3,
       range: '101 - 105'
     }
     criticals << {
       name: 'Horrific Injury',
-      description: '',
+      description: 'Randomly roll 1 d 10 to determine one of the target\'s characteristics— 1 -3 for Brawn. 4-6 for Agility, 7 for Intellect, 8 for Cunning, 9 for Presence, 10 for Willpower. Until this Critical Injury is healed, treat that characteristic as one point lower.',
       severity: 3,
       range: '106 - 110'
     }
     criticals << {
       name: 'Temporary Lame',
-      description: '',
+      description: 'Until this Critical Injury is healed, the target cannot perform more than one maneuver during his turn.',
       severity: 3,
       range: '111 - 115'
     }
     criticals << {
       name: 'Blinded',
-      description: '',
+      description: 'The target can no longer see. Upgrade the difficulty of all checks twice. Upgrade the difficulty of Perception and Vigilance checks three times.',
       severity: 3,
       range: '116 - 120'
     }
     criticals << {
       name: 'Knocked Senseless',
-      description: '',
+      description: 'The target is staggered for the remainder of the encounter.',
       severity: 3,
       range: '121 - 125'
     }
     criticals << {
       name: 'Gruesome Injury',
-      description: '',
+      description: 'Randomly roll 1 d 10 to determine one of the target\'s characteristics— 1 -3 for Brawn. 4-6 for Agility, 7 for Intellect, 8 for Cunning, 9 for Presence, 10 for Willpower. That characteristic is permanently reduced by one, to a minimum of one.',
       severity: 4,
       range: '126 - 130'
     }
     criticals << {
       name: 'Bleeding Out',
-      description: '',
+      description: 'Every round, the target suffers 1 wound and 1 strain at the beginning of his turn. For every five wounds he suffers beyond his wound threshold, he suffers one additional Critical Injury. Roll on the chart, suffering the injury (if he suffers this result a second time due to this, roll again).',
       severity: 4,
       range: '131 - 140'
     }
     criticals << {
       name: 'The end is Nigh',
-      description: '',
+      description: 'The target will die after the last Initiative slot during the next round.',
       severity: 4,
       range: '141 - 150'
     }
     criticals << {
       name: 'Dead',
-      description: '',
+      description: 'Complete, obliterated death.',
       severity: nil,
       range: '151 +'
     }

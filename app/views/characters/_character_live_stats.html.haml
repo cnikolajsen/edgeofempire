@@ -1,7 +1,8 @@
 .small-12.columns
   .panel.live-stats
     %h5 Life
-    = simple_form_for [@character.user, @character] do |f|
+    = form_for [@character.user, @character] do |f|
+      = hidden_field_tag 'slug', @character.slug
       .row
         .small-3.columns
           = f.label :strain
@@ -21,9 +22,14 @@
       .row
         .small-3.columns
         .small-9.columns
-          = f.input :staggered
-          = f.input :immobilized
-          = f.input :disoriented
+          = f.check_box :staggered
+          = f.label :staggered
+          %br
+          = f.check_box :immobilized
+          = f.label :immobilized
+          %br
+          = f.check_box :disoriented
+          = f.label :disoriented
 
       %h5
         Criticals

@@ -16,9 +16,7 @@
 //= require jquery.ui.all
 //= require foundation
 //= require cocoon
-//= require character
-//= require character_criticals
-//= require lib/footable.all.min
+//= require_tree .
 
 $(function(){ $(document).foundation(); });
 

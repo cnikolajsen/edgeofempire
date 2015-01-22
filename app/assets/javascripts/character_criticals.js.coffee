@@ -6,6 +6,3 @@ $('#character_criticals_effect').on 'change', ->
   $.ajax(url: "/ajax/criticals/" + encodeURIComponent($('#character_criticals_effect').val())).done (json) ->
     $('#character_criticals_description').val(json.criticals[0].description)
     $('#character_criticals_severity').val(json.criticals[0].severity)
-
-
-

@@ -73,6 +73,9 @@ class CharacterSheetPdf < Prawn::Document
         text_box 'WOUNDS', at: [bounds.left, bounds.top], width: bounds.width, height: 16, overflow: :shrink_to_fit, size: 10, style: :bold, align: :center, valign: :bottom
         fill_color '000000'
         text_box "#{@character.wound_threshold}", at: [bounds.left, (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        if @character.wounds > 0
+          text_box "#{@character.wounds}", at: [(bounds.left + 50), (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        end
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box 'THRESHOLD', at: [bounds.left, (bounds.top - 55)], width: (bounds.width / 2), height: 10, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center
@@ -95,6 +98,9 @@ class CharacterSheetPdf < Prawn::Document
         text_box 'STRAIN', at: [bounds.left, bounds.top], width: bounds.width, height: 16, overflow: :shrink_to_fit, size: 10, style: :bold, align: :center, valign: :bottom
         fill_color '000000'
         text_box "#{@character.strain_threshold}", at: [bounds.left, (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        if @character.strain > 0
+          text_box "#{@character.strain}", at: [(bounds.left + 50), (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        end
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box 'THRESHOLD', at: [bounds.left, (bounds.top - 55)], width: (bounds.width / 2), height: 10, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center
@@ -315,6 +321,10 @@ class CharacterSheetPdf < Prawn::Document
         rectangle [(bounds.right - 13), (bounds.top - 20)], 10, 10
         fill_and_stroke
         text_box "STAGGERED", width: bounds.width, height: 10, overflow: :shrink_to_fit, size: 5, style: :bold, align: :left, valign: :center, at: [(bounds.left + 3), (bounds.top - 20)]
+        if @character.staggered
+          fill_color '000000'
+          text_box "X", width: 10, height: 10, size: 7, style: :bold, align: :left, valign: :center, at: [(bounds.right - 10), (bounds.top - 20)]
+        end
 
         fill_color '751010'
         rectangle [bounds.left, (bounds.top - 36)], bounds.width, 10
@@ -323,6 +333,10 @@ class CharacterSheetPdf < Prawn::Document
         rectangle [(bounds.right - 13), (bounds.top - 36)], 10, 10
         fill_and_stroke
         text_box "IMMOBILIZED", width: bounds.width, height: 10, overflow: :shrink_to_fit, size: 5, style: :bold, align: :left, valign: :center, at: [(bounds.left + 3), (bounds.top - 36)]
+        if @character.immobilized
+          fill_color '000000'
+          text_box "X", width: 10, height: 10, size: 7, style: :bold, align: :left, valign: :center, at: [(bounds.right - 10), (bounds.top - 36)]
+        end
 
         fill_color '751010'
         rectangle [bounds.left, (bounds.top - 52)], bounds.width, 10
@@ -331,6 +345,10 @@ class CharacterSheetPdf < Prawn::Document
         rectangle [(bounds.right - 13), (bounds.top - 52)], 10, 10
         fill_and_stroke
         text_box "DISORIENTED", width: bounds.width, height: 10, overflow: :shrink_to_fit, size: 5, style: :bold, align: :left, valign: :center, at: [(bounds.left + 3), (bounds.top - 52)]
+        if @character.disoriented
+          fill_color '000000'
+          text_box "X", width: 10, height: 10, size: 7, style: :bold, align: :left, valign: :center, at: [(bounds.right - 10), (bounds.top - 52)]
+        end
 
         fill_color '751010'
         rectangle [bounds.left, (bounds.top - 68)], bounds.width, 10

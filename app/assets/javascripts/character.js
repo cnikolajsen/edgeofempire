@@ -108,6 +108,52 @@ $('#character_gears_gear_id').change(function(){
   })
 });
 
+$('#character_strain').change(function(){
+  $.ajax({
+    url: $('#slug').val() +  '/strain/' + $('#character_strain').val(),
+    type: 'PUT',
+    success: function(data) {
+      $('.live-stats').effect('highlight', {}, 1000);
+    }
+  });
+});
+$('#character_wounds').change(function(){
+  $.ajax({
+    url: $('#slug').val() +  '/wound/' + $('#character_wounds').val(),
+    type: 'PUT',
+    success: function(data) {
+      $('.live-stats').effect('highlight', {}, 1000);
+    }
+  });
+});
+$('#character_staggered').change(function(){
+  $.ajax({
+    url: $('#slug').val() +  '/stagger/' + $('#character_staggered').is(':checked'),
+    type: 'PUT',
+    success: function(data) {
+      $('.live-stats').effect('highlight', {}, 1000);
+    }
+  });
+});
+$('#character_disoriented').change(function(){
+  $.ajax({
+    url: $('#slug').val() +  '/disorient/' + $('#character_disoriented').is(':checked'),
+    type: 'PUT',
+    success: function(data) {
+      $('.live-stats').effect('highlight', {}, 1000);
+    }
+  })
+});
+$('#character_immobilized').change(function(){
+  $.ajax({
+    url: $('#slug').val() +  '/immobilize/' + $('#character_immobilized').is(':checked'),
+    type: 'PUT',
+    success: function(data) {
+      $('.live-stats').effect('highlight', {}, 1000);
+    }
+  })
+});
+
 function save_character_talent_option(character_id, element, tree, row, column, option) {
   $.ajax({
     url: "talents/" + tree + "/" + row + "/" + column + "/learn/" + option + "/" + element.value,
