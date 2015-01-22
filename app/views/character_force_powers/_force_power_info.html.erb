@@ -70,7 +70,7 @@
         </div>
       </div>
     </li>
-    <li class="cta-button"><%= link_to "Remove power", "/characters/#{@character.id}/force-power/#{power.id}/remove", :class => 'button tiny alert' %></li>
+    <li class="cta-button"><%= link_to "Remove power", "force-power/#{power.id}/remove", :class => 'button tiny alert' %></li>
   <% end -%>
 </ul>
 <% end -%>
