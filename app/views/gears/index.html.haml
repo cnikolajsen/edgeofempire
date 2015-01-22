@@ -11,18 +11,18 @@
 
 .row
   .small-12.columns
-    %table.responsive
+    %table.footable{ data: { sort: 'false', page: { size: 1000 } } }
       %thead
         %tr
-          %th Name
-          %th Price
-          %th Encum
-          %th Rarity
+          %th{ data: { toggle: 'true' } } Name
+          %th{ data: { hide: 'all' } }
+          %th{ data: { hide: 'phone' } } Price
+          %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
+          %th{ data: { hide: 'phone' } } Rarity
       - @gear_categories.each do |category|
         - if category.gears.any?
           %tr
-            %td{colspan: "1", style: "background-color: #000; color: #fff;"}= category.name.pluralize
-            %td{colspan: "3", style: "background-color: #000; color: #fff;"} &nbsp;
+            %th{colspan: "4", style: "background-color: #000; color: #fff;"}= category.name.pluralize
           - category.gears.each do |gear|
             %tr
               %td
@@ -30,6 +30,7 @@
                 - if can? :edit, @gear
                   %small
                     = link_to "<i class='fi-pencil'></i>".html_safe, edit_gear_path(gear)
+              %td= markdown(text_replace_tokens(gear.description))
               %td= gear.price
               %td= gear.encumbrance
               %td= gear.rarity

@@ -26,16 +26,15 @@
           %th Dam
           %th Crit
           %th Range
-          %th{data: {hide: "phone"}} Encum
-          %th{data: {hide: "phone"}} HP
+          %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
+          %th{ data: { hide: 'phone', name: 'Hard points' }} HP
           %th{data: {hide: "phone"}} Price
           %th{data: {hide: "phone"}} Rarity
           %th{data: {hide: "phone"}} Special
       - @weapon_categories.each do |category|
         - if category.weapons.any?
           %tr
-            %th{colspan: "1", style: "background-color: #000; color: #fff;"}= category.name.pluralize
-            %th{colspan: "9", style: "background-color: #000; color: #fff;"} &nbsp;
+            %th{colspan: "10", style: "background-color: #000; color: #fff;"}= category.name.pluralize
           - category.weapons.each do |weapon|
             %tr
               %td

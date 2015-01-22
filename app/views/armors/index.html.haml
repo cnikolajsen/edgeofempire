@@ -18,16 +18,17 @@
 
 .row
   .small-12.columns
-    %table.responsive
+    %table.footable{ data: { sort: 'false', page: { size: 1000 } } }
       %thead
         %tr
-          %th Name
+          %th{ data: { toggle: 'true', sort: { initial: 'true' } } } Name
+          %th{ data: { hide: 'all' } }
           %th Defense
           %th Soak
-          %th Price
-          %th Encum
-          %th HP
-          %th Rarity
+          %th{ data: { hide: 'phone' } } Price
+          %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
+          %th{ data: { hide: 'phone', name: 'Hard points' }} HP
+          %th{ data: { hide: 'phone' } } Rarity
       - @armors.each do |armor|
         %tr
           %td
@@ -35,6 +36,7 @@
             - if can? :edit, @armor
               %small
                 = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
+          %td= armor.description
           %td= armor.defense
           %td= armor.soak
           %td= armor.price
