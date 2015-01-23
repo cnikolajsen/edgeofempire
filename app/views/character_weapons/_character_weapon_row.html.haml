@@ -6,12 +6,22 @@
   %td
     = character_weapon.description
   %td
-    /= character_weapon.weapon.soak
+    %span.footable-details-label Skill:
+    = character_weapon.weapon.skill.name
   %td
-    /= character_weapon.weapon.defense
+    %span.footable-details-label Damage:
+    = character_weapon.weapon.damage
   %td
+    %span.footable-details-label Critical:
+    = character_weapon.weapon.crit
+  %td
+    %span.footable-details-label Range:
+    = character_weapon.weapon.range
+  %td
+    %span.footable-details-label Encumrance:
     = character_weapon.weapon.encumbrance
   %td
+    %span.footable-details-label Rarity:
     = character_weapon.weapon.rarity
   %td
     - if character_weapon.equipped
@@ -25,6 +35,7 @@
       = link_to "Stored", user_character_place_weapon_path(current_user, @character, character_weapon.id, 'inventory'), :class => 'label secondary'
   %td
     - unless character_weapon.character_weapon_attachments.blank?
+      %span.footable-details-label Modifications:
       %ul
         - character_weapon.character_weapon_attachments.each do |caa|
           - unless caa.weapon_attachment_id.blank?

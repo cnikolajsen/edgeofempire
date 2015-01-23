@@ -18,7 +18,7 @@
 
 .row
   .small-12.columns
-    %table.footable{ data: { sort: 'false', page: { size: 1000 } } }
+    %table.footable{ data: { sort: 'false', page: 'false' } }
       %thead
         %tr
           %th{ data: { toggle: 'true', sort: { initial: 'true' } } } Name
@@ -29,17 +29,18 @@
           %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
           %th{ data: { hide: 'phone', name: 'Hard points' }} HP
           %th{ data: { hide: 'phone' } } Rarity
-      - @armors.each do |armor|
-        %tr
-          %td
-            = link_to armor.name, armor_path(armor)
-            - if can? :edit, @armor
-              %small
-                = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
-          %td= armor.description
-          %td= armor.defense
-          %td= armor.soak
-          %td= armor.price
-          %td= armor.encumbrance
-          %td= armor.hard_points
-          %td= armor.rarity
+      %tbody
+        - @armors.each do |armor|
+          %tr
+            %td
+              = link_to armor.name, armor_path(armor)
+              - if can? :edit, @armor
+                %small
+                  = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
+            %td= armor.description
+            %td= armor.defense
+            %td= armor.soak
+            %td= armor.price
+            %td= armor.encumbrance
+            %td= armor.hard_points
+            %td= armor.rarity

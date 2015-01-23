@@ -29,6 +29,7 @@
           <tr>
             <td><%= link_to character.name, user_character_path(current_user, character) %></td>
             <td>
+              <span class="footable-details-label">Status:</span>
               <% if character.creation? %>
                   <i class='fi-wrench' title='Character creation mode'></i>
               <% elsif character.active? %>
@@ -39,7 +40,10 @@
             </td>
             <td><%= character.race.name unless character.race.nil? %></td>
             <td><%= character.career.name unless character.career.nil? %></td>
-            <td data-value="<%= character.created_at.to_time.to_i %>"><%=l character.created_at, :format => :short %></td>
+            <td data-value="<%= character.created_at.to_time.to_i %>">
+              <span class="footable-details-label">Created at:</span>
+              <%=l character.created_at, :format => :short %>
+            </td>
             <td>
               <div class="button-bar">
                 <ul class="button-group round">

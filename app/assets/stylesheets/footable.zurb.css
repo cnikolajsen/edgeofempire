@@ -75,3 +75,18 @@ tfoot.table-footer-pagination tr {
   background: none;
   border: 0px solid black;
 }
+
+.footable-row-detail-name {
+  display: none;
+}
+.footable-row-detail-value .pricing-table,
+.footable-row-detail-value p {
+  margin-bottom: 3px;
+  font-size: 0.875rem;
+}
+.footable-row-detail-value span.footable-details-label {
+  font-weight: bold;
+}
+.footable-visible span.footable-details-label {
+  display:none;
+}

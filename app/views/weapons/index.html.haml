@@ -18,7 +18,7 @@
 
 .row
   .small-12.columns
-    %table.footable{data: {sort: 'false', page: {size: 20}}}
+    %table.footable{data: {sort: 'false', page: 'false'}}
       %thead
         %tr
           %th{data: {toggle: 'true'}} Name
@@ -46,11 +46,21 @@
               %td= weapon.damage
               %td= weapon.crit
               %td= weapon.range
-              %td= weapon.encumbrance
-              %td= weapon.hard_points
-              %td= weapon.price
-              %td= weapon.rarity
-              %td= render "weapons/weapon_qualities", :qualities => weapon.weapon_quality_ranks
+              %td
+                %span.footable-details-label Encumbrance:
+                = weapon.encumbrance
+              %td
+                %span.footable-details-label Hard Points:
+                = weapon.hard_points
+              %td
+                %span.footable-details-label Price:
+                = weapon.price
+              %td
+                %span.footable-details-label Rarity:
+                = weapon.rarity
+              %td
+                %span.footable-details-label Special:
+                = render "weapons/weapon_qualities", :qualities => weapon.weapon_quality_ranks
 
     .footable-pagination.hide-if-no-paging
       .pagination.pagination-centered

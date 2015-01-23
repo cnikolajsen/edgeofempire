@@ -11,7 +11,7 @@
 
 .row
   .small-12.columns
-    %table.footable{ data: { sort: 'false', page: { size: 1000 } } }
+    %table.footable{ data: { sort: 'false', page: 'false' } }
       %thead
         %tr
           %th{ data: { toggle: 'true' } } Name
@@ -31,6 +31,12 @@
                   %small
                     = link_to "<i class='fi-pencil'></i>".html_safe, edit_gear_path(gear)
               %td= markdown(text_replace_tokens(gear.description))
-              %td= gear.price
-              %td= gear.encumbrance
-              %td= gear.rarity
+              %td
+                %span.footable-details-label Price:
+                = gear.price
+              %td
+                %span.footable-details-label Encumbrance:
+                = gear.encumbrance
+              %td
+                %span.footable-details-label Rarity:
+                = gear.rarity

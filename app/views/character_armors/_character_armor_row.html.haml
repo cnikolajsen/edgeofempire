@@ -2,16 +2,20 @@
   %td
     = character_armor.armor.name
   %td
-    = character_armor.armor_model.name if character_armor.armor_model
+    %strong= character_armor.armor_model.name if character_armor.armor_model
   %td
     = character_armor.description
   %td
+    %span.footable-details-label Soak:
     = character_armor.armor.soak
   %td
+    %span.footable-details-label Defense:
     = character_armor.armor.defense
   %td
+    %span.footable-details-label Encumbrance:
     = character_armor.armor.encumbrance
   %td
+    %span.footable-details-label Rarity:
     = character_armor.armor.rarity
   %td
     - if character_armor.equipped
@@ -25,6 +29,7 @@
       = link_to "Stored", user_character_place_armor_path(current_user, @character, character_armor.id, 'inventory'), :class => 'label secondary'
   %td
     - unless character_armor.character_armor_attachments.blank?
+      %span.footable-details-label Modifications:
       %ul
         - character_armor.character_armor_attachments.each do |caa|
           - unless caa.armor_attachment_id.blank?
