@@ -34,7 +34,6 @@
       %h5
         Criticals
         = "(+#{@character.character_criticals.count * 10})"
-      .reveal-modal#criticalModal{ :'data-reveal' => '' }
       - if  @character.character_criticals.any?
         %table{width: '100%'}
           - @character.character_criticals.each do |crit|
@@ -49,6 +48,6 @@
                     %small= crit.description
               %td
                 = link_to 'Heal', user_character_heal_critical_path(@character.user, @character, crit.id)
-      = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'criticalModal', :'data-reveal-ajax' => 'true'
+      = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'globalModal', :'data-reveal-ajax' => 'true'
 
 

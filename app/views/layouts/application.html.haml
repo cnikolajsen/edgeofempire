@@ -101,6 +101,7 @@
               = link_to "Force Powers", force_powers_path
     #flash_messages
       = render :partial => 'layouts/flash'
+    .reveal-modal.small#globalModal{ :'data-reveal' => '' }
     = yield
     = javascript_include_tag "application"
   - if user_signed_in?
