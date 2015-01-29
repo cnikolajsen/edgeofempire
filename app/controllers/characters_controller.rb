@@ -14,7 +14,8 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @characters }
+      format.json { render json: @characters.to_json(include: [:race, :career]) }
+      format.xml { render xml: @characters.to_xml(include: [:race, :career, :weapons, :armors, :gears]) }
     end
   end
 
@@ -384,37 +385,27 @@ class CharactersController < ApplicationController
 
   def stagger_ajax
     @character.update_attribute(:staggered, params[:state])
-    respond_to do |format|
-      format.json  { render json: { message: 'Success' } }
-    end
+    render json: @character, status: :ok
   end
 
   def immobilize_ajax
     @character.update_attribute(:immobilized, params[:state])
-    respond_to do |format|
-      format.json  { render json: { message: 'Success' } }
-    end
+    render json: @character, status: :ok
   end
 
   def disorient_ajax
     @character.update_attribute(:disoriented, params[:state])
-    respond_to do |format|
-      format.json  { render json: { message: 'Success' } }
-    end
+    render json: @character, status: :ok
   end
 
   def strain_ajax
     @character.update_attribute(:strain, params[:value])
-    respond_to do |format|
-      format.json  { render json: { message: 'Success' } }
-    end
+    render json: @character, status: :ok
   end
 
   def wound_ajax
     @character.update_attribute(:wounds, params[:value])
-    respond_to do |format|
-      format.json  { render json: { message: 'Success' } }
-    end
+    render json: @character, status: :ok
   end
 
   def set_activate

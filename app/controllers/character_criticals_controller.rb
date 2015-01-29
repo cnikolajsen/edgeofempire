@@ -31,13 +31,9 @@ class CharacterCriticalsController < ApplicationController
   def criticals_ajax
     if params[:effect]
       critical = character_critical_types(params[:effect])
-      respond_to do |format|
-        format.json { render :json => {:message => "Success", :criticals => critical} }
-      end
+      render json: { status: :ok, criticals: critical }
     else
-      respond_to do |format|
-        format.json { render :json => {:message => "Success", :criticals => character_critical_types} }
-      end
+      render json: { status: :ok, criticals: character_critical_types }
     end
   end
 

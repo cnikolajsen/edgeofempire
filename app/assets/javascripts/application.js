@@ -18,6 +18,8 @@
 //= require cocoon
 //= require_tree .
 
+// Place named functions here that do not fit into CoffeeScript.
+
 $(function(){ $(document).foundation(); });
 
 $(function () {
@@ -33,4 +35,11 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g");
   $(link).before(content.replace(regexp, new_id));
+}
+
+function save_character_talent_option(character_id, element, tree, row, column, option) {
+  $.ajax({
+    url: "talents/" + tree + "/" + row + "/" + column + "/learn/" + option + "/" + element.value,
+    type: "GET",
+  });
 }
