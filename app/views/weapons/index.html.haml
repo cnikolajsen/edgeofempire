@@ -31,6 +31,7 @@
           %th{data: {hide: "phone"}} Price
           %th{data: {hide: "phone"}} Rarity
           %th{data: {hide: "phone"}} Special
+          %th{ data: { hide: 'all' } } Book
       - @weapon_categories.each do |category|
         - if category.weapons.any?
           %tr
@@ -63,6 +64,9 @@
               %td
                 %span.footable-details-label Special:
                 = render "weapons/weapon_qualities", :qualities => weapon.weapon_quality_ranks
+              %td
+                %span.footable-details-label Book:
+                = weapon.book.title unless weapon.book.nil?
 
     .footable-pagination.hide-if-no-paging
       .pagination.pagination-centered

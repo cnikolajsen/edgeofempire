@@ -7,6 +7,7 @@ class Armor < ActiveRecord::Base
     name_changed?
   end
 
+  belongs_to :book
   has_many :character_armors
   has_many :characters, through: :character_armors
   has_many :armor_models

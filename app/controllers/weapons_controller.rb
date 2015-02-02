@@ -89,6 +89,7 @@ class WeaponsController < ApplicationController
     params.require(:weapon).permit(
       :crit, :damage, :description, :name, :price, :skill_id, :range,
       :encumbrance, :rarity, :hard_points, :image_url, :weapon_category_id,
+      :book_id,
       weapon_quality_ranks_attributes: [
         :id, :ranks, :weapon_id, :weapon_quality_id, :_destroy
       ],

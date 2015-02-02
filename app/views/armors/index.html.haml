@@ -29,6 +29,7 @@
           %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
           %th{ data: { hide: 'phone', name: 'Hard points' }} HP
           %th{ data: { hide: 'phone' } } Rarity
+          %th{ data: { hide: 'all' } } Book
       %tbody
         - @armors.each do |armor|
           %tr
@@ -40,9 +41,24 @@
                 %small
                   = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
             %td= armor.description
-            %td= armor.defense
-            %td= armor.soak
-            %td= armor.price
-            %td= armor.encumbrance
-            %td= armor.hard_points
-            %td= armor.rarity
+            %td
+              %span.footable-details-label Defense:
+              = armor.defense
+            %td
+              %span.footable-details-label Soak:
+              = armor.soak
+            %td
+              %span.footable-details-label Price:
+              = armor.price
+            %td
+              %span.footable-details-label Encumbrance:
+              = armor.encumbrance
+            %td
+              %span.footable-details-label Hard Points:
+              = armor.hard_points
+            %td
+              %span.footable-details-label Rarity:
+              = armor.rarity
+            %td
+              %span.footable-details-label Book:
+              = armor.book.title unless armor.book.nil?

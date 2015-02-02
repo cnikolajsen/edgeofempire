@@ -83,7 +83,7 @@ private
   # Never trust parameters from the scary internet, only allow the white list through.
   def armor_params
     params.require(:armor).permit(:name, :description, :defense, :soak, :price, :encumbrance,
-    :rarity, :hard_points, :image_url, :armor_category_id,
+    :rarity, :hard_points, :image_url, :armor_category_id, :book_id,
     armor_models_attributes: [ :id, :armor_id, :name ],
     armor_attachments_armors_attributes: [ :id, :armor_id, :armor_attachment_id ],
     armor_attachments_groups_attributes: [ :id, :armor_id, :attachment_group_id ])

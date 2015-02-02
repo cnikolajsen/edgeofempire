@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120103533) do
+ActiveRecord::Schema.define(version: 20150202075736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,8 +213,10 @@ ActiveRecord::Schema.define(version: 20150120103533) do
     t.string   "image_url"
     t.string   "slug"
     t.integer  "armor_category_id"
+    t.integer  "book_id"
   end
 
+  add_index "armors", ["book_id"], name: "index_armors_on_book_id", using: :btree
   add_index "armors", ["slug"], name: "index_armors_on_slug", unique: true, using: :btree
 
   create_table "attachment_groups", force: true do |t|
@@ -586,8 +588,10 @@ ActiveRecord::Schema.define(version: 20150120103533) do
     t.string   "image_url"
     t.string   "slug"
     t.integer  "gear_category_id"
+    t.integer  "book_id"
   end
 
+  add_index "gears", ["book_id"], name: "index_gears_on_book_id", using: :btree
   add_index "gears", ["slug"], name: "index_gears_on_slug", unique: true, using: :btree
 
   create_table "motivations", force: true do |t|
@@ -884,8 +888,10 @@ ActiveRecord::Schema.define(version: 20150120103533) do
     t.string   "image_url"
     t.string   "slug"
     t.integer  "weapon_category_id"
+    t.integer  "book_id"
   end
 
+  add_index "weapons", ["book_id"], name: "index_weapons_on_book_id", using: :btree
   add_index "weapons", ["slug"], name: "index_weapons_on_slug", unique: true, using: :btree
 
 end

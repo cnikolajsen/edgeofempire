@@ -19,6 +19,7 @@
           %th{ data: { hide: 'phone' } } Price
           %th{ data: { hide: 'phone', name: 'Encumbrance' } } Encum
           %th{ data: { hide: 'phone' } } Rarity
+          %th{ data: { hide: 'all' } } Book
       - @gear_categories.each do |category|
         - if category.gears.any?
           %tr
@@ -42,3 +43,6 @@
               %td
                 %span.footable-details-label Rarity:
                 = gear.rarity
+              %td
+                %span.footable-details-label Book:
+                = gear.book.title unless gear.book.nil?

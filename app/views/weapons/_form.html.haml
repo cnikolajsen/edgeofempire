@@ -94,6 +94,11 @@
           = f.label :rarity, :class => 'inline right'
         .small-9.columns
           = f.input :rarity, label: false
+      .row
+        .small-3.columns
+          = f.label :book_id, :class => 'inline right'
+        .small-9.columns
+          = f.input :book_id, as: :select, label: false, :collection => Book.where(:true)
 
   .row
     .small-12.columns

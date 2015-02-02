@@ -7,6 +7,7 @@ class Weapon < ActiveRecord::Base
     name_changed?
   end
 
+  belongs_to :book
   belongs_to :skill
   has_many :weapon_qualities, through: :weapon_quality_ranks
   has_many :weapon_quality_ranks, dependent: :destroy
