@@ -38,6 +38,8 @@
               - if can? :edit, @armor
                 - if armor.description.blank?
                   %span.alert.round.label Description missing
+                - if armor.book.blank?
+                  %span.alert.round.label Book missing
                 %small
                   = link_to "<i class='fi-pencil'></i>".html_safe, edit_armor_path(armor)
             %td= armor.description
