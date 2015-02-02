@@ -95,8 +95,10 @@
               %ul.dropdown
                 %li{:class => ("active" if current_page('obligations'))}
                   = link_to "Obligations", obligations_path
-                %li{:class => ("active" if current_page(''))}
+                %li{:class => ("active" if current_page('duties'))}
                   = link_to "Duties", duties_path
+                %li{:class => ("active" if current_page('motivations'))}
+                  = link_to "Motivations", motivations_path
             %li{:class => ("active" if current_page('force_powers'))}
               = link_to "Force Powers", force_powers_path
     #flash_messages

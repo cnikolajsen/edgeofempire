@@ -35,6 +35,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :talent_trees
   resources :obligations
   resources :duties
+  resources :motivations
   resources :sidebars
   resources :books
   resources :force_powers

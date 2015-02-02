@@ -1,0 +1,30 @@
+- content_for :title do
+  Motivations
+
+.row
+  .small-12.columns
+    %h1
+      Motivations
+      - if can? :create, @motivation
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_motivation_path
+
+.row
+  .small-12.columns
+    - @motivations.each do |motivation_career|
+      - if motivation_career[1].any?
+        %h3= "#{motivation_career[0]} Motivations"
+        %table{width: '100%'}
+          %thead
+            %tr
+              %th Name
+              %th Description
+          %tbody
+            - motivation_career[1].each do |motivation|
+              %tr
+                %td{valign: 'top'}
+                  %strong= motivation[1]
+                %td
+                  = markdown(text_replace_tokens(motivation[2]))
+                  - if can? :create, @motivation
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_motivation_path(motivation[0])
