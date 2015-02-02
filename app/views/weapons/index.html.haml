@@ -40,6 +40,8 @@
               %td
                 = link_to weapon.name, weapon_path(weapon)
                 - if can? :edit, @weapon
+                  - if weapon.description.blank?
+                    %span.alert.round.label Description missing
                   %small
                     = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_path(weapon)
               %td= weapon.skill.name unless weapon.skill.nil?

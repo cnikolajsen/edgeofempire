@@ -28,6 +28,8 @@
               %td
                 = link_to gear.name, gear_path(gear)
                 - if can? :edit, @gear
+                  - if gear.description.blank?
+                    %span.alert.round.label Description missing
                   %small
                     = link_to "<i class='fi-pencil'></i>".html_safe, edit_gear_path(gear)
               %td= markdown(text_replace_tokens(gear.description))
