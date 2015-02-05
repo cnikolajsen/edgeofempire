@@ -226,6 +226,8 @@ class Character < ActiveRecord::Base
         et += enc_bonus
       end
       et += 1 if inv[:name] == 'Utility Belt'
+      et += 2 if inv[:name] == 'Spacer\'s Duffel'
+      et += 2 if inv[:name] == 'Surveyor\'s Bag'
     end
     et
   end
