@@ -16,6 +16,7 @@
 //= require jquery.ui.all
 //= require foundation
 //= require cocoon
+//= require select2/select2.min
 //= require_tree .
 
 // Place named functions here that do not fit into CoffeeScript.

@@ -23,7 +23,7 @@
     %li.title Attachments
     - weapon.attachments.each do |caa|
       %li.bullet-item
-        = caa.weapon_attachment.name
+        = caa.name
         - unless caa.weapon_attachment_modification_options.blank?
           %ul{:style => "font-size: 10px;"}
             - caa.weapon_attachment_modification_options.each do |option|

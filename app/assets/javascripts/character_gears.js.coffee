@@ -2,10 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$('#character_gears_gear_id').on 'change', ->
+$('#character_gears_gear_id').select2()
+
+$('#character_gears_gear_id').on 'select2:select', ->
   $.ajax(
     url: '/find/equipment_selection',
-    data: 'gear_id=' + $('#character_gears_gear_id').val(),
-    type: 'GET'
-  ).success (data) ->
-    $('#item-info').html(data);
+    data: 'gear_id=' + $('#character_gears_gear_id').val()
+  ).done (data) ->
+    $('#item-info').html(data)
