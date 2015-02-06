@@ -10,7 +10,10 @@
     = character_weapon.weapon.skill.name
   %td
     %span.footable-details-label Damage:
-    = character_weapon.weapon.damage
+    - if !character_weapon.weapon.skill.nil? && (character_weapon.weapon.skill.name == 'Melee' || character_weapon.weapon.skill.name == 'Brawl')
+      = "+#{character_weapon.weapon.damage}"
+    - else
+      = character_weapon.weapon.damage
   %td
     %span.footable-details-label Critical:
     = character_weapon.weapon.crit

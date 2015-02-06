@@ -48,7 +48,11 @@
                   %small
                     = link_to "<i class='fi-pencil'></i>".html_safe, edit_weapon_path(weapon)
               %td= weapon.skill.name unless weapon.skill.nil?
-              %td= weapon.damage
+              %td
+                - if !weapon.skill.nil? && (weapon.skill.name == 'Melee' || weapon.skill.name == 'Brawl')
+                  = "+#{weapon.damage}"
+                - else
+                  = weapon.damage
               %td= weapon.crit
               %td= weapon.range
               %td

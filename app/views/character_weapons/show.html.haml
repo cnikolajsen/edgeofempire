@@ -9,7 +9,7 @@
     = form_for :character_weapons do |f|
       - grouped_options = Array.new
       - WeaponCategory.where(:true).order(:name).each do |cat|
-        - grouped_options << [cat.name, Weapon.where(:weapon_category_id => cat.id).order(:name).collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
+        - grouped_options << [cat.name, Weapon.where(:weapon_category_id => cat.id).where('name != ?', 'Unarmed').order(:name).collect { |weapon| ["#{weapon.name} - #{weapon.price}", weapon.id]}]
       = f.select :weapon_id, grouped_options_for_select(grouped_options), {:prompt => "Select weapon"}
       .row
         .small-12.columns

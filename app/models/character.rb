@@ -329,7 +329,7 @@ class Character < ActiveRecord::Base
         end
 
         if cw.weapon.skill.name == 'Brawl'
-          cw.weapon.damage = self.brawn
+          cw.weapon.damage += self.brawn
 
           if cw.weapon.name == 'Unarmed'
             # Trandoshans have claws.
@@ -350,6 +350,7 @@ class Character < ActiveRecord::Base
         end
 
         if cw.weapon.skill.name == 'Melee'
+          cw.weapon.damage += self.brawn
           self.talent_alterations.each do |talent_id, stat|
             stat.each do |type, value|
               if type == :melee_damage_bonus

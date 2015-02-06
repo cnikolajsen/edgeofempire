@@ -19,7 +19,11 @@
       %tbody
         %tr
           %td= @weapon.skill.name unless @weapon.skill.nil?
-          %td= @weapon.damage
+          %td
+            - if !@weapon.skill.nil? && (@weapon.skill.name == 'Melee' || @weapon.skill.name == 'Brawl')
+              = "+#{@weapon.damage}"
+            - else
+              = @weapon.damage
           %td= @weapon.crit
           %td= @weapon.price
           %td= render "weapon_qualities", :qualities => @weapon.weapon_quality_ranks

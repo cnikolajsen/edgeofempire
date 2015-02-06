@@ -8,7 +8,10 @@
   %li.bullet-item
     Range: #{weapon.range}
   %li.bullet-item
-    Damage: #{weapon.damage}
+    - if !weapon.skill.nil? && (weapon.skill.name == 'Melee' || weapon.skill.name == 'Brawl')
+      Damage: +#{weapon.damage}
+    - else
+      Damage: #{weapon.damage}
   %li.bullet-item
     Crit rating: #{weapon.crit}
   %li.bullet-item
