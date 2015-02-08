@@ -8,10 +8,7 @@
         %h5= @character.career.name
         - if @character.career
           %label= "Select #{@character.race.name == 'Droid' ? 6 : 4} career skills to add a free rank to:"
-          - @character.career.skills.each do |class_skill|
-            %input{:name => "free_career_skill_rank[]", :id => ("free_skill_rank_#{class_skill.id}"), :value => class_skill.id, :checked => (career_free_rank.include? class_skill.id), :type => 'checkbox'}
-            %label{:for => "free_skill_rank_#{class_skill.id}"}
-              %small= class_skill.name
+          =select_tag 'free_career_skill_ranks', options_from_collection_for_select(@character.career.skills, 'id', 'name', selected: career_free_rank), multiple: true, data: { max: "#{@character.race.name == 'Droid' ? 6 : 4}" }
 
     - if @character.race.respond_to?("#{@character.race.name.gsub(' ', '').downcase}_traits")
       - traits = @character.race.send("#{@character.race.name.gsub(' ', '').downcase}_traits")
@@ -19,20 +16,15 @@
         .small-12.columns.panel
           %h5= "#{@character.race.name} trait"
           %label= "Select #{traits[:bonus_non_class_skill_ranks]} non-career skills to add a free rank to:"
-          - @character.career.non_career_skills.each do |non_class_skill|
-            %input{:name => "free_non_career_skill_rank[]", :id => ("free_skill_rank_#{non_class_skill.id}"), :value => non_class_skill.id, :checked => (@racial_trait_free_rank.include? non_class_skill.id), :type => 'checkbox'}
-            %label{:for => "free_skill_rank_#{non_class_skill.id}"}
-              %small= non_class_skill.name
+          =select_tag 'free_non_career_skill_ranks', options_from_collection_for_select(@character.career.non_career_skills, 'id', 'name', selected: @racial_trait_free_rank), multiple: true, data: { max: "#{traits[:bonus_non_class_skill_ranks]}" }
 
     - if @initial_talent_tree
       - @character_tree_talents = CharacterTalent.where("talent_tree_id = ? AND character_id = ?", @initial_talent_tree.id, @character.id)
       .small-12.columns.panel
         %h5= @initial_talent_tree.name
         %label= "Select #{@character.race.name == 'Droid' ? 3 : 2} career skills to add a free rank to:"
-        - @initial_talent_tree.skills.each do |class_skill|
-          %input{:name => "free_specialization_skill_rank[]", :id => ("free_skill_rank_#{class_skill.id}"), :value => class_skill.id, :checked => (@specialization_free_rank.include? class_skill.id), :type => 'checkbox'}
-          %label{:for => "free_skill_rank_#{class_skill.id}"}
-            %small= class_skill.name
+        =select_tag 'free_specialization_skill_ranks', options_from_collection_for_select(@initial_talent_tree.skills, 'id', 'name', selected: @specialization_free_rank), multiple: true, data: { max: "#{@character.race.name == 'Droid' ? 3 : 2}" }
+
     .form-actions
       =hidden_field_tag 'destination', 'skills'
       = f.submit "Save free skill ranks", :class => 'button'

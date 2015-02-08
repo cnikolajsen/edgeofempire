@@ -78,10 +78,10 @@ class CharacterSkillsController < ApplicationController
 
       if params[:free_skill_ranks]
         # Save specialization skills to add a free rank to.
-        if params[:free_specialization_skill_rank]
+        if params[:free_specialization_skill_ranks]
           specialization_skills = TalentTree.find_by_id(@character.specialization_1).skills
           specialization_skills.each do |skill|
-            if params[:free_specialization_skill_rank].include? skill.id.to_s
+            if params[:free_specialization_skill_ranks].include? skill.id.to_s
               CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'specialization', :ranks => 1).first_or_create
               character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
               if character_skill.free_ranks_specialization == 0 or character_skill.free_ranks_specialization.blank?
@@ -114,9 +114,9 @@ class CharacterSkillsController < ApplicationController
         end
 
         # Save career skills to add a free rank to.
-        if params[:free_career_skill_rank]
+        if params[:free_career_skill_ranks]
           @character.career.skills.each do |skill|
-            if params[:free_career_skill_rank].include? skill.id.to_s
+            if params[:free_career_skill_ranks].include? skill.id.to_s
               CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'career', :ranks => 1).first_or_create
               character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
               if character_skill.free_ranks_career == 0 or character_skill.free_ranks_career.blank?
@@ -149,9 +149,9 @@ class CharacterSkillsController < ApplicationController
         end
 
         # Save non career skills to add a free rank to. Mainly from racial traits.
-        if params[:free_non_career_skill_rank]
+        if params[:free_non_career_skill_ranks]
           @character.career.non_career_skills.each do |skill|
-            if params[:free_non_career_skill_rank].include? skill.id.to_s
+            if params[:free_non_career_skill_ranks].include? skill.id.to_s
               CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => skill.id, :granted_by => 'racial_trait', :ranks => 1).first_or_create
               character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => skill.id).first_or_create
               if character_skill.free_ranks_race == 0 or character_skill.free_ranks_race.blank?

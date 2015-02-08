@@ -16,6 +16,7 @@
 //= require jquery.ui.all
 //= require foundation
 //= require cocoon
+//= require footable.all.min
 //= require select2/select2.min
 //= require_tree .
 

@@ -225,7 +225,7 @@ module CharactersHelper
   end
 
   def skill_total_ranks(character_skill)
-    character_skill.ranks + skill_total_free_ranks(character_skill)
+    character_skill.ranks.to_i + skill_total_free_ranks(character_skill).to_i
   end
 
   def character_critical_types(name = nil)
