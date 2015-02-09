@@ -24,6 +24,7 @@
       </div>
       <div class="row">
         <div class="small-12 columns">
+          <%= f.text_field :custom_name, :value => @character_weapon.custom_name, :placeholder => "Give it a name and make it your own." %>
           <%= f.label :description, 'Custom description' %>
           <%= f.text_area :description, :rows => 10, :value => @character_weapon.description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal." %>
           <% unless @weapon.weapon_models.blank? %>

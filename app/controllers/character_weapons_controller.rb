@@ -97,7 +97,8 @@ class CharacterWeaponsController < ApplicationController
         flash[:error] = "No hard points left on item."
       end
     end
-    if params[:character_weapon_attachment][:description] || params[:character_weapon_attachment][:weapon_model_id]
+    if params[:character_weapon_attachment][:description] || params[:character_weapon_attachment][:weapon_model_id] || params[:character_weapon_attachment][:custom_name]
+      character_weapon.update_attribute(:custom_name, params[:character_weapon_attachment][:custom_name])
       character_weapon.update_attribute(:description, params[:character_weapon_attachment][:description])
       character_weapon.update_attribute(:weapon_model_id, params[:character_weapon_attachment][:weapon_model_id])
       flash[:success] = 'Character weapon updated.'

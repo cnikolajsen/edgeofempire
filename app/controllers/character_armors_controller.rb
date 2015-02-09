@@ -87,8 +87,9 @@ class CharacterArmorsController < ApplicationController
       @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
       flash[:success] = "Attachment added"
     end
-    if params[:character_armor_attachment][:description] || params[:character_armor_attachment][:armor_model_id]
+    if params[:character_armor_attachment][:description] || params[:character_armor_attachment][:armor_model_id] || params[:character_armor_attachment][:custom_name]
       armor = CharacterArmor.find(params[:character_armor_id])
+      armor.update_attribute(:custom_name, params[:character_armor_attachment][:custom_name])
       armor.update_attribute(:description, params[:character_armor_attachment][:description])
       armor.update_attribute(:armor_model_id, params[:character_armor_attachment][:armor_model_id])
       flash[:success] = 'Character armor updated.'

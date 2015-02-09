@@ -1,6 +1,8 @@
 %tr.nested-fields
   %td
     = character_weapon.weapon.name
+    - unless character_weapon.custom_name.blank?
+      = " (#{character_weapon.custom_name})"
   %td
     = character_weapon.weapon_model.name if character_weapon.weapon_model
   %td

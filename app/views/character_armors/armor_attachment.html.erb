@@ -30,6 +30,7 @@
       </div>
       <div class="row">
         <div class="small-12 columns">
+          <%= f.text_field :custom_name, :value => @character_armor.custom_name, :placeholder => "Give it a name and make it your own." %>
           <%= f.text_area :description, :rows => 10, :value => @character_armor.description, :placeholder => "Write your own description of your armor, such as make and model, color, or anything else that might make this armor personal." %>
           <% unless @armor.armor_models.blank? %>
             <%= f.select :armor_model_id, @armor.armor_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model", :selected => @character_armor.armor_model_id} %>

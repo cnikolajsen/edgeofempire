@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202075736) do
+ActiveRecord::Schema.define(version: 20150209093427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(version: 20150202075736) do
     t.boolean  "equipped"
     t.boolean  "carried"
     t.integer  "armor_model_id"
+    t.string   "custom_name"
   end
 
   create_table "character_bonus_talents", force: true do |t|
@@ -476,6 +477,7 @@ ActiveRecord::Schema.define(version: 20150202075736) do
     t.boolean  "equipped"
     t.boolean  "carried"
     t.integer  "weapon_model_id"
+    t.string   "custom_name"
   end
 
   create_table "characters", force: true do |t|

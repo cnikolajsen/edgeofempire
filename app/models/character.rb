@@ -360,11 +360,13 @@ class Character < ActiveRecord::Base
           end
         end
 
-        unless cw.weapon_model_id.nil?
+        if !cw.custom_name.blank?
+          cw.weapon.name = cw.custom_name
+        elsif !cw.weapon_model_id.nil?
           cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
         end
 
-        unless cw.character_weapon_attachments.blank?
+        if !cw.character_weapon_attachments.blank? && cw.custom_name.blank?
           cw.weapon.name = "Modified " + cw.weapon.name
         end
 
@@ -688,9 +690,6 @@ class Character < ActiveRecord::Base
         if ((options[:carried] && cg.carried) || (!options[:carried] && !cg.carried) || options[:carried].nil?) && cg.weapon.name != 'Unarmed'
           if cg.weapon_model_id
             cg.weapon.name = WeaponModel.find(cg.weapon_model_id).name
-          end
-          if cg.character_weapon_attachments.any?
-            cg.weapon.name = "Modified " + cg.weapon.name
           end
           inventory << {
             :id => cg.id,
