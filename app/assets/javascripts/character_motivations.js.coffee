@@ -3,8 +3,9 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $('#character_motivation_motivation_id').on 'change', ->
-  $.ajax(
-    url: '/find/motivation_selection',
+  $.ajax
+    type: 'get'
+    url: '/find/motivation_selection'
     data: 'motivation_id=' + $('#character_motivation_motivation_id').val()
-  ).done (data) ->
-    $('#motivation-info').html(data);
+    success: (data) ->
+      $('#motivation-info').html(data)
