@@ -360,7 +360,7 @@ class Character < ActiveRecord::Base
           end
         end
 
-        if !cw.custom_name.blank?
+        if !cw.custom_name.nil? && !cw.custom_name.blank?
           cw.weapon.name = cw.custom_name
         elsif !cw.weapon_model_id.nil?
           cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
