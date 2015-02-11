@@ -132,6 +132,7 @@ EdgeOfEmpire::Application.routes.draw do
       # Character Cybernetics routes.
       get 'cybernetics' => 'character_cybernetics#show'
       post 'cybernetics' => 'character_cybernetics#update'
+      get 'cybernetics/:character_cybernetics_id/remove' => 'character_cybernetics#remove', :as => :remove_cybernetics
 
       # Character Force Power routes.
       get 'force-powers' => 'character_force_powers#show'

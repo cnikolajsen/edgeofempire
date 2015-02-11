@@ -10,3 +10,12 @@ $('#character_gears_gear_id').on 'select2:select', ->
     data: 'gear_id=' + $('#character_gears_gear_id').val()
   ).done (data) ->
     $('#item-info').html(data)
+
+$('#character_cybernetics_cybernetics_id').select2()
+
+$('#character_cybernetics_cybernetics_id').on 'select2:select', ->
+  $.ajax(
+    url: '/find/equipment_selection',
+    data: 'gear_id=' + $('#character_cybernetics_cybernetics_id').val()
+  ).done (data) ->
+    $('#item-info').html(data)

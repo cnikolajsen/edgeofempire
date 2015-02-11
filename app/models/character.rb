@@ -514,8 +514,8 @@ class Character < ActiveRecord::Base
         self.character_cybernetics.each do |cyb|
           bonus = nil
           unless cyb.gear_id.nil?
-            if cyb.respond_to?("#{cyb.gear.name.gsub(' ', '').downcase}")
-              bonus = cyb.send("#{cyb.gear.name.gsub(' ', '').downcase}")
+            if cyb.respond_to?("#{cyb.gear.name.gsub(/[^0-9a-z\\s]/i, '').downcase}")
+              bonus = cyb.send("#{cyb.gear.name.gsub(/[^0-9a-z\\s]/i, '').downcase}")
               if bonus
                 if !arms_active && (cyb.location == 'left_arm' || cyb.location == 'right_arm')
                   bonus_arms = bonus

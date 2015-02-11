@@ -5,27 +5,35 @@
   .medium-12.columns
     = render :partial => 'characters/character_edit_menu'
 
-= simple_form_for :character_cybernetics do |f|
-  .row
-    .small-12.columns
-      = f.input :head, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:head]
-      = f.input :eyes, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:eyes]
-  .row
-    .small-12.columns
-      = f.input :upper_chest, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:upper_chest]
-      = f.input :lower_chest, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:lower_chest]
-  .row
-    .small-6.columns
-      = f.input :right_arm, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_arm]
-      = f.input :right_hand, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_hand]
-    .small-6.columns
-      = f.input :left_arm, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_arm]
-      = f.input :left_hand, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_hand]
-  .row
-    .small-6.columns
-      = f.input :left_leg, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:left_leg]
-    .small-6.columns
-      = f.input :right_leg, :as => :select, :collection => @cybernetics_gear, :include_blank => true, :selected => @selected_cybernetics[:right_leg]
-  .row
-    .small-12.columns
-      = f.submit nil, :class => 'button'
+.row
+  .small-12.medium-3.columns
+    = simple_form_for :character_cybernetics do |f|
+      = f.input :cybernetics_id, :as => :select, :collection => @cybernetics_gear, label: false
+      %br/
+      .row
+        #item-info.small-12.columns
+      .row
+        .small-12.columns
+          = f.input :location, :as => :select, :collection => @cybernetics_locations, label: false, placeholder: 'Location'
+          = f.submit 'Save changes', :class => 'button tiny'
+          = link_to "Back", user_character_armor_url(current_user, @character), :class => "button secondary tiny"
+  .small-12.medium-9.columns{"data-no-turbolink" => ""}
+    /%h4
+    /  /Installed cybernetics
+    /  /%small= "#{@armor.hard_points-@hard_points_used} available hard points left out of #{@armor.hard_points}"
+    .row
+      .small-12.columns
+        /%div{:class => "progress round #{@hard_point_meter_class}"}
+        /  %span.meter{:style => "text-align: center;width: #{@hard_point_meter > 100 ? 100 : @hard_point_meter}%"}
+        %table.footable
+          %thead
+            %th{data: {toggle: 'true'}} Item
+            %th{data: {hide: 'all'}}
+            %th{data: {hide: 'phone'}} Location
+            %th{data: {hide: 'phone'}} Encumbrance
+            %th{data: {hide: 'phone'}} Rarity
+            %th{data: {hide: 'phone', sort: {ignore: 'true'}}}
+          %tbody#item-grid
+            - @cybernetics.each do |character_cybernetics|
+              = render :partial => 'character_cybernetics_row', :locals => { :character_cybernetics => character_cybernetics }
+

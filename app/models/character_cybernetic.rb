@@ -2,28 +2,28 @@ class CharacterCybernetic < ActiveRecord::Base
   belongs_to :character
   belongs_to :gear
 
-  def cyberneticarmv
+  def cyberneticarmmodv
     traits = {
       :brawn => 1
     }
     traits
   end
 
-  def cyberneticarmvi
+  def cyberneticarmmodvi
     traits = {
       :agility => 1
     }
     traits
   end
 
-  def cyberneticlegii
+  def cyberneticlegmodii
     traits = {
       :brawn => 1
     }
     traits
   end
 
-  def cyberneticlegiii
+  def cyberneticlegmodiii
     traits = {
       :agility => 1
     }

@@ -183,13 +183,17 @@
               %td= c[:name]
               %td= c[:location].humanize
               %td
-                = c[:bonus].map{|k,v| "#{k.to_s.humanize} +#{v}"}.join(' & ') unless bonus_class == 'red'
-          /%tr{style: "background-color:transparent;border:none"}
-          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
-          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
-          /  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
-          /    %small
-          /      Green: Cybernetic limb bonus granted, Red: Cybernetic limb bonus requirements not met or not applicable.
+                - unless c[:bonus].blank?
+                  = c[:bonus].map{|k,v| "#{k.to_s.humanize} +#{v}"}.join(' & ')
+                  - if bonus_class == 'red'
+                    %br
+                    %small Unmet requirement or bonus already granted.
+          //%tr{style: "background-color:transparent;border:none"}
+          //  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          //  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          //  %td{style: "line-height:10px;padding-top:0;border:none;background-color:transparent;"}
+          //    %small
+          //      Green: Cybernetic limb bonus granted, Red: Cybernetic limb bonus requirements not met or not applicable.
 
     %h4 Equipment:
     - @character.inventory.each_with_index do |item, delta|

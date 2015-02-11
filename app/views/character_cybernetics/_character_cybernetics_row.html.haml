@@ -1,0 +1,16 @@
+%tr.nested-fields
+  %td
+    = character_cybernetics.gear.name
+  %td
+    = character_cybernetics.gear.description
+  %td
+    %span.footable-details-label Location:
+    = character_cybernetics.location.humanize
+  %td
+    %span.footable-details-label Encumbrance:
+    = character_cybernetics.gear.encumbrance
+  %td
+    %span.footable-details-label Rarity:
+    = character_cybernetics.gear.rarity
+  %td
+    = link_to "Remove", user_character_remove_cybernetics_path(current_user, @character, character_cybernetics.id), :class => 'label alert', :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }
