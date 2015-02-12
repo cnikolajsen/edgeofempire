@@ -128,7 +128,6 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @character, :methods => [:soak, :defense, :strain_threshold, :wound_threshold, :attacks, :encumbrance_threshold, :inventory, :talents, :specializations, :force_rating] }
       format.pdf do
         pdf = CharacterSheetPdf.new(@character, view_context)
         send_data pdf.render, filename: "Character_Sheet_#{@character.name}-#{@character.created_at.strftime("%d/%m/%Y")}.pdf", type: "application/pdf", disposition: "inline", :margin => 0
@@ -167,7 +166,7 @@ class CharactersController < ApplicationController
     respond_to do |format|
       if @character.save
         Skill.where(true).each do |skill|
-          @character_skill = CharacterSkill.new()
+          @character_skill = CharacterSkill.new
           @character_skill.character_id = @character.id
           @character_skill.ranks = 0
           @character_skill.free_ranks_career = 0
@@ -182,27 +181,25 @@ class CharactersController < ApplicationController
         species = Race.find(@character.race_id)
 
         # Save subspecies.
-        if params[:sub_species]
-          if species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits")
-            traits = species.send("#{species.name.gsub(' ', '').downcase}_traits")
-            if traits[:sub_species][params[:sub_species]]
-              # Add experience entry in the adventure log for species bonus XP.
-              AdventureLog.where(character_id: @character.id, experience: traits[:sub_species][params[:sub_species]][:exp_bonus], date: @character.created_at, log: 'Subspecies bonus experience', user_id: 0).create
-              @character.update_attribute(:subspecies, params[:sub_species])
-            end
+        if params[:sub_species] && species.respond_to?("#{species.name.gsub(' ', '').downcase}_traits")
+          traits = species.send("#{species.name.gsub(' ', '').downcase}_traits")
+          if traits[:sub_species][params[:sub_species]]
+            # Add experience entry in the adventure log for species bonus XP.
+            AdventureLog.where(character_id: @character.id, experience: traits[:sub_species][params[:sub_species]][:exp_bonus], date: @character.created_at, log: 'Subspecies bonus experience', user_id: 0).create
+            @character.update_attribute(:subspecies, params[:sub_species])
           end
         end
 
         # Save selectable free species skill ranks.
         if params[:skill_rank_choice]
-          @character_skill = CharacterSkill.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice]).first
+          @character_skill = CharacterSkill.where(character_id: @character.id, skill_id: params[:skill_rank_choice]).first
           if @character_skill
             @character_skill.free_ranks_race = 1
             @character_skill.save
 
             # Save experience entry.
             set_experience_cost(@character.id, 'skill', params[:skill_rank_choice], 1, 'up', 'race')
-            CharacterStartingSkillRank.where(:character_id => @character.id, :skill_id => params[:skill_rank_choice], :granted_by => 'race', :ranks => 1).first_or_create
+            CharacterStartingSkillRank.where(character_id: @character.id, skill_id: params[:skill_rank_choice], granted_by: 'race', ranks: 1).first_or_create
           end
         end
 
@@ -214,7 +211,7 @@ class CharactersController < ApplicationController
         format.html { redirect_to user_character_url(current_user, @character), notice: 'Character was successfully created.' }
         format.json { render json: @character, status: :created, location: @character }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @character.errors, status: :unprocessable_entity }
       end
     end
@@ -262,7 +259,7 @@ class CharactersController < ApplicationController
     end
 
     # Update character skill entries for character to add in new skills created since the character was created.
-    existing_skills = Array.new
+    existing_skills = []
     @character.character_skills.each do |skill|
       existing_skills << skill.skill.id unless skill.skill.nil?
     end
