@@ -19,3 +19,11 @@ $('#character_cybernetics_cybernetics_id').on 'select2:select', ->
     data: 'gear_id=' + $('#character_cybernetics_cybernetics_id').val()
   ).done (data) ->
     $('#item-info').html(data)
+
+  $.ajax(
+    url: '/find/cybernetics_locations',
+    data: { id: $('#character_cybernetics_cybernetics_id').val() }
+  ).success (data) ->
+    $('#character_cybernetics_location').html('')
+    for element in data
+      $("#character_cybernetics_location").append($("<option></option>").val(element[1]).html(element[0]));

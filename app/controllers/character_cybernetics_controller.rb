@@ -1,8 +1,8 @@
 class CharacterCyberneticsController < ApplicationController
   include CharactersHelper
-  before_action :find_character
-  before_filter :authenticate_user!
-  before_filter :authenticate_owner
+  before_action :find_character, except: :locations
+  before_filter :authenticate_user!, except: :locations
+  before_filter :authenticate_owner, except: :locations
 
   def show
     @character_menu = 'equipment'
@@ -41,6 +41,70 @@ class CharacterCyberneticsController < ApplicationController
 
     flash[:success] = 'Cybernetics removed'
     redirect_to :back
+  end
+
+  def locations
+    gear = Gear.find(params[:id])
+    case "#{gear.name.gsub(/[^0-9a-z\\s]/i, '').downcase}"
+    when /^cyberneticweapon/
+      @cybernetics_locations = [
+        ['Right arm', 'right_arm'],
+        ['Left arm', 'left_arm']
+      ]
+    when /^cyberneticarmmod/
+      @cybernetics_locations = [
+        ['Right arm', 'right_arm'],
+        ['Left arm', 'left_arm']
+      ]
+    when /^cyberneticlegmod/
+      @cybernetics_locations = [
+        ['Right leg', 'right_leg'],
+        ['Left leg', 'left_leg']
+      ]
+    when /^cyberneticbrainimplant/
+      @cybernetics_locations = [
+        %w(Head head)
+      ]
+    when /^cyberneticeyes/
+      @cybernetics_locations = [
+        %w(Eyes eyes)
+      ]
+    when /^implantarmor/
+      @cybernetics_locations = [
+        ['Upper chest', 'upper_chest'],
+        ['Lower chest', 'lower_chest']
+      ]
+    when /^immuneimplant/
+      @cybernetics_locations = [
+        ['Upper chest', 'upper_chest'],
+        ['Lower chest', 'lower_chest']
+      ]
+    when /^cyberscannerlimb/
+      @cybernetics_locations = [
+        ['Right hand', 'right_hand'],
+        ['Left hand', 'left_hand']
+      ]
+    when /avionicsinterface/
+      @cybernetics_locations = [
+        ['Right hand', 'right_hand'],
+        ['Left hand', 'left_hand']
+      ]
+    else
+      @cybernetics_locations = [
+        %w(Head head),
+        %w(Eyes eyes),
+        ['Upper chest', 'upper_chest'],
+        ['Lower chest', 'lower_chest'],
+        ['Right arm', 'right_arm'],
+        ['Left arm', 'left_arm'],
+        ['Right hand', 'right_hand'],
+        ['Left hand', 'left_hand'],
+        ['Right leg', 'right_leg'],
+        ['Left leg', 'left_leg']
+      ]
+    end
+
+    render json: @cybernetics_locations, status: :ok
   end
 
   private

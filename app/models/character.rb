@@ -164,6 +164,7 @@ class Character < ActiveRecord::Base
       end
     end
 
+    # Add soak increase from cybenetics.
     self.cybernetics[:bonuses].each do |cb|
       if cb[0] == :soak
         soak += cb[1]

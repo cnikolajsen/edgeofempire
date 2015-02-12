@@ -4,21 +4,21 @@ class CharacterCybernetic < ActiveRecord::Base
 
   def cyberneticarmmodv
     traits = {
-      :brawn => 1
+      brawn: 1
     }
     traits
   end
 
   def cyberneticarmmodvi
     traits = {
-      :agility => 1
+      agility: 1
     }
     traits
   end
 
   def cyberneticlegmodii
     traits = {
-      :brawn => 1
+      brawn: 1
     }
     traits
   end
