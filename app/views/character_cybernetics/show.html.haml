@@ -18,13 +18,12 @@
           = f.submit 'Save changes', :class => 'button tiny'
           = link_to "Back", user_character_armor_url(current_user, @character), :class => "button secondary tiny"
   .small-12.medium-9.columns{"data-no-turbolink" => ""}
-    /%h4
-    /  /Installed cybernetics
-    /  /%small= "#{@armor.hard_points-@hard_points_used} available hard points left out of #{@armor.hard_points}"
+    %h4
+      = "#{@cybernetics.count == 0 ? 0 : @cybernetics_limit-@cybernetics.count} cybernetics installed out of a maximum of #{@cybernetics_limit}"
     .row
       .small-12.columns
-        /%div{:class => "progress round #{@hard_point_meter_class}"}
-        /  %span.meter{:style => "text-align: center;width: #{@hard_point_meter > 100 ? 100 : @hard_point_meter}%"}
+        %div{:class => "progress round #{@cybernetics_meter_class}"}
+          %span.meter{:style => "text-align: center;width: #{@cybernetics_meter > 100 ? 100 : @cybernetics_meter}%"}
         %table.footable
           %thead
             %th{data: {toggle: 'true'}} Item

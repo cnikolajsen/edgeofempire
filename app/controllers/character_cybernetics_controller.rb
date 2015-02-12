@@ -10,21 +10,19 @@ class CharacterCyberneticsController < ApplicationController
     @title = "#{@character.name} | Cybernetics"
     @character_state = character_state(@character)
 
-    @cybernetics_locations = [
-      ['Head', 'head'],
-      ['Eyes', 'eyes'],
-      ['Upper chest', 'upper_chest'],
-      ['Lower chest', 'lower_chest'],
-      ['Right arm', 'right_arm'],
-      ['Left arm', 'left_arm'],
-      ['Right hand', 'right_hand'],
-      ['Left hand', 'left_hand'],
-      ['Right leg', 'right_leg'],
-      ['Left leg', 'left_leg']
-    ]
-
     @cybernetics = CharacterCybernetic.where(character_id: @character.id)
     @cybernetics_gear = Gear.joins(:gear_category).where(gear_categories: { name: 'Cybernetics' })
+
+    @cybernetics_limit = @character.race.name == 'Droid' ? 6 : @character.brawn
+    @cybernetics_meter = ((@cybernetics.count.to_f / @cybernetics_limit.to_f) * 100)
+    @cybernetics_meter_class = ''
+    if @cybernetics_meter > 100
+      @cybernetics_meter_class = 'alert'
+    end
+    if @cybernetics_meter == 100
+      @cybernetics_meter_class = 'success'
+    end
+
   end
 
   def update
