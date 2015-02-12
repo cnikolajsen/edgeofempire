@@ -18,11 +18,7 @@
           </div>
         </div>
       <% else %>
-        <% if @armor.attachments.any? %>
-          <%= f.select :armor_attachment_id, @armor.attachments.collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
-        <% else %>
-          <%= f.select :armor_attachment_id, ArmorAttachment.where("hard_points <= ?", @armor.hard_points).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
-        <% end %>
+        <%= f.select :armor_attachment_id, ArmorAttachment.where("hard_points <= ?", @armor.hard_points).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Select Attachment"} %>
       <% end -%>
       <br />
       <div class="row">
