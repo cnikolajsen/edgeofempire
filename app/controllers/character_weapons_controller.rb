@@ -88,8 +88,6 @@ class CharacterWeaponsController < ApplicationController
         hard_points_used += WeaponAttachment.where(:id => attachment.weapon_attachment_id).first.hard_points
       end
       weapon = Weapon.find(character_weapon.weapon_id)
-      logger.warn(hard_points_used)
-      logger.warn(weapon.hard_points)
       if hard_points_used < weapon.hard_points
         @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
         flash[:success] = "Attachment added"
