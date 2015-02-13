@@ -90,6 +90,8 @@
                   #{link_to "Armor", armors_path}
                 %li{:class => ("active" if current_page('gear'))}
                   #{link_to "Gear", gears_path}
+                %li{:class => ("active" if current_page('starships'))}
+                  #{link_to "Starships", starships_path}
             %li.has-dropdown{:class => ("active" if ['obligations', 'duties'].include?(@page))}
               #{link_to "Backgrounds", '#'}
               %ul.dropdown

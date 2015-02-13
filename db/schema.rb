@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209093427) do
+ActiveRecord::Schema.define(version: 20150213100123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -680,6 +680,46 @@ ActiveRecord::Schema.define(version: 20150209093427) do
     t.datetime "updated_at",  null: false
     t.integer  "career_id"
   end
+
+  create_table "starship_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "starships", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "silhouette"
+    t.integer  "speed"
+    t.integer  "handling"
+    t.integer  "defense_fore"
+    t.integer  "defense_port"
+    t.integer  "defense_starboard"
+    t.integer  "defense_aft"
+    t.integer  "armor"
+    t.integer  "hull_trauma_threshold"
+    t.integer  "system_strain_threshold"
+    t.integer  "hard_points"
+    t.string   "hull_type"
+    t.string   "manufacturer"
+    t.integer  "hyperdrive_class_primary"
+    t.integer  "hyperdrive_class_secondary"
+    t.string   "navicomputer"
+    t.string   "sensor_range"
+    t.integer  "encumbrance_capacity"
+    t.integer  "passenger_capacity"
+    t.string   "consumables"
+    t.integer  "cost"
+    t.integer  "rarity"
+    t.integer  "book_id"
+    t.integer  "starship_category_id"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "starships", ["slug"], name: "index_starships_on_slug", unique: true, using: :btree
 
   create_table "talent_tree_career_skills", force: true do |t|
     t.integer  "talent_tree_id"

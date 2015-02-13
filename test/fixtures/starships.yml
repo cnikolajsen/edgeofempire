@@ -1,0 +1,57 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  silhouette: 1
+  speed: 1
+  handling: 1
+  defense_fore: 1
+  defense_port: 1
+  defense_starboard: 1
+  defense_aft: 1
+  armor: 1
+  hull_trauma_threshold: 1
+  system_strain_threshold: 1
+  hard_points: 1
+  hull_type: MyString
+  manufacturer: MyString
+  hyperdrive_class_primary: 1
+  hyperdrive_class_secondary: 1
+  navicomputer: MyString
+  sensor_range: MyString
+  encumbrance_capacity: 1
+  passenger_capacity: 1
+  consumables: MyString
+  cost: 1
+  rarity: 1
+  book_id: 1
+  starship_category_id: 1
+
+two:
+  name: MyString
+  description: MyText
+  silhouette: 1
+  speed: 1
+  handling: 1
+  defense_fore: 1
+  defense_port: 1
+  defense_starboard: 1
+  defense_aft: 1
+  armor: 1
+  hull_trauma_threshold: 1
+  system_strain_threshold: 1
+  hard_points: 1
+  hull_type: MyString
+  manufacturer: MyString
+  hyperdrive_class_primary: 1
+  hyperdrive_class_secondary: 1
+  navicomputer: MyString
+  sensor_range: MyString
+  encumbrance_capacity: 1
+  passenger_capacity: 1
+  consumables: MyString
+  cost: 1
+  rarity: 1
+  book_id: 1
+  starship_category_id: 1

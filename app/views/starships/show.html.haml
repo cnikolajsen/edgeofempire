@@ -1,0 +1,84 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @starship.name
+%p
+  %b Description:
+  = @starship.description
+%p
+  %b Silhouette:
+  = @starship.silhouette
+%p
+  %b Speed:
+  = @starship.speed
+%p
+  %b Handling:
+  = @starship.handling
+%p
+  %b Defense fore:
+  = @starship.defense_fore
+%p
+  %b Defense port:
+  = @starship.defense_port
+%p
+  %b Defense starboard:
+  = @starship.defense_starboard
+%p
+  %b Defense aft:
+  = @starship.defense_aft
+%p
+  %b Armor:
+  = @starship.armor
+%p
+  %b Hull trauma threshold:
+  = @starship.hull_trauma_threshold
+%p
+  %b System strain threshold:
+  = @starship.system_strain_threshold
+%p
+  %b Hard points:
+  = @starship.hard_points
+%p
+  %b Hull type:
+  = @starship.hull_type
+%p
+  %b Manufacturer:
+  = @starship.manufacturer
+%p
+  %b Hyperdrive class primary:
+  = @starship.hyperdrive_class_primary
+%p
+  %b Hyperdrive class secondary:
+  = @starship.hyperdrive_class_secondary
+%p
+  %b Navicomputer:
+  = @starship.navicomputer
+%p
+  %b Sensor range:
+  = @starship.sensor_range
+%p
+  %b Encumbrance capacity:
+  = @starship.encumbrance_capacity
+%p
+  %b Passenger capacity:
+  = @starship.passenger_capacity
+%p
+  %b Consumables:
+  = @starship.consumables
+%p
+  %b Cost:
+  = @starship.cost
+%p
+  %b Rarity:
+  = @starship.rarity
+%p
+  %b Book:
+  = @starship.book_id
+%p
+  %b Starship category:
+  = @starship.starship_category_id
+
+= link_to 'Edit', edit_starship_path(@starship)
+\|
+= link_to 'Back', starships_path

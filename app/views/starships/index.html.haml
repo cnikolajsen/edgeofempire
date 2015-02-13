@@ -1,0 +1,102 @@
+- content_for :title do
+  Starships
+
+.row
+  .small-12.columns
+    %h1
+      Starships
+      - if can? :create, @starship
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_starship_path
+    %dl.sub-nav
+      %dd{:class => ("active" if current_page('starships'))}
+        = link_to "Starships", starships_path
+      /%dd{:class => ("active" if current_page('weapon_qualities'))}
+      /  = link_to "Qualities", weapon_qualities_path
+      /%dd{:class => ("active" if current_page('weapon_attachments'))}
+      /  = link_to "Attachments", weapon_attachments_path
+
+.row
+  .small-12.columns
+    %table.footable{data: {sort: 'false', page: 'false'}}
+      %thead
+        %tr
+          %th{data: {toggle: 'true'}} Name
+          %th{ data: { hide: 'all' } } Description
+          %th Silhouette
+          %th Speed
+          %th Handling
+          %th{ data: { hide: 'all' } } Defense fore
+          %th{ data: { hide: 'all' } } Defense port
+          %th{ data: { hide: 'all' } } Defense starboard
+          %th{ data: { hide: 'all' } } Defense aft
+          %th Armor
+          %th Hull trauma threshold
+          %th System strain threshold
+          %th{ data: { hide: 'all' } } Hard points
+          %th{ data: { hide: 'all' } } Hull type
+          %th{ data: { hide: 'all' } } Manufacturer
+          %th{ data: { hide: 'all' } } Hyperdrive class primary
+          %th{ data: { hide: 'all' } } Hyperdrive class secondary
+          %th{ data: { hide: 'all' } } Navicomputer
+          %th{ data: { hide: 'all' } } Sensor range
+          %th{ data: { hide: 'all' } } Encumbrance capacity
+          %th{ data: { hide: 'all' } } Passenger capacity
+          %th{ data: { hide: 'all' } } Consumables
+          %th Cost
+          %th Rarity
+          %th{ data: { hide: 'all' } } Book
+          %th{ data: { hide: 'all' } } Starship category
+
+      - @starship_categories.each do |category|
+        - if category.starships.any?
+          %tr
+            %th{colspan: "10", style: "background-color: #000; color: #fff;"}= category.name.pluralize
+          - @starships.each do |starship|
+            %tr
+              %td
+                = link_to starship.name, starship_path(starship)
+                - if can? :edit, @starship
+                  - if starship.description.blank?
+                    %span.alert.round.label Description missing
+                  - if starship.book.blank?
+                    %span.alert.round.label Book missing
+                  %small
+                    = link_to "<i class='fi-pencil'></i>".html_safe, edit_starship_path(starship)
+              %td= starship.description
+              %td= starship.silhouette
+              %td= starship.speed
+              %td
+                - if starship.handling && starship.handling > 0
+                  = "+#{starship.handling}"
+                - else
+                  = starship.handling
+              %td= starship.defense_fore
+              %td= starship.defense_port
+              %td= starship.defense_starboard
+              %td= starship.defense_aft
+              %td= starship.armor
+              %td= starship.hull_trauma_threshold
+              %td= starship.system_strain_threshold
+              %td= starship.hard_points
+              %td= starship.hull_type
+              %td= starship.manufacturer
+              %td= starship.hyperdrive_class_primary
+              %td= starship.hyperdrive_class_secondary
+              %td= starship.navicomputer
+              %td= starship.sensor_range
+              %td= starship.encumbrance_capacity
+              %td= starship.passenger_capacity
+              %td
+                %span.footable-details-label Consumables:
+                = starship.consumables
+              %td
+                %span.footable-details-label Cost:
+                = starship.cost
+              %td
+                %span.footable-details-label Rarity:
+                = starship.rarity
+              %td
+                %span.footable-details-label Book:
+                = starship.book.title if starship.book
+              %td= starship.starship_category_id

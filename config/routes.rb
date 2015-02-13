@@ -1,9 +1,4 @@
 EdgeOfEmpire::Application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
   root :to => 'characters#index'
 
   ActiveAdmin.routes(self)
@@ -39,6 +34,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :sidebars
   resources :books
   resources :force_powers
+  resources :starships
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   devise_scope :user do
