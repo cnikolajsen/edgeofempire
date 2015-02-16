@@ -25,10 +25,8 @@
           %th Range
           %th Damage
           %th Critical
-          %th Price
-          %th Rarity
-          %th Size low
-          %th Size high
+          %th Price/Rarity
+          %th Size that can mount
           - if can? :edit, @vehicle_weapon
             %th
       %tbody
@@ -42,10 +40,8 @@
             %td= vehicle_weapon.range
             %td= vehicle_weapon.damage
             %td= vehicle_weapon.critical
-            %td= vehicle_weapon.price
-            %td= vehicle_weapon.rarity
-            %td= vehicle_weapon.size_low
-            %td= vehicle_weapon.size_high
+            %td= "#{number_to_currency(vehicle_weapon.price, unit: '', precision: 0)}/#{vehicle_weapon.rarity}"
+            %td= "#{vehicle_weapon.size_low}-#{vehicle_weapon.size_high}"
             - if can? :edit, @vehicle_weapon
               %td= link_to 'Destroy', vehicle_weapon, :method => :delete, :data => { :confirm => 'Are you sure?' }
 

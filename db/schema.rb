@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150216083718) do
+ActiveRecord::Schema.define(version: 20150216124834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -855,6 +855,17 @@ ActiveRecord::Schema.define(version: 20150216083718) do
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
+
+  create_table "vehicle_weapon_quality_ranks", force: true do |t|
+    t.integer  "vehicle_weapon_id"
+    t.integer  "weapon_quality_id"
+    t.integer  "ranks"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vehicle_weapon_quality_ranks", ["vehicle_weapon_id"], name: "index_vehicle_weapon_quality_ranks_on_vehicle_weapon_id", using: :btree
+  add_index "vehicle_weapon_quality_ranks", ["weapon_quality_id"], name: "index_vehicle_weapon_quality_ranks_on_weapon_quality_id", using: :btree
 
   create_table "vehicle_weapons", force: true do |t|
     t.string   "name"

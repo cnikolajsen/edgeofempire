@@ -47,7 +47,8 @@ class Starship < ActiveRecord::Base
       if w.vehicle_weapon_id
         grouping = w.grouping.blank? ? '' : " #{w.grouping}"
         turreted = w.turret? ? ' Turret' : ''
-        weapons << "#{w.mounting}#{turreted} Mounted#{grouping} #{w.vehicle_weapon.name} (Fire Arc #{w.firing_arc}; Damage #{w.vehicle_weapon.damage}; Critical #{w.vehicle_weapon.critical}; Range [#{w.vehicle_weapon.range}]; {Qualities})"
+        qualities = w.vehicle_weapon.qualities.any? ? "; #{w.vehicle_weapon.qualities.to_sentence(two_words_connector: ', ')}" : ''
+        weapons << "#{w.mounting}#{turreted} Mounted#{grouping} #{w.vehicle_weapon.name} (Fire Arc #{w.firing_arc}; Damage #{w.vehicle_weapon.damage}; Critical #{w.vehicle_weapon.critical}; Range [#{w.vehicle_weapon.range}]#{qualities})"
       end
     end
     weapons

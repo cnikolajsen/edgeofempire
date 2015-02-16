@@ -3,4 +3,8 @@
     .small-10.columns
       = f.input :description, as: :select, collection: ['Pilot', 'Co-pilot', 'Co-pilot/Engineer', 'Captain', 'Navigator', 'Gunner', 'Comms/Sensor Operator', 'Engineer', 'Cargo Master', 'Crew']
       = f.input :qty
+    .small-1.columns
+      = f.hidden_field :_destroy
+      = link_to "<i class='fi-trash'></i>".html_safe, '', :onclick => "remove_fields(this);return false;"
+
       %hr

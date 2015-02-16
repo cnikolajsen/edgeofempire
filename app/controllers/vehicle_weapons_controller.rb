@@ -70,7 +70,12 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def vehicle_weapon_params
-    params.require(:vehicle_weapon).permit(:name, :range, :damage, :critical, :price, :rarity, :size_high, :size_low)
+    params.require(:vehicle_weapon).permit(
+      :name, :range, :damage, :critical, :price, :rarity, :size_high, :size_low,
+      vehicle_weapon_quality_ranks_attributes: [
+        :id, :vehicle_weapon_id, :weapon_quality_id, :ranks, :_destroy
+      ]
+    )
   end
 
   def set_page

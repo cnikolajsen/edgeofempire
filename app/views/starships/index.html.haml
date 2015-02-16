@@ -63,4 +63,4 @@
                   = starship.system_strain_threshold
                 %td
                   %span.footable-details-label Cost/Rarity:
-                  #{starship.cost}/#{starship.rarity}
+                  #{number_to_currency(starship.cost, unit: '', precision: 0)}/#{starship.rarity}

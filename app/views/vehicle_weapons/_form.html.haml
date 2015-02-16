@@ -9,7 +9,7 @@
           %li= msg
 
   .row
-    .medium-4.small-12.columns
+    .medium-6.small-12.columns
       .row
         .small-3.columns
           = f.label :name, class: 'inline right'
@@ -51,6 +51,11 @@
         .small-9.columns
           = f.input :size_high, label: false
 
+    .medium-6.small-12.columns
+      %h4 Qualities
+      = f.simple_fields_for :vehicle_weapon_quality_ranks do |builder|
+        = render 'vehicle_weapon_quality_rank_fields', :f => builder
+      = link_to_add_fields "<i class='fi-plus'> Add Quality</i>".html_safe, f, :vehicle_weapon_quality_ranks
   .row
     .small-12.columns
       .form-actions

@@ -77,7 +77,7 @@
       = @starship.consumables
       %br
       %b Cost/Rarity:
-      #{@starship.cost}/#{@starship.rarity}
+      #{number_to_currency(@starship.cost, unit: '', precision: 0)}/#{@starship.rarity}
       %br
       %b Customization Hard Points:
       = @starship.hard_points
