@@ -1,0 +1,63 @@
+= simple_form_for @vehicle_weapon, html: { class: 'form-horizontal' } do |f|
+  - if @vehicle_weapon.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@vehicle_weapon.errors.count, "error")
+        prohibited this vehicle weapon from being saved:
+      %ul
+        - @vehicle_weapon.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-4.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :name, class: 'inline right'
+        .small-9.columns
+          = f.input :name, label: false
+      .row
+        .small-3.columns
+          = f.label :range, class: 'inline right'
+        .small-9.columns
+          = f.input :range, label: false
+      .row
+        .small-3.columns
+          = f.label :damage, class: 'inline right'
+        .small-9.columns
+          = f.input :damage, label: false
+      .row
+        .small-3.columns
+          = f.label :critical, class: 'inline right'
+        .small-9.columns
+          = f.input :critical, label: false
+      .row
+        .small-3.columns
+          = f.label :price, class: 'inline right'
+        .small-9.columns
+          = f.input :price, label: false
+      .row
+        .small-3.columns
+          = f.label :rarity, class: 'inline right'
+        .small-9.columns
+          = f.input :rarity, label: false
+      .row
+        .small-3.columns
+          = f.label :size_low, class: 'inline right'
+        .small-9.columns
+          = f.input :size_low, label: false
+      .row
+        .small-3.columns
+          = f.label :size_high, class: 'inline right'
+        .small-9.columns
+          = f.input :size_high, label: false
+
+  .row
+    .small-12.columns
+      .form-actions
+        = f.submit nil, class: 'button'
+        - if @vehicle_weapon.new_record?
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            vehicle_weapons_path, class: 'button secondary'                    |
+        - else
+          = link_to t('.cancel', :default => t("helpers.links.cancel")), |
+            vehicle_weapon_path, class: 'button secondary'                    |

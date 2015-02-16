@@ -1,4 +1,6 @@
 EdgeOfEmpire::Application.routes.draw do
+  resources :vehicle_weapons
+
   root :to => 'characters#index'
 
   ActiveAdmin.routes(self)

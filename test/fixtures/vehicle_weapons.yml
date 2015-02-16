@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  range: MyString
+  damage: 1
+  critical: 1
+  price: 1
+  rarity: 1
+  size_low: 1
+  size_high: 1
+  slug: MyString
+
+two:
+  name: MyString
+  range: MyString
+  damage: 1
+  critical: 1
+  price: 1
+  rarity: 1
+  size_low: 1
+  size_high: 1
+  slug: MyString

@@ -1,0 +1,33 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @vehicle_weapon.name
+%p
+  %b Range:
+  = @vehicle_weapon.range
+%p
+  %b Damage:
+  = @vehicle_weapon.damage
+%p
+  %b Critical:
+  = @vehicle_weapon.critical
+%p
+  %b Price:
+  = @vehicle_weapon.price
+%p
+  %b Rarity:
+  = @vehicle_weapon.rarity
+%p
+  %b Size low:
+  = @vehicle_weapon.size_low
+%p
+  %b Size high:
+  = @vehicle_weapon.size_high
+%p
+  %b Slug:
+  = @vehicle_weapon.slug
+
+= link_to 'Edit', edit_vehicle_weapon_path(@vehicle_weapon)
+\|
+= link_to 'Back', vehicle_weapons_path
