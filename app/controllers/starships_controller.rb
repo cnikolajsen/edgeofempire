@@ -80,7 +80,7 @@ private
       :book_id, :starship_category_id,
       starship_vehicle_weapons_attributes: [
         :id, :vehicle_weapon_id, :starship_id, :mounting, :grouping,
-        :retractable, :turret, :_destroy
+        :retractable, :turret, :firing_arc, :_destroy
       ],
       starship_crews_attributes: [
         :id, :starship_id, :description, :qty, :_destroy

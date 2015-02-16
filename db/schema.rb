@@ -704,6 +704,7 @@ ActiveRecord::Schema.define(version: 20150216083718) do
     t.string   "grouping"
     t.boolean  "turret"
     t.boolean  "retractable"
+    t.string   "firing_arc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

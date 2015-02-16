@@ -7,6 +7,7 @@ class CreateStarshipVehicleWeapons < ActiveRecord::Migration
       t.string :grouping
       t.boolean :turret
       t.boolean :retractable
+      t.string :firing_arc
 
       t.timestamps
     end

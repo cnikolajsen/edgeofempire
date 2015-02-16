@@ -45,7 +45,9 @@ class Starship < ActiveRecord::Base
     weapons = []
     starship_vehicle_weapons.each do |w|
       if w.vehicle_weapon_id
-        weapons << "#{w.mounting} Mounted #{w.grouping} #{w.vehicle_weapon.name} (Fire Arc N/A; Damage #{w.vehicle_weapon.damage}; Critical #{w.vehicle_weapon.critical}; Range [#{w.vehicle_weapon.range}]; {Qualities})"
+        grouping = w.grouping.blank? ? '' : " #{w.grouping}"
+        turreted = w.turret? ? ' Turret' : ''
+        weapons << "#{w.mounting}#{turreted} Mounted#{grouping} #{w.vehicle_weapon.name} (Fire Arc #{w.firing_arc}; Damage #{w.vehicle_weapon.damage}; Critical #{w.vehicle_weapon.critical}; Range [#{w.vehicle_weapon.range}]; {Qualities})"
       end
     end
     weapons

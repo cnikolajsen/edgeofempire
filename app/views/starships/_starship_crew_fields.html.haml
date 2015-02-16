@@ -1,6 +1,6 @@
 .fields
   .row
     .small-10.columns
-      = f.input :description
+      = f.input :description, as: :select, collection: ['Pilot', 'Co-pilot', 'Co-pilot/Engineer', 'Captain', 'Navigator', 'Gunner', 'Comms/Sensor Operator', 'Engineer', 'Cargo Master', 'Crew']
       = f.input :qty
       %hr
