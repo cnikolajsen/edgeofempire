@@ -71,7 +71,19 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def starship_params
-    params.require(:starship).permit(:name, :description, :silhouette, :speed, :handling, :defense_fore, :defense_port, :defense_starboard, :defense_aft, :armor, :hull_trauma_threshold, :system_strain_threshold, :hard_points, :hull_type, :manufacturer, :hyperdrive_class_primary, :hyperdrive_class_secondary, :navicomputer, :sensor_range, :encumbrance_capacity, :passenger_capacity, :consumables, :cost, :rarity, :book_id, :starship_category_id)
+    params.require(:starship).permit(
+      :name, :description, :silhouette, :speed, :handling, :defense_fore,
+      :defense_port, :defense_starboard, :defense_aft, :armor,
+      :hull_trauma_threshold, :system_strain_threshold, :hard_points,
+      :hull_type, :manufacturer, :hyperdrive_class_primary,
+      :hyperdrive_class_secondary, :navicomputer, :sensor_range,
+      :encumbrance_capacity, :passenger_capacity, :consumables, :cost, :rarity,
+      :book_id, :starship_category_id,
+      starship_vehicle_weapons_attributes: [
+        :id, :vehicle_weapon_id, :starship_id, :mounting, :grouping,
+        :retractable, :turret, :_destroy
+      ]
+    )
   end
 
   def set_page

@@ -1,0 +1,9 @@
+.fields
+  .row
+    .small-10.columns
+      = f.input :vehicle_weapon_id, :as => :select, :collection => VehicleWeapon.all.map{|u| ["#{u.name}", u.id]}, label: false
+      = f.input :mounting, as: :select, collection: %w(Forward Aft Port Starboard Dorsal Ventral Wingtip)
+      = f.input :grouping, as: :select, collection: %w(Twin Triple Quad)
+      = f.input :retractable
+      = f.input :turret
+      %hr

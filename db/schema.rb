@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150213132509) do
+ActiveRecord::Schema.define(version: 20150216072813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -686,6 +686,20 @@ ActiveRecord::Schema.define(version: 20150213132509) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "starship_vehicle_weapons", force: true do |t|
+    t.integer  "starship_id"
+    t.integer  "vehicle_weapon_id"
+    t.string   "mounting"
+    t.string   "grouping"
+    t.boolean  "turret"
+    t.boolean  "retractable"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "starship_vehicle_weapons", ["starship_id"], name: "index_starship_vehicle_weapons_on_starship_id", using: :btree
+  add_index "starship_vehicle_weapons", ["vehicle_weapon_id"], name: "index_starship_vehicle_weapons_on_vehicle_weapon_id", using: :btree
 
   create_table "starships", force: true do |t|
     t.string   "name"

@@ -44,6 +44,13 @@
           = f.label :book_id, class: 'inline right'
         .small-9.columns
           = f.input :book_id, as: :select, label: false, collection: Book.where(:true)
+      .row.panel
+        .small-12.columns
+          %h4 Weapons
+          = f.simple_fields_for :starship_vehicle_weapons do |builder|
+            = render 'starship_vehicle_weapon_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Weapon</i>".html_safe, f, :starship_vehicle_weapons
+
 
     .medium-4.small-12.columns
       .row

@@ -11,4 +11,8 @@ class Starship < ActiveRecord::Base
 
   belongs_to :book
   belongs_to :starship_category
+
+  has_many :starship_vehicle_weapons
+  accepts_nested_attributes_for :starship_vehicle_weapons, reject_if: :all_blank, allow_destroy: true
+
 end
