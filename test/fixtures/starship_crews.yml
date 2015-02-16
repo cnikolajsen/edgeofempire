@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  starship_id: 
+  description: MyText
+  qty: 1
+
+two:
+  starship_id: 
+  description: MyText
+  qty: 1

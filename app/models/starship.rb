@@ -14,5 +14,6 @@ class Starship < ActiveRecord::Base
 
   has_many :starship_vehicle_weapons
   accepts_nested_attributes_for :starship_vehicle_weapons, reject_if: :all_blank, allow_destroy: true
-
+  has_many :starship_crews
+  accepts_nested_attributes_for :starship_crews, reject_if: :all_blank, allow_destroy: true
 end

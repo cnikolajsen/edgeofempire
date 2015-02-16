@@ -66,7 +66,6 @@ private
   # Use callbacks to share common setup or constraints between actions.
   def set_starship
     @starship = Starship.friendly.find(params[:id])
-    #@starship = Starship.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -82,6 +81,9 @@ private
       starship_vehicle_weapons_attributes: [
         :id, :vehicle_weapon_id, :starship_id, :mounting, :grouping,
         :retractable, :turret, :_destroy
+      ],
+      starship_crews_attributes: [
+        :id, :starship_id, :description, :qty, :_destroy
       ]
     )
   end

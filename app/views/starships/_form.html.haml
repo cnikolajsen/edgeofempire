@@ -107,6 +107,12 @@
           = f.label :hard_points, class: 'inline right'
         .small-3.columns
           = f.input :hard_points, label: false
+      .row.panel
+        .small-12.columns
+          %h4 Crew Complement
+          = f.simple_fields_for :starship_crews do |builder|
+            = render 'starship_crew_fields', :f => builder
+          = link_to_add_fields "<i class='fi-plus'> Add Crew</i>".html_safe, f, :starship_crews
 
     .medium-4.small-12.columns
       .row
