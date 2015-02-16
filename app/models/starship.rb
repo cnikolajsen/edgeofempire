@@ -16,4 +16,38 @@ class Starship < ActiveRecord::Base
   accepts_nested_attributes_for :starship_vehicle_weapons, reject_if: :all_blank, allow_destroy: true
   has_many :starship_crews
   accepts_nested_attributes_for :starship_crews, reject_if: :all_blank, allow_destroy: true
+
+  def crew
+    crew = []
+    starship_crews.each do |c|
+      crew << "#{c.qty} #{c.description}"
+    end
+    crew.reverse!
+  end
+
+  def hyperdrive
+    hd = []
+    if hyperdrive_class_primary > 0
+      hd << "Primary: Class #{hyperdrive_class_primary}"
+    end
+    if hyperdrive_class_secondary > 0
+      hd << "Backup: Class #{hyperdrive_class_secondary}"
+    end
+
+    if hd.empty?
+      hd << 'None'
+    end
+
+    hd
+  end
+
+  def weapons
+    weapons = []
+    starship_vehicle_weapons.each do |w|
+      if w.vehicle_weapon_id
+        weapons << "#{w.mounting} Mounted #{w.grouping} #{w.vehicle_weapon.name} (Fire Arc N/A; Damage #{w.vehicle_weapon.damage}; Critical #{w.vehicle_weapon.critical}; Range [#{w.vehicle_weapon.range}]; {Qualities})"
+      end
+    end
+    weapons
+  end
 end

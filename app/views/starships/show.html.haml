@@ -1,84 +1,96 @@
-%p#notice= notice
+- content_for :title do
+  #{@starship.name}
 
-%p
-  %b Name:
-  = @starship.name
-%p
-  %b Description:
-  = @starship.description
-%p
-  %b Silhouette:
-  = @starship.silhouette
-%p
-  %b Speed:
-  = @starship.speed
-%p
-  %b Handling:
-  = @starship.handling
-%p
-  %b Defense fore:
-  = @starship.defense_fore
-%p
-  %b Defense port:
-  = @starship.defense_port
-%p
-  %b Defense starboard:
-  = @starship.defense_starboard
-%p
-  %b Defense aft:
-  = @starship.defense_aft
-%p
-  %b Armor:
-  = @starship.armor
-%p
-  %b Hull trauma threshold:
-  = @starship.hull_trauma_threshold
-%p
-  %b System strain threshold:
-  = @starship.system_strain_threshold
-%p
-  %b Hard points:
-  = @starship.hard_points
-%p
-  %b Hull type:
-  = @starship.hull_type
-%p
-  %b Manufacturer:
-  = @starship.manufacturer
-%p
-  %b Hyperdrive class primary:
-  = @starship.hyperdrive_class_primary
-%p
-  %b Hyperdrive class secondary:
-  = @starship.hyperdrive_class_secondary
-%p
-  %b Navicomputer:
-  = @starship.navicomputer
-%p
-  %b Sensor range:
-  = @starship.sensor_range
-%p
-  %b Encumbrance capacity:
-  = @starship.encumbrance_capacity
-%p
-  %b Passenger capacity:
-  = @starship.passenger_capacity
-%p
-  %b Consumables:
-  = @starship.consumables
-%p
-  %b Cost:
-  = @starship.cost
-%p
-  %b Rarity:
-  = @starship.rarity
-%p
-  %b Book:
-  = @starship.book_id
-%p
-  %b Starship category:
-  = @starship.starship_category_id
+.row
+  .small-12.columns
+    %h1= @starship.name
 
-= link_to 'Edit', edit_starship_path(@starship)
-\|
-= link_to 'Back', starships_path
+    = markdown(text_replace_tokens(@starship.description))
+    %p
+      %b Book:
+      = @starship.book.title
+
+.row
+  .small-12.columns
+    %table
+      %thead
+        %tr
+          %th Silhoutte
+          %th Speed
+          %th Handling
+          %th HT Threshold
+          %th SS Threshold
+          %th Armor
+      %tbody
+        %tr
+          %td= @starship.silhouette
+          %td= @starship.speed
+          %td= @starship.handling
+          %td= @starship.hull_trauma_threshold
+          %td= @starship.system_strain_threshold
+          %td= @starship.armor
+      %thead
+        %tr
+          %th Defense
+          %th Fore
+          %th Port
+          %th Starboard
+          %th Aft
+          %th
+      %tbody
+        %tr
+          %td
+          %td= @starship.defense_fore
+          %td= @starship.defense_port
+          %td= @starship.defense_starboard
+          %td= @starship.defense_aft
+          %td
+
+.row
+  .small-12.columns
+    %p
+      %b Hull Type/Class:
+      = @starship.hull_type
+      %br
+      %b Manufacturer:
+      = @starship.manufacturer
+      %br
+      %b Hyperdrive:
+      = @starship.hyperdrive.to_sentence(two_words_connector: ', ')
+      %br
+      %b Navicomputer:
+      = @starship.navicomputer
+      %br
+      %b Sensor range:
+      = @starship.sensor_range
+      %br
+      %b Ship's Complement:
+      = @starship.crew.to_sentence.humanize
+      %br
+      %b Encumbrance Capacity:
+      = @starship.encumbrance_capacity
+      %br
+      %b Passenger Capacity:
+      = @starship.passenger_capacity
+      %br
+      %b Consumables:
+      = @starship.consumables
+      %br
+      %b Cost/Rarity:
+      #{@starship.cost}/#{@starship.rarity}
+      %br
+      %b Customization Hard Points:
+      = @starship.hard_points
+      %br
+      %b Weapons:
+      = @starship.weapons.to_sentence
+
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            starships_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @starship
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_starship_path(@starship), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @starship, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'
