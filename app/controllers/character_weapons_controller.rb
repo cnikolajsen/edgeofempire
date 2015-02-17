@@ -20,6 +20,10 @@ class CharacterWeaponsController < ApplicationController
         character_gear.update_attribute(:carried, params[:character_weapons][:carried])
         character_gear.update_attribute(:equipped, params[:character_weapons][:equipped])
         flash[:success] = "#{item.name} added"
+
+        if @character.creation?
+          @character.update_attribute(:credits, (@character.credits - item.price))
+        end
       else
         flash[:error] = "Item not found."
       end
@@ -32,6 +36,11 @@ class CharacterWeaponsController < ApplicationController
     name = item.weapon.name
     item.delete
     flash[:success] = "'#{name}' removed"
+
+    if @character.creation?
+      @character.update_attribute(:credits, (@character.credits + item.total_value))
+    end
+
     redirect_to :back
   end
 
@@ -91,6 +100,11 @@ class CharacterWeaponsController < ApplicationController
       if hard_points_used < weapon.hard_points
         @weapon_attachments = CharacterWeaponAttachment.where(:character_weapon_id => params[:character_weapon_id], :weapon_attachment_id => params[:character_weapon_attachment][:weapon_attachment_id]).first_or_create
         flash[:success] = "Attachment added"
+
+        if @character.creation?
+          attachment = WeaponAttachment.find(@weapon_attachments.weapon_attachment_id)
+          @character.update_attribute(:credits, (@character.credits - attachment.price))
+        end
       else
         flash[:error] = "No hard points left on item."
       end
@@ -105,8 +119,16 @@ class CharacterWeaponsController < ApplicationController
   end
 
   def remove_weapon_attachment
-    CharacterWeaponAttachment.where(:id => params[:attachment_id]).delete_all
+    weapons_attachment = CharacterWeaponAttachment.find(params[:attachment_id])
+
+    if @character.creation?
+      attachment = WeaponAttachment.find(weapons_attachment.weapon_attachment_id)
+      @character.update_attribute(:credits, (@character.credits + attachment.price))
+    end
+
+    weapons_attachment.delete
     flash[:success] = "Attachment removed"
+
     redirect_to :back
   end
 

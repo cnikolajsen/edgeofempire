@@ -10,6 +10,24 @@
 </div>
 <div class="row">
   <div class="small-12 medium-3 columns">
+    <div class="panel live-stats">
+      <% if @character.creation? %>
+        <h5><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits") %> <%= @character.credits %></h5>
+      <% else %>
+        <div class="row collapse">
+          <div class="small-2 columns">
+            <span class="prefix radius">
+              <label class="inline"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits") %></label>
+            </span>
+          </div>
+          <div class="small-10 columns">
+            <%= hidden_field_tag 'slug', user_character_path(current_user, @character) %>
+            <%= number_field_tag :character_credits, @character.credits %>
+          </div>
+        </div>
+      <% end %>
+      <small>During character generation the cost of items added will be subtracted from your character's starting credits. After activation credits will no longer be automatically updated on item purchase.</small>
+    </div>
     <%= form_for :character_weapon_attachment do |f| %>
       <% if @weapon.hard_points > 0 %>
         <%= f.select :weapon_attachment_id, WeaponAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Add Attachment"} %>

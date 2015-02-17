@@ -27,7 +27,12 @@ class CharacterCyberneticsController < ApplicationController
 
   def update
     if !params[:character_cybernetics][:cybernetics_id].blank? && !params[:character_cybernetics][:location].blank?
+      item = Gear.find(params[:character_cybernetics][:cybernetics_id])
       CharacterCybernetic.where(character_id: @character.id, location: params[:character_cybernetics][:location], gear_id: params[:character_cybernetics][:cybernetics_id]).create
+
+      if @character.creation?
+        @character.update_attribute(:credits, (@character.credits - item.price))
+      end
     end
 
     flash[:success] = 'Cybernetics updated'
@@ -35,7 +40,12 @@ class CharacterCyberneticsController < ApplicationController
   end
 
   def remove
-    CharacterCybernetic.find(params[:character_cybernetics_id]).destroy
+    character_cybernetics = CharacterCybernetic.find(params[:character_cybernetics_id])
+
+    item = Gear.find(character_cybernetics.gear_id)
+    if @character.creation?
+      @character.update_attribute(:credits, (@character.credits + item.price))
+    end
 
     flash[:success] = 'Cybernetics removed'
     redirect_to :back

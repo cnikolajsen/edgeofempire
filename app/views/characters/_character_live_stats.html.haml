@@ -3,18 +3,17 @@
     %h5 Life
     = form_for [@character.user, @character] do |f|
       = hidden_field_tag 'slug', @character.slug
-      .row
+      .row.collapse
         .small-3.columns
-          = f.label :strain
+          %span.prefix.radius
+            = f.label :strain, :class => 'inline'
         .small-6.columns
           = f.number_field :strain, min: 0
         .small-3.columns
-      /.row
-      /  .progress.small-12.alert.round
-      /    %span.meter{style: "width: 50%"}
-      .row
+      .row.collapse
         .small-3.columns
-          = f.label :wounds
+          %span.prefix.radius
+            = f.label :wounds, :class => 'inline'
         .small-6.columns
           = f.number_field :wounds, min: 0
         .small-3.columns
@@ -51,9 +50,10 @@
       = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'globalModal', :'data-reveal-ajax' => 'true'
       %hr
       %h5 Credits
-      .row
+      .row.collapse
         .small-2.columns
-          = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+          %span.prefix.radius
+            %label.inline= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
         .small-10.columns
           = f.number_field :credits, :min => 0
 

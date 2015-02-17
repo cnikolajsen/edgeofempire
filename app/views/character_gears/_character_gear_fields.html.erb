@@ -8,6 +8,7 @@
     <%= item[:quantity] %>
     <%= link_to " +", user_character_increase_item_qty_path(current_user, @character, item[:id], item[:custom] ? 'custom' : '') %>
   </td>
+  <td><%= item[:total_value] %></td>
   <td>
     <% if item[:carried] %>
       <%= link_to "Carried", user_character_place_item_path(current_user, @character, item[:id], 'storage', item[:custom] ? 'custom' : ''), :class => 'label success' %>

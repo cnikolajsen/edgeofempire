@@ -1,9 +1,0 @@
-<ul class="pricing-table">
-  <li class="title"><%= gear.name %></li>
-  <li class="price"><%= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")%> <%= gear.price %></li>
-  <li class="bullet-item">
-    <%= text_replace_tokens(gear.description).html_safe %>
-  </li>
-  <li class="bullet-item">Enc: <%= gear.encumbrance %></li>
-  <li class="bullet-item">Rarity: <%= gear.rarity %></li>
-</ul>

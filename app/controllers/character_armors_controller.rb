@@ -20,6 +20,10 @@ class CharacterArmorsController < ApplicationController
         character_gear.update_attribute(:carried, params[:character_armors][:carried])
         character_gear.update_attribute(:equipped, params[:character_armors][:equipped])
         flash[:success] = "#{item.name} added"
+
+        if @character.creation?
+          @character.update_attribute(:credits, (@character.credits - item.price))
+        end
       else
         flash[:error] = "Item not found."
       end
@@ -32,6 +36,11 @@ class CharacterArmorsController < ApplicationController
     name = item.armor.name
     item.delete
     flash[:success] = "'#{name}' removed"
+
+    if @character.creation?
+      @character.update_attribute(:credits, (@character.credits + item.total_value))
+    end
+
     redirect_to :back
   end
 
@@ -86,6 +95,11 @@ class CharacterArmorsController < ApplicationController
     unless params[:character_armor_attachment][:armor_attachment_id].blank?
       @armor_attachments = CharacterArmorAttachment.where(:character_armor_id => params[:character_armor_id], :armor_attachment_id => params[:character_armor_attachment][:armor_attachment_id]).first_or_create
       flash[:success] = "Attachment added"
+
+      if @character.creation?
+        attachment = ArmorAttachment.find(@armor_attachments.armor_attachment_id)
+        @character.update_attribute(:credits, (@character.credits - attachment.price))
+      end
     end
     if params[:character_armor_attachment][:description] || params[:character_armor_attachment][:armor_model_id] || params[:character_armor_attachment][:custom_name]
       armor = CharacterArmor.find(params[:character_armor_id])
@@ -98,8 +112,16 @@ class CharacterArmorsController < ApplicationController
   end
 
   def remove_armor_attachment
-    CharacterArmorAttachment.where(:id => params[:attachment_id]).destroy_all
+    armor_attachment = CharacterArmorAttachment.find(params[:attachment_id])
+
+    if @character.creation?
+      attachment = ArmorAttachment.find(armor_attachment.armor_attachment_id)
+      @character.update_attribute(:credits, (@character.credits + attachment.price))
+    end
+
+    armor_attachment.delete
     flash[:success] = "Attachment removed"
+
     redirect_to :back
   end
 

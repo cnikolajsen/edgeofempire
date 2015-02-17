@@ -28,6 +28,10 @@ class CharacterGearsController < ApplicationController
         character_gear = CharacterGear.where(:character_id => @character.id, :gear => params[:character_gears][:gear_id]).create
         character_gear.update_attribute(:carried, params[:character_gears][:carried])
         character_gear.update_attribute(:qty, params[:character_gears][:qty])
+
+        if @character.creation?
+          @character.update_attribute(:credits, (@character.credits - (item.price * character_gear.qty)))
+        end
         flash[:success] = "#{item.name} added"
       else
         flash[:error] = "Item not found."
@@ -59,6 +63,10 @@ class CharacterGearsController < ApplicationController
       item = CharacterGear.find(params[:character_gear_id])
       item.update_attribute(:qty, item.qty + 1)
       name = item.gear.name
+
+      if @character.creation?
+        @character.update_attribute(:credits, (@character.credits - item.gear.price))
+      end
     end
     flash[:success] = "'#{name}' count increased"
     redirect_to :back
@@ -73,6 +81,10 @@ class CharacterGearsController < ApplicationController
       item = CharacterGear.find(params[:character_gear_id])
       item.update_attribute(:qty, item.qty - 1)
       name = item.gear.name
+
+      if @character.creation?
+        @character.update_attribute(:credits, (@character.credits + item.gear.price))
+      end
     end
     flash[:success] = "'#{name}' count decreased"
     redirect_to :back
@@ -85,6 +97,10 @@ class CharacterGearsController < ApplicationController
     else
       item = CharacterGear.where(:character_id => @character.id, :id => params[:character_gear_id]).first
       name = item.gear.name
+
+      if @character.creation?
+        @character.update_attribute(:credits, (@character.credits + (item.gear.price * item.qty)))
+      end
     end
     item.delete
     flash[:success] = "'#{name}' removed"

@@ -1,0 +1,11 @@
+%ul.pricing-table
+  %li.title= gear.name
+  %li.price
+    = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+    = gear.price
+  %li.bullet-item
+    = markdown(text_replace_tokens(gear.description))
+  %li.bullet-item
+    Enc: #{gear.encumbrance}
+  %li.bullet-item
+    Rarity: #{gear.rarity}

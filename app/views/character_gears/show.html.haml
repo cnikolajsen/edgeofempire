@@ -1,0 +1,87 @@
+.row
+  .medium-12.columns
+    %h1= t '.title', :default => "Manage equipment for #{@character.name}"
+.row
+  .medium-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .small-3.columns
+    .panel.live-stats
+      - if @character.creation?
+        %h5 #{image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")} #{@character.credits}
+      - else
+        .row.collapse
+          .small-2.columns
+            %span.prefix.radius
+              %label.inline= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+          .small-10.columns
+            = hidden_field_tag 'slug', user_character_path(current_user, @character)
+            = number_field_tag :character_credits, @character.credits
+      %small During character generation the cost of items added will be subtracted from your character's starting credits. After activation credits will no longer be automatically updated on item purchase.
+    %h5 Add general item
+    = form_for :character_gears do |f|
+      - grouped_options = Array.new
+      - GearCategory.where(:true).order(:name).each do |cat|
+        - grouped_options << [cat.name, Gear.where(:gear_category_id => cat.id).order(:name).collect { |gear| ["#{gear.name}", gear.id]}]
+      = f.select :gear_id, grouped_options_for_select(grouped_options), {:prompt => "Select Item"}
+      .row
+        .small-12.columns
+          #item-info
+      .row
+        .small-6.columns
+          = f.check_box :carried, {checked: true}
+          = f.label :carried
+        .small-6.columns
+          .row.collapse
+            .small-4.columns
+              %span.prefix.radius
+                %label.inline Qty
+            .small-8.columns
+              = f.number_field :qty, :min => 1, :value => 1
+      .row
+        .small-12.columns
+          = f.submit 'Add Item', :class => 'button tiny'
+    %hr
+    %h5 Add custom item
+    = form_for :character_custom_gears do |f|
+      .row
+        .small-12.columns
+          = f.label :description
+          = f.text_field :description
+          = f.check_box :carried, {checked: true}
+          = f.label :carried
+      .row
+        .small-6.columns
+          .row.collapse
+            .small-4.columns
+              %span.prefix.radius
+                %label.inline Enc
+            .small-8.columns
+              = f.number_field :encumbrance, :min => 0, :value => 0
+        .small-6.columns
+          .row.collapse
+            .small-4.columns
+              %span.prefix.radius
+                %label.inline Qty
+            .small-8.columns
+              = f.number_field :qty, :min => 1, :value => 1
+      .row
+        .small-12.columns
+          = f.submit 'Add Item', :class => 'button tiny'
+  .small-9.columns
+    .row
+      .small-12.columns
+        %table.responsive{:style => "width:100%"}
+          %thead
+            %th Item
+            %th Encumbrance
+            %th Quantity
+            %th Value
+            %th
+          %tbody#item-grid
+            - @character.inventory({:type => ['gear']}).each do |item|
+              = render :partial => 'character_gear_fields', :locals => { :item => item }
+        %caption
+          Items marked as <span class="label success">Carried</span> is placed on the character's person and account for in calculating encumbrance.
+          %br/
+          Items marked as <span class="label secondary">Stored</span> is owned by the character but located somewhere else such as on the group's ship and is not included in character encumbrance.

@@ -60,6 +60,9 @@
                         Skill bonus:
                         = Skill.find(modification_option.skill_id).name
   %td
+    %span.footable-details-label Total Value:
+    = character_weapon.total_value
+  %td
     = link_to "Modify", user_character_modify_weapon_path(current_user, @character, character_weapon.id), :class => 'label info'
   %td
     = link_to "Remove", user_character_remove_weapon_path(current_user, @character, character_weapon.id), :class => 'label alert', :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }

@@ -662,6 +662,7 @@ class Character < ActiveRecord::Base
             :carried => cg.carried,
             :quantity => cg.qty,
             :total_encumbrance => cg.gear.encumbrance.nil? ? 0 : cg.gear.encumbrance * cg.qty, # calculate total
+            :total_value => cg.gear.price.nil? ? 0 : cg.gear.price * cg.qty, # calculate total
             :location => nil,
             :custom => false,
             :type => 'gear',
@@ -678,6 +679,7 @@ class Character < ActiveRecord::Base
             :carried => cg.carried,
             :quantity => cg.qty,
             :total_encumbrance => cg.encumbrance.nil? ? 0 : cg.encumbrance * cg.qty, # calculate total
+            :total_value => '',
             :location => nil,
             :custom => true,
             :type => 'gear',
