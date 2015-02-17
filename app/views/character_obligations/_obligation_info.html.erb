@@ -1,10 +1,15 @@
 <% if active %>
   <% unless character_obligation.obligation.nil? %>
     <h4><%= character_obligation.obligation.name %><%= " <small>[#{character_obligation.obligation.career.name}]</small>".html_safe unless character_obligation.obligation.career.nil? %></h4>
-    <%= form_for :character_obligation, :url => { :action => 'update_obligation'} do |form| %>
+    <%= simple_form_for :character_obligation, :url => { :action => 'update_obligation'} do |form| %>
       <%= form.hidden_field :character_obligation_id, :value => character_obligation.id %>
       <%= form.text_area :description, :value => character_obligation.description %>
+      <%= form.label :magnitude %>
       <%= form.number_field :magnitude, :value => character_obligation.magnitude, :min => 0, :step => 1 %>
+      <% if @character.creation? %>
+        <%= form.input :reward, as: :select, label: false, :include_blank => false, selected: character_obligation.reward, collection: [['Starting obligation (no bonus)', ''], ['+5 starting XP', 'exp_1'], ['+10 starting XP', 'exp_2'], ['+1000 starting credits', 'cred_1'], ['+2500 starting credits', 'cred_2']] %>
+      <% end %>
+
       <%= form.submit 'Update obligation', :class => 'button tiny' %>
       <%= link_to "Remove", "obligation/#{character_obligation.id}/remove", :class => 'button tiny alert',data: { confirm: 'Really delete obligation?' } %>
     <% end -%>

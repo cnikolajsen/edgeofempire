@@ -213,7 +213,16 @@ module CharactersHelper
   end
 
   def character_available_experience
-    @character.adventure_logs.sum(:experience)
+    bonus = 0
+    @character.character_obligations.each do |obl|
+      case obl.reward
+      when 'exp_1'
+        bonus = 5
+      when 'exp_2'
+        bonus = 10
+      end
+    end
+    @character.adventure_logs.sum(:experience) + bonus
   end
 
   def skill_total_free_ranks(character_skill)

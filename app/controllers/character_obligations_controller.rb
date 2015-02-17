@@ -38,7 +38,28 @@ class CharacterObligationsController < ApplicationController
       unless @obligation.nil?
         @obligation.description = params[:character_obligation][:description]
         @obligation.magnitude = params[:character_obligation][:magnitude]
+        @obligation.reward = params[:character_obligation][:reward]
+
+        if @character.creation? && @obligation.reward_changed?
+          unless @obligation.reward_was.blank?
+            case @obligation.reward_was
+            when 'cred_1'
+              @character.update_attribute(:credits, (@character.credits - 1000))
+            when 'cred_2'
+              @character.update_attribute(:credits, (@character.credits - 2500))
+            end
+          end
+
+          case @obligation.reward
+          when 'cred_1'
+            @character.update_attribute(:credits, (@character.credits + 1000))
+          when 'cred_2'
+            @character.update_attribute(:credits, (@character.credits + 2500))
+          end
+        end
+
         @obligation.save
+
       end
     end
     flash[:success] = "Obligation updated"

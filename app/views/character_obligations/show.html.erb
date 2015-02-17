@@ -34,6 +34,38 @@
         <%= link_to "Back", user_character_path(current_user, @character), :class => "button secondary tiny" %>
       </div>
     </div>
+    <% if @character.creation? %>
+    <div class="row">
+      <div class="small-12 columns">
+        <table>
+          <thead>
+            <tr>
+              <th>Additional Bonus</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>+5 starting XP</td>
+              <td>+5 Obligation</td>
+            </tr>
+            <tr>
+              <td>+10 starting XP</td>
+              <td>+10 Obligation</td>
+            </tr>
+            <tr>
+              <td>+1.000 starting credits</td>
+              <td>+5 Obligation</td>
+            </tr>
+            <tr>
+              <td>+2.500 starting credits</td>
+              <td>+10 Obligation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% end %>
   </div>
   <div class="small-8 columns" data-no-turbolink>
     <% unless @character.character_obligations.blank? %>
