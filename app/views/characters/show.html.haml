@@ -109,7 +109,11 @@
                   - if key+1 < attack[:attachments].count
                     ,
 
-    %h4 Talents
+    %h4
+      Talents
+      - if current_user == @character.user
+        %small #{link_to "<i class='fi-pencil'></i>".html_safe, user_character_talents_path(@character.user, @character)}
+
     %table.responsive{style: "width:100%"}
       %thead
         %tr
@@ -233,17 +237,11 @@
                     :target => "_blank"
 
   .medium-3.columns
-    - if @character.active?
+    - if @character.active? && current_user == @character.user
       .row
         = render :partial => 'character_live_stats'
     .row
       = render :partial => 'character_experience_usage'
-    .row
-      .medium-12.columns
-        .panel
-          %h5 Credits
-          = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
-          = @character.credits
     - if @character.character_obligations.any?
       .row
         .medium-12.columns
@@ -252,6 +250,8 @@
               Obligation
               %small
                 (#{@character.character_obligations.sum(:magnitude)})
+              - if current_user == @character.user
+                %small #{link_to "<i class='fi-pencil'></i>".html_safe, user_character_obligation_path(@character.user, @character)}
             - @character.character_obligations.each do |obl|
               - unless obl.obligation_id.nil?
                 %h5
@@ -269,6 +269,8 @@
               Duty
               %small
                 (#{@character.character_duties.sum(:magnitude)})
+              - if current_user == @character.user
+                %small #{link_to "<i class='fi-pencil'></i>".html_safe, user_character_duty_path(@character.user, @character)}
             - @character.character_duties.each do |d|
               - unless d.duty_id.nil?
                 %h5

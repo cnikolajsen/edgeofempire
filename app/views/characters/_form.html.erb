@@ -50,15 +50,6 @@
     </div>
   </div>
 
-  <% unless @character.new_record? %>
-    <div class="row">
-      <div class="small-6 columns">
-        <%= f.label :credits %>
-        <%= f.number_field :credits, :min => 0 %>
-      </div>
-    </div>
-  <% end %>
-
   <div class="row">
     <div class="small-6 columns">
       <%= f.label :notable_features %>

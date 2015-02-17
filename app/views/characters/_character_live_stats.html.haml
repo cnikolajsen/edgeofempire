@@ -49,5 +49,14 @@
               %td
                 = link_to 'Heal', user_character_heal_critical_path(@character.user, @character, crit.id)
       = link_to 'Add critical', user_character_criticals_path(@character.user, @character), :'data-reveal-id' => 'globalModal', :'data-reveal-ajax' => 'true'
+      %hr
+      %h5 Credits
+      .row
+        .small-2.columns
+          = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+        .small-10.columns
+          = f.number_field :credits, :min => 0
+
+
 
 

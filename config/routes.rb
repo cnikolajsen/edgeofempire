@@ -141,11 +141,12 @@ EdgeOfEmpire::Application.routes.draw do
       get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/add' => 'character_force_powers#add_force_power_upgrade', :defaults => { format: 'js' }
       get 'force-power/:force_power_id/upgrade/:force_power_upgrade_id/remove' => 'character_force_powers#remove_force_power_upgrade', :defaults => { format: 'js' }
 
-      put 'stagger/:state' => 'characters#stagger_ajax'
-      put 'disorient/:state' => 'characters#disorient_ajax'
-      put 'immobilize/:state' => 'characters#immobilize_ajax'
-      put 'strain/:value' => 'characters#strain_ajax'
-      put 'wound/:value' => 'characters#wound_ajax'
+      patch 'stagger/:state' => 'characters#stagger_ajax'
+      patch 'disorient/:state' => 'characters#disorient_ajax'
+      patch 'immobilize/:state' => 'characters#immobilize_ajax'
+      patch 'strain/:value' => 'characters#strain_ajax'
+      patch 'wound/:value' => 'characters#wound_ajax'
+      patch 'money/:value' => 'characters#money_ajax'
     end
   end
 

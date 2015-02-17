@@ -19,34 +19,41 @@ $('#character_race_id').on 'change', ->
 $('#character_strain').on 'change', ->
   $.ajax(
     url: $('#slug').val() +  '/strain/' + $('#character_strain').val()
-    type: 'PUT'
+    type: 'PATCH'
   ).success (data) ->
     $('.live-stats').effect('highlight', {}, 1000);
 
 $('#character_wounds').on 'change', ->
   $.ajax(
     url: $('#slug').val() +  '/wound/' + $('#character_wounds').val()
-    type: 'PUT'
+    type: 'PATCH'
+  ).success (data) ->
+    $('.live-stats').effect('highlight', {}, 1000);
+
+$('#character_credits').on 'change', ->
+  $.ajax(
+    url: $('#slug').val() +  '/money/' + $('#character_credits').val()
+    type: 'PATCH'
   ).success (data) ->
     $('.live-stats').effect('highlight', {}, 1000);
 
 $('#character_staggered').on 'change', ->
   $.ajax(
     url: $('#slug').val() +  '/stagger/' + $('#character_staggered').is(':checked'),
-    type: 'PUT'
+    type: 'PATCH'
   ).success (data) ->
     $('.live-stats').effect('highlight', {}, 1000);
 
 $('#character_disoriented').on 'change', ->
   $.ajax(
     url: $('#slug').val() +  '/disorient/' + $('#character_disoriented').is(':checked'),
-    type: 'PUT'
+    type: 'PATCH'
   ).success (data) ->
     $('.live-stats').effect('highlight', {}, 1000);
 
 $('#character_immobilized').on 'change', ->
   $.ajax(
     url: $('#slug').val() +  '/immobilize/' + $('#character_immobilized').is(':checked'),
-    type: 'PUT'
+    type: 'PATCH'
   ).success (data) ->
     $('.live-stats').effect('highlight', {}, 1000);

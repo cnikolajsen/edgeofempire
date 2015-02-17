@@ -405,6 +405,11 @@ class CharactersController < ApplicationController
     render json: @character, status: :ok
   end
 
+  def money_ajax
+    @character.update_attribute(:credits, params[:value])
+    render json: @character, status: :ok
+  end
+
   def set_activate
     @character.activate
     @character.save
