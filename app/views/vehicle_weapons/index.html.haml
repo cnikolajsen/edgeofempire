@@ -27,6 +27,7 @@
           %th Critical
           %th Price/Rarity
           %th Size that can mount
+          %th Qualities
           - if can? :edit, @vehicle_weapon
             %th
       %tbody
@@ -42,6 +43,7 @@
             %td= vehicle_weapon.critical
             %td= "#{number_to_currency(vehicle_weapon.price, unit: '', precision: 0)}/#{vehicle_weapon.rarity}"
             %td= "#{vehicle_weapon.size_low}-#{vehicle_weapon.size_high}"
+            %td= "#{vehicle_weapon.qualities.to_sentence(two_words_connector: ', ')}"
             - if can? :edit, @vehicle_weapon
               %td= link_to 'Destroy', vehicle_weapon, :method => :delete, :data => { :confirm => 'Are you sure?' }
 

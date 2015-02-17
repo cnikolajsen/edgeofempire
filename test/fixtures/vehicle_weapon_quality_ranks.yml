@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle_weapon_id: 
+  weapon_quality_id: 
+  ranks: 1
+
+two:
+  vehicle_weapon_id: 
+  weapon_quality_id: 
+  ranks: 1

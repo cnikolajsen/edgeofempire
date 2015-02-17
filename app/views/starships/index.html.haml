@@ -26,15 +26,15 @@
           %th Speed
           %th Handling
           %th Armor
-          %th Hull trauma threshold
-          %th System strain threshold
+          %th HT threshold
+          %th SS threshold
           %th Cost/Rarity
       %tbody
         - @starship_categories.each do |category|
           - if category.starships.any?
             %tr
               %th{colspan: "10", style: "background-color: #000; color: #fff;"}= category.name.pluralize
-            - @starships.each do |starship|
+            - category.starships.each do |starship|
               %tr
                 %td
                   = link_to starship.name, starship_path(starship)
@@ -53,14 +53,14 @@
                   - else
                     = starship.handling
                 %td
-                  %span.footable-details-label Armor:
+                  /%span.footable-details-label Armor:
                   = starship.armor
                 %td
-                  %span.footable-details-label Hull Trauma Threshold:
+                  /%span.footable-details-label Hull Trauma Threshold:
                   = starship.hull_trauma_threshold
                 %td
-                  %span.footable-details-label System Strain Threshold:
+                  /%span.footable-details-label System Strain Threshold:
                   = starship.system_strain_threshold
                 %td
-                  %span.footable-details-label Cost/Rarity:
+                  /%span.footable-details-label Cost/Rarity:
                   #{number_to_currency(starship.cost, unit: '', precision: 0)}/#{starship.rarity}

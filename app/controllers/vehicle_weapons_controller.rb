@@ -44,7 +44,7 @@ class VehicleWeaponsController < InheritedResources::Base
   def update
     respond_to do |format|
       if @vehicle_weapon.update(vehicle_weapon_params)
-        format.html { redirect_to @vehicle_weapon, notice:  "#{@vehicle_weapon.name} was successfully updated." }
+        format.html { redirect_to vehicle_weapons_path, notice:  "#{@vehicle_weapon.name} was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
