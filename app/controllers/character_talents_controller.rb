@@ -50,7 +50,7 @@ class CharacterTalentsController < ApplicationController
       end
     end
 
-    redirect_to user_character_talents_path(current_user, @character), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
+    redirect_to user_character_talents_path(@character.user, @character), notice: "#{@character.name} has successfully untrained the #{specialization.name} specialization."
   end
 
   def learn

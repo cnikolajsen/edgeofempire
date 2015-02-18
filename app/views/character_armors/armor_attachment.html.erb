@@ -21,7 +21,7 @@
             </span>
           </div>
           <div class="small-10 columns">
-            <%= hidden_field_tag 'slug', user_character_path(current_user, @character) %>
+            <%= hidden_field_tag 'slug', user_character_path(@character.user, @character) %>
             <%= number_field_tag :character_credits, @character.credits %>
           </div>
         </div>

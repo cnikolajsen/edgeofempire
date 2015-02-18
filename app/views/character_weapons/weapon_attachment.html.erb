@@ -21,7 +21,7 @@
             </span>
           </div>
           <div class="small-10 columns">
-            <%= hidden_field_tag 'slug', user_character_path(current_user, @character) %>
+            <%= hidden_field_tag 'slug', user_character_path(@character.user, @character) %>
             <%= number_field_tag :character_credits, @character.credits %>
           </div>
         </div>
@@ -45,7 +45,7 @@
             <%= f.select :weapon_model_id, @weapon.weapon_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model", :selected => @character_weapon.weapon_model_id} %>
           <% end %>
           <%= f.submit 'Save changes', :class => 'button tiny' %>
-          <%= link_to "Back", user_character_weapons_path(current_user, @character), :class => "button secondary tiny" %>
+          <%= link_to "Back", user_character_weapons_path(@character.user, @character), :class => "button secondary tiny" %>
         </div>
       </div>
     <% end %>

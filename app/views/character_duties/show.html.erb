@@ -31,7 +31,7 @@
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <%= link_to "Back", user_character_path(current_user, @character), :class => "button secondary tiny" %>
+        <%= link_to "Back", user_character_path(@character.user, @character), :class => "button secondary tiny" %>
       </div>
     </div>
   </div>

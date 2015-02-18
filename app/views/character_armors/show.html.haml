@@ -15,7 +15,7 @@
             %span.prefix.radius
               %label.inline= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
           .small-10.columns
-            = hidden_field_tag 'slug', user_character_path(current_user, @character)
+            = hidden_field_tag 'slug', user_character_path(@character.user, @character)
             = number_field_tag :character_credits, @character.credits
       %small During character generation the cost of items added will be subtracted from your character's starting credits. After activation credits will no longer be automatically updated on item purchase.
     = form_for :character_armors do |f|

@@ -19,14 +19,14 @@
     = character_armor.armor.rarity
   %td
     - if character_armor.equipped
-      = link_to "Equipped", user_character_place_armor_path(current_user, @character, character_armor.id, 'unequip'), :class => 'label success'
+      = link_to "Equipped", user_character_place_armor_path(@character.user, @character, character_armor.id, 'unequip'), :class => 'label success'
     - elsif character_armor.carried
-      = link_to "Unequipped", user_character_place_armor_path(current_user, @character, character_armor.id, 'equip'), :class => 'label secondary'
+      = link_to "Unequipped", user_character_place_armor_path(@character.user, @character, character_armor.id, 'equip'), :class => 'label secondary'
   %td
     - if character_armor.carried
-      = link_to "Carried", user_character_place_armor_path(current_user, @character, character_armor.id, 'storage'), :class => 'label success'
+      = link_to "Carried", user_character_place_armor_path(@character.user, @character, character_armor.id, 'storage'), :class => 'label success'
     - else
-      = link_to "Stored", user_character_place_armor_path(current_user, @character, character_armor.id, 'inventory'), :class => 'label secondary'
+      = link_to "Stored", user_character_place_armor_path(@character.user, @character, character_armor.id, 'inventory'), :class => 'label secondary'
   %td
     - unless character_armor.character_armor_attachments.blank?
       %span.footable-details-label Modifications:
@@ -52,6 +52,6 @@
     %span.footable-details-label Total Value:
     = character_armor.total_value
   %td
-    = link_to "Modify", user_character_modify_armor_path(current_user, @character, character_armor.id), :class => 'label info'
+    = link_to "Modify", user_character_modify_armor_path(@character.user, @character, character_armor.id), :class => 'label info'
   %td
-    = link_to "Remove", user_character_remove_armor_path(current_user, @character, character_armor.id), :class => 'label alert', :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }
+    = link_to "Remove", user_character_remove_armor_path(@character.user, @character, character_armor.id), :class => 'label alert', :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }

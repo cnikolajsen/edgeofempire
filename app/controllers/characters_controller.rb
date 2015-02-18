@@ -290,28 +290,28 @@ class CharactersController < ApplicationController
             flash[:success] = 'Character equipment updated'
           elsif params[:destination] == 'weapons'
             flash[:success] = 'Character weapons updated'
-            format.html { redirect_to user_character_weapons_path(current_user, @character) }
+            format.html { redirect_to user_character_weapons_path(@character.user, @character) }
           elsif params[:destination] == 'armor'
             flash[:success] = 'Character armor updated'
-            format.html { redirect_to user_character_armor_path(current_user, @character) }
+            format.html { redirect_to user_character_armor_path(@character.user, @character) }
           elsif params[:destination] == 'talents'
             flash[:success] = 'Character talents updated'
-            format.html { redirect_to user_character_talents_path(current_user, @character) }
+            format.html { redirect_to user_character_talents_path(@character.user, @character) }
           elsif params[:destination] == 'skills'
             flash[:success] = 'Character career free skill ranks saved.'
           elsif params[:destination] == 'characteristics'
             flash[:success] = 'Characteristics updated'
-            format.html { redirect_to user_character_path(current_user, @character) }
+            format.html { redirect_to user_character_path(@character.user, @character) }
           elsif params[:destination] == 'background'
             flash[:success] = 'Background saved'
-            format.html { redirect_to user_character_background_path(current_user, @character)}
+            format.html { redirect_to user_character_background_path(@character.user, @character)}
           elsif params[:destination] == 'obligation'
-            format.html { redirect_to user_character_obligation_path(current_user, @character) }
+            format.html { redirect_to user_character_obligation_path(@character.user, @character) }
           elsif params[:destination] == 'motivation'
-            format.html { redirect_to user_character_motivation_path(current_user, @character) }
+            format.html { redirect_to user_character_motivation_path(@character.user, @character) }
           end
         else
-          format.html { redirect_to user_character_path(current_user, @character), notice: 'Character was successfully updated.' }
+          format.html { redirect_to user_character_path(@character.user, @character), notice: 'Character was successfully updated.' }
         end
         format.json { head :no_content }
       else
@@ -413,19 +413,19 @@ class CharactersController < ApplicationController
   def set_activate
     @character.activate
     @character.save
-    redirect_to user_character_path(current_user, @character), notice: 'Character activated. Character creation rules no longer apply.'
+    redirect_to user_character_path(@character.user, @character), notice: 'Character activated. Character creation rules no longer apply.'
   end
 
   def set_retired
     @character.retire
     @character.save
-    redirect_to user_character_path(current_user, @character), notice: 'Character taken off duty. Character is now read only.'
+    redirect_to user_character_path(@character.user, @character), notice: 'Character taken off duty. Character is now read only.'
   end
 
   def set_creation
     @character.set_create
     @character.save
-    redirect_to user_character_path(current_user, @character), notice: 'Character put into creation mode. Special rules apply.'
+    redirect_to user_character_path(@character.user, @character), notice: 'Character put into creation mode. Special rules apply.'
   end
 
   private

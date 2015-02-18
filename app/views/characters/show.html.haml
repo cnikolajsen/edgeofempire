@@ -212,24 +212,24 @@
             %ul.button-group.round
               - if current_user == @character.user || current_user.role == 'admin'
                 %li= link_to "<i class='fi-rewind'> Back</i>".html_safe,
-                    user_characters_path(current_user),
+                    user_characters_path(@character.user),
                     :class => 'button secondary'
                 %li= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe,
-                    user_character_path(current_user, @character, :format => 'pdf'),
+                    user_character_path(@character.user, @character, :format => 'pdf'),
                     :class => 'button disabled',
                     :target => "_blank"
                 %li= link_to "<i class='fi-skull'> Delete</i>".html_safe,
-                    user_character_path(current_user, @character),
+                    user_character_path(@character.user, @character),
                     :method => 'delete',
                     :data => { :confirm => t('.confirm',
                     :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                     :class => 'button alert'
                 - if @character.may_set_create? && !@character.creation?
-                  %li= link_to "<i class='icon-wrench'></i> Creation".html_safe, user_character_creation_path(current_user, @character), :class => 'button info'
+                  %li= link_to "<i class='icon-wrench'></i> Creation".html_safe, user_character_creation_path(@character.user, @character), :class => 'button info'
                 - if @character.may_activate?
-                  %li= link_to "<i class='icon-ok'></i> Activate".html_safe, user_character_activate_path(current_user, @character), :class => 'button  success'
+                  %li= link_to "<i class='icon-ok'></i> Activate".html_safe, user_character_activate_path(@character.user, @character), :class => 'button  success'
                 - if @character.may_retire?
-                  %li= link_to "<i class='icon-fire'></i> Retire".html_safe, user_character_retire_path(current_user, @character), :class => 'button alert'
+                  %li= link_to "<i class='icon-fire'></i> Retire".html_safe, user_character_retire_path(@character.user, @character), :class => 'button alert'
               - else
                 %li= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe,
                     user_character_path(@character.user, @character, :format => 'pdf'),

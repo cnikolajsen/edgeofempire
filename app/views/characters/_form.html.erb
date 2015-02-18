@@ -89,7 +89,7 @@
                 user_characters_path(current_user), :class => 'button secondary' %>
     <% else %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                user_character_path(current_user, @character), :class => 'button secondary' %>
+                user_character_path(@character.user, @character), :class => 'button secondary' %>
     <% end %>
   </div>
 <% end %>
