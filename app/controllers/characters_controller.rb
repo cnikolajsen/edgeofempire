@@ -10,12 +10,26 @@ class CharactersController < ApplicationController
   # GET /characters
   # GET /characters.json
   def index
-    @characters = Character.where(:user_id => current_user.id).includes(:race).includes(:career)
+    begin
+      @list_title = "Your characters"
+      if params[:user_id]
+        user = User.friendly.find(params[:user_id])
+        if user && user != current_user
+          @list_title = "#{user.username}'s characters"
+        end
+      else
+        user = current_user
+      end
+      @characters = Character.where(:user_id => user.id).includes(:race).includes(:career)
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @characters.to_json(include: [:race, :career]) }
-      format.xml { render xml: @characters.to_xml(include: [:race, :career, :weapons, :armors, :gears]) }
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: @characters.to_json(include: [:race, :career]) }
+        format.xml { render xml: @characters.to_xml(include: [:race, :career, :weapons, :armors, :gears]) }
+      end
+    rescue ActiveRecord::RecordNotFound
+      redirect_to :root
+      return
     end
   end
 
