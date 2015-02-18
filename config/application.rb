@@ -21,5 +21,7 @@ module EdgeOfEmpire
     # config.i18n.default_locale = :de
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
+
+    config.exceptions_app = self.routes
   end
 end

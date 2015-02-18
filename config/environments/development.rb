@@ -22,6 +22,9 @@ EdgeOfEmpire::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
+  # Show error pages like production.
+  #config.consider_all_requests_local = false
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.

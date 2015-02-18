@@ -192,4 +192,7 @@ EdgeOfEmpire::Application.routes.draw do
   get 'adversaries/:id/weapon/attachment/:attachment_id/option/:option_id/remove' => 'adversary_weapons#remove_weapon_attachment_option'
   get 'adversaries/find/weapon_attachment_selection' => 'adversary_weapons#weapon_attachment_selection'
 
+  get '/404', :to => 'errors#not_found'
+  get '/500', :to => 'errors#internal_error'
+  get '/422', :to => 'errors#unprocessable_entity'
 end
