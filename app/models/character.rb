@@ -53,9 +53,9 @@ class Character < ActiveRecord::Base
     @character.character_obligations.each do |obl|
       case obl.reward
       when 'exp_1'
-        bonus = 5
+        bonus += 5
       when 'exp_2'
-        bonus = 10
+        bonus += 10
       end
     end
     available_experience = @character.adventure_logs.sum(:experience) + bonus
