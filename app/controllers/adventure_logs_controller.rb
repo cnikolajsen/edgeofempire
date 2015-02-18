@@ -1,4 +1,5 @@
 class AdventureLogsController < ApplicationController
+  include CharactersHelper
   before_action :find_character
   before_filter :authenticate_user!
   before_filter :authenticate_owner
@@ -70,9 +71,5 @@ class AdventureLogsController < ApplicationController
 
   def adventure_log_params
     params.require(:adventure_log).permit(:date, :log, :experience)
-  end
-
-  def authenticate_owner
-    redirect_to user_character_path(@character.user, @character) unless current_user == @character.user
   end
 end

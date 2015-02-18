@@ -8,7 +8,7 @@
       %small
         = @character.race.name unless @character.race.nil?
         = @character.career.name unless @character.career.nil?
-- if current_user == @character.user
+- if current_user == @character.user || current_user.role == 'admin'
   .row
     .medium-12.columns
       = render :partial => 'character_edit_menu'
@@ -210,7 +210,7 @@
         .medium-12.columns
           .button-bar
             %ul.button-group.round
-              - if current_user == @character.user
+              - if current_user == @character.user || current_user.role == 'admin'
                 %li= link_to "<i class='fi-rewind'> Back</i>".html_safe,
                     user_characters_path(current_user),
                     :class => 'button secondary'

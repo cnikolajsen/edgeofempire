@@ -178,8 +178,4 @@ private
     character_id = params[:character_id] || params[:id]
     @character = Character.friendly.find(character_id)
   end
-
-  def authenticate_owner
-    redirect_to user_character_path(@character.user, @character) unless current_user == @character.user
-  end
 end

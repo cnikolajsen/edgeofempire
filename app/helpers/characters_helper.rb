@@ -1,4 +1,7 @@
 module CharactersHelper
+  def authenticate_owner
+    redirect_to user_character_path(@character.user, @character) unless current_user == @character.user || current_user.role == 'admin'
+  end
 
   def character_state(character)
     @return = {}
