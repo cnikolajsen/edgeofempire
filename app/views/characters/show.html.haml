@@ -84,12 +84,12 @@
       %tbody
         - @character.attacks.each do |attack|
           %tr
-            %td= attack[:weapon].name
+            %td= attack[:name]
             %td= attack[:skill].name
             %td= render :partial => 'dice_pool', :locals => {:score => @character.send(attack[:skill].characteristic.downcase), :ranks => attack[:ranks]}
-            %td= attack[:weapon].damage
-            %td= attack[:weapon].crit
-            %td= attack[:weapon].range
+            %td= attack[:damage]
+            %td= attack[:crit]
+            %td= attack[:range]
             %td
               - unless attack[:qualities].blank?
                 %strong> Qualities:

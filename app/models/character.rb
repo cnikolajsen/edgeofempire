@@ -314,10 +314,13 @@ class Character < ActiveRecord::Base
   end
 
   def attacks
-    attacks = Array.new
+    attacks = []
 
     # Build attacks list.
     self.character_weapons.each do |cw|
+      weapon_name = cw.weapon.name
+      weapon_damage = cw.weapon.damage
+      weapon_crit = cw.weapon.crit
       if cw.weapon && cw.equipped?
         @wq = Array.new
         cw.weapon.weapon_quality_ranks.each do |q|
@@ -339,52 +342,52 @@ class Character < ActiveRecord::Base
         end
 
         if cw.weapon.skill.name == 'Brawl'
-          cw.weapon.damage += self.brawn
+          weapon_damage += self.brawn
 
           if cw.weapon.name == 'Unarmed'
             # Trandoshans have claws.
             if !self.race.nil? and self.race.name == 'Trandoshan'
-              cw.weapon.name = 'Claws'
-              cw.weapon.damage += 1
-              cw.weapon.crit = 3
+              weapon_name = 'Claws'
+              weapon_damage += 1
+              weapon_crit = 3
             end
           end
 
           self.talent_alterations.each do |talent_id, stat|
             stat.each do |type, value|
               if type == :brawl_damage_bonus
-                cw.weapon.damage += value['count']
+                weapon_damage += value['count']
               end
             end
           end
         end
 
         if cw.weapon.skill.name == 'Melee'
-          cw.weapon.damage += self.brawn
+          weapon_damage += self.brawn
           self.talent_alterations.each do |talent_id, stat|
             stat.each do |type, value|
               if type == :melee_damage_bonus
-                cw.weapon.damage += value['count']
+                weapon_damage += value['count']
               end
             end
           end
         end
 
         if !cw.custom_name.nil? && !cw.custom_name.blank?
-          cw.weapon.name = cw.custom_name
+          weapon_name = cw.custom_name
         elsif !cw.weapon_model_id.nil?
-          cw.weapon.name = WeaponModel.find(cw.weapon_model_id).name
+          weapon_name = WeaponModel.find(cw.weapon_model_id).name
         end
 
         if !cw.character_weapon_attachments.blank? && cw.custom_name.blank?
-          cw.weapon.name = "Modified " + cw.weapon.name
+          weapon_name = "Modified " + weapon_name
         end
 
         weapon_attachment = Array.new
         cw.character_weapon_attachments.each do |cwa|
           weapon_attachment_damage_bonus = WeaponAttachment.find(cwa.weapon_attachment_id).damage_bonus
           unless weapon_attachment_damage_bonus.nil?
-            cw.weapon.damage += weapon_attachment_damage_bonus
+            weapon_damage += weapon_attachment_damage_bonus
           end
           options = Array.new
           unless cwa.weapon_attachment_modification_options.nil?
@@ -401,7 +404,7 @@ class Character < ActiveRecord::Base
                 }
               end
               unless modification_option.damage_bonus.nil?
-                cw.weapon.damage += modification_option.damage_bonus
+                weapon_damage += modification_option.damage_bonus
                 options << "Damage +#{modification_option.damage_bonus}"
               end
               unless modification_option.custom.blank?
@@ -418,36 +421,33 @@ class Character < ActiveRecord::Base
         end
 
       attacks << {
-        :weapon => cw.weapon,
+        :name => weapon_name,
+        :damage => weapon_damage,
+        :crit => weapon_crit,
         :skill => cw.weapon.skill,
         :ranks => ranks,
+        :range => cw.weapon.range,
         :qualities => @wq,
         :attachments => weapon_attachment,
       }
       end
     end
-
     attacks
   end
 
   def specializations
-    specializations = Array.new
-    if self.specialization_1
-      specializations << TalentTree.find_by_id(self.specialization_1).name
+    specializations = []
+    3.times do |i|
+      if self["specialization_#{i}"]
+        specializations << TalentTree.find_by_id(self["specialization_#{i}"]).name
+      end
     end
-    if self.specialization_2
-      specializations << TalentTree.find_by_id(self.specialization_2).name
-    end
-    if self.specialization_3
-      specializations << TalentTree.find_by_id(self.specialization_3).name
-    end
-
     specializations
   end
 
   def talent_alterations
     talent_alterations = {}
-    self.talents.each do |id, count|
+    talents.each do |id, count|
       talent = Talent.find(id)
       name = talent.name.gsub(' ', '').downcase
       if talent.respond_to?("#{name}")

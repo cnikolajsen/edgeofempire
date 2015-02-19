@@ -674,11 +674,11 @@ class CharacterSheetPdf < Prawn::Document
             weapon_data = @wq.join(',')
 
             [
-              atk[:weapon].name,
+              atk[:name],
               "#{atk[:skill].name}",
-              atk[:weapon].damage,
-              atk[:weapon].range,
-              atk[:weapon].crit,
+              atk[:damage],
+              atk[:range],
+              atk[:crit],
               weapon_data
             ]
           end
