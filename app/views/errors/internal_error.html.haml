@@ -1,1 +1,10 @@
-%h1 500
+- content_for :title do
+  Internal Error
+.row
+  .small-12.columns
+    %center
+      %h1 An error has occured!
+      %p
+        = image_tag('500.jpg', :size => '100%')
+      %p Blasted rebel scum's been at it again!
+      %p Please try again or contact the site admin if the error persists.
