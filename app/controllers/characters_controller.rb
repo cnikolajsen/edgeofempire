@@ -13,14 +13,14 @@ class CharactersController < ApplicationController
     begin
       @list_title = "Your characters"
       if params[:user_id]
-        user = User.friendly.find(params[:user_id])
-        if user && user != current_user
-          @list_title = "#{user.username}'s characters"
+        @user = User.friendly.find(params[:user_id])
+        if @user && @user != current_user
+          @list_title = "#{@user.username}'s characters"
         end
       else
-        user = current_user
+        @user = current_user
       end
-      @characters = Character.where(:user_id => user.id).includes(:race).includes(:career)
+      @characters = Character.where(:user_id => @user.id).includes(:race).includes(:career)
 
       respond_to do |format|
         format.html # index.html.erb

@@ -1,0 +1,53 @@
+- model_class = Character
+- unless can? :manage, Character
+  .row
+    .medium-12.columns.panel.warning
+      You have not yet been granted access to the functionality of this site. Please await help from the site admin.
+.row
+  .medium-12.columns
+    %h1= @list_title
+.row
+  .medium-12.columns
+    %table.character-list.footable{"data-page-size" => "10"}
+      %thead
+        %tr
+          %th{"data-sort-initial" => "true", "data-toggle" => "true"}= model_class.human_attribute_name(:name)
+          %th{"data-hide" => "phone"} Status
+          %th= model_class.human_attribute_name(:race_id)
+          %th= model_class.human_attribute_name(:career_id)
+          %th{"data-hide" => "phone,tablet", "data-type" => "numeric"}= model_class.human_attribute_name(:created_at)
+          - if current_user == @user || current_user.role == 'admin'
+            %th{"data-hide" => "phone,tablet", "data-sort-ignore" => "true"}
+      %tbody
+        - @characters.each do |character|
+          %tr
+            %td= link_to character.name, user_character_path(character.user, character)
+            %td
+              %span.footable-details-label Status:
+              - if character.creation?
+                %i.fi-wrench{:title => "Character creation mode"}
+              - elsif character.active?
+                %i.fi-torso{:title => "Active character"}
+              - elsif character.retired?
+                %i.fi-blind{:title => "Character retired"}
+            %td= character.race.name unless character.race.nil?
+            %td= character.career.name unless character.career.nil?
+            %td{"data-value" => character.created_at.to_time.to_i}
+              %span.footable-details-label Created at:
+              = l character.created_at, :format => :short
+            - if current_user == character.user || current_user.role == 'admin'
+              %td
+                .button-bar
+                  %ul.button-group.round
+                    %li= link_to "<i class='fi-page-pdf'> PDF</i>".html_safe, user_character_path(character.user, character, :format => 'pdf'), :class => 'button tiny success', :target => "_blank"
+                    %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, user_character_path(character.user, character), :class => 'button tiny'
+                    %li= link_to "<i class='fi-skull'> Delete</i>".html_safe, user_character_path(character.user, character),         |
+                        :method => :delete,                                                                                          |
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, |
+                        :class => 'button alert tiny'                                                                                |
+    .footable-pagination.hide-if-no-paging
+      .pagination.pagination-centered
+    - if current_user == @user && (can? :manage, Character)
+      = link_to t('.new', :default => t("helpers.links.new")),
+        new_user_character_path(current_user),
+        :class => 'button radius'
