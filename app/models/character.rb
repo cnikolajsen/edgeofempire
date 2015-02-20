@@ -118,8 +118,6 @@ class Character < ActiveRecord::Base
   accepts_nested_attributes_for :adventure_logs, :allow_destroy => true
   accepts_nested_attributes_for :character_criticals, :reject_if => proc { |a| a['effect'].blank? }, :allow_destroy => true
 
-  default_scope { order('name ASC') }
-
   def purchased_skills
     CharacterExperienceCost.where(:character_id => self.id, :resource_type => 'skill', :granted_by => '')
   end

@@ -174,6 +174,8 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
   get "rules", :to => "pages#rules_summary", :as => :rules
 
+  get 'characters', to: 'character_manager#index'
+
   # Adversary Armor routes.
   get 'adversaries/:id/armor' => 'adversary_armors#show' , :as => :adversary_armor
   get 'adversaries/:id/armor/:adversary_armor_id/attachments' => 'adversary_armors#armor_attachment'

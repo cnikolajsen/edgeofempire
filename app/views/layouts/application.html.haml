@@ -7,6 +7,7 @@
       = content_for?(:title) ? yield(:title) : (@title ? @title : "")
       | ISB Control Center
     = stylesheet_link_tag    "application"
+    = javascript_include_tag "//www.google.com/jsapi", "chartkick"
     = javascript_include_tag "vendor/modernizr"
     = csrf_meta_tags
   %body
@@ -57,6 +58,9 @@
                       #{link_to "My characters", user_characters_path(current_user)}
                     %li{:class => ("active" if current_page('new_character'))}
                       #{link_to "Create character", new_user_character_path(current_user)}
+                    -if current_user.role == 'admin'
+                      %li{:class => ("active" if current_page('all_characters'))}
+                        #{link_to 'All characters', characters_path}
             %li.has-dropdown{:class => ("active" if current_page('user'))}
               %a{href: "#"} Account
               %ul.dropdown

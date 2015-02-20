@@ -1,0 +1,38 @@
+.row
+  .medium-12.columns
+    %h1 All Characters
+.row
+  .small-12.columns.medium-9.columns
+    %table.character-list.footable{"data-page-size" => "10"}
+      %thead
+        %tr
+          %th{"data-toggle" => "true"} Name
+          %th{"data-hide" => "phone"} Status
+          %th Species
+          %th Career
+          %th{"data-hide" => "phone,tablet", "data-type" => "numeric"} Created at
+          %th{"data-sort-initial" => "true"} Player
+      %tbody
+        - @characters.each do |character|
+          %tr
+            %td= link_to character.name, user_character_path(character.user, character)
+            %td
+              %span.footable-details-label Status:
+              - if character.creation?
+                %i.fi-wrench{:title => "Character creation mode"}
+              - elsif character.active?
+                %i.fi-torso{:title => "Active character"}
+              - elsif character.retired?
+                %i.fi-blind{:title => "Character retired"}
+            %td= character.race.name unless character.race.nil?
+            %td= character.career.name unless character.career.nil?
+            %td{"data-value" => character.created_at.to_time.to_i}
+              %span.footable-details-label Created at:
+              = l character.created_at, :format => :short
+            %td
+              = character.user.username
+    .footable-pagination.hide-if-no-paging
+      .pagination.pagination-centered
+  .small-12.columns.medium-3.columns
+    = pie_chart @races, library: { title: 'Species popularity', is3D: true, legend: 'none' }
+    = pie_chart @careers, library: { title: 'Career popularity', is3D: true, legend: 'none' }

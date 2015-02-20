@@ -30,9 +30,6 @@ gem 'omniauth-google-oauth2'
 gem 'sass-rails', '~> 4.0.3'
 gem 'sprockets', '2.11.0'
 
-#gem "meta_search",    '>= 1.1.3'
-#gem "less-rails", "~> 2.4.2"
-#gem 'twitter-bootstrap-rails', '2.2.8'
 gem 'foundation-rails', '~> 5.2.2.0'
 gem 'foundation-icons-sass-rails', '~> 3.0.0'
 gem "therubyracer", "~> 0.12.0"
@@ -42,13 +39,9 @@ gem 'prawn', '1.2.1'
 gem 'prawn-table', '0.1.0'
 gem "aasm", "~> 3.2.0"
 gem "friendly_id", "~> 5.0.2"
+gem "chartkick"
 
-# Delete tis when migrated to strong parameters.
-#gem 'protected_attributes'
-
-#gem 'sqlite3', group: [:development, :test]
 gem 'quiet_assets', group: [:development, :test]
-#gem "log_buddy", "~> 0.7.0", group: [:development, :test]
 
 gem "pg", "~> 0.17.1", group: [:production, :staging]
 gem 'rails_12factor', group: :production
