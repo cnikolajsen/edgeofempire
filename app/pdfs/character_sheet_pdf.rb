@@ -163,6 +163,7 @@ class CharacterSheetPdf < Prawn::Document
         text_box "ENCUMBRANCE", at: [bounds.left, bounds.top], width: bounds.width, height: 16, overflow: :shrink_to_fit, size: 10, style: :bold, align: :center, valign: :bottom
         fill_color '000000'
         text_box "#{@character.encumbrance_threshold.to_s}", at: [bounds.left, (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        text_box "#{@character.encumbrance_value.to_s}", at: [(bounds.left + 50), (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box "THRESHOLD", at: [bounds.left, (bounds.top - 55)], width: (bounds.width / 2), height: 10, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center
@@ -1904,6 +1905,7 @@ end
         text_box 'ENCUMBRANCE', at: [bounds.left, bounds.top], width: bounds.width, height: 16, overflow: :shrink_to_fit, size: 10, style: :bold, align: :center, valign: :bottom
         fill_color '000000'
         text_box @character.encumbrance_threshold.to_s, at: [bounds.left, (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
+        text_box @character.encumbrance_value.to_s, at: [(bounds.left + 50), (bounds.top - 18)], width: (bounds.width / 2), height: 36, overflow: :shrink_to_fit, size: 25, style: :bold, align: :center, valign: :center
         line [(bounds.width / 2), (bounds.top - 16)], [(bounds.width / 2), (bounds.top - 52)]
         fill
         text_box 'THRESHOLD', at: [bounds.left, (bounds.top - 55)], width: (bounds.width / 2), height: 10, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center

@@ -240,6 +240,59 @@ class Character < ActiveRecord::Base
     et
   end
 
+  def encumbrance_value
+    encumbrance = 0
+    enc_zero_gear = 0
+
+    # Gear encumbrances
+    character_gears.each do |character_gear|
+      if character_gear.carried
+        if character_gear.gear.encumbrance == 0
+          enc_zero_gear += character_gear.qty
+        else
+          encumbrance += character_gear.gear.encumbrance * character_gear.qty
+        end
+      end
+    end
+
+    # Custom gear encumbrances
+    character_custom_gears.each do |c_custom|
+      if c_custom.carried
+        if c_custom.encumbrance == 0
+          enc_zero_gear += c_custom.qty
+        else
+          encumbrance += c_custom.encumbrance * c_custom.qty
+        end
+      end
+    end
+
+    # Weapon encumbrances
+    character_weapons.each do |character_weapon|
+      if character_weapon.carried
+        encumbrance += character_weapon.weapon.encumbrance
+      end
+    end
+
+    # Armor encumbrances
+    character_armor.each do |c_armor|
+      if c_armor.carried
+        if c_armor.equipped
+          # Less encumbrance on worn armor.
+          encumbrance += c_armor.armor.encumbrance - 3 < 0 ? 0 : c_armor.armor.encumbrance - 3
+        else
+          encumbrance += c_armor.armor.encumbrance
+        end
+      end
+    end
+
+    # Simple zero enc calculation 10 items = 1 enc
+    if enc_zero_gear >= 10
+      encumbrance += enc_zero_gear % 10
+    end
+
+    encumbrance
+  end
+
   # Fetch character's force rating.
   def force_rating
     rating = 0
@@ -670,7 +723,7 @@ class Character < ActiveRecord::Base
             :quantity => cg.qty,
             :total_encumbrance => cg.gear.encumbrance.nil? ? 0 : cg.gear.encumbrance * cg.qty, # calculate total
             :total_value => cg.gear.price.nil? ? 0 : cg.gear.price * cg.qty, # calculate total
-            :location => nil,
+            :location => cg.carried ? 'Carried' : 'Stored',
             :custom => false,
             :type => 'gear',
           }
@@ -708,7 +761,7 @@ class Character < ActiveRecord::Base
             :carried => cg.carried,
             :quantity => 1,
             :total_encumbrance => cg.weapon.encumbrance, # calculate total
-            :location => nil,
+            :location => cg.carried ? 'Carried' : 'Stored',
             :custom => false,
             :type => 'weapon',
           }
@@ -732,7 +785,7 @@ class Character < ActiveRecord::Base
             :carried => cg.carried,
             :quantity => 1,
             :total_encumbrance => cg.armor.encumbrance, # calculate total
-            :location => nil,
+            :location => cg.carried ? 'Carried' : 'Stored',
             :custom => false,
             :type => 'armor',
           }
