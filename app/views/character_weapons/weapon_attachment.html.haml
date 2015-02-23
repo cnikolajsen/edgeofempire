@@ -1,0 +1,56 @@
+.row
+  .small-12.columns
+    %h1= t '.title', :default => "Modifying #{@weapon.name}"
+.row
+  .small-12.columns
+    = render :partial => 'characters/character_edit_menu'
+.row
+  .small-12.medium-3.columns
+    .panel.live-stats
+      - if @character.creation?
+        %h5
+          = image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+          = @character.credits
+      - else
+        .row.collapse
+          .small-2.columns
+            %span.prefix.radius
+              %label.inline= image_tag("credit_symbol.png", :class => "credit-icon", :title => "Credits")
+          .small-10.columns
+            = hidden_field_tag 'slug', user_character_path(@character.user, @character)
+            = number_field_tag :character_credits, @character.credits
+      %small During character generation the cost of items added will be subtracted from your character's starting credits. After activation credits will no longer be automatically updated on item purchase.
+    = form_for :character_weapon_attachment do |f|
+      - if @weapon.hard_points > 0
+        = f.select :weapon_attachment_id, WeaponAttachment.where(:true).collect  {|attachment| ["#{attachment.name} - #{attachment.hard_points} hp - price: #{attachment.price}", attachment.id]}, {:prompt => "Add Attachment"}
+      %br/
+      .row
+        #attachment-info.small-12.columns
+      .row
+        .small-12.columns
+          = f.text_field :custom_name, :value => @character_weapon.custom_name, :placeholder => "Give it a name and make it your own."
+          = f.label :description, 'Custom description'
+          = f.text_area :description, :rows => 10, :value => @character_weapon.description, :placeholder => "Write your own description of your weapon, such as make and model, color, or anything else that might make this weapon personal."
+          - unless @weapon.weapon_models.blank?
+            = f.select :weapon_model_id, @weapon.weapon_models.collect {|model| ["#{model.name}", model.id]}, {:prompt => "Select Model", :selected => @character_weapon.weapon_model_id}
+          = f.submit 'Save changes', :class => 'button tiny'
+          = link_to "Back", user_character_weapons_path(@character.user, @character), :class => "button secondary tiny"
+  .small-12.medium-9.columns
+    - if @weapon.hard_points == 0
+      .small-12.columns
+        .alert-box.warning.round{"data-alert" => ""}
+          This weapon does not have any hard points for attachments.
+    - else
+      %h4
+        Attachments on item
+        %small= "#{@weapon.hard_points-@hard_points_used} available hard points left out of #{@weapon.hard_points}"
+      .row
+        .small-12.columns
+          %div{:class => "progress round #{@hard_point_meter_class}"}
+            %span.meter{:style => "text-align: center;width: #{@hard_point_meter > 100 ? 100 : @hard_point_meter}%"}
+    - unless @weapon_attachments.blank?
+      %ul#item-grid.small-block-grid-1.medium-block-grid-2.large-block-grid-2{"data-no-turbolink" => ""}
+        - @weapon_attachments.each do |aa|
+          - if aa.weapon_attachment_id
+            - attachment = WeaponAttachment.find(aa.weapon_attachment_id)
+            %li= render :partial => "weapon_attachments/weapon_attachment_info", :locals => { :attachment => attachment, :character_attachment_id => aa.id, :active => :true, :weapon_attachment_options => aa }
