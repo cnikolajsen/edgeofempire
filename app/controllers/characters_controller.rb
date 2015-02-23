@@ -42,26 +42,22 @@ class CharactersController < ApplicationController
     @character_state = character_state(@character)
 
     # Determine characteristic increases from talents.
-    @character.talent_alterations.each do |talent_id, stat|
-      stat.each do |type, value|
-        if type == :on_purchase && value[:type] == :select_characteristic
-          if @character.talents[talent_id]['options'].include?('Brawn') && @character.brawn < 6
-            @character.brawn += 1
-          end
-          if @character.talents[talent_id]['options'].include?('Agility') && @character.agility < 6
-            @character.agility += 1
-          end
-          if @character.talents[talent_id]['options'].include?('Cunning') && @character.cunning < 6
-            @character.cunning += 1
-          end
-          if @character.talents[talent_id]['options'].include?('Intellect') && @character.intellect < 6
-            @character.intellect += 1
-          end
-          if @character.talents[talent_id]['options'].include?('Presence') && @character.presence < 6
-            @character.presence += 1
-          end
-          if @character.talents[talent_id]['options'].include?('Willpower') && @character.willpower < 6
-            @character.willpower += 1
+    @character.talents.each_with_index do |element, index|
+      unless element[1]['options'].empty?
+        element[1]['options'].each do |stat_inc|
+          case stat_inc
+          when 'Brawn'
+            @character.brawn += 1 if @character.brawn < 6
+          when 'Agility'
+            @character.agility += 1 if @character.agility < 6
+          when 'Cunning'
+            @character.cunning += 1 if @character.cunning < 6
+          when 'Intellect'
+            @character.intellect += 1 if @character.intellect < 6
+          when 'Presence'
+            @character.presence += 1 if @character.presence < 6
+          when 'Willpower'
+            @character.willpower += 1 if @character.willpower < 6
           end
         end
       end
