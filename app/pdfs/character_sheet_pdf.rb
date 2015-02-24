@@ -634,10 +634,10 @@ class CharacterSheetPdf < Prawn::Document
     end
     fill_color '354555'
     skill_label_top_bound = bounds.top - 320
-    polygon [(bounds.left + 200),(skill_label_top_bound - 7)], [(bounds.left + 210), (skill_label_top_bound - 2)], [(bounds.right - 210), (skill_label_top_bound - 2)], [(bounds.right - 200), (skill_label_top_bound - 7)], [(bounds.right - 210), (skill_label_top_bound - 12)], [(bounds.left + 210), (skill_label_top_bound - 12)]
+    #polygon [(bounds.left + 200),(skill_label_top_bound - 7)], [(bounds.left + 210), (skill_label_top_bound - 2)], [(bounds.right - 210), (skill_label_top_bound - 2)], [(bounds.right - 200), (skill_label_top_bound - 7)], [(bounds.right - 210), (skill_label_top_bound - 12)], [(bounds.left + 210), (skill_label_top_bound - 12)]
     fill
     fill_color 'ffffff'
-    text_box "SKILLS", width: bounds.width, height: 14, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center, at: [bounds.left, skill_label_top_bound]
+    #text_box "SKILLS", width: bounds.width, height: 14, overflow: :shrink_to_fit, size: 7, style: :bold, align: :center, valign: :center, at: [bounds.left, skill_label_top_bound]
     # ===== /Skills =====
 
     # ===== WEAPONS =====
