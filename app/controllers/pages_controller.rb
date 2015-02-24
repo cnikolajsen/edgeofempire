@@ -9,6 +9,8 @@ class PagesController < ApplicationController
   end
 
   def changelog
+    @parent_page = 'misc'
+    @page = 'changelog'
     @content  = File.read("#{Rails.root}/CHANGELOG.md")
   end
 

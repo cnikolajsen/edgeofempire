@@ -49,6 +49,8 @@
                     #{link_to "Books", books_path}
                   %li{:class => ("active" if current_page('adversaries'))}
                     = link_to "Adversaries", adversaries_path
+                  %li{:class => ("active" if current_page('changelog'))}
+                    = link_to "Changelog", changelog_path
 
               - if can? :manage, Character
                 %li.has-dropdown{:class => ("active" if ['characters', 'new_character'].include?(@page))}
