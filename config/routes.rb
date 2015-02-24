@@ -173,6 +173,7 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/twilek", :to => "pages#twilek_naming_tables", :as => :twilek_names
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
   get "rules", :to => "pages#rules_summary", :as => :rules
+  get "changelog", :to => "pages#changelog", :as => :changelog
 
   get 'characters', to: 'character_manager#index'
 

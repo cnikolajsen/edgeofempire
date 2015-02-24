@@ -8,6 +8,10 @@ class PagesController < ApplicationController
     @title = "Edge of the Empire Dummy Frontpage"
   end
 
+  def changelog
+    @content  = File.read("#{Rails.root}/CHANGELOG.md")
+  end
+
   def species_list
     @species = Race.find(:all, :order => :name)
 
