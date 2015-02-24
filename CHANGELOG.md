@@ -1,13 +1,13 @@
 # Changelog
 
-## v1.3
+## v1.3.0
 #### 24/02/15
 * Project now has a Changelog!
 * Removed the "Skills" title bar from the character sheet PDF.
 * Fixed multiple selections of the Dedication talent not being added to characteristics.
 * Total encumberance now calculated and displayed on equipment pages and in character sheet PDF.
 
-## v1.2
+## v1.2.0
 #### 20/02/15
 * Added a page for site admins to view all characters created from all users.
 * Fixed brawn being calculated twice on melee and brawl attacks in the character sheet PDF.
@@ -18,7 +18,7 @@
 * Cybernetics page now show how many cybernetics you can install.
 * You can now name your weapons and armor... giving it that special touch.
 
-## v1.1
+## v1.1.0
 #### 09/02/15
 * Fixed wrong calculation of damage for brawl and melee weapons, and prefixed all brawl and melee weapons with a plus-sign.
 * Added a couple more items that increase encumbrance threshold.
@@ -28,6 +28,6 @@
 * New users without user roles can now log out of the application again.
 * Added message to new users to wait for admin approval.
 
-## v1.0
+## v1.0.0
 #### 05/01/15
 * Launch version, because we gotta start somewhere right?
