@@ -1,12 +1,12 @@
 class PagesController < ApplicationController
-  before_filter :authenticate_user!, :only => [:species, :careers]
+  before_filter :authenticate_user!
 
   require 'builder'
 
   def changelog
     @parent_page = 'misc'
     @page = 'changelog'
-    @content  = File.read('#{Rails.root}/CHANGELOG.md')
+    @content  = File.read("#{Rails.root}/CHANGELOG.md")
   end
 
   def species_list
