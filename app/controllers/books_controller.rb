@@ -5,11 +5,11 @@ class BooksController < InheritedResources::Base
   load_and_authorize_resource
 
   def index
-    @book = Book.where(:true).order(:title)
+    @books = Book.order('system DESC').order(:ffg_sku)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @book }
+      format.json { render json: @books }
     end
   end
 
