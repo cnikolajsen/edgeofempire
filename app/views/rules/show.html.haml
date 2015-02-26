@@ -1,0 +1,18 @@
+- content_for :title do
+  = @rule.title
+
+.row
+  .small-12.columns
+    %h1= t '.title', :default => text_replace_tokens(@rule.title)
+.row
+  .small-12.columns
+    = markdown(text_replace_tokens(@rule.content).html_safe)
+.row
+  .small-12.columns
+    .button-bar
+      %ul.button-group.round
+        %li= link_to "<i class='fi-arrow-left'> Back</i>".html_safe, |
+            rules_path, :class => 'tiny secondary button'         |
+        - if can? :manage, @rule
+          %li= link_to "<i class='fi-pencil'> Edit</i>".html_safe, edit_rule_path(@rule), :class => 'tiny success button'
+          %li= link_to "<i class='fi-trash'> Destroy</i>".html_safe, @rule, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'tiny alert button'

@@ -37,6 +37,7 @@ EdgeOfEmpire::Application.routes.draw do
   resources :duties
   resources :motivations
   resources :sidebars
+  resources :rules
   resources :books
   resources :force_powers
 
@@ -172,7 +173,6 @@ EdgeOfEmpire::Application.routes.draw do
   get "names/trandoshan", :to => "pages#trandoshan_naming_tables", :as => :trandoshan_names
   get "names/twilek", :to => "pages#twilek_naming_tables", :as => :twilek_names
   get "names/droid", :to => "pages#droid_naming_tables", :as => :droid_names
-  get "rules", :to => "pages#rules_summary", :as => :rules
   get "changelog", :to => "pages#changelog", :as => :changelog
 
   get 'characters', to: 'character_manager#index'

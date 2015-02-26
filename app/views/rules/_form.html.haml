@@ -1,0 +1,32 @@
+= simple_form_for(@rule) do |f|
+  - if @rule.errors.any?
+    .alert-box.warning.radius{"data-alert" => ""}
+      %p
+        = pluralize(@rule.errors.count, "error")
+        prohibited this rule from being saved:
+      %ul
+        - @rule.errors.full_messages.each do |msg|
+          %li= msg
+
+  .row
+    .medium-6.small-12.columns
+      .row
+        .small-3.columns
+          = f.label :title, :class => 'inline right'
+        .small-9.columns
+          = f.input :title, :placeholder => 'Rule title', label: false
+      .row
+        .small-3.columns
+          = f.label :content, :class => 'inline right'
+        .small-9.columns
+          = f.input :content, :placeholder => 'Rule content', label: false, as: :text, :input_html => { :rows => 20 }
+          %a{"data-reveal-id" => "markdown", href: "#"}= "Markdown syntax"
+          .reveal-modal.large{"data-reveal" => "", id: "markdown"}
+            = find_and_preserve render :partial => 'layouts/markdown'
+            %a.close-reveal-modal ×
+  .row
+    %p
+    .small-12.columns
+      .form-actions
+        = f.submit nil, :class => 'button'
+        = link_to t('.cancel', :default => t("helpers.links.cancel")), rules_path, :class => 'button secondary'

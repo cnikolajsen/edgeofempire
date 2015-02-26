@@ -1,11 +1,16 @@
 # Changelog
 
+## v1.3.1
+#### 26/02/15
+* Books index sorting by FFG SKU.
+* Restructured the Rules Summary page. This is mainly an admin improvement.
+
 ## v1.3.0
 #### 24/02/15
 * Project now has a Changelog!
 * Removed the "Skills" title bar from the character sheet PDF.
 * Fixed multiple selections of the Dedication talent not being added to characteristics.
-* Total encumberance now calculated and displayed on equipment pages and in character sheet PDF.
+* Total encumbrance now calculated and displayed on equipment pages and in character sheet PDF.
 
 ## v1.2.0
 #### 20/02/15

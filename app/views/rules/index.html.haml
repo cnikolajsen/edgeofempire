@@ -1,0 +1,29 @@
+- content_for :title do
+  Rules
+
+.row
+  .small-12.columns
+    %h1
+      Rules
+      - if can? :create, @rule
+        %small
+          = link_to "<i class='fi-plus'></i>".html_safe, new_rule_path
+
+.row
+  .medium-3.columns.show-for-medium-up
+    %ul.side-nav
+      - @rules.each do |rule|
+        %li
+          %a{href: "#rule-#{rule.id}"}= rule.title
+  .small-12.medium-9.columns{role: "content"}
+    - @rules.each do |rule|
+
+      %article.panel
+        %a{name: "rule-#{rule.id}"}
+        %h3
+          = link_to text_replace_tokens(rule.title), rule_path(rule)
+          - if can? :create, @rule
+            %small
+              = link_to "<i class='fi-pencil'></i>".html_safe, edit_rule_path(rule)
+        .content
+          = markdown(text_replace_tokens(rule.content))

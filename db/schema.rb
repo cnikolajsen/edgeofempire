@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217115624) do
+ActiveRecord::Schema.define(version: 20150226132916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -511,7 +511,6 @@ ActiveRecord::Schema.define(version: 20150217115624) do
     t.string   "image_url"
     t.string   "slug"
     t.string   "subspecies"
-    t.integer  "campaign_id"
     t.integer  "strain",           default: 0
     t.integer  "wounds",           default: 0
     t.boolean  "staggered",        default: false
@@ -652,6 +651,17 @@ ActiveRecord::Schema.define(version: 20150217115624) do
 
   add_index "races", ["slug"], name: "index_races_on_slug", unique: true, using: :btree
 
+  create_table "rules", force: true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rules", ["slug"], name: "index_rules_on_slug", unique: true, using: :btree
+  add_index "rules", ["title"], name: "index_rules_on_title", unique: true, using: :btree
+
   create_table "sidebars", force: true do |t|
     t.string   "title"
     t.text     "content"
@@ -681,6 +691,71 @@ ActiveRecord::Schema.define(version: 20150217115624) do
     t.datetime "updated_at",  null: false
     t.integer  "career_id"
   end
+
+  create_table "starship_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "starship_crews", force: true do |t|
+    t.integer  "starship_id"
+    t.string   "description"
+    t.integer  "qty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "starship_crews", ["starship_id"], name: "index_starship_crews_on_starship_id", using: :btree
+
+  create_table "starship_vehicle_weapons", force: true do |t|
+    t.integer  "starship_id"
+    t.integer  "vehicle_weapon_id"
+    t.string   "mounting"
+    t.string   "grouping"
+    t.boolean  "turret"
+    t.boolean  "retractable"
+    t.string   "firing_arc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "starship_vehicle_weapons", ["starship_id"], name: "index_starship_vehicle_weapons_on_starship_id", using: :btree
+  add_index "starship_vehicle_weapons", ["vehicle_weapon_id"], name: "index_starship_vehicle_weapons_on_vehicle_weapon_id", using: :btree
+
+  create_table "starships", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "silhouette"
+    t.integer  "speed"
+    t.integer  "handling"
+    t.integer  "defense_fore"
+    t.integer  "defense_port"
+    t.integer  "defense_starboard"
+    t.integer  "defense_aft"
+    t.integer  "armor"
+    t.integer  "hull_trauma_threshold"
+    t.integer  "system_strain_threshold"
+    t.integer  "hard_points"
+    t.string   "hull_type"
+    t.string   "manufacturer"
+    t.integer  "hyperdrive_class_primary"
+    t.integer  "hyperdrive_class_secondary"
+    t.string   "navicomputer"
+    t.string   "sensor_range"
+    t.integer  "encumbrance_capacity"
+    t.integer  "passenger_capacity"
+    t.string   "consumables"
+    t.integer  "cost"
+    t.integer  "rarity"
+    t.integer  "book_id"
+    t.integer  "starship_category_id"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "starships", ["slug"], name: "index_starships_on_slug", unique: true, using: :btree
 
   create_table "talent_tree_career_skills", force: true do |t|
     t.integer  "talent_tree_id"
@@ -791,6 +866,33 @@ ActiveRecord::Schema.define(version: 20150217115624) do
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
+
+  create_table "vehicle_weapon_quality_ranks", force: true do |t|
+    t.integer  "vehicle_weapon_id"
+    t.integer  "weapon_quality_id"
+    t.integer  "ranks"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vehicle_weapon_quality_ranks", ["vehicle_weapon_id"], name: "index_vehicle_weapon_quality_ranks_on_vehicle_weapon_id", using: :btree
+  add_index "vehicle_weapon_quality_ranks", ["weapon_quality_id"], name: "index_vehicle_weapon_quality_ranks_on_weapon_quality_id", using: :btree
+
+  create_table "vehicle_weapons", force: true do |t|
+    t.string   "name"
+    t.string   "range"
+    t.integer  "damage"
+    t.integer  "critical"
+    t.integer  "price"
+    t.integer  "rarity"
+    t.integer  "size_low"
+    t.integer  "size_high"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vehicle_weapons", ["slug"], name: "index_vehicle_weapons_on_slug", unique: true, using: :btree
 
   create_table "weapon_attachment_attachments_groups", force: true do |t|
     t.integer  "weapon_attachment_id"
